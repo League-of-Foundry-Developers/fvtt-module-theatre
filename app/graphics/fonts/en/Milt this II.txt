@@ -1,0 +1,21 @@
+Yet another showing of classic type demolished, this time sinking Times a bit further.
+
+The idea for a second Miltown came from a designer friend of mine who tries his best to break out of the norm in everything he does. For as long as I've known him, he's been shedding light on things from angles which can in most cases qualify as an "unexplored perspective" as another friend of mine would label it. One of his funky habits is watching television and movies in black and white and only in black and white. He has his VCR set up to drain the colour from everything that plays through it.
+
+One day last month, I was at his place and he was watching the Matrix movie. In black and white, of course. I took one look at the very familiar titling, and was very surprised to realize that it looked sharper, tighter and much better overall with a greyscale background. So I decided to try imposing the greyscaling on the background of the original Miltown. To do that, I simply drew a vertical rectangle in Illustrator and placed it randomly over each character. It looked good, and it did scream movie titling. Since the experiment was favourable, the technician in me decided to go the extra step on the font. 
+
+To make a long story short, here's what's new in Miltown II:
+- The caps are the semi-knocked-out characters, while the lowercase letters are the same as the uppers in the original Miltown.
+- The space stroke in this font will produce a blank 450 em wide space, as opposed to the variety of "fillers" that were in the original Miltown.
+- Brand new numbers, as opposed to the OCR-like digits that were in Miltown.
+- Complete character set. Although the original Miltown had many accented characters, it was nowhere near complete. This one is. It has all the monetary characters, for instance. The @ was remade to fit the style. And a bunch of other letters were either added or remade. If you liked and used the original Miltown, I suggest you take a closer look at this one to see where you can benefit more from its usage.
+- Fitting and kerning were revised extensively. Although spacing the characters properly is nearly impossible in a font with a really random width and height structure such as this baby here, I tried my best to trap all the characters in their kerning. So EVERYTHING is kerned. Upper-upper, upper-lower, lower-lower, lower-upper, digits, accented-upper, accented-lower, lower-accented, upper-accented, etc. The result is 8838 kern pairs.
+
+All in all I strongly recommend using this font instead of the original Miltown. Whatever you did with the original can be done with this font, except for the space fillers and the OCR-like numbers, which one can always use the original Miltown to produce. However, if you want to reproduce the spacing of the letters in the Matrix title, you should stick to the original Miltown. Miltown II, though it has a much better tightness to it, was not kerned to match the spacing of the movie title, but to actually look better in a demolition-man sort of way.
+
+It's getting late. I'm out of here.
+
+Don't drink and fly.
+
+'
+ 

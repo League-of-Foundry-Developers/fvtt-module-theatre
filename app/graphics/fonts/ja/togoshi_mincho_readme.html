@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+                      "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>戸越明朝 README</title>
+<style type="text/css">
+h1 { font-size: x-large; font-family: sans-serif; font-weight: normal; text-align: center; margin-bottom: 60px; }
+h2 { font-size: large; font-family: sans-serif; font-weight: normal; text-align: center; margin-top: 60px; }
+p { font-family: sans-serif; margin: 0px 40px 0px 40px; }
+pre { font-family; monospace; margin: 10px 40px 10px 40px; padding: 10px; background-color: #cfcfcf; }
+</style>
+</head>
+<body>
+<h1>戸越明朝 (Togoshi Mincho)</h1>
+<p>戸越明朝は、東風フォント代用品（OBSOLETE）明朝体をベースに、グリフ（字形）を調整して作成した TrueType フォントです。調整は FontForge を使って 1 文字ずつ手で行いました。</p>
+<p>戸越明朝は、東風フォント代用品と異なり、アウトラインフォントだけで構成されています。ビットマップフォントは含まれていません。また、東風フォント代用品と異なり、英数字がプロポーショナルになっています。</p>
+<p><br/></p>
+<p>なお、このフォントは開発途中のものであり、かつ十分に検証されているわけではありません。</p>
+
+
+<h2>フォントの構成について</h2>
+<p>東風フォント代用品に含まれる README.ja によると、東風フォント代用品の明朝体のアウトラインフォントは、下記のような構成になっています。</p>
+<pre>  仮名、英数字：従来の東風明朝
+  ギリシャ文字、キリル文字：内田さん製作の拡張フォント
+  それ以外：和田研明朝</pre>
+
+<p>戸越明朝では、仮名、英数字、漢字を中心に変更を加えています。</p>
+<p>ギリシャ文字、キリル文字については、東風フォント代用品のものをそのまま使っています。</p>
+
+
+<h2>ライセンスについて</h2>
+<p>ライセンスは、和田研フォントのライセンスに依存しています。
+<pre>オリジナル和田研フォントのライセンス文書：
+      フォントをそのまま, あるいはフォーマット変換して使用, 
+      配布する場合, 個人, 会社を問わず, こちらの許可は必要
+      ありません. ただ, 配布する場合はそのフォントが
+      ftp.ipl.t.u-tokyo.ac.jpに由来すること, どのような変換
+      をしたかを付記して下さい. フォントはこれからも, バー
+      ジョンアップする予定なので, 末端ユーザが最新のバージョ
+      ンを自分で手に入れられるようにしたいためです.</pre>
+
+
+<h2>インストール方法と設定</h2>
+<p>戸越明朝は、通常の TrueType フォントです。特別なことは何もありませんので、通常のフォントと同様にインストールできると思います。</p>
+<p><br/></p>
+<p>Linux の場合、ヒンティングをオフにしたほうが綺麗に見えると思います。設定方法はさまざまあるかと思いますが、例として戸越ゴシックだけに適用する手順を記します。この設定方法は、Fedora 8、Ubuntu 7.10 で試しました。</p>
+<p><br/></p>
+<p>まず、~/.fonts.conf ファイルを作成し、下記のように記述します。</p>
+<pre>
+&lt;?xml version="1.0"?&gt;
+&lt;!DOCTYPE fontconfig SYSTEM "file:///etc/fonts/fonts.dtd"&gt;
+&lt;fontconfig&gt;
+  &lt;match target="font"&gt;
+    &lt;test name="family"&gt;
+      &lt;string&gt;Togoshi Mincho&lt;/string&gt;
+    &lt;/test&gt;
+    &lt;edit name="hinting" mode="assign"&gt;
+      &lt;bool&gt;false&lt;/bool&gt;
+    &lt;/edit&gt;
+  &lt;/match&gt;
+&lt;/fontconfig&gt;</pre>
+
+<p>そして、ログインし直すなどして X を起動し直します。</p>
+<p><br/></p>
+<p>戸越ゴシックなど他のフォントについても同様の設定にしたい場合、&lt;match&gt;要素を複数設定して対応することができます。設定の詳細については、man 等が参考にできます。man は「<code>man fonts-conf</code>」で起動できます（なお、man は終了は「q」、ヘルプは「h」です）。</p>
+<p>なお、fonts.conf の設定によっては、欧文フォントとの「合成フォント」も実現可能です。戸越ゴシックの英数字では満足できない場合等ありましたら、設定で対応していただくこともできます。</p>
+<p><br/></p>
+<h2>最後に</h2>
+<p>戸越明朝をダウンロードしていただき、ありがとうございました。戸越フォントは日々進化しています。今後とも、ぜひご愛顧いただけますと幸いです。</p>
+<p><br/></p>
+<p style="text-align:right">mshio</p>
+</body>
+</html>

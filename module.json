@@ -1,0 +1,53 @@
+{
+	"name": "theatre",
+	"title": "Theatre Inserts",
+	"description": "Theater Inserts for speaking players",
+	"version": "1.0.0",
+	"author": "Ken L.",
+	"socket": true,
+	"languages": [
+		{
+			"lang": "en",
+			"name": "English",
+			"path": "app/lang/en.json"
+		},
+		{
+			"lang": "ja",
+			"name": "日本語 (Japanese)",
+			"path": "app/lang/ja.json"
+		},
+		{
+			"lang": "ko",
+			"name": "한국어 (Korean)",
+			"path": "app/lang/ko.json"
+		},
+		{
+			"lang": "pt-BR",
+			"name": "Português (Portuguese [Brasil])",
+			"path": "app/lang/pt-BR.json"
+		},
+		{
+			"lang": "fr",
+			"name": "Français (French)",
+			"path": "app/lang/fr.json"
+		},
+		{
+			"lang": "th",
+			"name": "ภาษาไทย (Thai)",
+			"path": "app/lang/th.json"
+		}
+
+	],
+	"scripts": [
+		"greensock/dist/TweenMax.min.js",
+		"greensock/dist/plugins/PixiPlugin.min.js",
+		"greensock/dist/plugins/ScrollToPlugin.min.js",
+		"greensock/dist/utils/SplitText.min.js",
+		"app/js/TheatreActorConfig.js",
+		"app/js/TheatreAlert.js",
+		"app/js/Theatre.js",
+		"app/js/theatre_main.js"
+	],
+	"styles" : ["app/css/theatre.css"],
+	"packs": []
+}
