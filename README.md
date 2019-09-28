@@ -4,7 +4,7 @@ Theatre is a mod for FVTT that allows for a visual novel style RP experience for
 
 ## Documentation
 
-The [wiki](https://gitlab.com/Ayanzo/theatre/wikis/home) on this project's git-lab will provide all needed instructions on how to use theatre.
+The [wiki](https://gitlab.com/Ayanzo/theatre/wikis/home/Introduction%20to%20Theatre) on this project's git-lab will provide all needed instructions on how to use theatre.
 
 ## Installation
 
