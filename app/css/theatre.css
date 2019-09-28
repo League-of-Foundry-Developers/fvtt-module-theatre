@@ -1105,6 +1105,7 @@
   font-size: 18px;
   text-shadow: 2px 2px #000;
   align-items: center;
+  align-content: center;
   justify-content: center; }
 
 .theatre-emote-menu .textanim div,
