@@ -49,5 +49,8 @@
 		"app/js/theatre_main.js"
 	],
 	"styles" : ["app/css/theatre.css"],
-	"packs": []
+	"packs": [],
+	"url" : "https://gitlab.com/Ayanzo/theatre",
+	"download" : "https://gitlab.com/Ayanzo/theatre/-/archive/master/theatre-master.zip",
+	"manifest" : "https://gitlab.com/Ayanzo/theatre/blob/master/module.json"
 }

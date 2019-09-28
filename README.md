@@ -4,8 +4,12 @@ Theatre is a mod for FVTT that allows for a visual novel style RP experience for
 
 ## Documentation
 
-The wiki on this project's git-lab will provide all needed instructions on how to use theatre.
+The [wiki](https://gitlab.com/Ayanzo/theatre/wikis/home) on this project's git-lab will provide all needed instructions on how to use theatre.
 
 ## Installation
 
-TODO
+Copy https://gitlab.com/Ayanzo/theatre/raw/master/module.json into the module installer inside foundry when it asks for the manifest.
+
+OR
+
+Download the zip, create a folder in public/modules called 'theatre' and extract the contents of "theatre-master.zip" there.
