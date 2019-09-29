@@ -56,8 +56,6 @@ class TheatreActorConfig extends FormApplication {
    */
   getData() {
     const entityName = this.object.entity;
-    const config = CONFIG[entityName];
-    const classes = Object.values(config.sheetClasses[this.object.data.type]);
     return {
       entityName: entityName,
       isGM: game.user.isGM,
