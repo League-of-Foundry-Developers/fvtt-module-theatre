@@ -2,7 +2,7 @@
 	"name": "theatre",
 	"title": "Theatre Inserts",
 	"description": "Theater Inserts for speaking players",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"author": "Ken L.",
 	"socket": true,
 	"languages": [

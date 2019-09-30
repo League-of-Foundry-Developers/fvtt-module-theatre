@@ -138,36 +138,36 @@ Hooks.on("init",  function() {
 		// (None)
 
 		// BASE ENTITY SHEET
-    if ( this.options.compendium ) {
-      buttons.unshift({
-        label: "Header.Override.Import",
-        class: "import",
-        icon: "fas fa-download",
-        onclick: async ev => {
-          await this.close();
-          this.entity.collection.importFromCollection(this.options.compendium, this.entity._id);
-        }
-      });
-    }
+		if ( this.options.compendium ) {
+			buttons.unshift({
+				label: "Header.Override.Import",
+				class: "import",
+				icon: "fas fa-download",
+				onclick: async ev => {
+					await this.close();
+					this.entity.collection.importFromCollection(this.options.compendium, this.entity._id);
+				}
+			});
+		}
 
 		// Modified ActorSheet (Target)
-    let canConfigure = this.options.editable && (game.user.isGM || (this.actor.owner && game.user.isTrusted));
-    if ( canConfigure ) {
-      buttons = [
-        {
-          label: "Header.Override.Sheet",
-          class: "configure-sheet",
-          icon: "fas fa-cog",
-          onclick: ev => this._onConfigureSheet(ev)
-        },
-        {
-          label: "Header.Override.Token",
-          class: "configure-token",
-          icon: "fas fa-user-circle",
-          onclick: ev => this._onConfigureToken(ev)
-        }
-      ].concat(buttons);
-    }
+		let canConfigure = this.options.editable && (game.user.isGM || (this.actor.owner && game.user.isTrusted));
+		if ( canConfigure ) {
+			buttons = [
+				{
+					label: "Header.Override.Sheet",
+					class: "configure-sheet",
+					icon: "fas fa-cog",
+					onclick: ev => this._onConfigureSheet(ev)
+				},
+				{
+					label: "Header.Override.Token",
+					class: "configure-token",
+					icon: "fas fa-user-circle",
+					onclick: ev => this._onConfigureToken(ev)
+				}
+			].concat(buttons);
+		}
 		// Owners
 		if (this.actor.owner) {
 			// only prototype actors
@@ -191,7 +191,7 @@ Hooks.on("init",  function() {
 			].concat(buttons); 
 		}
 
-    return buttons
+		return buttons
 	}
 }); 
 

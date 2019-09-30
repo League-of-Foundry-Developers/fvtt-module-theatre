@@ -43,32 +43,37 @@ class TheatreAlert extends Application {
 
 
 	/**
-		* Render the TheatreAlert if there if the motddata is present, and there is a
-		* new version available OR if the new info accumulator is greater than our current value
-		*
-		* @param (Boolean) force   Add the rendered application to the DOM if it is not already present. If false, the
-		*                          Application will only be re-rendered if it is already present.
-		* @param (Object) options  Additional rendering options which are applied to customize the way that the Application
-		*                          is rendered in the DOM.
-		*/
+	 * Render the TheatreAlert if there if the motddata is present, and there is a
+	 * new version available OR if the new info accumulator is greater than our current value
+	 *
+	 * @param (Boolean) force   Add the rendered application to the DOM if it is not already present. If false, the
+	 *                          Application will only be re-rendered if it is already present.
+	 * @param (Object) options  Additional rendering options which are applied to customize the way that the Application
+	 *                          is rendered in the DOM.
+	 */
 	async render(force=false, options={}) {
 		//let data = await fetch("modules/theatre/motd.json").then(r => r.text()); 
 		let data = await this.makeGETRequest("https://gitlab.com/Ayanzo/motds/raw/master/motd_theatre.json"); 
 		let module = game.modules.find(m => m.id == "theatre"); 
 		let motdNewInfo = Theatre.instance.settings.motdNewInfo; 
 
-		data = JSON.parse(data); 
-		this.motdData = data; 
-		if (data.error) {
-			console.log("ERROR: Unable to fetch MOTD!"); 
-			return; 
-		}
-		if (Theatre.DEBUG) console.log("module, data ",module,data); 
+		try {
+			data = JSON.parse(data); 
+			this.motdData = data; 
+			if (!data || data.error) {
+				console.log("ERROR: Unable to fetch MOTD!"); 
+				return; 
+			}
+			if (Theatre.DEBUG) console.log("module, data ",module,data); 
 
-		if (isNewerVersion(data.version,module.data.version,module.data.version) || motdNewInfo < data.newinfo) {
-			game.settings.set(Theatre.SETTINGS,"motdNewInfo",data.newinfo); 
-			return super.render(force,options);
-		} else {
+			if (isNewerVersion(data.version,module.data.version,module.data.version) || motdNewInfo < data.newinfo) {
+				game.settings.set(Theatre.SETTINGS,"motdNewInfo",data.newinfo); 
+				return super.render(force,options);
+			} else {
+				this.close(); 
+			}
+		} catch (e) {
+			console.log("ERROR: Unable to fetch MOTD!"); 
 			this.close(); 
 		}
 	}
@@ -114,8 +119,8 @@ class TheatreAlert extends Application {
 	 *
 	 * @param html (JQuery) : JQuery object containing the the app level container
 	 */
-  activateListeners(html) {
-    super.activateListeners(html);
-  }
+	activateListeners(html) {
+		super.activateListeners(html);
+	}
 
 }
