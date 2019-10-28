@@ -246,7 +246,11 @@ Hooks.on("createCombat",  function() {
 	&& Theatre.instance.isSuppressed) {
 		if (Theatre.DEBUG) console.log("COMBAT CREATED"); 
 		// if suppressed, change opacity to 0.05
-		Theatre.instance.theatreGroup.style.opacity = "0.05"; 
+		//Theatre.instance.theatreGroup.style.opacity = "0.05"; 
+		Theatre.instance.theatreDock.style.opacity = "1"; 
+		Theatre.instance.theatreBar.style.opacity = "1"; 
+		Theatre.instance.theatreNarrator.style.opacity = "1"; 
+
 	}
 }); 
 
@@ -260,7 +264,11 @@ Hooks.on("deleteCombat",  function() {
 	if (!game.combats.active && Theatre.instance.isSuppressed) {
 		if (Theatre.DEBUG) console.log("COMBAT DELETED"); 
 		// if suppressed, change opacity to 0.25
-		Theatre.instance.theatreGroup.style.opacity = "0.25"; 
+		//Theatre.instance.theatreGroup.style.opacity = "0.25"; 
+		Theatre.instance.theatreDock.style.opacity = "0.20"; 
+		Theatre.instance.theatreBar.style.opacity = "0.20"; 
+		Theatre.instance.theatreNarrator.style.opacity = "0.20"; 
+
 	}
 }); 
 
