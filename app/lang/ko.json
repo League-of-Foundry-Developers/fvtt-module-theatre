@@ -44,9 +44,10 @@
 	"Theatre.UI.Notification.BadFilepath" : "잘못된 파일 경로가 존재하여, 극장 설정 변경을 할 수 없습니다. : ",
 
 	"Theatre.UI.Settings.displayMode" : "극장 바 표시 모드",
-	"Theatre.UI.Settings.displayModeHint" : "극장 그래픽 아래의 텍스트 영역을 설정합니다. 텍스트 박스 스타일은 텍스트 기반 게임에 적합합니다. 라이트 박스 스타일은 음성 혹은 음성-텍스트 혼합 게임에 적합합니다.",
+	"Theatre.UI.Settings.displayModeHint" : "극장 그래픽 아래의 텍스트 영역에 관한 표시 모드입니다. 텍스트 박스 스타일은 텍스트에 명확한 배경을 제공하므로 텍스트 기반 게임에 적합합니다. 라이트 박스 스타일은 비주얼 노벨 외관과 느낌을 가지고 있어서 음성만 사용하거나 또는 음성과 텍스트를 복합적으로 사용하는 게임에 어울립니다. 클리어 스타일은 텍스트를 *읽기가 어렵기 때문에* 텍스트의 중요성이 떨어지는 음성 전용 게임용으로 제작되었습니다. 이 모드는 포트레잇을 움직이고 감정을 드러내는 등의 용도로 사용됩니다.",
 	"Theatre.UI.Settings.displayModeTextBox" : "텍스트 박스 스타일",
 	"Theatre.UI.Settings.displayModeLightBox" : "라이트 박스 스타일",
+	"Theatre.UI.Settings.displayModeClearBox" : "클리어 박스 스타일",
 	"Theatre.UI.Settings.textDecayMin" : "최소 텍스트 삭제 시간",
 	"Theatre.UI.Settings.textDecayMinHint" : "극장에 입력된 텍스트 삭제가 시작 되는 최소 시간을 설정합니다.",
 	"Theatre.UI.Settings.textDecayRate" : "텍스트 삭제 속도",

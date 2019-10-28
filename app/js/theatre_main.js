@@ -382,6 +382,7 @@ Hooks.on("createChatMessage", function(chatEntity) {
 	|| chatData.emote
 	|| chatData.type == 1
 	//|| Object.keys(chatData.speaker).length == 0
+	|| chatData.content.match(/@[a-zA-Z0-9]+\[[a-zA-Z0-9]+\]/)
 	|| chatData.content.match(/\<div.*\>[\s\S]*\<\/div\>/)) return; 
 	
 	let textBox = Theatre.instance.getTextBoxById(theatreId);
@@ -414,8 +415,8 @@ Hooks.on("createChatMessage", function(chatEntity) {
 			// Highlight the most recent speaker's textBox
 			let lastSpeaking = Theatre.instance.theatreBar.getElementsByClassName("theatre-text-box-lastspeaking");
 			if (lastSpeaking[0]) {
-				lastSpeaking[0].style.background = "unset"; 
-				lastSpeaking[0].style["box-shadow"] = "unset"; 
+				lastSpeaking[0].style.background = ""; 
+				lastSpeaking[0].style["box-shadow"] = ""; 
 				KHelpers.removeClass(lastSpeaking[0],"theatre-text-box-lastspeaking"); 
 			}
 			KHelpers.addClass(textBox,"theatre-text-box-lastspeaking"); 

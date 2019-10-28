@@ -1,1 +1,1 @@
-<section><h1>{{data.title}}</h1><div class="theatre-alert-motd">{{{data.content}}}</div><div class="theatre-alert-goalbar"></div></section>
+<section><h1>{{data.title}} (v{{data.curversion}})</h1>{{#if data.update}}<div class="theatre-alert-motd">{{{data.unotes}}}</div>{{else}}<div class="theatre-alert-motd">{{{data.content}}}</div>{{/if}}</section>

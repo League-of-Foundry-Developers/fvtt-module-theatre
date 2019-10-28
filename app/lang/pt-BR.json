@@ -43,9 +43,12 @@
 	"Theatre.UI.Notification.BadFilepath" : "Um caminho de arquivo errado está presente no envio. Rejeitando as alterações de configuração do Theatre: ",
 
 	"Theatre.UI.Settings.displayMode" : "Estilo da Barra de Teatro",
-	"Theatre.UI.Settings.displayModeHint" : "O estilo da área de texto abaixo da inserção. O estilo Sólido é mais indicado para jogos baseados em texto, e o Suave é mais indicado para jogos baseados em voz ou híbridos.",
+	"Theatre.UI.Settings.displayModeHint" : "O modo de visualização da área de texto abaixo da inserção do teatro. O estilo [Text Box] é destinado a jogos baseados em texto, com um fundo opaco para o texto. O estilo [Light Box] é destinado a jogos baseados em voz ou híbridos, com uma aparência de visual novel. O estilo [Clear] é destinado a jogos baseados apenas em voz, nos quais o texto não é tão importante, já que o texto *será difícil de ler*; é mais projetado como um modo no qual os retratos são usados apenas com movimentos e emotes.",	
 	"Theatre.UI.Settings.displayModeTextBox" : "Sólido",
 	"Theatre.UI.Settings.displayModeLightBox" : "Suave",
+	"Theatre.UI.Settings.displayModeClearBox" : "Transparente",	
+	"Theatre.UI.Settings.narrHeight" : "Posição da Barra do Narrador",
+	"Theatre.UI.Settings.narrHeightHint" : "A posição da barra do narrador como uma porcentagem da altura da tela.",
 	"Theatre.UI.Settings.textDecayMin" : "Decaída Mínima do Texto",
 	"Theatre.UI.Settings.textDecayMinHint" :"A quantidade mínima de tempo em segundos antes do texto começar a decair.",
 	"Theatre.UI.Settings.textDecayRate" : "Taxa de Decaída do Texto",
@@ -55,7 +58,7 @@
 	"Theatre.MOTD.OldVersion" : "O Theatre está desatualizado. Por favor, peça para seu GM atualizar o Theatre na tela de configurações.",
 
 	"Theatre.UI.Config.Stage" : "Palco",
-	"Theatre.UI.Config.Theatre" : "Teatro",
+	"Theatre.UI.Config.Theatre" : "Theatre",
 	"Theatre.UI.Config.ConfigureTheatre" : "Configurar Teatro",
 	"Theatre.UI.Config.Main" : "Principal",
 	"Theatre.UI.Config.AddEmote" : "Adicionar Emote",

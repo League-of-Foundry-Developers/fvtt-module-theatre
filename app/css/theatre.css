@@ -112,10 +112,6 @@
   src: url("../graphics/fonts/en/BalletHarmony.ttf"); }
 
 @font-face {
-  font-family: "Exmouth";
-  src: url("../graphics/fonts/en/exmouth_.ttf"); }
-
-@font-face {
   font-family: "FairProsper";
   src: url("../graphics/fonts/en/FairProsper.ttf"); }
 
@@ -156,8 +152,8 @@
   src: url("../graphics/fonts/en/Comic-ink.otf"); }
 
 @font-face {
-  font-family: "College";
-  src: url("../graphics/fonts/en/college.ttf"); }
+  font-family: "VarsityTeam";
+  src: url("../graphics/fonts/en/VarsityTeam-Bold.otf"); }
 
 @font-face {
   font-family: "Tiza";
@@ -226,6 +222,94 @@
 @font-face {
   font-family: "StampAct";
   src: url("../graphics/fonts/en/STAMPACT.ttf"); }
+
+@font-face {
+  font-family: "TimesNewRomance";
+  src: url("../graphics/fonts/en/Times-New-Romance.ttf"); }
+
+@font-face {
+  font-family: "DreamersBrush";
+  src: url("../graphics/fonts/en/DREAMERS-BRUSH.ttf"); }
+
+@font-face {
+  font-family: "Hamish";
+  src: url("../graphics/fonts/en/Hamish.otf"); }
+
+@font-face {
+  font-family: "Syemox";
+  src: url("../graphics/fonts/en/Syemox-italic.ttf"); }
+
+@font-face {
+  font-family: "Himagsikan";
+  src: url("../graphics/fonts/en/himagsikan.otf"); }
+
+@font-face {
+  font-family: "GoodBrush";
+  src: url("../graphics/fonts/en/Good-Brush.ttf"); }
+
+@font-face {
+  font-family: "Fewriter";
+  src: url("../graphics/fonts/en/fewriter_memesbruh03.ttf"); }
+
+@font-face {
+  font-family: "DreamyLand";
+  src: url("../graphics/fonts/en/Dreamy-Land-Medium.ttf"); }
+
+@font-face {
+  font-family: "JianGkrik";
+  src: url("../graphics/fonts/en/JIANGKRIK.otf"); }
+
+@font-face {
+  font-family: "Valentino";
+  src: url("../graphics/fonts/en/Valentino.ttf"); }
+
+@font-face {
+  font-family: "Galactico";
+  src: url("../graphics/fonts/en/Galactico-Basic.otf"); }
+
+@font-face {
+  font-family: "Hiroshio";
+  src: url("../graphics/fonts/en/Hiroshio.otf"); }
+
+@font-face {
+  font-family: "Makayla";
+  src: url("../graphics/fonts/en/makayla.ttf"); }
+
+@font-face {
+  font-family: "HappyFrushZero";
+  src: url("../graphics/fonts/en/happyfrushzero.ttf"); }
+
+@font-face {
+  font-family: "Oko";
+  src: url("../graphics/fonts/en/oko.ttf"); }
+
+@font-face {
+  font-family: "Stereofidelic";
+  src: url("../graphics/fonts/en/stereofidelic.ttf"); }
+
+@font-face {
+  font-family: "Headache";
+  src: url("../graphics/fonts/en/Headache.ttf"); }
+
+@font-face {
+  font-family: "YoungerThanMe";
+  src: url("../graphics/fonts/en/Younger-than-me.ttf"); }
+
+@font-face {
+  font-family: "Underground";
+  src: url("../graphics/fonts/en/MB_Underground.ttf"); }
+
+@font-face {
+  font-family: "LPEducational";
+  src: url("../graphics/fonts/en/LPEducational.ttf"); }
+
+@font-face {
+  font-family: "Kirsty";
+  src: url("../graphics/fonts/en/kirsty-rg.ttf"); }
+
+@font-face {
+  font-family: "VenusRising";
+  src: url("../graphics/fonts/en/venus-rising-rg.ttf"); }
 
 @font-face {
   font-family: "GenShinGothicBold";
@@ -606,7 +690,6 @@
   background: url("../graphics/denim95.png");
   box-shadow: 0 0 20px #000;
   transition: width 0.5s ease, left 0.5s ease, opacity 0.5s ease;
-  pointer-events: all;
   opacity: 0; }
 
 .theatre-bar-right {
@@ -623,7 +706,6 @@
   background: url("../graphics/denim95.png");
   box-shadow: 0 0 20px #000;
   transition: width 0.5s ease, left 0.5s ease, opacity 0.5s ease;
-  pointer-events: all;
   opacity: 0; }
 
 .theatre-bar-lightleft {
@@ -637,7 +719,6 @@
   height: 170px;
   z-index: 1;
   transition: width 0.5s ease, left 0.5s ease, opacity 0.5s ease;
-  pointer-events: all;
   opacity: 0; }
 
 .theatre-bar-lightright {
@@ -648,10 +729,35 @@
   width: 750px;
   margin: 0px;
   padding: 0px;
+  height: 160px;
+  z-index: 1;
+  transition: width 0.5s ease, left 0.5s ease, opacity 0.5s ease;
+  opacity: 0; }
+
+.theatre-bar-clearleft {
+  display: flex;
+  position: absolute;
+  top: 0px;
+  left: -100%;
+  width: 750px;
+  margin: 0px;
+  padding: 0px;
   height: 170px;
   z-index: 1;
   transition: width 0.5s ease, left 0.5s ease, opacity 0.5s ease;
-  pointer-events: all;
+  opacity: 0; }
+
+.theatre-bar-clearright {
+  display: flex;
+  position: absolute;
+  top: 0px;
+  left: 200%;
+  width: 750px;
+  margin: 0px;
+  padding: 0px;
+  height: 170px;
+  z-index: 1;
+  transition: width 0.5s ease, left 0.5s ease, opacity 0.5s ease;
   opacity: 0; }
 
 .theatre-dock {
@@ -790,7 +896,8 @@
 .theatre-container-column {
   flex: 1;
   display: flex;
-  flex-direction: column; }
+  flex-direction: column;
+  overflow: hidden; }
 
 .theatre-command-group {
   flex: 0 0 50px;
@@ -829,14 +936,33 @@
   transition: opacity 1s ease-in-out;
   flex-wrap: wrap; }
 
+.theatre-text-box-clear {
+  flex: 1;
+  position: relative;
+  display: flex;
+  font-size: 32px;
+  text-shadow: 1px 1px 3px #000;
+  margin: 10px 0px 10px 0px;
+  padding-left: 10px;
+  border-radius: 5px;
+  align-content: flex-start;
+  font-family: "Signika", "Palatino Linotype", serif;
+  transition: opacity 1s ease-in-out, box-shadow 0.5s ease-in-out;
+  flex-wrap: wrap; }
+
+.theatre-text-box-clear:hover {
+  box-shadow: inset 0px 0px 20px 2px white; }
+
 .theatre-narrator-content div,
 .theatre-text-box-light div,
+.theatre-text-box-clear div,
 .theatre-text-box div {
   display: flex;
   align-content: flex-start; }
 
 .theatre-narrator-content hr,
 .theatre-text-box-light hr,
+.theatre-text-box-clear hr,
 .theatre-text-box hr {
   border: 0;
   margin: 0;
@@ -848,7 +974,7 @@
 
 .theatre-narrator {
   position: absolute;
-  top: calc(50% - 50px);
+  top: calc(25% - 50px);
   left: 0px;
   display: flex;
   width: calc(100% - 300px);
@@ -875,9 +1001,10 @@
   position: absolute;
   top: 0px;
   left: 0px;
-  width: 100%;
+  width: calc(100% - 5em);
   height: 100%;
   display: flex;
+  margin: 0px 1em 0px 4em;
   align-items: center;
   justify-content: center;
   z-index: 1;
@@ -1016,7 +1143,8 @@
   opacity: 0.25; }
 
 .theatre-control-chat-cover-ooc {
-  background-image: url("../graphics/ooc.png"); }
+  background-image: url("../graphics/ooc.png");
+  box-shadow: inset 0px 0px 10px 2px blue; }
 
 .theatre-emote-menu {
   display: none;

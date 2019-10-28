@@ -48,6 +48,7 @@
 	"Theatre.UI.Settings.displayModeHint" : "Le mode d'affichage de la portion texte en dessous de l'insertion théâtrale. Le Style Texte se prête plus aux jeux textuels alors que le Style Clair se prête plus pour les jeux audios ou hybrides.",
 	"Theatre.UI.Settings.displayModeTextBox" : "Style Texte",
 	"Theatre.UI.Settings.displayModeLightBox" : "Style Clair",
+	"Theatre.UI.Settings.displayModeClearBox" : "Style Verre",
 	"Theatre.UI.Settings.textDecayMin" : "Temps de disparition minimum du texte",
 	"Theatre.UI.Settings.textDecayMinHint" : "Le temps minimum en secondes avant que le texte affiché dans théâtre ne commence a disparaître.",
 	"Theatre.UI.Settings.textDecayRate" : "Vitesse de disparition du texte",

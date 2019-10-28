@@ -43,7 +43,7 @@ class TheatreAlert extends Application {
 
 
 	/**
-	 * Render the TheatreAlert if there if the motddata is present, and there is a
+	 * Render the TheatreAlert if the motddata is present, and there is a
 	 * new version available OR if the new info accumulator is greater than our current value
 	 *
 	 * @param (Boolean) force   Add the rendered application to the DOM if it is not already present. If false, the
@@ -52,9 +52,9 @@ class TheatreAlert extends Application {
 	 *                          is rendered in the DOM.
 	 */
 	async render(force=false, options={}) {
-		//let data = await fetch("modules/theatre/motd.json").then(r => r.text()); 
+		let data = await fetch("modules/theatre/motd.json").then(r => r.text()); 
 		let data = await this.makeGETRequest("https://gitlab.com/Ayanzo/motds/raw/master/motd_theatre.json"); 
-		let module = game.modules.find(m => m.id == "theatre"); 
+		//let module = game.modules.find(m => m.id == "theatre"); 
 		let motdNewInfo = Theatre.instance.settings.motdNewInfo; 
 
 		try {
@@ -65,8 +65,13 @@ class TheatreAlert extends Application {
 				return; 
 			}
 			if (Theatre.DEBUG) console.log("module, data ",module,data); 
+			this.motdData.curversion = module.data.version; 
 
-			if (isNewerVersion(data.version,module.data.version,module.data.version) || motdNewInfo < data.newinfo) {
+			if (isNewerVersion(data.version,module.data.version,module.data.version)) {
+				// we don't update our new info accumulator to allow showing of the patchnotes later
+				return super.render(force,options);
+			} else if (motdNewInfo < data.newinfo) {
+				this.motdData.update = true; 
 				game.settings.set(Theatre.SETTINGS,"motdNewInfo",data.newinfo); 
 				return super.render(force,options);
 			} else {

@@ -43,9 +43,12 @@
 	"Theatre.UI.Notification.ErrorFatal" : "致命的なエラーが発生しました、コンソールログと共にバグ報告をしてください。",
 
 	"Theatre.UI.Settings.displayMode" : "表示モード",
-	"Theatre.UI.Settings.displayModeHint" : "立ち絵が表示されるときのモードを切り替えます。テキストボックスはテキストセッション向きで、簡易ボックスはオンセ等のセッション向きです。",
+	"Theatre.UI.Settings.displayModeHint" : "立ち絵のテキストボックスが表示されるときのモードを切り替えます。テキストボックスは従来のもので、テキストセッション向きです。簡易ボックスはボイスとテキストを両方使うセッション向きです。クリアボックスはボイスのみのセッション向きでテキストが読みづらくなる変わりに立ち絵を強調して表情と動きで見栄えをよくできるものです。",
 	"Theatre.UI.Settings.displayModeTextBox" : "テキストボックス",
 	"Theatre.UI.Settings.displayModeLightBox" : "簡易ボックス",
+	"Theatre.UI.Settings.displayModeClearBox" : "クリアボックス",
+	"Theatre.UI.Settings.narrHeight" : "ナレーションの位置",
+	"Theatre.UI.Settings.narrHeightHint" : "ナレーションの位置は画面の高さの割合で決まります。デフォルトは50%です",
 	"Theatre.UI.Settings.textDecayMin" : "最低リセット時間",
 	"Theatre.UI.Settings.textDecayMinHint" : "立ち絵のテキストボックスに表示されたテキストが白紙状態に戻されリセットされるまでの最低時間です。リセット時ログからテキストが消えることはありません。",
 	"Theatre.UI.Settings.textDecayRate" : "リセット率",

@@ -48,6 +48,7 @@
 	"Theatre.UI.Settings.displayModeHint" : "โหมดการแสดงผลสำหรับพื้นที่ข้อความภายใต้ Theatre รูปแบบของกล่องคำพูดจะเหมาะสำหรับเกมที่ใช้ข้อความเป็นหลัก ส่วนกล่องไฟนั้นเหมาะสำหรับเกมที่ใช้เสียงพูด หรือ ทั้งคู่",
 	"Theatre.UI.Settings.displayModeTextBox" : "สไตล์ Text Box",
 	"Theatre.UI.Settings.displayModeLightBox" : "สไตล์ Light Box",
+	"Theatre.UI.Settings.displayModeClearBox" : "สไตล์ Clear Box",
 	"Theatre.UI.Settings.textDecayMin" : "เวลาขั้นต่ำที่จะให้ตัวอักษรหายไป",
 	"Theatre.UI.Settings.textDecayMinHint" : "เวลาขั้นต่ำเป็นวินาที ก่อนที่ตัวอักษรใน theatre จะหายไป",
 	"Theatre.UI.Settings.textDecayRate" : "อัตราการจางของตัวอักษร",

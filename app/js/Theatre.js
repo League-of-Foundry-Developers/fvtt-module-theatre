@@ -31,11 +31,12 @@
  * ============================================================
  */
 class Theatre {
+
 	/**
 	 * Make singleton and initalize the inner instance object. 
 	 * Return singleton if already created. 
 	 */
-  constructor() {
+	constructor() {
 		if (!Theatre.instance) {
 			// build theater-wide statics
 			Theatre.SOCKET = "module.theatre"; 
@@ -83,7 +84,8 @@ class Theatre {
 				autoDecay: true,
 				decayRate: 1000,
 				decayMin: 30000,
-				barStyle: "textbox"
+				barStyle: "textbox",
+				narrHeight: "50%"
 			}
 			// Font library
 			Theatre.getFonts(); 
@@ -101,7 +103,7 @@ class Theatre {
 			this._sendResyncRequest("any"); 
 		}
 		return Theatre.instance; 
-  }
+	}
 
 	/**
 	 * Inject HTML
@@ -120,6 +122,7 @@ class Theatre {
 		this.theatreDock = this._initTheatreDockCanvas(); 
 		this.theatreToolTip = this._initTheatreToolTip(); 
 		if (!this.theatreDock || !this.theatreToolTip) {
+			console.error("Theatre encountered a FATAL error during initialization"); 
 			ui.notifications.error(game.i18n.localize("Theatre.UI.Notification.Fatal")); 
 			return; 
 		}
@@ -168,11 +171,14 @@ class Theatre {
 		// set theatreStyle
 		this.settings.theatreStyle = game.settings.get(Theatre.SETTINGS,"theatreStyle"); 
 		this.configTheatreStyle(this.settings.theatreStyle); 
+		// set narrator height
+		this.settings.narrHeight =  game.settings.get(Theatre.SETTINGS,"theatreNarratorHeight"); 
+		this.theatreNarrator.style.top = `calc(${this.settings.narrHeight} - 50px)`; 
 
 		// set dock canvas hard dimensions after CSS has caclulated it
 
 		/**
-		 * Theatre Chat Controls TODO
+		 * Theatre Chat Controls
 		 */
 		let chatControls = document.getElementById("chat-controls"); 
 		let controlButtons = chatControls.getElementsByClassName("control-buttons")[0]; 
@@ -316,9 +322,31 @@ class Theatre {
 			type: String,
 			choices: {
 				"textbox": "Theatre.UI.Settings.displayModeTextBox",
-				"lightbox": "Theatre.UI.Settings.displayModeLightBox"
+				"lightbox": "Theatre.UI.Settings.displayModeLightBox",
+				"clearbox": "Theatre.UI.Settings.displayModeClearBox"
 			},
 			onChange: theatreStyle => Theatre.instance.configTheatreStyle(theatreStyle)
+		});
+
+		game.settings.register(Theatre.SETTINGS, "theatreNarratorHeight", {
+			name: "Theatre.UI.Settings.narrHeight",
+			hint: "Theatre.UI.Settings.narrHeightHint",
+			scope: "world",
+			config: true,
+			default: "50%",
+			type: String,
+			choices: {
+				"15%": "15%",
+				"25%": "25%",
+				"30%": "30%",
+				"50%": "50%",
+				"70%": "75%"
+			},
+			onChange: narrHeight => {
+				this.settings.narrHeight = narrHeight; 
+				if (this.theatreNarrator)
+					this.theatreNarrator.style.top = `calc(${narrHeight} - 50px)`; 
+			}
 		});
 
 		game.settings.register(Theatre.SETTINGS, "textDecayMin", {
@@ -386,7 +414,8 @@ class Theatre {
 		// Load in default settings (theatreStyle is loaded on HTML Injection)
 		this.settings.decayMin = (game.settings.get(Theatre.SETTINGS,"textDecayMin")||30)*1000; 
 		this.settings.decayRate = (game.settings.get(Theatre.SETTINGS,"textDecayRate")||1)*1000; 
-		this.settings.motdNewInfo = game.settings.get(Theatre.SETTINGS,"motdNewInfo"); 
+		this.settings.motdNewInfo = game.settings.get(Theatre.SETTINGS,"motdNewInfo")||1; 
+
 	}
 
 	/**
@@ -396,6 +425,7 @@ class Theatre {
 	 */
 	configTheatreStyle(theatreStyle) {
 		if (Theatre.DEBUG) console.log("SWITCHING THEATRE BAR MODE : %s from %s",theatreStyle,this.settings.theatreStyle); 
+		let oldStyle = this.settings.theatreStyle; 
 		let primeBar = document.getElementById("theatre-prime-bar"); 
 		let secondBar = document.getElementById("theatre-second-bar");
 		let textBoxes = this._getTextBoxes(); 
@@ -404,10 +434,48 @@ class Theatre {
 		let dockWidth = this.theatreDock.offsetWidth; 
 		let dockHeight = this.theatreDock.offsetHeight; 
 
-		switch (theatreStyle) {
+		// clear old style
+		switch (oldStyle || "textbox") {
 			case "lightbox":
 				KHelpers.removeClass(primeBar,"theatre-bar-left"); 
 				KHelpers.removeClass(secondBar,"theatre-bar-right"); 
+				KHelpers.removeClass(primeBar,"theatre-bar-lightleft"); 
+				KHelpers.removeClass(secondBar,"theatre-bar-lightright"); 
+				for (let tb of textBoxes) {
+					KHelpers.removeClass(tb,"theatre-text-box-light"); 
+					KHelpers.removeClass(tb,"theatre-text-box"); 
+				}
+				break; 
+			case "clearbox":
+				KHelpers.removeClass(primeBar,"theatre-bar-left"); 
+				KHelpers.removeClass(secondBar,"theatre-bar-right"); 
+				KHelpers.removeClass(primeBar,"theatre-bar-clearleft"); 
+				KHelpers.removeClass(secondBar,"theatre-bar-clearright"); 
+				for (let tb of textBoxes) {
+					KHelpers.removeClass(tb,"theatre-text-box-clear"); 
+					KHelpers.removeClass(tb,"theatre-text-box"); 
+				}
+				break; 
+			case "mangabubble":
+				KHelpers.removeClass(primeBar,"theatre-bar-left"); 
+				KHelpers.removeClass(secondBar,"theatre-bar-right"); 
+				for (let tb of textBoxes) {
+					KHelpers.removeClass(tb,"theatre-text-box"); 
+				}
+				// PLACEHOLDER FOR FUTURE
+				break; 
+			case "textbox":
+			default:
+				KHelpers.removeClass(primeBar,"theatre-bar-left"); 
+				KHelpers.removeClass(secondBar,"theatre-bar-right"); 
+				for (let tb of textBoxes)
+					KHelpers.removeClass(tb,"theatre-text-box"); 
+				break; 
+		}
+
+		// apply new style
+		switch (theatreStyle) {
+			case "lightbox":
 				KHelpers.addClass(primeBar,"theatre-bar-lightleft"); 
 				KHelpers.addClass(secondBar,"theatre-bar-lightright"); 
 				this.theatreDock.style.height = "100%"; 
@@ -416,22 +484,26 @@ class Theatre {
 				this.theatreBar.style["border-radius"] = "5px 0px 0px 5px"; 
 				this.theatreBar.style["box-shadow"] = "0 0 40px #000"; 
 				this.theatreBar.style.background = "linear-gradient(transparent, rgba(20,20,20,0.98) 5%,rgba(20,20,20,0.85) 40%, rgba(20,20,20,0.6) 70%, rgba(20,20,20,0.5) 95%)"; 
-				for (let tb of textBoxes) {
-					KHelpers.removeClass(tb,"theatre-text-box"); 
+				for (let tb of textBoxes)
 					KHelpers.addClass(tb,"theatre-text-box-light"); 
-				}
+				break; 
+			case "clearbox":
+				KHelpers.addClass(primeBar,"theatre-bar-clearleft"); 
+				KHelpers.addClass(secondBar,"theatre-bar-clearright"); 
+				this.theatreDock.style.height = "100%"; 
+				this.theatreBar.style.top = "calc(100% - 170px)"; 
+				this.theatreBar.style.height = "170px"; 
+				this.theatreBar.style["border-radius"] = "unset"; 
+				this.theatreBar.style["box-shadow"] = "unset"; 
+				this.theatreBar.style.background = "unset"; 
+				for (let tb of textBoxes)
+					KHelpers.addClass(tb,"theatre-text-box-clear"); 
 				break; 
 			case "mangabubble":
-				KHelpers.removeClass(primeBar,"theatre-bar-left"); 
-				KHelpers.removeClass(secondBar,"theatre-bar-right"); 
-				KHelpers.removeClass(primeBar,"theatre-bar-lightleft"); 
-				KHelpers.removeClass(secondBar,"theatre-bar-lightright"); 
 				// PLACEHOLDER FOR FUTURE
 				break; 
 			case "textbox":
 			default:
-				KHelpers.removeClass(primeBar,"theatre-bar-lightleft"); 
-				KHelpers.removeClass(secondBar,"theatre-bar-lightright"); 
 				KHelpers.addClass(primeBar,"theatre-bar-left"); 
 				KHelpers.addClass(secondBar,"theatre-bar-right"); 
 				this.theatreDock.style.height = "99.5vh"; 
@@ -440,11 +512,8 @@ class Theatre {
 				this.theatreBar.style["border-radius"] = "unset"; 
 				this.theatreBar.style["box-shadow"] = "unset"; 
 				this.theatreBar.style.background = "unset"; 
-
-				for (let tb of textBoxes) {
-					KHelpers.removeClass(tb,"theatre-text-box-light"); 
+				for (let tb of textBoxes)
 					KHelpers.addClass(tb,"theatre-text-box"); 
-				}
 				break; 
 		}
 
@@ -974,12 +1043,16 @@ class Theatre {
 				}
 				break;
 			case "push":
-				if (Theatre.DEBUG) console.log("insertorder: tid:%s",data.insertid); 
+				if (Theatre.DEBUG) console.log("insertpush: tid:%s",data.insertid); 
 				this.pushInsertById(data.insertid,data.tofront,true); 
 				break; 
 			case "swap":
-				if (Theatre.DEBUG) console.log("insertorder: tid1:%s tid2:%s",data.insertid1,data.insertid2); 
+				if (Theatre.DEBUG) console.log("insertswap: tid1:%s tid2:%s",data.insertid1,data.insertid2); 
 				this.swapInsertsById(data.insertid1,data.insertid2,true); 
+				break; 
+			case "move":
+				if (Theatre.DEBUG) console.log("insertmove: tid1:%s tid2:%s",data.insertid1,data.insertid2); 
+				this.moveInsertById(data.insertid1,data.insertid2,true); 
 				break; 
 			case "emote":
 				if (Theatre.DEBUG) console.log("emote:",data); 
@@ -1242,18 +1315,15 @@ class Theatre {
 	}
 
 	/**
-	 * Get the users Speaking via their inserts
-	 *
-	 */
-	getUsersSpeaking() {
-		//TODO STUB
-	}
-
-	/**
 	 * Get the inserts which are typing based on if their users are typing
 	 */
 	getInsertsTyping() {
-		//TODO STUB
+		let typing = []; 
+		for (let userId in this.usersTyping)
+			if (this.usersTyping[userId].theatreId)
+				typing.push(userId); 
+
+		return typing; 
 	}
 
 	/**
@@ -1275,57 +1345,61 @@ class Theatre {
 
 		switch(subType) {
 			case "textfont":
-				userEmoting.textFont = value; 
 				if (insert) {
 					if (value) insert.textFont = value; 
 					else insert.textFont = null; 
 				} else if (theatreId == Theatre.NARRATOR) {
 					if (value) this.theatreNarrator.setAttribute("textfont",value); 					
 					else this.theatreNarrator.removeAttribute("textfont",value); 
+				} else {
+					userEmoting.textFont = value; 
 				}
 				break;
 			case "textsize":
-				userEmoting.textSize = value; 
 				if (insert) {
 					if (value) insert.textSize = value; 
 					else insert.textSize = null; 
 				} else if (theatreId == Theatre.NARRATOR) {
 					if (value) this.theatreNarrator.setAttribute("textsize",value); 					
 					else this.theatreNarrator.removeAttribute("textsize",value); 
+				} else {
+					userEmoting.textSize = value; 
 				}
 				break;
 			case "textcolor":
-				userEmoting.textColor = value; 
 				if (insert) {
 					if (value) insert.textColor = value; 
 					else insert.textColor = null; 
 				} else if (theatreId == Theatre.NARRATOR) {
 					if (value) this.theatreNarrator.setAttribute("textcolor",value); 					
 					else this.theatreNarrator.removeAttribute("textcolor",value); 
+				} else {
+					userEmoting.textColor = value; 
 				}
 				break; 
 			case "textflyin":
-				userEmoting.textFlyin = value; 
 				if (insert) {
 					if (value) insert.textFlyin = value; 
 					else insert.textFlyin = null; 
 				} else if (theatreId == Theatre.NARRATOR) {
 					if (value) this.theatreNarrator.setAttribute("textflyin",value); 					
 					else this.theatreNarrator.removeAttribute("textflyin",value); 
+				} else {
+					userEmoting.textFlyin = value; 
 				}
 				break; 
 			case "textstanding":
-				userEmoting.textStanding = value; 
 				if (insert) {
 					if (value) insert.textStanding = value; 
 					else insert.textStanding = null; 
 				} else if (theatreId == Theatre.NARRATOR) {
 					if (value) this.theatreNarrator.setAttribute("textstanding",value); 
 					else this.theatreNarrator.removeAttribute("textstanding",value); 
+				} else {
+					userEmoting.textStanding = value; 
 				}
 				break; 
 			case "emote":
-				userEmoting.emote = value; 
 				// if provided a theatreId, set that insert's emote image + effects
 				if (insert) {
 					// if we're delaying our emote, and ths user is us, hold off on setting it
@@ -1391,8 +1465,23 @@ class Theatre {
 				this._removeDockTween(insert.imgId,null,"typingWiggle"); 
 				this._removeDockTween(insert.imgId,null,"typingBounce"); 
 				// fade away
-				let oy = insert.typingBubble.y = insert.portrait.height - 
-					(insert.optAlign == "top" ? 0 : this.theatreBar.offsetHeight) - insert.label.style.lineHeight + insert.typingBubble.height/2;  
+				let oy = insert.portrait.height - 
+					(insert.optAlign == "top" ? 0 : this.theatreBar.offsetHeight);  
+
+				// style specific settings
+				switch (this.settings.theatreStyle) {
+					case "lightbox":
+						break; 
+					case "clearbox":
+						oy += (insert.optAlign == "top" ? 0 : this.theatreBar.offsetHeight);  
+						break; 
+					case "mangabubble":
+						break; 
+					case "textbox":
+						break; 
+					default:
+						break; 
+				}
 
 				let tweenId = "typingVanish"; 	
 				let tween = TweenMax.to(insert.typingBubble,0.2,{
@@ -1456,9 +1545,21 @@ class Theatre {
 				this._addDockTween(insert.imgId,tween,tweenId); 
 
 				let oy = insert.portrait.height - 
-					(insert.optAlign == "top" ? 0 : this.theatreBar.offsetHeight) - insert.label.style.lineHeight*0.75 + insert.typingBubble.height/2;  
-				//insert.typingBubble.y = insert.portrait.height - 
-					//(insert.optAlign == "top" ? 0 : this.theatreBar.offsetHeight) - insert.label.style.lineHeight + insert.typingBubble.height/2;  
+					(insert.optAlign == "top" ? 0 : this.theatreBar.offsetHeight) - insert.label.style.lineHeight*0.75;  
+				// style specific settings
+				switch (this.settings.theatreStyle) {
+					case "clearbox":
+						insert.typingBubble.y = insert.portrait.height;  
+						oy += (insert.optAlign == "top" ? 0 : this.theatreBar.offsetHeight);  
+						break; 
+					case "mangabubble":
+					case "lightbox":
+					case "textbox":
+					default:
+						insert.typingBubble.y = insert.portrait.height - (insert.optAlign == "top" ? 0 : this.theatreBar.offsetHeight);  
+						break; 
+				}
+
 				tweenId = "typingBounce"; 	
 				tween = TweenMax.to(insert.typingBubble,0.25,{
 					pixi:{y: oy},
@@ -1516,7 +1617,22 @@ class Theatre {
 				this._removeDockTween(insert.imgId,null,"typingBounce"); 
 				// fade away
 				let oy = insert.portrait.height - 
-					(insert.optAlign == "top" ? 0 : Theatre.instance.theatreBar.offsetHeight) - insert.label.style.lineHeight + insert.typingBubble.height/2;  
+					(insert.optAlign == "top" ? 0 : this.theatreBar.offsetHeight);  
+				// style specific settings
+				switch (this.settings.theatreStyle) {
+					case "lightbox":
+						break; 
+					case "clearbox":
+						oy += (insert.optAlign == "top" ? 0 : this.theatreBar.offsetHeight);  
+						break; 
+					case "mangabubble":
+						break; 
+					case "textbox":
+						break; 
+					default:
+						break; 
+				}
+
 				let tweenId = "typingVanish"; 	
 				let tween = TweenMax.to(insert.typingBubble,0.2,{
 					pixi:{scaleX: 0.01, scaleY: 0.01, alpha: 0, y: oy},
@@ -2022,7 +2138,7 @@ class Theatre {
 
 		//sanit check
 		if(this.renderAnims < 0) {
-			console.log("ERROR RENDER ANIM < 0 from %s of %s",tweenId,(insert ? insert.name : imgId)); 
+			console.error("ERROR RENDER ANIM < 0 from %s of %s",tweenId,(insert ? insert.name : imgId)); 
 			ui.notifications.error("ERROR RENDER ANIM < 0 "); 
 		}
 	}
@@ -2208,14 +2324,14 @@ class Theatre {
 		let insert = this.getInsertById(imgId); 
 
 		if (!insert || !insert.dockContainer)	{
-			console.log("ERROR PIXI Container was destroyed before setup could execute for %s",imgId); 
+			console.error("ERROR PIXI Container was destroyed before setup could execute for %s",imgId); 
 			ui.notifications.error(`${game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P1")} ${imgId} ${game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P2")} ${resName}`); 
 			this.removeInsertById(imgId); 
 			return; 
 		}
 
 		if (!resources[resName] || !resources[resName].texture) {
-			console.log("ERROR could not load texture %s",resName,resources); 
+			console.error("ERROR could not load texture %s",resName,resources); 
 			ui.notifications.error(`${game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P1")} ${imgId} ${game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P2")} ${resName}`); 
 			this.removeInsertById(imgId); 
 			return; 
@@ -2239,21 +2355,6 @@ class Theatre {
 		//dockContainer.x = 0;
 		dockContainer.y = this.theatreDock.offsetHeight - (optAlign == "top" ? this.theatreBar.offsetHeight : 0) - portHeight; 
 		
-		// theatreStyle specific dockContainer settings
-		switch (this.settings.theatreStyle) {
-			case "lightbox":
-				// to allow top-aligned portraits to work without a seam
-				//dockContainer.y += 20; 
-				dockContainer.y += (optAlign == "top" ? 8 : 0); 
-				break; 
-			case "mangabubble":
-				break; 
-			case "textbox":
-				break; 
-			default:
-				break; 
-		}
-
 		// save and stage our sprite
 		insert.portrait = sprite; 
 		portraitContainer.addChild(sprite);
@@ -2303,21 +2404,6 @@ class Theatre {
 		// position the label
 		insert.label.y = portHeight - (optAlign == "top" ? 0 : this.theatreBar.offsetHeight) - insert.label.lineHeight - 20; 
 
-		// TheatreStyle specific adjustments
-		switch (this.settings.theatreStyle) {
-			case "lightbox":
-				// to allow top-aligned portraits to work without a seam
-				dockContainer.y += (optAlign == "top" ? 8 : 0); 
-				insert.label.y -= (insert.optAlign == "top" ? 8 : 0); 
-				break; 
-			case "mangabubble":
-				break; 
-			case "textbox":
-				break; 
-			default:
-				break; 
-		}
-
 		// setup typing bubble
 		if (!insert.typingBubble) {
 			let typingBubble = new PIXI.Sprite(); 
@@ -2333,6 +2419,25 @@ class Theatre {
 			dockContainer.addChild(typingBubble); 
 		}
 
+		// TheatreStyle specific adjustments
+		switch (this.settings.theatreStyle) {
+			case "lightbox":
+				// to allow top-aligned portraits to work without a seam
+				dockContainer.y += (optAlign == "top" ? 8 : 0); 
+				insert.label.y -= (insert.optAlign == "top" ? 8 : 0); 
+				break; 
+			case "clearbox":
+				dockContainer.y = this.theatreDock.offsetHeight - portHeight; 
+				insert.label.y += (optAlign == "top" ? 0 : this.theatreBar.offsetHeight); 
+				insert.typingBubble.y += (optAlign == "top" ? 0 : this.theatreBar.offsetHeight);  
+				break; 
+			case "mangabubble":
+				break; 
+			case "textbox":
+				break; 
+			default:
+				break; 
+		}
 		
 		if (Theatre.DEBUG) console.log("Portrait loaded with w:%s h:%s",portWidth,portHeight,sprite); 
 
@@ -2563,6 +2668,11 @@ class Theatre {
 				insert.dockContainer.y += (insert.optAlign == "top" ? 8 : 0); 
 				insert.label.y -= (insert.optAlign == "top" ? 8 : 0); 
 				break; 
+			case "clearbox":
+				insert.dockContainer.y = this.theatreDock.offsetHeight - insert.portrait.height; 
+				insert.label.y += (insert.optAlign == "top" ? 0 : Theatre.instance.theatreBar.offsetHeight); 
+				insert.typingBubble.y += (insert.optAlign == "top" ? 0 : Theatre.instance.offsetHeight);  
+				break; 
 			case "mangabubble":
 				break; 
 			case "textbox":
@@ -2630,7 +2740,7 @@ class Theatre {
 
 		// Send to socket
 		if (!remote) {
-			// broadcast change to clients TODO
+			// broadcast change to clients
 			this._sendSceneEvent("addtexture",{
 				insertid: imgId,
 				imgsrc: imgSrc,
@@ -2701,7 +2811,7 @@ class Theatre {
 
 		// Send to socket
 		if (!remote) {
-			// broadcast change to clients TODO
+			// broadcast change to clients
 			this._sendSceneEvent("addalltextures",{
 				insertid: imgId,
 				imgsrcs: imgSrcs,
@@ -2913,8 +3023,7 @@ class Theatre {
 		let params = this._getInsertParamsFromActorId(actorId); 
 		if (!params) return;
 		//console.log("params: ",params); 
-		// kick asset loader to cache the portrait + emotes TODO
-		//TODO asset load in the rigging elements too
+		// kick asset loader to cache the portrait + emotes
 		let imgSrcs = [];
 
 		//imgSrcs.push({imgpath: params.src, resname: `portrait-${theatreId}`}); 
@@ -2976,7 +3085,6 @@ class Theatre {
 	}
 	/**
 	 * Set the emote given the insert
-	 * TODO: we should pre-load all the emote resources
 	 * the moment the insert is in the RP bar
 	 *
 	 * @params ename (String) : The emote name.
@@ -3028,7 +3136,7 @@ class Theatre {
 				if (Theatre.DEBUG) console.log("emote insert loaded",resources); 
 				// Error loading the sprite
 				if (!resources[emoteResName] || resources[emoteResName].error) {
-					console.log("ERROR loading resource %s : %s : %s",insert.imgId,emoteResName,emotes[ename].insert); 
+					console.error("ERROR loading resource %s : %s : %s",insert.imgId,emoteResName,emotes[ename].insert); 
 					ui.notifications.error(game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P1") + 
 							+ emoteResName
 							+ game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P2") + emotes[ename].insert + "'");
@@ -3071,7 +3179,7 @@ class Theatre {
 					if (Theatre.DEBUG) console.log("base insert re-loaded",resources); 
 					// Error loading the sprite
 					if (!resources[baseInsert] || resources[baseInsert].error) {
-						console.log("ERROR loading resource %s : %s : %s",insert.imgId,baseInsert,baseInsert); 
+						console.error("ERROR loading resource %s : %s : %s",insert.imgId,baseInsert,baseInsert); 
 						ui.notifications.error(game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P1") + 
 								+ baseInsert
 								+ game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P2") + baseInsert + "'");
@@ -3171,7 +3279,9 @@ class Theatre {
 			primeBar.appendChild(textBox); 
 			primeBar.style.left = "0%"; 
 			primeBar.style.opacity = "1";  
+			primeBar.style["pointer-events"] = "all"; 
 			this.theatreBar.style.opacity = "1";  
+			Hooks.call("theatreDockActive",this.dockActive);
 		} else if (textBoxes.length == 1) {
 			// single dock
 			// 1. slide in second container, and add new textBox to it
@@ -3184,10 +3294,12 @@ class Theatre {
 			let dualWidth = Math.min(Math.floor(this.theatreBar.offsetWidth/2),650); 
 			secondBar.style.left = `calc(100% - ${dualWidth}px)`; 
 			secondBar.style.opacity = "1";  
+			secondBar.style["pointer-events"] = "all";  
 			secondBar.style.width = `${dualWidth}px`; 
 			primeBar.style.width = `${dualWidth}px`; 
 
 			secondBar.appendChild(textBox); 
+			Hooks.call("theatreDockActive",this.dockActive);
 		} else if (textBoxes.length == 2) {
 			// dual docks
 			// 1. confirm if we're in dual dock mode
@@ -3205,16 +3317,19 @@ class Theatre {
 			}
 			secondBar.style.left = "200%";
 			secondBar.style.opacity = "0";  
+			secondBar.style["pointer-events"] = "none";  
 			primeBar.style.width = "100%"; 
 
 			if (isLeft) KHelpers.insertBefore(textBox,primeBar.children[0]); 
 			else primeBar.appendChild(textBox); 
+			Hooks.call("theatreDockActive",this.dockActive);
 
 		} else if (textBoxes.length > 2){
 			// bar dock
 			// 1. Just find the prime container, and add the new textBox to it
 			if (isLeft) KHelpers.insertBefore(textBox,primeBar.children[0]); 
 			else primeBar.appendChild(textBox); 
+			Hooks.call("theatreDockActive",this.dockActive);
 
 		}
 	}
@@ -3241,8 +3356,10 @@ class Theatre {
 			// 1. Remove the text Box, and close the primary bar
 			primeBar.style.left = "-100%";
 			primeBar.style.opacity = "0";  
+			primeBar.style["pointer-events"] = "none"; 
 			textBox.parentNode.removeChild(textBox); 
 			this.theatreBar.style.opacity = "0";  
+			Hooks.call("theatreDockActive",this.dockActive);
 		} else if (textBoxes.length == 2) {
 			// dual docks
 			// 1. confirm if we're in dual dock mode
@@ -3263,8 +3380,10 @@ class Theatre {
 			}
 			secondBar.style.left = "200%"; 
 			secondBar.style.opacity = "0";  
+			secondBar.style["pointer-events"] = "none";  
 			primeBar.style.width = "750px";
 			textBox.parentNode.removeChild(textBox); 
+			Hooks.call("theatreDockActive",this.dockActive);
 
 		} else if (textBoxes.length == 3){
 			// bar dock
@@ -3283,13 +3402,16 @@ class Theatre {
 			let dualWidth = Math.min(Math.floor(this.theatreBar.offsetWidth/2),650); 
 			secondBar.style.left = `calc(100% - ${dualWidth}px)`; 
 			secondBar.style.opacity = "1";  
+			secondBar.style["pointer-events"] = "all";  
 			secondBar.style.width = `${dualWidth}px`; 
 			primeBar.style.width = `${dualWidth}px`; 
 
 			textBox.parentNode.removeChild(textBox); 
+			Hooks.call("theatreDockActive",this.dockActive);
 		} else {
 			// normal bar removal
 			textBox.parentNode.removeChild(textBox); 
+			Hooks.call("theatreDockActive",this.dockActive);
 		}
 	}
 
@@ -3325,6 +3447,9 @@ class Theatre {
 		switch (this.settings.theatreStyle) {
 			case "lightbox":
 				KHelpers.addClass(textBox,"theatre-text-box-light"); 
+				break; 
+			case "clearbox":
+				KHelpers.addClass(textBox,"theatre-text-box-clear"); 
 				break; 
 			case "mangabubble":
 				break; 
@@ -3386,6 +3511,9 @@ class Theatre {
 		switch (this.settings.theatreStyle) {
 			case "lightbox":
 				KHelpers.addClass(textBox,"theatre-text-box-light"); 
+				break; 
+			case "clearbox":
+				KHelpers.addClass(textBox,"theatre-text-box-clear"); 
 				break; 
 			case "mangabubble":
 				break; 
@@ -3567,7 +3695,6 @@ class Theatre {
 					break; 
 				}
 			// clear label
-			// TODO remove text tween
 			// clear speakingAs
 			this.speakingAs = null;
 			this.renderEmoteMenu(); 
@@ -3861,6 +3988,7 @@ class Theatre {
 		if (!!!textBox1 || !!!textBox2) return; 
 		this._swapInserts(insert1,insert2,textBox1,textBox2,remote); 
 	}
+
 	/**
 	 * Swap Inserts by Name
 	 *
@@ -3896,11 +4024,12 @@ class Theatre {
 		if (!!!textBox1 || !!!textBox2) return; 
 		this._swapInserts(insert1,insert2,textBox1,textBox2,remote); 
 	}
+
 	/**
 	 * Swaps Inserts
 	 *
 	 * @params insert1 (Object) : The Object representing the first insert to swap. 
-	 * @params insert1 (Object) : The Object representing the second insert to swap. 
+	 * @params insert2 (Object) : The Object representing the second insert to swap. 
 	 * @params textBox1 (HTMLELement) : The textBox of the first insert to swap.
 	 * @params textBox2 (HTMLELement) : The textBox of the second insert to swap.
 	 * @params remote (Boolean) : Wither this is being invoked remotely, or locally. 
@@ -3982,6 +4111,117 @@ class Theatre {
 			}); 
 		}
 	}
+
+	/**
+	 * Move  Inserts by ID
+	 *
+	 * @params id1 (String) : The theatreId of the destination insert to move to.
+	 * @params id2 (String) : The theatreId of insert to move.
+	 * @params remote (Boolean) : Wither this is being invoked remotely, or locally. 
+	 */
+	moveInsertById(id1,id2,remote) {
+		if (this.portraitDocks.length < 2) return; 
+
+		let insert1,
+				insert2,
+				textBox1,
+				textBox2; 
+		for (let insert of this.portraitDocks) {
+			if (insert.imgId == id1 && !!!insert1)
+				insert1 = insert; 
+			else if (insert.imgId == id2 && !!!insert2)
+				insert2 = insert; 
+			if (!!insert1 && !!insert2) break; 
+		}
+		for (let textBox of this._getTextBoxes()) {
+			if (textBox.getAttribute("imgId") == id1 && !!!textBox1)
+				textBox1 = textBox; 
+			else if (textBox.getAttribute("imgId") == id2 && !!!textBox2)
+				textBox2 = textBox; 
+			if (!!textBox1 && !!textBox2) break; 
+		}
+
+		if (!!!insert1 || !!!insert2) return; 
+		if (!!!textBox1 || !!!textBox2) return; 
+		this._moveInsert(insert1,insert2,textBox1,textBox2,remote); 
+	}
+
+	/**
+	 * Move an insert
+	 *
+	 * @params insert1 (Object) : The Object representing the destination insert. 
+	 * @params insert2 (Object) : The Object representing insert to move
+	 *
+	 * @params textBox1 (HTMLELement) : The textBox of the destination textbox
+	 * @params textBox2 (HTMLELement) : The textBox of the textbox to move
+	 *
+	 * @params remote (Boolean) : Wither this is being invoked remotely, or locally. 
+	 *
+	 * @private
+	 */
+	_moveInsert(insert1,insert2,textBox1,textBox2,remote) {
+		let tsib1n = textBox1.nextSibling,
+				tsib1p = textBox1.previousSibling,
+				tsib2n = textBox2.nextSibling,
+				tsib2p = textBox2.previousSibling; 
+		//console.log("SWAP",textBox1,textBox2); 
+		let adjSwap = false; 
+
+		// permission check
+		if (!remote && !this.isActorOwner(game.user._id,insert2.imgId)) {
+			ui.notifications.info(game.i18n.localize("Theatre.UI.Notification.CannotMoveOwner"));
+			return; 
+		} else if (!remote && (!this.isPlayerOwned(insert1.imgId) || !this.isPlayerOwned(insert2.imgId))) {
+			ui.notifications.info(game.i18n.localize("Theatre.UI.Notification.CannotMoveControlled"));
+			return; 
+		} 
+
+		// check the dual dock case
+		if (this._isTextBoxInPrimeBar(textBox1) && this._isTextBoxInSecondBar(textBox2)) {
+			let primeBar = document.getElementById("theatre-prime-bar"); 
+			let secondBar = document.getElementById("theatre-second-bar"); 
+			insert1.nameOrientation = "right"; 
+			insert1.exitOrientation = "right"; 
+			insert2.nameOrientation = "left"; 
+			insert2.exitOrientation = "left"; 
+
+			primeBar.appendChild(textBox2); 
+			secondBar.appendChild(textBox1); 
+		} else if (this._isTextBoxInPrimeBar(textBox2) && this._isTextBoxInSecondBar(textBox1)) {
+			let primeBar = document.getElementById("theatre-prime-bar"); 
+			let secondBar = document.getElementById("theatre-second-bar"); 
+			insert1.nameOrientation = "left"; 
+			insert1.exitOrientation = "left"; 
+			insert2.nameOrientation = "right"; 
+			insert2.exitOrientation = "right"; 
+
+			primeBar.appendChild(textBox1); 
+			secondBar.appendChild(textBox2); 
+		} else {
+			// full bar case
+			if (insert2.order > insert1.order)
+				KHelpers.insertBefore(textBox2,textBox1); 
+			else
+				KHelpers.insertAfter(textBox2,textBox1); 
+		}
+
+		if (this.reorderTOId)
+			window.clearTimeout(this.reorderTOId); 
+
+		this.reorderTOId = window.setTimeout(()=>{
+			Theatre.reorderInserts(); 
+			this.reorderTOId = null; 
+		},250); 
+
+		// Push to socket our event
+		if (!remote) {
+			Theatre.instance._sendSceneEvent("move",{
+				insertid1 : insert1.imgId,
+				insertid2 : insert2.imgId,
+			}); 
+		}
+	}
+
 
 	/**
 	 * Is the textbox in the prime bar
@@ -4643,8 +4883,8 @@ class Theatre {
 		}
 		// clear last speaking if present
 		KHelpers.removeClass(textBox,"theatre-text-box-lastspeaking"); 
-		textBox.style.background = "unset"; 
-		textBox.style["box-shadow"] = "unset"; 
+		textBox.style.background = ""; 
+		textBox.style["box-shadow"] = ""; 
 
 		// clear decay Timout if present
 		if (insert.decayTOId) {
@@ -4702,7 +4942,20 @@ class Theatre {
 		blue = Math.min(blue+75,255); 
 
 		if (Theatre.DEBUG) console.log("color %s : red: %s:%s, green %s:%s, blue %s:%s",color,red,darkred,green,darkgreen,blue,darkblue); 
-		textBox.style.cssText += `background: linear-gradient(transparent 0%, rgba(${red},${green},${blue},0.10) 40%, rgba(${red},${green},${blue},0.10) 60%, transparent 100%); box-shadow: 0px 5px 2px 1px rgba(${darkred}, ${darkgreen}, ${darkblue}, .2)`; 
+
+		// style specific settings
+		switch (this.settings.theatreStyle) {
+			case "clearbox":
+				textBox.style.cssText += `background: linear-gradient(transparent 0%, rgba(${red},${green},${blue},0.30) 40%, rgba(${red},${green},${blue},0.30) 60%, transparent 100%); box-shadow: 0px 5px 2px 1px rgba(${darkred}, ${darkgreen}, ${darkblue}, 0.30)`; 
+				break; 
+			case "mangabubble":
+			case "lightbox":
+			case "textbox":
+			default:
+				textBox.style.cssText += `background: linear-gradient(transparent 0%, rgba(${red},${green},${blue},0.10) 40%, rgba(${red},${green},${blue},0.10) 60%, transparent 100%); box-shadow: 0px 5px 2px 1px rgba(${darkred}, ${darkgreen}, ${darkblue}, .2)`; 
+				break; 
+		}
+
 	}
 
 	/**
@@ -5466,27 +5719,28 @@ class Theatre {
 				KHelpers.removeClass(ev.currentTarget,"theatre-control-btn-down"); 
 			}
 			Theatre.instance.isSuppressed = false; 
-			Theatre.instance.theatreGroup.style.opacity = "1"; 
-			/*
+			//Theatre.instance.theatreGroup.style.opacity = "1"; 
 			Theatre.instance.theatreDock.style.opacity = "1"; 
 			Theatre.instance.theatreBar.style.opacity = "1"; 
 			Theatre.instance.theatreNarrator.style.opacity = "1"; 
-			*/
+
 			primeBar.style["pointer-events"] = "all"; 
 			secondBar.style["pointer-events"] = "all"; 
 		} else {
 			let combatActive = game.combats.active; 
 			KHelpers.addClass(ev.currentTarget,"theatre-control-btn-down"); 
 			Theatre.instance.isSuppressed = true; 
-			Theatre.instance.theatreGroup.style.opacity = (combatActive ? "0.05" : "0.25"); 
-			/*
-			Theatre.instance.theatreDock.style.opacity = (combatActive ? "0.05" : "0.25"); 
-			Theatre.instance.theatreBar.style.opacity = (combatActive ? "0.05" : "0.25"); 
-			Theatre.instance.theatreNarrator.style.opacity = (combatActive ? "0.05" : "0.25"); 
-			*/
+			//Theatre.instance.theatreGroup.style.opacity = (combatActive ? "0.05" : "0.20"); 
+			Theatre.instance.theatreDock.style.opacity = (combatActive ? "0.05" : "0.20"); 
+			Theatre.instance.theatreBar.style.opacity = (combatActive ? "0.05" : "0.20"); 
+			Theatre.instance.theatreNarrator.style.opacity = (combatActive ? "0.05" : "0.20"); 
+
+
 			primeBar.style["pointer-events"] = "none"; 
 			secondBar.style["pointer-events"] = "none"; 
 		}
+		// call hooks
+		Hooks.call("theatreSuppression", Theatre.instance.isSuppressed);
 	}
 
 	/**
@@ -5563,7 +5817,7 @@ class Theatre {
 		}); 
 		Theatre.instance._addDockTween(insert.imgId,tween,tweenId); 
 
-		// send sceneEvent TODO FIX PORTRAIT MIRROR
+		// send sceneEvent
 		Theatre.instance._sendSceneEvent("positionupdate",{
 			insertid : insert.imgId,
 			position: {x: dx, y: dy, mirror: insert.mirrored}
@@ -5654,13 +5908,10 @@ class Theatre {
 		let chatMessage = document.getElementById("chat-message"); 
 		if (ev.button == 0) {
 			if (ev.ctrlKey) {
-				//Theatre.instance.removeInsertById(id); 
-				//console.log("TODO clear textbox"); 
 				Theatre.instance.decayTextBoxById(id); 
 				ev.stopPropagation(); 
 			} else if (ev.shiftKey) {
 				Theatre.instance.pushInsertById(id,true); 
-				// push focus to chat-message
 				chatMessage.focus(); 
 				ev.stopPropagation(); 
 			} else if (ev.altKey) {
@@ -5673,8 +5924,13 @@ class Theatre {
 				Theatre.instance.removeInsertById(id); 
 				ev.stopPropagation(); 
 			} else if (ev.shiftKey) {
-				Theatre.instance.pushInsertById(id,false); 
-				// push focus to chat-message
+				if (Theatre.instance.swapTarget 
+				&& Theatre.instance.swapTarget != id) {
+					Theatre.instance.swapInsertsById(id,Theatre.instance.swapTarget); 
+					Theatre.instance.swapTarget = null; 
+				} else {
+					Theatre.instance.pushInsertById(id,false); 
+				}
 				chatMessage.focus(); 
 				ev.stopPropagation(); 
 			} else if (ev.altKey) {
@@ -5682,14 +5938,13 @@ class Theatre {
 				Theatre.addToNavBar(actor.data); 
 			} else if (Theatre.instance.swapTarget) {
 				if (Theatre.instance.swapTarget != id) {
-					Theatre.instance.swapInsertsById(id,Theatre.instance.swapTarget); 
+					//Theatre.instance.swapInsertsById(id,Theatre.instance.swapTarget); 
+					Theatre.instance.moveInsertById(id,Theatre.instance.swapTarget); 
 					Theatre.instance.swapTarget = null; 
-					ev.stopPropagation(); 
 				} else {
 					Theatre.instance.mirrorInsertById(id); 
-					ev.stopPropagation(); 
 				}
-				// push focus to chat-message
+				ev.stopPropagation(); 
 				chatMessage.focus(); 
 				Theatre.instance.swapTarget = null; 
 			} 
@@ -5927,6 +6182,11 @@ class Theatre {
 					// to allow top-aligned portraits to work without a seam
 					insert.dockContainer.y += (insert.optAlign == "top" ? 8 : 0); 
 					insert.label.y -= (insert.optAlign == "top" ? 8 : 0); 
+					break; 
+				case "clearbox":
+					insert.dockContainer.y = Theatre.instance.theatreDock.offsetHeight - insert.portrait.height; 
+					insert.label.y += (insert.optAlign == "top" ? 0 : Theatre.instance.theatreBar.offsetHeight) 
+					insert.typingBubble.y += (insert.optAlign == "top" ? 0 : Theatre.instance.theatreBar.offsetHeight);  
 					break; 
 				case "mangabubble":
 					break; 
@@ -6324,7 +6584,9 @@ class Theatre {
 						"Riffic",
 						"IronSans",
 						"LinLibertine",
+						"TimesNewRomance",
 						"TimesNewYorker",
+						"LPEducational",
 						"Cardinal",
 						"OldLondon",
 						"StoneHenge",
@@ -6334,37 +6596,54 @@ class Theatre {
 						"FairProsper",
 						"BalletHarmony",
 						"MagieraScript",
-						"Exmouth",
 						"Cathallina",
+						"Hamish",
+						"DreamersBrush",
 						"FastInMyCar",
 						"ChildWriting",
 						"Kindergarten",
 						"FuturaHandwritten",
+						"Fewriter",
 						"TrashHand",
+						"GoodBrush",
 						"BaksoSapi",
 						"SuplexmentaryComic",
 						"ComicInk",
-						"Subscriber",
+						"DreamyLand",
 						"Yikes",
 						"GangOfThree",
+						"JianGkrik",
 						"Yozakura",
+						"Hiroshio",
 						"ArabDances",
-						"Megadeth",
 						"Rooters",
 						"Subway",
+						"Himagsikan",
 						"MilTown",
+						"Galactico",
+						"Oko",
 						"Ethnocentric",
+						"VenusRising",
 						"StampAct",
+						"Kirsty",
 						"Western",
 						"BreakAway",
-						"College",
+						"YoungerThanMe",
+						"Underground",
+						"VarsityTeam",
+						"Valentino",
 						"GlassHouses",
+						"Makayla",
 						"DancingVampyrish",
 						"Codex",
 						"DSNetStamped",
+						"HappyFrushZero",
 						"Shoplifter",
+						"Stereofidelic",
+						"Headache",
 						"HorrorHouse",
 						"GhostTheory2",
+						"Syemox",
 						"GhostChase"
 					]; 
 					break; 
@@ -6376,6 +6655,8 @@ class Theatre {
 						"SignikaBold", 
 						"Riffic",
 						"LinLibertine",
+						"TimesNewRomance",
+						"LPEducational",
 						"Cardinal",
 						"OldLondon",
 						"StoneHenge",
@@ -6383,19 +6664,37 @@ class Theatre {
 						"LemonTuesday",
 						"FairProsper",
 						"Exmouth",
-						"HoneyScript",
+						"Hamish",
+						"DreamersBrush",
 						"FuturaHandwritten",
+						"Fewriter",
 						"TrashHand",
+						"GoodBrush",
 						"BaksoSapi",
 						"SuplexmentaryComic",
-						"Subscriber",
+						"DreamyLand",
 						"GangOfThree",
+						"JianGkrik",
 						"Yozakura",
-						"Megadeth",
+						"Hiroshio",
 						"Rooters",
-						"StampAct",
+						"Himagsikan",
+						"Galactico",
+						"Oko",
 						"Ethnocentric",
-						"HorrorHouse"
+						"VenusRising",
+						"StampAct",
+						"Kirsty",
+						"YoungerThanMe",
+						"Underground",
+						"VarsityTeam",
+						"Valentino",
+						"Makayla",
+						"HappyFrushZero",
+						"Stereofidelic",
+						"Headache",
+						"HorrorHouse",
+						"Syemox"
 					]; 
 					break; 
 			}
@@ -7888,6 +8187,11 @@ class Theatre {
 									if (!textBox)
 										textBox = KHelpers.seekParentClass(charSpans[0],"theatre-text-box",5); 
 									break; 
+								case "clearbox":
+									textBox = KHelpers.seekParentClass(charSpans[0],"theatre-text-box-clear",5); 
+									if (!textBox)
+										textBox = KHelpers.seekParentClass(charSpans[0],"theatre-text-box",5); 
+									break; 
 								case "mangabubble":
 									break; 
 								case "textbox":
@@ -7958,6 +8262,11 @@ class Theatre {
 									if (!textBox)
 										textBox = KHelpers.seekParentClass(charSpans[0],"theatre-text-box",5); 
 									break; 
+								case "clearbox":
+									textBox = KHelpers.seekParentClass(charSpans[0],"theatre-text-box-clear",5); 
+									if (!textBox)
+										textBox = KHelpers.seekParentClass(charSpans[0],"theatre-text-box",5); 
+									break; 
 								case "mangabubble":
 									break; 
 								case "textbox":
@@ -8005,6 +8314,11 @@ class Theatre {
 							switch (Theatre.instance.settings.theatreStyle) {
 								case "lightbox":
 									textBox = KHelpers.seekParentClass(charSpans[0],"theatre-text-box-light",5); 
+									if (!textBox)
+										textBox = KHelpers.seekParentClass(charSpans[0],"theatre-text-box",5); 
+									break; 
+								case "clearbox":
+									textBox = KHelpers.seekParentClass(charSpans[0],"theatre-text-box-clear",5); 
 									if (!textBox)
 										textBox = KHelpers.seekParentClass(charSpans[0],"theatre-text-box",5); 
 									break; 
@@ -8057,6 +8371,11 @@ class Theatre {
 							switch (Theatre.instance.settings.theatreStyle) {
 								case "lightbox":
 									textBox = KHelpers.seekParentClass(charSpans[0],"theatre-text-box-light",5); 
+									if (!textBox)
+										textBox = KHelpers.seekParentClass(charSpans[0],"theatre-text-box",5); 
+									break; 
+								case "clearbox":
+									textBox = KHelpers.seekParentClass(charSpans[0],"theatre-text-box-clear",5); 
 									if (!textBox)
 										textBox = KHelpers.seekParentClass(charSpans[0],"theatre-text-box",5); 
 									break; 
