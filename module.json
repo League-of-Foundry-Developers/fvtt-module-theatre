@@ -3,7 +3,7 @@
 	"title": "Theatre Inserts",
 	"description": "Theater Inserts for speaking players",
 	"version": "1.0.4",
-	"author": "Noah Zorbaugh",
+	"author": "Ken L, maintained by Noah Zorbaugh",
 	"socket": true,
 	"languages": [
 		{
