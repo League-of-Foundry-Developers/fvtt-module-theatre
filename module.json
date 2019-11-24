@@ -2,8 +2,8 @@
 	"name": "theatre",
 	"title": "Theatre Inserts",
 	"description": "Theater Inserts for speaking players",
-	"version": "1.0.3",
-	"author": "Ken L.",
+	"version": "1.0.4",
+	"author": "Noah Zorbaugh",
 	"socket": true,
 	"languages": [
 		{
@@ -50,7 +50,7 @@
 	],
 	"styles" : ["app/css/theatre.css"],
 	"packs": [],
-	"url" : "https://gitlab.com/Ayanzo/theatre",
-	"download" : "https://gitlab.com/Ayanzo/theatre/-/archive/master/theatre-master.zip",
-	"manifest" : "https://gitlab.com/Ayanzo/theatre/raw/master/module.json"
+	"url" : "https://gitlab.com/NoahZorbaugh/theatre",
+	"download" : "https://gitlab.com/NoahZorbaugh/theatre/-/archive/master/theatre-master.zip",
+	"manifest" : "https://gitlab.com/NoahZorbaugh/theatre/raw/master/module.json"
 }
