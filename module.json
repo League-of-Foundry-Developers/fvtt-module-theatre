@@ -52,5 +52,6 @@
 	"packs": [],
 	"url" : "https://gitlab.com/NoahZorbaugh/theatre",
 	"download" : "https://gitlab.com/NoahZorbaugh/theatre/-/archive/master/theatre-master.zip",
-	"manifest" : "https://gitlab.com/NoahZorbaugh/theatre/raw/master/module.json"
+	"manifest" : "https://gitlab.com/NoahZorbaugh/theatre/raw/master/module.json",
+	"minimumCoreVersion": "0.4.0"
 }
