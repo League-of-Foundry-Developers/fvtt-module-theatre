@@ -36,7 +36,7 @@ class TheatreActorConfig extends FormApplication {
 	static get defaultOptions() {
 	  const options = super.defaultOptions;
 	  options.id = "theatre-config";
-	  options.template = "public/modules/theatre/app/templates/theatre_actor_config.html";
+	  options.template = "modules/theatre/app/templates/theatre_actor_config.html";
 	  options.width = 500;
 		options.height = 270; 
 	  return options;
