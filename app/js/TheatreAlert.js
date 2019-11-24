@@ -35,7 +35,7 @@ class TheatreAlert extends Application {
 	static get defaultOptions() {
 	  const options = super.defaultOptions;
 	  options.id = "theatre-alert";
-	  options.template = "public/modules/theatre/app/templates/theatre_alert.html";
+	  options.template = "modules/theatre/app/templates/theatre_alert.html";
 	  options.title = game.i18n.localize("Theatre.MOTD.Header");
 	  options.width = 600;
 	  return options;
@@ -52,8 +52,8 @@ class TheatreAlert extends Application {
 	 *                          is rendered in the DOM.
 	 */
 	async render(force=false, options={}) {
-		//let data = await fetch("modules/theatre/motd.json").then(r => r.text()); 
-		let data = await this.makeGETRequest("https://gitlab.com/Ayanzo/motds/raw/master/motd_theatre.json"); 
+		let data = await fetch("modules/theatre/motd.json").then(r => r.text()); 
+		//let data = await this.makeGETRequest("https://gitlab.com/Ayanzo/motds/raw/master/motd_theatre.json"); 
 		let module = game.modules.find(m => m.id == "theatre"); 
 		let motdNewInfo = Theatre.instance.settings.motdNewInfo; 
 
