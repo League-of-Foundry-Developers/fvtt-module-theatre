@@ -1,7 +1,7 @@
 /**
  * Theatre.js
  *
- * Copyright (c) 2019 - 2020 Ken L.
+ * Copyright (c) 2019 Ken L.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -5126,7 +5126,7 @@ class Theatre {
 		let textFlyin = Theatre.FLYIN_ANIMS; 
 		let textStanding = Theatre.STANDING_ANIMS; 
 		let sideBar = document.getElementById("sidebar"); 
-		renderTemplate("public/modules/theatre/app/templates/emote_menu.html",{emotes,textFlyin,textStanding,fonts}).then(template=>{
+		renderTemplate("modules/theatre/app/templates/emote_menu.html",{emotes,textFlyin,textStanding,fonts}).then(template=>{
 			if (Theatre.DEBUG) console.log("emote window template rendered"); 
 			Theatre.instance.theatreEmoteMenu.style.top = `${Theatre.instance.theatreControls.offsetTop-410}px`; 
 			Theatre.instance.theatreEmoteMenu.innerHTML = template; 
