@@ -2,7 +2,7 @@
 	"name": "theatre",
 	"title": "Theatre Inserts",
 	"description": "Theater Inserts for speaking players",
-	"version": "1.0.4",
+	"version": "1.0.5",
 	"author": "Ken L, maintained by Noah Zorbaugh",
 	"socket": true,
 	"languages": [
@@ -50,8 +50,8 @@
 	],
 	"styles" : ["app/css/theatre.css"],
 	"packs": [],
-	"url" : "https://gitlab.com/NoahZorbaugh/theatre",
-	"download" : "https://gitlab.com/NoahZorbaugh/theatre/-/archive/master/theatre-master.zip",
-	"manifest" : "https://gitlab.com/NoahZorbaugh/theatre/raw/master/module.json",
-	"minimumCoreVersion": "0.4.0"
+	"url" : "https://gitlab.com/mesfoliesludiques/theatre",
+	"download" : "https://gitlab.com/mesfoliesludiques/theatre/-/archive/master/theatre-master.zip",
+	"manifest" : "https://gitlab.com/mesfoliesludiques/theatre/-/raw/master/module.json",
+	"minimumCoreVersion": "0.5.0"
 }
