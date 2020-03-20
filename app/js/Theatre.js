@@ -2345,10 +2345,13 @@ class Theatre {
 		let dockContainer = insert.dockContainer; 
 		let portraitContainer = insert.portraitContainer; 
 
-		let sprite = new PIXI.Sprite(resources[resName].texture); 
-		// WIP by U~man
+		let sprite = new PIXI.Sprite(resources[resName].texture);
 		let portWidth =  resources[resName].texture.width; 
 		let portHeight =  resources[resName].texture.height; 
+		if (portHeight > 400) {
+			portWidth *= 400 / portHeight;
+			portHeight = 400;
+		}
 
 		// adjust dockContainer + portraitContainer dimensions to fit the image
 		dockContainer.width = portWidth;
@@ -2362,12 +2365,8 @@ class Theatre {
 		
 		// save and stage our sprite
 		insert.portrait = sprite;
-		
-		// Rescale portrait to not exceed height 400px
-		if (insert.portrait.height > 400) {
-			insert.portrait.width *= 400 / insert.portrait.height;
-			insert.portrait.height = 400;
-		}
+		insert.portrait.width = portWidth;
+		insert.portrait.height = portHeight;
 
 		portraitContainer.addChild(sprite);
 		portraitContainer.pivot.x = portWidth/2; 
@@ -5875,8 +5874,8 @@ class Theatre {
 				// max left is half natural width
 				// min left is - half natural width
 				boundingBox["maxtop"] = (insert.optAlign == "top" ? 0 : insert.portrait.height); 
-				boundingBox["mintop"] = insert.portrait.height/2; 
-				boundingBox["maxleft"] = insert.portrait.width; 
+				boundingBox["mintop"] = insert.portrait.height / 2; 
+				boundingBox["maxleft"] = insert.portrait.width * 3 / 2; 
 				boundingBox["minleft"] = 0; 
 
 				// original cooords

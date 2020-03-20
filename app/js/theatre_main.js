@@ -610,23 +610,19 @@ Hooks.on("createChatMessage", function(chatEntity, chatData) {
   }
 });
 
-var tux =
-  "                 .88888888:.\n                88888888.88888.\n              .8888888888888888.\n              888888888888888888\n              88' _`88'_  `88888\n              88 88 88 88  88888\n              88_88_::_88_:88888\n              88:::,::,:::::8888\n              88`:::::::::'`8888\n             .88  `::::'    8:88.\n            8888            `8:888.\n          .8888'             `888888.\n         .8888:..  .::.  ...:'8888888:.\n        .8888.'     :'     `'::`88:88888\n       .8888        '         `.888:8888.\n      888:8         .           888:88888\n    .888:88        .:           888:88888:\n    8888888.       ::           88:888888\n    `.::.888.      ::          .88888888\n   .::::::.888.    ::         :::`8888'.:.\n  ::::::::::.888   '         .::::::::::::\n  ::::::::::::.8    '      .:8::::::::::::.\n .::::::::::::::.        .:888:::::::::::::\n :::::::::::::::88:.__..:88888:::::::::::'\n  `'.:::::::::::88888888888.88:::::::::'\n        `':::_:' -- '' -'-' `':_::::'`\n";
-
 // Fixed global singleton/global object
 var theatre = null;
 Hooks.on("renderChatLog", function() {
   theatre = new Theatre();
   // window may not be ready?
   console.log(
-    "%cTheatre is Ready!",
-    "font-weight: bold; font-size: 40px; font-style: italic; color: cyan; text-shadow: 1px 1px 0px black,  1px -1px 0px black, -1px 1px 0px black, -1px -1px 0px black;"
+    "%cTheatre Inserts",
+    "font-weight: bold; font-size: 30px; font-style: italic; color: black;"
   );
 
   //console.log("%c -- Theatre is currently All Rights Reserved in Closed Beta -- ","font-weight: bold; font-size: 18");
   //console.log("%c -- Theatre will be GPLv3 upon release -- ","font-weight: bold; font-size: 18");
   // NOTE: Closed alpha/beta is currently all rights reserved!
-  console.log(tux);
   console.log(
     "%c-- Theatre is Powered by Free Open Source GPLv3 Software --",
     "font-weight: bold; font-size: 18"

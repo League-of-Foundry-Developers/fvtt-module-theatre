@@ -1,8 +1,8 @@
 {
 	"name": "theatre",
 	"title": "Theatre Inserts",
-	"description": "Theater Inserts for speaking players",
-	"version": "1.0.6",
+	"description": "Theater Inserts with a visual novel style made for heavy roleplay scenes",
+	"version": "1.0.7",
 	"author": "Ken L, Noah Zorbaugh, U~man",
 	"socket": true,
 	"languages": [
