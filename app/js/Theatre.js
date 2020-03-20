@@ -267,8 +267,12 @@ class Theatre {
 		//this.theatreControls.appendChild(btnCinema); 
 		this.theatreControls.appendChild(btnSuppress); 
 
+		btnDelayEmote.style["margin"] = "0 4px";
+		btnQuote.style["margin"] = "0 4px";
+		btnResync.style["margin"] = "0 4px";
+
 		if (controlButtons) {
-			controlButtons.style["flex-basis"] = "110px"; 
+			controlButtons.style["flex-basis"] = "150px";
 			KHelpers.insertBefore(btnResync,controlButtons.children[0]); 
 			KHelpers.insertBefore(btnQuote,btnResync); 
 			KHelpers.insertBefore(btnDelayEmote,btnQuote); 
@@ -276,7 +280,7 @@ class Theatre {
 			controlButtons = document.createElement("div");
 			KHelpers.addClass(controlButtons,"control-buttons"); 
 			controlButtons.style["flex-basis"] = "66px"; 
-			controlButtons.appendChild(btnDelayEmote); 
+			controlButtons.appendChild(btnDelayEmote);
 			controlButtons.appendChild(btnQuote); 
 			controlButtons.appendChild(btnResync); 
 			chatControls.appendChild(controlButtons); 
@@ -2342,6 +2346,7 @@ class Theatre {
 		let portraitContainer = insert.portraitContainer; 
 
 		let sprite = new PIXI.Sprite(resources[resName].texture); 
+		// WIP by U~man
 		let portWidth =  resources[resName].texture.width; 
 		let portHeight =  resources[resName].texture.height; 
 
@@ -2356,7 +2361,14 @@ class Theatre {
 		dockContainer.y = this.theatreDock.offsetHeight - (optAlign == "top" ? this.theatreBar.offsetHeight : 0) - portHeight; 
 		
 		// save and stage our sprite
-		insert.portrait = sprite; 
+		insert.portrait = sprite;
+		
+		// Rescale portrait to not exceed height 400px
+		if (insert.portrait.height > 400) {
+			insert.portrait.width *= 400 / insert.portrait.height;
+			insert.portrait.height = 400;
+		}
+
 		portraitContainer.addChild(sprite);
 		portraitContainer.pivot.x = portWidth/2; 
 		portraitContainer.pivot.y = portHeight/2; 
@@ -6078,7 +6090,7 @@ class Theatre {
 		for (let textBox of boxes) {
 			let theatreId = textBox.getAttribute("imgid"); 
 			let insert = Theatre.instance.getInsertById(theatreId); 
-
+			
 			if (!insert) {
 				Theatre.instance._removeTextBoxFromTheatreBar(textBox); 
 				continue; 
@@ -6136,6 +6148,7 @@ class Theatre {
 			}
 
 			// Scale the name bar length and orient the portait
+			
 			if (insert.nameOrientation == "left") {
 				insert.label.x = 20; 
 				insert.typingBubble.anchor.set(0.5); 
