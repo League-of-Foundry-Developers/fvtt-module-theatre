@@ -40,10 +40,6 @@
   src: url("../graphics/fonts/en/Fast-In-My-Car.ttf"); }
 
 @font-face {
-  font-family: "HorrorHouse";
-  src: url("../graphics/fonts/en/MB-HorrorHouse_Font.ttf"); }
-
-@font-face {
   font-family: "StoneHenge";
   src: url("../graphics/fonts/en/stonehen.ttf"); }
 
@@ -130,10 +126,6 @@
 @font-face {
   font-family: "BaksoSapi";
   src: url("../graphics/fonts/en/BaksoSapi.otf"); }
-
-@font-face {
-  font-family: "SingleSleeve";
-  src: url("../graphics/fonts/en/sing_14l.ttf"); }
 
 @font-face {
   font-family: "Yikes";
@@ -296,10 +288,6 @@
   src: url("../graphics/fonts/en/Younger-than-me.ttf"); }
 
 @font-face {
-  font-family: "Underground";
-  src: url("../graphics/fonts/en/MB_Underground.ttf"); }
-
-@font-face {
   font-family: "LPEducational";
   src: url("../graphics/fonts/en/LPEducational.ttf"); }
 
@@ -312,24 +300,12 @@
   src: url("../graphics/fonts/en/venus-rising-rg.ttf"); }
 
 @font-face {
-  font-family: "GenShinGothicBold";
-  src: url("../graphics/fonts/ja/GenShinGothic-Bold.ttf"); }
-
-@font-face {
-  font-family: "GenjyuuGothicBold";
-  src: url("../graphics/fonts/ja/GenJyuuGothic-Bold.ttf"); }
-
-@font-face {
   font-family: "NotoSansJPBold";
   src: url("../graphics/fonts/ja/NotoSansJP-Bold.otf"); }
 
 @font-face {
   font-family: "CorporateLogoBold";
   src: url("../graphics/fonts/ja/logotypejp.ttf"); }
-
-@font-face {
-  font-family: "IPAGothic";
-  src: url("../graphics/fonts/ja/ipag.ttf"); }
 
 @font-face {
   font-family: "RiiPopkk";
@@ -440,14 +416,6 @@
   src: url("../graphics/fonts/ja/minamoji.ttf"); }
 
 @font-face {
-  font-family: "Planetarium-ひらがな";
-  src: url("../graphics/fonts/ja/Planetarium.otf"); }
-
-@font-face {
-  font-family: "Kodomo-ひらがな";
-  src: url("../graphics/fonts/ja/KodomoRounded.otf"); }
-
-@font-face {
   font-family: "Nikukyu-カタカナ";
   src: url("../graphics/fonts/ja/FontopoNIKUKYU.otf"); }
 
@@ -470,10 +438,6 @@
 @font-face {
   font-family: "BMHannaPro";
   src: url("../graphics/fonts/ko/BMHANNAPro.ttf"); }
-
-@font-face {
-  font-family: "BMJua";
-  src: url("../graphics/fonts/ko/BMJUA_ttf.ttf"); }
 
 @font-face {
   font-family: "Sunflower";

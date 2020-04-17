@@ -332,6 +332,14 @@ class Theatre {
 			onChange: theatreStyle => Theatre.instance.configTheatreStyle(theatreStyle)
 		});
 
+		game.settings.register(Theatre.SETTINGS, "theatreImageSize", {
+			name: "Maximum image height",
+			scope: "client",
+			config: true,
+			default: 400,
+			type: Number,
+		  });
+
 		game.settings.register(Theatre.SETTINGS, "theatreNarratorHeight", {
 			name: "Theatre.UI.Settings.narrHeight",
 			hint: "Theatre.UI.Settings.narrHeightHint",
@@ -2348,9 +2356,10 @@ class Theatre {
 		let sprite = new PIXI.Sprite(resources[resName].texture);
 		let portWidth =  resources[resName].texture.width; 
 		let portHeight =  resources[resName].texture.height; 
-		if (portHeight > 400) {
-			portWidth *= 400 / portHeight;
-			portHeight = 400;
+		let maxHeight = game.settings.get(Theatre.SETTINGS,"theatreImageSize");
+		if (portHeight > maxHeight) {
+			portWidth *= maxHeight / portHeight;
+			portHeight = maxHeight;
 		}
 
 		// adjust dockContainer + portraitContainer dimensions to fit the image
@@ -2477,7 +2486,7 @@ class Theatre {
 			graphics.lineTo(0,0); 
 			dockContainer.addChild(graphics); 
 			let dimStyle = new PIXI.TextStyle({
-				fontSize: 30,
+				fontSize: 10,
 				lineHeight: 30,
 				fontWeight: "bold",
 				fill: ['#FF383A'],
@@ -6491,14 +6500,10 @@ class Theatre {
 				case "ja":
 					Theatre.instance.titleFont = "Togalite";
 					Theatre.instance.textFont = "NotoSansJPBold"; 
-					Theatre.instance.fontWeight = "normal"; 
-					// 87 Mb total (okay what the fuck)
+					Theatre.instance.fontWeight = "normal";
 					Theatre.FONTS = [
 						"NotoSansJPBold",
 						"Togalite",
-						//"GenShinGothicBold",
-						//"GenjyuuGothicBold",
-						//"IPAGothic",
 						"GenEiLateMin_v2",
 						"HannariMincho",
 						"TogoshiMincho",
@@ -6525,15 +6530,12 @@ class Theatre {
 						"MinaMoji",
 						"Zomzi",
 						"ReallyScaryMinchotai"
-						//"Nikukyu-カタカナ",
-						//"Oriental-カタカナ"
 					]; 
 					break; 
 				case "ko":
 					Theatre.instance.titleFont = "BMDohyeon";
 					Theatre.instance.textFont = "NotoSansKRBold"; 
-					Theatre.instance.fontWeight = "normal"; 
-					// 53 Mb total (ouch)
+					Theatre.instance.fontWeight = "normal";
 					Theatre.FONTS = [
 						"NotoSansKRBold",
 						"BMDohyeon",
@@ -6589,8 +6591,7 @@ class Theatre {
 				case "en":
 					Theatre.instance.titleFont = "Riffic";
 					Theatre.instance.textFont = "SignikaBold"; 
-					Theatre.instance.fontWeight = "normal"; 
-					// 2.6 Mb, excellent
+					Theatre.instance.fontWeight = "normal";
 					Theatre.FONTS = [
 						"SignikaBold", 
 						"Riffic",
