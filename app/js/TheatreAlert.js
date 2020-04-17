@@ -54,7 +54,7 @@ class TheatreAlert extends Application {
 	async render(force=false, options={}) {
 		let data = await fetch("modules/theatre/motd.json").then(r => r.text()); 
 		//let data = await this.makeGETRequest("https://gitlab.com/Ayanzo/motds/raw/master/motd_theatre.json"); 
-		let module = game.modules.find(m => m.id == "theatre"); 
+		let module = game.modules.get("theatre"); 
 		let motdNewInfo = Theatre.instance.settings.motdNewInfo; 
 
 		try {
