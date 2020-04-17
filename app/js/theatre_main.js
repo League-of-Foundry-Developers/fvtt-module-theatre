@@ -619,16 +619,11 @@ Hooks.on("renderChatLog", function() {
     "%cTheatre Inserts",
     "font-weight: bold; font-size: 30px; font-style: italic; color: black;"
   );
-
-  //console.log("%c -- Theatre is currently All Rights Reserved in Closed Beta -- ","font-weight: bold; font-size: 18");
-  //console.log("%c -- Theatre will be GPLv3 upon release -- ","font-weight: bold; font-size: 18");
   // NOTE: Closed alpha/beta is currently all rights reserved!
   console.log(
     "%c-- Theatre is Powered by Free Open Source GPLv3 Software --",
-    "font-weight: bold; font-size: 18"
+    "font-weight: bold; font-size: 12"
   );
-  //Object.freeze(theatre);
-  let ta = new TheatreAlert().render(true);
 });
 
 /**

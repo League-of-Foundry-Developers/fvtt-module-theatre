@@ -2,7 +2,7 @@
 	"name": "theatre",
 	"title": "Theatre Inserts",
 	"description": "Theater Inserts with a visual novel style made for heavy roleplay scenes",
-	"version": "1.0.7",
+	"version": "1.0.8",
 	"author": "Ken L, Noah Zorbaugh, U~man",
 	"socket": true,
 	"languages": [
@@ -44,7 +44,6 @@
 		"greensock/dist/plugins/ScrollToPlugin.min.js",
 		"greensock/dist/utils/SplitText.min.js",
 		"app/js/TheatreActorConfig.js",
-		"app/js/TheatreAlert.js",
 		"app/js/Theatre.js",
 		"app/js/theatre_main.js"
 	],
@@ -53,5 +52,6 @@
 	"url" : "https://gitlab.com/mesfoliesludiques/theatre",
 	"download" : "https://gitlab.com/mesfoliesludiques/theatre/-/archive/master/theatre-master.zip",
 	"manifest" : "https://gitlab.com/mesfoliesludiques/theatre/-/raw/master/module.json",
-	"minimumCoreVersion": "0.5.0"
+	"minimumCoreVersion": "0.5.0",
+	"compatibleCoreVersion": "0.5.4"
 }
