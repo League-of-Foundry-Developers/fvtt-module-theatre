@@ -1,7 +1,0 @@
-{
-	"title" : "Welcome to Theatre!",
-	"content" : "<section><p>Please be sure to read the <a href='https://gitlab.com/Ayanzo/theatre/wikis/home/Introduction-to-Theatre'>instructions</a> on gitlab for how to get started, as well as the <a href='https://gitlab.com/Ayanzo/theatre/wikis/reference/Control-Reference'>control schema</a>!</p></section>",
-	"unotes": "<section><h2>Update Notes for <b>(v1.0.7)</b>:<ul style='font-size: 15px;'><li style='margin-top: 10px'>Fixed a bug where emotes caused resized image to go down.</li><li style='margin-top: 10px'>Fixed the drag and drop boxes so you can move the insert further.</li></ul></section>",
-	"newinfo" : 3,
-	"version" : "1.0.7"
-}
