@@ -291,7 +291,7 @@ Hooks.on("deleteCombat", function() {
  * Pre-process chat message to set 'speaking as' to correspond
  * to our 'speaking as'
  */
-Hooks.on("preCreateChatMessage", function(context, chatData) {
+Hooks.on("preCreateChatMessage", function(chatData) {
   if (Theatre.DEBUG) console.log("preCreateChatMessage", chatData);
   // If theatre isn't even ready, then just no
   if (!Theatre.instance) return;
@@ -414,10 +414,8 @@ Hooks.on("preCreateChatMessage", function(context, chatData) {
 /**
  * Chat message Binding
  */
-Hooks.on("createChatMessage", function(chatEntity, chatData) {
+Hooks.on("createChatMessage", function(chatEntity, _, userId) {
   if (Theatre.DEBUG) console.log("createChatMessage", chatData);
-
-  let userId = chatData.user;
   let theatreId = null;
 
   // If theatre isn't even ready, then just no
@@ -429,6 +427,7 @@ Hooks.on("createChatMessage", function(chatEntity, chatData) {
   }
 
   // slash commands are pass through
+  let chatData = chatEntity.data;
   if (
     chatData.content.startsWith("/") ||
     chatData.roll ||
