@@ -2,7 +2,7 @@
 	"name": "theatre",
 	"title": "Theatre Inserts",
 	"description": "Theater Inserts with a visual novel style made for heavy roleplay scenes",
-	"version": "1.0.10",
+	"version": "1.0.11",
 	"author": "Ken L, Noah Zorbaugh, U~man",
 	"socket": true,
 	"languages": [
@@ -35,8 +35,12 @@
 			"lang": "th",
 			"name": "ภาษาไทย (Thai)",
 			"path": "app/lang/th.json"
+		},
+		{
+			"lang": "cn",
+			"name": "中文 (Chinese)",
+			"path": "app/lang/cn.json"
 		}
-
 	],
 	"scripts": [
 		"greensock/dist/TweenMax.min.js",
@@ -53,5 +57,5 @@
 	"download" : "https://gitlab.com/mesfoliesludiques/theatre/-/archive/master/theatre-master.zip",
 	"manifest" : "https://gitlab.com/mesfoliesludiques/theatre/-/raw/master/module.json",
 	"minimumCoreVersion": "0.5.5",
-	"compatibleCoreVersion": "0.5.5"
+	"compatibleCoreVersion": "0.6.0"
 }

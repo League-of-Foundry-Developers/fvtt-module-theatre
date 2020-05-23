@@ -6497,6 +6497,15 @@ class Theatre {
 		if (!Theatre.FONTS) {
 			// language specific fonts 
 			switch (game.i18n.lang) {
+			    case "cn":
+					Theatre.instance.titleFont = "SourceHanSerifSC-Medium";
+					Theatre.instance.textFont = "BianHeiti"; 
+					Theatre.instance.fontWeight = "normal";
+					Theatre.FONTS = [
+						"SourceHanSerifSC-Medium",
+						"BianHeiti"
+					];
+					break;
 				case "ja":
 					Theatre.instance.titleFont = "Togalite";
 					Theatre.instance.textFont = "NotoSansJPBold"; 
@@ -6531,7 +6540,7 @@ class Theatre {
 						"Zomzi",
 						"ReallyScaryMinchotai"
 					]; 
-					break; 
+					break;
 				case "ko":
 					Theatre.instance.titleFont = "BMDohyeon";
 					Theatre.instance.textFont = "NotoSansKRBold"; 
@@ -7483,6 +7492,10 @@ class Theatre {
 		switch (game.i18n.lang) {
 			case "ja":
 				// Kinsoku Shori (JP)
+				splitMode = 3; 
+				break; 
+			case "cn":
+				// 按照日文方式换行 (CN)
 				splitMode = 3; 
 				break; 
 			case "ko":
@@ -8466,5 +8479,3 @@ class Theatre {
 	}
 
 }
-
-
