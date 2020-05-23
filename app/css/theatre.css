@@ -594,7 +594,15 @@
 @font-face {
   font-family: "Thasadith";
   src: url("../graphics/fonts/th/Thasadith-Bold.ttf"); }
-
+  
+@font-face {
+ font-family: "BianHeiti";
+ src: url("../graphics/fonts/cn/BianHeiti.ttf"); }
+ 
+@font-face {
+ font-family: "SourceHanSerifSC-Medium";
+ src: url("../graphics/fonts/cn/SourceHanSerifSC-Medium.otf"); }
+  
 .no-scrollbar {
   overflow-y: scroll;
   overflow-x: scroll;
