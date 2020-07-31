@@ -1397,9 +1397,9 @@
 
 #chat-form {
   position: relative; }
-
-#notifications {
-  pointer-events: none; }
+/* BUG https://gitlab.com/foundrynet/foundryvtt/-/issues/3200#note_374466454*/
+/* #notifications {
+  pointer-events: none; } */
 
 #pause {
   top: calc(50% - 50px); }
