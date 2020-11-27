@@ -29,6 +29,14 @@
  * ============================================================
  */
 class TheatreActorConfig extends FormApplication {
+	constructor(object={}, options={}) {
+		if (object._theatre_mod_configTab) {
+			options.tabs = [        
+				{navSelector: ".tabs", contentSelector: ".theatre-config-contents", initial: object._theatre_mod_configTab}
+			];
+		}
+		super(object, options);
+	}
 
 	/**
 	 * Default options for TheatreActorConfig
@@ -96,6 +104,12 @@ class TheatreActorConfig extends FormApplication {
 		for (let label of labelsCustom)
 			this._setupCustomLabelEvents(label); 
   }
+
+	/** @override */
+	_onChangeTab(event, tabs, active) {
+		this.object._theatre_mod_configTab = active;
+		return super._onChangeTab(event, tabs, active);
+	}
 
 	/**
 	 * Verify the form data just prior to submission
