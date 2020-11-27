@@ -15,6 +15,6 @@ OR
 Find Theatre Inserts in the module browser integrated in Foundry VTT
 
 ### Contributors
-The original and immense work is from Ken L, Theatre Inserts was then be picked up by NoahZorbaugh, and then by U~Man who maintained the day to day updates. Brother Sharp commissioned on behalf of the Japanese TRPG community the port of the module to Foundry VTT 0.7.x, done by KaKaRoTo.
+The original and immense work is from `Ken L`, Theatre Inserts was then be picked up by `NoahZorbaugh`, and then by `U~Man` who maintained the day to day updates. `Brother Sharp` commissioned on behalf of the Japanese TRPG community the port of the module to Foundry VTT 0.7.7, done by `KaKaRoTo`.
 
 Contributions are most welcome, please do one Pull Request per feature.
