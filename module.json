@@ -3,7 +3,7 @@
 	"title": "Theatre Inserts",
 	"description": "Theater Inserts with a visual novel style made for heavy roleplay scenes",
 	"version": "1.0.11",
-	"author": "Ken L, Noah Zorbaugh, U~man",
+	"author": "Ken L, Noah Zorbaugh, U~man, KaKaRoTo",
 	"socket": true,
 	"languages": [
 		{
@@ -43,10 +43,7 @@
 		}
 	],
 	"scripts": [
-		"greensock/dist/TweenMax.min.js",
-		"greensock/dist/plugins/PixiPlugin.min.js",
-		"greensock/dist/plugins/ScrollToPlugin.min.js",
-		"greensock/dist/utils/SplitText.min.js",
+		"greensock/dist/gsap.min.js",
 		"app/js/TheatreActorConfig.js",
 		"app/js/Theatre.js",
 		"app/js/theatre_main.js"
@@ -56,4 +53,6 @@
 	"url" : "https://github.com/kakaroto/fvtt-module-theatre",
 	"download" : "https://github.com/kakaroto/fvtt-module-theatre/releases/download/v1.0.11/theatre.zip",
 	"manifest" : "https://github.com/kakaroto/fvtt-module-theatre/releases/download/latest/module.json",
+	"minimumCoreVersion": "0.7.7",
+	"compatibleCoreVersion": "0.8.0"
 }
