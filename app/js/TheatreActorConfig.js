@@ -320,8 +320,8 @@ class TheatreActorConfig extends FormApplication {
 			}
 
 		// check for null'd emotes, push the objects up a level if one exists
-		mergeObject(this.object.data,emoteFormData); 
-		let emMerge = this.object.data.flags.theatre.emotes; 
+		const newData = mergeObject(this.object.data, emoteFormData, {inplace: false}); 
+		let emMerge = newData.flags.theatre.emotes; 
 		let nEmotes = {}; 
 		for (let emProp in emMerge) {
 			if (emMerge[emProp] == null)
