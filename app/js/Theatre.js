@@ -1374,6 +1374,7 @@ class Theatre {
 				} else if (theatreId == Theatre.NARRATOR) {
 					if (value) this.theatreNarrator.setAttribute("textsize",value); 					
 					else this.theatreNarrator.removeAttribute("textsize",value); 
+					userEmoting.textSize = value; 
 				} else {
 					userEmoting.textSize = value; 
 				}
