@@ -415,7 +415,7 @@ Hooks.on("preCreateChatMessage", function(chatData) {
  * Chat message Binding
  */
 Hooks.on("createChatMessage", function(chatEntity, _, userId) {
-  if (Theatre.DEBUG) console.log("createChatMessage", chatData);
+  if (Theatre.DEBUG) console.log("createChatMessage");
   let theatreId = null;
 
   // If theatre isn't even ready, then just no
@@ -497,8 +497,8 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
           // decrement the rendering accumulator
           let insert = Theatre.instance.getInsertById(imgId);
           if (insert) {
-            this.target.scale.x = insert.mirrored ? -1 : 1;
-            this.target.scale.y = 1;
+            this.targets()[0].scale.x = insert.mirrored ? -1 : 1;
+            this.targets()[0].scale.y = 1;
           }
           ctx._removeDockTween(imgId, this, tweenId);
           // remove our own reference from the dockContainer tweens
@@ -518,7 +518,7 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
         yoyo: true,
         onComplete: function(ctx, imgId, tweenId) {
           // decrement the rendering accumulator
-          this.target.tint = 0xffffff;
+          this.targets()[0].tint = 0xffffff;
           ctx._removeDockTween(imgId, this, tweenId);
           // remove our own reference from the dockContainer tweens
         },

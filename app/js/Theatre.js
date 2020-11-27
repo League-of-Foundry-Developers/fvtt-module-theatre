@@ -1502,8 +1502,8 @@ class Theatre {
 					onComplete: function(ctx,imgId,tweenId) {
 						// decrement the rendering accumulator
 						ctx._removeDockTween(imgId,this,tweenId); 
-						this.target.scale.x = 1; 
-						this.target.scale.y = 1; 
+						this.targets()[0].scale.x = 1; 
+						this.targets()[0].scale.y = 1; 
 						// remove our own reference from the dockContainer tweens
 					},
 					onCompleteParams: [this,insert.imgId,tweenId]
@@ -1532,8 +1532,8 @@ class Theatre {
 					onComplete: function(ctx,imgId,tweenId) {
 						// decrement the rendering accumulator
 						ctx._removeDockTween(imgId,this,tweenId); 
-						this.target.scale.x = 1; 
-						this.target.scale.y = 1; 
+						this.targets()[0].scale.x = 1; 
+						this.targets()[0].scale.y = 1; 
 						// remove our own reference from the dockContainer tweens
 					},
 					onCompleteParams: [this,insert.imgId,tweenId]
@@ -1582,7 +1582,7 @@ class Theatre {
 					onComplete: function(ctx,imgId,tweenId) {
 						// decrement the rendering accumulator
 						ctx._removeDockTween(imgId,this,tweenId); 
-						this.target.y = oy; 
+						this.targets()[0].y = oy; 
 						// remove our own reference from the dockContainer tweens
 					},
 					onCompleteParams: [this,insert.imgId,tweenId]
@@ -1652,8 +1652,8 @@ class Theatre {
 					onComplete: function(ctx,imgId,tweenId) {
 						// decrement the rendering accumulator
 						ctx._removeDockTween(imgId,this,tweenId); 
-						this.target.scale.x = 1; 
-						this.target.scale.y = 1; 
+						this.targets()[0].scale.x = 1; 
+						this.targets()[0].scale.y = 1; 
 						// remove our own reference from the dockContainer tweens
 					},
 					onCompleteParams: [this,insert.imgId,tweenId]
@@ -4779,7 +4779,7 @@ class Theatre {
 			if (this.speakingAs != id) {
 				this.speakingAs = id; 
 				KHelpers.addClass(navItem,"theatre-control-nav-bar-item-speakingas"); 
-				TweenMax.to(Theatre.instance.theatreNavBar,.4,{scrollTo:{x:navItem.offsetLeft,offsetX:Theatre.instance.theatreNavBar.offsetWidth/2}})
+				TweenMax.to(Theatre.instance.theatreNavBar,.4, {scrollTo:{x:navItem.offsetLeft,offsetX:Theatre.instance.theatreNavBar.offsetWidth/2}})
 
 				// add label pulse
 				insert.label.tint = 0xFFFFFF; 
@@ -8139,7 +8139,7 @@ class Theatre {
 							scale: 1.5,
 							onComplete: function() {
 								if (standingAnim)
-									standingAnim.call(this,this.target)
+									standingAnim.call(this,this.targets()[0])
 							}
 						},0.05); 
 					},
@@ -8152,7 +8152,7 @@ class Theatre {
 							opacity: 0,
 							onComplete: function() {
 								if (standingAnim)
-									standingAnim.call(this,this.target)
+									standingAnim.call(this,this.targets()[0])
 							}
 						},speed); 
 					},
@@ -8167,7 +8167,7 @@ class Theatre {
 								left: 200,
 								onComplete: function() {
 									if (standingAnim)
-										standingAnim.call(this,this.target)
+										standingAnim.call(this,this.targets()[0])
 								}
 							},
 							speed,
@@ -8190,7 +8190,7 @@ class Theatre {
 								ease: Power4.easeOut,
 								onComplete: function() {
 									if (standingAnim)
-										standingAnim.call(this,this.target)
+										standingAnim.call(this,this.targets()[0])
 								}
 							},
 							speed,
@@ -8237,7 +8237,7 @@ class Theatre {
 								ease: Power4.easeOut,
 								onComplete: function() {
 									if (standingAnim)
-										standingAnim.call(this,this.target)
+										standingAnim.call(this,this.targets()[0])
 								}
 							},
 							speed,
@@ -8265,7 +8265,7 @@ class Theatre {
 								ease: Power4.easeOut,
 								onComplete: function() {
 									if (standingAnim)
-										standingAnim.call(this,this.target)
+										standingAnim.call(this,this.targets()[0])
 								}
 							},
 							speed,
@@ -8314,7 +8314,7 @@ class Theatre {
 								ease: Power4.easeOut,
 								onComplete: function() {
 									if (standingAnim)
-										standingAnim.call(this,this.target)
+										standingAnim.call(this,this.targets()[0])
 								}
 							},
 							speed,
@@ -8368,7 +8368,7 @@ class Theatre {
 								ease: Power4.easeOut,
 								onComplete: function() {
 									if (standingAnim)
-										standingAnim.call(this,this.target)
+										standingAnim.call(this,this.targets()[0])
 								}
 							},
 							speed,
@@ -8427,7 +8427,7 @@ class Theatre {
 								top: `${(Math.random() < 0.5 ? -1 : 1) * Math.random()*500}px`,
 								onComplete: function() {
 									if (standingAnim)
-										standingAnim.call(this,this.target)
+										standingAnim.call(this,this.targets()[0])
 								}
 							}); 
 						}
@@ -8438,9 +8438,9 @@ class Theatre {
 								//opacity: 1,
 								onComplete: function() {
 									if (Theatre.DEBUG) console.log("vortex all complete"); 
-									if (this.target) {
-										this.target.style["overflow-y"] = "scroll"; 
-										this.target.style["overflow-x"] = "visible"; 
+									if (this.targets().length) {
+										this.targets()[0].style["overflow-y"] = "scroll"; 
+										this.targets()[0].style["overflow-x"] = "visible"; 
 									}
 								}
 							}); 
@@ -8462,7 +8462,7 @@ class Theatre {
 								top: `${Math.random()*500}px`,
 								onComplete: function() {
 									if (standingAnim)
-										standingAnim.call(this,this.target)
+										standingAnim.call(this,this.targets()[0])
 								}
 							}); 
 						}
