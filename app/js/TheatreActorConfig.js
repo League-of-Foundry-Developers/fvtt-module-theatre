@@ -33,7 +33,10 @@ class TheatreActorConfig extends FormApplication {
 		if (object._theatre_mod_configTab) {
 			options.tabs = [        
 				{navSelector: ".tabs", contentSelector: ".theatre-config-contents", initial: object._theatre_mod_configTab}
-			];
+      ];
+      if (object._theatre_mod_configTab === "emotes") {
+        options.height = 775;
+      }
 		}
 		super(object, options);
 	}
@@ -110,7 +113,7 @@ class TheatreActorConfig extends FormApplication {
     this.object._theatre_mod_configTab = active;
     // Auto change height
     const tab = this.element.find(`.tab[data-tab="${active}"]`)[0];
-		this.setPosition({height: (tab && tab.offsetHeight + 130) || "auto"})
+		this.setPosition({height: (tab && tab.offsetHeight + 125) || "auto"})
 	}
 
 	/**
