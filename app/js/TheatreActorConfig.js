@@ -34,11 +34,14 @@ class TheatreActorConfig extends FormApplication {
 	 * Default options for TheatreActorConfig
 	 */
 	static get defaultOptions() {
-	  const options = super.defaultOptions;
-	  options.id = "theatre-config";
-	  options.template = "modules/theatre/app/templates/theatre_actor_config.html";
-	  options.width = 500;
+		const options = super.defaultOptions;
+		options.id = "theatre-config";
+		options.template = "modules/theatre/app/templates/theatre_actor_config.html";
+		options.width = 500;
 		options.height = 270; 
+		options.tabs = [        
+			{navSelector: ".tabs", contentSelector: ".theatre-config-contents", initial: "main"}
+		];
 	  return options;
   }
 
@@ -74,10 +77,6 @@ class TheatreActorConfig extends FormApplication {
 	activateListeners(html) {
 	  super.activateListeners(html);
 
-    // Activate tab navigation
-    new Tabs(html.find(".tabs"), this.object.data.flags["_configTab"], clicked => {
-      this.object.data.flags["_configTab"] = clicked.attr("data-tab");
-    });
 
     let btnAdd = html[0].getElementsByClassName("theatre-config-btn-add-emote")[0]; 
 		if (btnAdd)
