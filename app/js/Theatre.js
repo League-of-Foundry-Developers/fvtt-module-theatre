@@ -8134,47 +8134,55 @@ class Theatre {
 			Theatre.FLYIN_ANIMS = {
 				"typewriter" : {
 					"func" : function(charSpans,animTime,speed,standingAnim) {
-						TweenMax.staggerFrom(charSpans,0.05,{
+						gsap.from(charSpans,{
+                            duration: 0.05,
+                            stagger: {
+                                duration: 0.05,
+                                onComplete: function() {
+                                    if (standingAnim)
+                                        standingAnim.call(this, this.targets()[0]);
+                                }
+                            },
 							opacity: 0,
-							scale: 1.5,
-							onComplete: function() {
-								if (standingAnim)
-									standingAnim.call(this,this.targets()[0])
-							}
-						},0.05); 
+							scale: 1.5
+                        }); 
+
 					},
 					"label" : game.i18n.localize("Theatre.Flyin.Typewriter")
 				},
 
 				"fadein" : {
 					"func" : function(charSpans,animTime,speed,standingAnim) {
-						TweenMax.staggerFrom(charSpans,animTime,{
+						gsap.from(charSpans,{
+                            duration: animTime,
+                            stagger: {
+                                duration: speed,
+                                onComplete: function() {
+                                    if (standingAnim)
+                                        standingAnim.call(this, this.targets()[0]);
+                                }
+                            },
 							opacity: 0,
-							onComplete: function() {
-								if (standingAnim)
-									standingAnim.call(this,this.targets()[0])
-							}
-						},speed); 
+						}); 
 					},
 					"label" : game.i18n.localize("Theatre.Flyin.Fadein")
 				},
 
 				"slidein" : {
 					"func" : function(charSpans,animTime,speed,standingAnim) {
-						TweenMax.staggerFrom(charSpans,animTime,
+						gsap.from(charSpans,
 							{
+                                duration: animTime,
+                                stagger: {
+                                    duration: speed,
+                                    onComplete: function() {
+                                        if (standingAnim)
+                                            standingAnim.call(this, this.targets()[0]);
+                                    }
+                                },
 								opacity: 0,
-								left: 200,
-								onComplete: function() {
-									if (standingAnim)
-										standingAnim.call(this,this.targets()[0])
-								}
-							},
-							speed,
-							function () {
-								if (Theatre.DEBUG) console.log("completeAll"); 
-							},
-							this
+								left: 200
+							}
 						); 
 					},
 					"label" : game.i18n.localize("Theatre.Flyin.Slidein")
@@ -8182,22 +8190,21 @@ class Theatre {
 
 				"scalein" : {
 					"func" : function(charSpans,animTime,speed,standingAnim) {
-						TweenMax.staggerFrom(charSpans,animTime,
+						gsap.from(charSpans,
 							{
+                                duration: animTime,
+                                stagger: {
+                                    duration: speed,
+                                    onComplete: function() {
+                                        if (standingAnim)
+                                            standingAnim.call(this, this.targets()[0]);
+                                    }
+                                },
 								opacity: 0,
 								scale: 5,
 								//rotation: -180,
-								ease: Power4.easeOut,
-								onComplete: function() {
-									if (standingAnim)
-										standingAnim.call(this,this.targets()[0])
-								}
-							},
-							speed,
-							function () {
-								if (Theatre.DEBUG) console.log("completeAll"); 
-							},
-							this
+								ease: Power4.easeOut
+							}
 						); 
 					},
 					"label" : game.i18n.localize("Theatre.Flyin.Scalein")
@@ -8230,25 +8237,27 @@ class Theatre {
 								textBox.style["overflow-x"] = "visible"; 
 							}
 						}
-						TweenMax.staggerFrom(charSpans,animTime,
+						gsap.from(charSpans,
 							{
+                                duration: animTime,
+                                stagger: {
+                                    duration: speed,
+                                    onComplete: function() {
+                                        if (standingAnim)
+                                            standingAnim.call(this, this.targets()[0]);
+                                    }
+                                },
 								opacity: 0,
 								top: -100,
 								ease: Power4.easeOut,
-								onComplete: function() {
-									if (standingAnim)
-										standingAnim.call(this,this.targets()[0])
+								onComplete: () => {
+                                    if (Theatre.DEBUG) console.log("completeAll"); 
+                                    if (textBox) {
+                                        textBox.style["overflow-y"] = "scroll"; 
+                                        textBox.style["overflow-x"] = "hidden"; 
+                                    }
 								}
-							},
-							speed,
-							function () {
-								if (Theatre.DEBUG) console.log("completeAll"); 
-								if (textBox) {
-									textBox.style["overflow-y"] = "scroll"; 
-									textBox.style["overflow-x"] = "hidden"; 
-								}
-							},
-							this
+							}
 						); 
 					},
 					"label" : game.i18n.localize("Theatre.Flyin.Fallin")
@@ -8257,22 +8266,21 @@ class Theatre {
 
 				"spin" : {
 					"func" : function(charSpans,animTime,speed,standingAnim) {
-						TweenMax.staggerFrom(charSpans,animTime,
+						gsap.from(charSpans,
 							{
+                                duration: animTime,
+                                stagger: {
+                                    duration: speed,
+                                    onComplete: function() {
+                                        if (standingAnim)
+                                            standingAnim.call(this, this.targets()[0]);
+                                    }
+                                },
 								opacity: 0,
 								rotation: -360,
 								left: 100,
-								ease: Power4.easeOut,
-								onComplete: function() {
-									if (standingAnim)
-										standingAnim.call(this,this.targets()[0])
-								}
-							},
-							speed,
-							function () {
-								if (Theatre.DEBUG) console.log("completeAll"); 
-							},
-							this
+								ease: Power4.easeOut
+							}
 						); 
 					},
 					"label" : game.i18n.localize("Theatre.Flyin.Spin")
@@ -8305,27 +8313,29 @@ class Theatre {
 								textBox.style["overflow-x"] = "visible"; 
 							}
 						}
-						TweenMax.staggerFrom(charSpans,animTime*1.5,
+						gsap.from(charSpans,animTime*1.5,
 							{
+                                duration: animTime*1.5,
+                                stagger: {
+                                    duration: speed,
+                                    onComplete: function() {
+                                        if (standingAnim)
+                                            standingAnim.call(this, this.targets()[0]);
+                                    }
+                                },
 								opacity: 0,
 								scale: 5,
 								rotation: -360,
 								left: 150,
 								ease: Power4.easeOut,
-								onComplete: function() {
-									if (standingAnim)
-										standingAnim.call(this,this.targets()[0])
+								onComplete: () => {
+                                    if (Theatre.DEBUG) console.log("completeAll"); 
+                                    if (textBox) {
+                                        textBox.style["overflow-y"] = "scroll"; 
+                                        textBox.style["overflow-x"] = "hidden"; 
+                                    }
 								}
-							},
-							speed,
-							function () {
-								if (Theatre.DEBUG) console.log("completeAll"); 
-								if (textBox) {
-									textBox.style["overflow-y"] = "scroll"; 
-									textBox.style["overflow-x"] = "hidden"; 
-								}
-							},
-							this
+							}
 						); 
 					},
 					"label" : game.i18n.localize("Theatre.Flyin.SpinScale")
@@ -8360,30 +8370,32 @@ class Theatre {
 								textBox.style["overflow-x"] = "visible"; 
 							}
 						}
-						TweenMax.staggerFrom(charSpans,animTime*1.5,
+						gsap.from(charSpans,
 							{
+                                duration: animTime*1.5,
+                                stagger: {
+                                    duration: speed,
+                                    onComplete: function() {
+                                        if (standingAnim)
+                                            standingAnim.call(this, this.targets()[0]);
+                                    }
+                                },
 								opacity: 0,
 								scale: 6,
 								rotation: -1080,
 								ease: Power4.easeOut,
-								onComplete: function() {
-									if (standingAnim)
-										standingAnim.call(this,this.targets()[0])
+								onComplete: () => {
+                                    if (Theatre.DEBUG) console.log("completeAll"); 
+                                    if (textBox) {
+                                        textBox.style["overflow-y"] = "scroll"; 
+                                        textBox.style["overflow-x"] = "hidden"; 
+                                        // shaking box
+                                        //TweenMax.killTweensOf(charSpans[0].parentNode.parentNode); 
+                                        //charSpans[0].parentNode.parentNode.style.top = `${barTop}px`; 
+                                        //charSpans[0].parentNode.parentNode.style.left = `${barLeft}px`; 
+                                    }
 								}
-							},
-							speed,
-							function () {
-								if (Theatre.DEBUG) console.log("completeAll"); 
-								if (textBox) {
-									textBox.style["overflow-y"] = "scroll"; 
-									textBox.style["overflow-x"] = "hidden"; 
-									// shaking box
-									//TweenMax.killTweensOf(charSpans[0].parentNode.parentNode); 
-									//charSpans[0].parentNode.parentNode.style.top = `${barTop}px`; 
-									//charSpans[0].parentNode.parentNode.style.left = `${barLeft}px`; 
-								}
-							},
-							this
+							}
 						); 
 					},
 					"label" : game.i18n.localize("Theatre.Flyin.Outlaw")
