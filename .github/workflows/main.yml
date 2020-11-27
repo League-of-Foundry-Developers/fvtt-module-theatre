@@ -16,11 +16,9 @@ jobs:
 
       - name: Get the version
         id: get_version
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-
-      - name: Get the version without v prefix
-        id: get_version_number
-        run: echo ::set-output name=VERSION_NUMBER::${GITHUB_REF/refs\/tags\/v/}
+        run: |
+            echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+            echo ::set-output name=VERSION_NUMBER::${GITHUB_REF/refs\/tags\/v/}
 
       #Substitute the Manifest and Download URLs in the module.json
       - name: Substitute Manifest and Download Links For Versioned Ones
