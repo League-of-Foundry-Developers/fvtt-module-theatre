@@ -4,11 +4,11 @@ Theatre is a mod for Foundry VTT that allows for a visual novel style RP experie
 
 ### Installation For FVTT
 
-Copy https://github.com/kakaroto/fvtt-module/theatre/releases/download/latest/module.json into the module installer inside foundry when it asks for the manifest.
+Copy https://github.com/kakaroto/fvtt-module-theatre/releases/download/latest/module.json into the module installer inside foundry when it asks for the manifest.
 
 OR
 
-Download the [zip](https://github.com/kakaroto/fvtt-module/theatre/releases/download/latest/theatre.zip), create a folder in public/modules called 'theatre' and extract the contents of "theatre.zip" there.
+Download the [zip](https://github.com/kakaroto/fvtt-module-theatre/releases/download/latest/theatre.zip), create a folder in public/modules called 'theatre' and extract the contents of "theatre.zip" there.
 
 OR
 
