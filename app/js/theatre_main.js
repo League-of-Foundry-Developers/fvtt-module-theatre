@@ -309,7 +309,7 @@ Hooks.on("preCreateChatMessage", function(chatData) {
       chatData.speaker.actor = null;
       chatData.speaker.scene = null;
     }
-    chatData.type = 1;
+    chatData.type = CONST.CHAT_MESSAGE_TYPES.OOC;
     return;
   }
 
@@ -336,7 +336,7 @@ Hooks.on("preCreateChatMessage", function(chatData) {
       chatData.speaker.actor = null;
       chatData.speaker.scene = null;
       //chatData.flags.theatreColor = theatreColor;
-      chatData.type = 2;
+      chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
       // if delay emote is active
       if (
         Theatre.instance.isDelayEmote &&
@@ -366,7 +366,7 @@ Hooks.on("preCreateChatMessage", function(chatData) {
       chatData.speaker.actor = null;
       chatData.speaker.scene = null;
       //chatData.flags.theatreColor = theatreColor;
-      chatData.type = 2;
+      chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
       // if delay emote is active
       if (
         Theatre.instance.isDelayEmote &&
@@ -389,7 +389,7 @@ Hooks.on("preCreateChatMessage", function(chatData) {
       chatData.speaker.alias = game.i18n.localize("Theatre.UI.Chat.Narrator");
       chatData.speaker.actor = null;
       chatData.speaker.scene = null;
-      chatData.type = 2;
+      chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
     }
   }
   // alter message data
@@ -432,7 +432,7 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
     chatData.content.startsWith("/") ||
     chatData.roll ||
     chatData.emote ||
-    chatData.type == 1 ||
+    chatData.type == CONST.CHAT_MESSAGE_TYPES.OOC ||
     //|| Object.keys(chatData.speaker).length == 0
     chatData.content.match(/@[a-zA-Z0-9]+\[[a-zA-Z0-9]+\]/) ||
     chatData.content.match(/\<div.*\>[\s\S]*\<\/div\>/)
