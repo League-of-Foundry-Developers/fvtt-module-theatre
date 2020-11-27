@@ -8137,7 +8137,7 @@ class Theatre {
 						gsap.from(charSpans,{
                             duration: 0.05,
                             stagger: {
-                                duration: 0.05,
+                                each: 0.05,
                                 onComplete: function() {
                                     if (standingAnim)
                                         standingAnim.call(this, this.targets()[0]);
@@ -8156,7 +8156,7 @@ class Theatre {
 						gsap.from(charSpans,{
                             duration: animTime,
                             stagger: {
-                                duration: speed,
+                                each: speed,
                                 onComplete: function() {
                                     if (standingAnim)
                                         standingAnim.call(this, this.targets()[0]);
@@ -8174,7 +8174,7 @@ class Theatre {
 							{
                                 duration: animTime,
                                 stagger: {
-                                    duration: speed,
+                                    each: speed,
                                     onComplete: function() {
                                         if (standingAnim)
                                             standingAnim.call(this, this.targets()[0]);
@@ -8194,7 +8194,7 @@ class Theatre {
 							{
                                 duration: animTime,
                                 stagger: {
-                                    duration: speed,
+                                    each: speed,
                                     onComplete: function() {
                                         if (standingAnim)
                                             standingAnim.call(this, this.targets()[0]);
@@ -8241,7 +8241,7 @@ class Theatre {
 							{
                                 duration: animTime,
                                 stagger: {
-                                    duration: speed,
+                                    each: speed,
                                     onComplete: function() {
                                         if (standingAnim)
                                             standingAnim.call(this, this.targets()[0]);
@@ -8270,7 +8270,7 @@ class Theatre {
 							{
                                 duration: animTime,
                                 stagger: {
-                                    duration: speed,
+                                    each: speed,
                                     onComplete: function() {
                                         if (standingAnim)
                                             standingAnim.call(this, this.targets()[0]);
@@ -8317,7 +8317,7 @@ class Theatre {
 							{
                                 duration: animTime*1.5,
                                 stagger: {
-                                    duration: speed,
+                                    each: speed,
                                     onComplete: function() {
                                         if (standingAnim)
                                             standingAnim.call(this, this.targets()[0]);
@@ -8374,7 +8374,7 @@ class Theatre {
 							{
                                 duration: animTime*1.5,
                                 stagger: {
-                                    duration: speed,
+                                    each: speed,
                                     onComplete: function() {
                                         if (standingAnim)
                                             standingAnim.call(this, this.targets()[0]);
