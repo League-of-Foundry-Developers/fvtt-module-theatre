@@ -297,7 +297,7 @@ Hooks.on("preCreateChatMessage", function(chatData) {
   if (!Theatre.instance) return;
 
   // make the message OOC if needed
-  if (!chatData.roll && game.keyboard.isDown(17)) {
+  if (!chatData.roll && game.keyboard.isDown("Control")) {
     let user = game.users.get(chatData.user);
     if (chatData.speaker) {
       chatData.speaker.alias = game.users.get(chatData.user).data.name;
