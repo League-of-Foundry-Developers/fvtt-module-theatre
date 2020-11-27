@@ -107,8 +107,10 @@ class TheatreActorConfig extends FormApplication {
 
 	/** @override */
 	_onChangeTab(event, tabs, active) {
-		this.object._theatre_mod_configTab = active;
-		return super._onChangeTab(event, tabs, active);
+    this.object._theatre_mod_configTab = active;
+    // Auto change height
+    const tab = this.element.find(`.tab[data-tab="${active}"]`)[0];
+		this.setPosition({height: (tab && tab.offsetHeight + 130) || "auto"})
 	}
 
 	/**
