@@ -53,9 +53,7 @@
 	],
 	"styles" : ["app/css/theatre.css"],
 	"packs": [],
-	"url" : "https://gitlab.com/mesfoliesludiques/theatre",
-	"download" : "https://gitlab.com/mesfoliesludiques/theatre/-/archive/master/theatre-master.zip",
-	"manifest" : "https://gitlab.com/mesfoliesludiques/theatre/-/raw/master/module.json",
-	"minimumCoreVersion": "0.5.5",
-	"compatibleCoreVersion": "0.6.0"
+	"url" : "https://github.com/kakaroto/fvtt-module-theatre",
+	"download" : "https://github.com/kakaroto/fvtt-module-theatre/releases/download/v1.1.0/theatre.zip",
+	"manifest" : "https://github.com/kakaroto/fvtt-module-theatre/releases/download/latest/module.json",
 }
