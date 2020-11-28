@@ -2,7 +2,7 @@
 	"name": "theatre",
 	"title": "Theatre Inserts",
 	"description": "Theater Inserts with a visual novel style made for heavy roleplay scenes",
-	"version": "1.1.2",
+	"version": "1.1.3",
 	"author": "Ken L, Noah Zorbaugh, U~man, KaKaRoTo",
 	"socket": true,
 	"languages": [
@@ -53,9 +53,9 @@
 	],
 	"styles" : ["app/css/theatre.css"],
 	"packs": [],
-	"url" : "https://github.com/kakaroto/fvtt-module-theatre",
-	"download" : "https://github.com/kakaroto/fvtt-module-theatre/releases/download/v1.1.2/theatre.zip",
-	"manifest" : "https://github.com/kakaroto/fvtt-module-theatre/releases/download/latest/module.json",
+	"url" : "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre",
+	"download" : "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/v1.1.3/theatre.zip",
+	"manifest" : "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/latest/module.json",
 	"minimumCoreVersion": "0.7.7",
 	"compatibleCoreVersion": "0.8.0"
 }
