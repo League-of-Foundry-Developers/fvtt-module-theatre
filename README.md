@@ -14,6 +14,20 @@ OR
 
 Find Theatre Inserts in the module browser integrated in Foundry VTT
 
+### Usage
+
+Right-click an Actor in the list, and select "Add to stage." The Character will now appear in the small bar at the bottom of the Chat window.
+
+https://i.imgur.com/0aUQcD9.png
+
+https://i.imgur.com/8KKAY0G.png
+
+Right-Clicking that actor tile will cause the actor's image and name to appear in the bottom-left of the screen. You can apply Emotes to them via the Emote Selector button, just above the chat box. 
+
+While the actor is selected in the small box, anything that is typed into Chat will be written as the Actor, and will also appear below the Actor insert on the left side.
+
+Another button next to chat, the Megaphone, causes a black box to appear in the middle of the screen. Anything that the GM types to chat will appear in this box. This is good for describing a scene.
+
 ### Contributors
 The original and immense work is from `Ken L`, Theatre Inserts was then be picked up by `NoahZorbaugh`, and then by `U~Man` who maintained the day to day updates. `Brother Sharp` commissioned on behalf of the Japanese TRPG community the port of the module to Foundry VTT 0.7.7, done by `KaKaRoTo`.
 
