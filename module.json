@@ -40,6 +40,11 @@
 			"lang": "cn",
 			"name": "中文 (Chinese)",
 			"path": "app/lang/cn.json"
+		},
+		{
+			"lang": "zh-tw",
+			"name": "正體中文",
+			"path": "app/lang/zh-tw.json"
 		}
 	],
 	"scripts": [
