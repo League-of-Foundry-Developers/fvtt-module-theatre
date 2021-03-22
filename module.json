@@ -45,7 +45,13 @@
 			"lang": "zh-tw",
 			"name": "正體中文",
 			"path": "app/lang/zh-tw.json"
-		}
+    },
+    {
+			"lang": "es",
+			"name": "Español",
+			"path": "app/lang/es.json"
+     }
+
 	],
 	"scripts": [
 		"greensock/dist/gsap.min.js",

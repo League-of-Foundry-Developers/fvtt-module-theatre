@@ -129,7 +129,7 @@
 	"Theatre.Emote.Lazy" : "Lazy",
 	"Theatre.Emote.Ambitious" : "Ambitious",
 	"Theatre.Emote.Correct" : "Correct",
-	"Theatre.Emote.Correct" : "Wrong",
+	"Theatre.Emote.Wrong" : "Wrong",
 
 	"Theatre.Flyin.Label" : "Fly-In",
 	"Theatre.Flyin.Typewriter" : "Typewriter",
