@@ -40,6 +40,11 @@
 			"lang": "cn",
 			"name": "中文 (Chinese)",
 			"path": "app/lang/cn.json"
+		},
+		{
+			"lang": "es",
+			"name": "Español",
+			"path": "app/lang/es.json"
 		}
 	],
 	"scripts": [
