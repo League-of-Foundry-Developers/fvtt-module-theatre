@@ -429,6 +429,7 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
   // slash commands are pass through
   let chatData = chatEntity.data;
   if (
+    chatData.content.startsWith("<") || //Bandaid fix so that texts that start with html formatting don't utterly break it
     chatData.content.startsWith("/") ||
     chatData.roll ||
     chatData.emote ||
