@@ -50,7 +50,13 @@
 			"lang": "es",
 			"name": "Español",
 			"path": "app/lang/es.json"
+     		},
+    		{
+			"lang": "de",
+			"name": "Deutsche",
+			"path": "app/lang/de.json"
      		}
+		
 
 	],
 	"scripts": [
