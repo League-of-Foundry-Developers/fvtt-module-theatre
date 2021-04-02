@@ -28,6 +28,8 @@ While the actor is selected in the small box, anything that is typed into Chat w
 
 Another button next to chat, the Megaphone, causes a black box to appear in the middle of the screen. Anything that the GM types to chat will appear in this box. This is good for describing a scene.
 
+## For a detailed list of instructions, visit the original Repo by U~Man: https://gitlab.com/mesfoliesludiques/theatre/-/wikis/home
+
 ### Contributors
 The original and immense work is from `Ken L`, Theatre Inserts was then be picked up by `NoahZorbaugh`, and then by `U~Man` who maintained the day to day updates. `Brother Sharp` commissioned on behalf of the Japanese TRPG community the port of the module to Foundry VTT 0.7.7, done by `KaKaRoTo`.
 
