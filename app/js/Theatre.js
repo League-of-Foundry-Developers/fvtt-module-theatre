@@ -67,7 +67,9 @@ class Theatre {
 			this.rendering = false; 
 			this.renderAnims = 0; 
 			// global insert state related
-			this.speakingAs = null; 
+			this.speakingAs = null;
+			// Map of theatreId to TheatreActor
+			this.stage = {};
 			this.portraitDocks = []; 
 			this.userEmotes = {}; 
 			this.usersTyping = {}; 
@@ -3037,7 +3039,7 @@ class Theatre {
 	 * "Stages" an insert by pre-loading the base + all emote images
 	 *
 	 * @params theatreId (String) : The theatreId of the insert to load.
-	 * @params remote (Boolean) : Wither this is being invoked remotely or locally. 
+	 * @params remote (Boolean) : Whether this is being invoked remotely or locally. 
 	 */
 	stageInsertById(theatreId,remote) {
 		let actorId = theatreId.replace("theatre-",""); 
@@ -3787,10 +3789,9 @@ class Theatre {
 	 * @return (HTMLElement) : The nav item, if found, else undefined. 
 	 */
 	getNavItemById(id) {
-		for (let navItem of this.theatreNavBar.children) {
-			if (navItem.getAttribute("imgId") == id)
-				return navItem; 
-		}
+		const theatreActor = this.stage[id];
+		if (theatreActor)
+			return theatreActor.navElement;
 	}
 
 	/**
@@ -7845,6 +7846,10 @@ class Theatre {
 		Theatre.addToNavBar(actor); 
 	}
 
+	static _getTheatreId(actor) {
+		return `theatre-${actor._id}`; 
+	}
+
 	/**
 	 * Add to the NavBar staging area
 	 *
@@ -7861,7 +7866,7 @@ class Theatre {
 		// add click handler to push it into the theatre bar, if it already exists on the bar, remove it
 		// from the bar
 		// add click handler logic to remove it from the stage
-		let theatreId = `theatre-${actor._id}`; 
+		let theatreId = Theatre.instance._getTheatreId(actor);
 		let portrait = (actor.img ? actor.img : "icons/mystery-man.png"); 
 		let optAlign = "top"; 
 		let name = actor.name; 
@@ -7881,12 +7886,11 @@ class Theatre {
 				optAlign = actor.flags.theatre.optalign; 
 		}
 
-		for (let ni of Theatre.instance.theatreNavBar.children) {
-			if (ni.getAttribute("imgId") == theatreId) {
-				ui.notifications.info(actor.name + game.i18n.localize("Theatre.UI.Notification.AlreadyStaged"));
-				return; 
-			}
+		if (Theatre.instance.stage[theatreId]) {
+			ui.notifications.info(actor.name + game.i18n.localize("Theatre.UI.Notification.AlreadyStaged"));
+			return; 
 		}
+
 		if (Theatre.DEBUG) console.log("new theatre id: " + theatreId); 
 
 		let navItem = document.createElement("img");
@@ -7910,6 +7914,33 @@ class Theatre {
 		Theatre.instance.theatreNavBar.appendChild(navItem); 
 		// stage event
 		Theatre.instance.stageInsertById(theatreId); 
+		// Store reference
+		Theatre.instance.stage[theatreId] = new TheatreActor(actor, navElement);
+	}
+
+	/**
+	 * Removes the actor from the nav bar.
+	 *
+	 * @params actor (Actor) : The actor from which to add to the NavBar staging area. 
+	 */
+	static removeFromNavBar(actor) {
+		if (!actor) return; 
+		const theatreId = Theatre.instance._getTheatreId(actor);
+		const staged = Theatre.instance.stage(theatreId);
+		if(staged && staged.navElement) {
+			Theatre.instance.theatreNavBar.removeChild(staged.navElement);
+			delete Theatre.instance.stage[theatreId];
+		}
+
+	}
+
+	/**
+	 * Returns whether the actor is on the stage.
+	 * @params actor (Actor) : The actor. 
+	 */
+	static isActorStaged(actor) {
+		if (!actor) return false; 
+		return !!Theatre.instance.stage[Theatre.instance._getTheatreId(actor)]
 	}
 
 	/**

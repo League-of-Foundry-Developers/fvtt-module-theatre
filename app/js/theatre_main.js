@@ -630,13 +630,21 @@ Hooks.on("renderChatLog", function() {
  * Add to stage button on ActorDirectory Sidebar
  */
 Hooks.on("getActorDirectoryEntryContext", async (html, options) => {
+
+  const getActorData = target => {
+    const actor = game.actors.get(target.attr("data-entity-id"));
+    return actor.data;
+  }
+
   options.splice(3, 0, {
     name: "Add to Stage",
-    condition: true,
+    condition: target => !Theatre.isActorStaged(getActorData(target)),
     icon: '<i class="fas fa-theater-masks"></i>',
-    callback: target => {
-	  const actor = game.actors.get(target.attr("data-entity-id"));
-	  Theatre.addToNavBar(actor.data);
-    }
+    callback: target => Theatre.addToNavBar(getActorData(target))
+  }, {
+    name: "Remove from Stage",
+    condition: target => Theatre.isActorStaged(getActorData(target)),
+    icon: '<i class="fas fa-theater-masks"></i>',
+    callback: target => Theatre.removeFromNavBar(getActorData(target))
   });
 });
