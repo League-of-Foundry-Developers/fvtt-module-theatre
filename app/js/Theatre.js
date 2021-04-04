@@ -3865,7 +3865,7 @@ class Theatre {
 	/**
 	 * Get insert dock by Name
 	 *
-	 * @params id (String) : The theatreId of an insert we want.
+	 * @params name (String) : The name of an insert we want.
 	 *
 	 * @return (Object) : The Object representing the insert, or undefined.
 	 */
@@ -7937,8 +7937,11 @@ class Theatre {
 		if (!actor) return; 
 		const theatreId = Theatre._getTheatreId(actor);
 		const staged = Theatre.instance.stage[theatreId];
-		if(staged && staged.navElement) {
-			Theatre.instance.theatreNavBar.removeChild(staged.navElement);
+		if(staged) {
+			if(staged.navElement) {
+				Theatre.instance.theatreNavBar.removeChild(staged.navElement);
+			}
+			Theatre.instance.removeInsertById(theatreId);
 			delete Theatre.instance.stage[theatreId];
 		}
 
@@ -7951,6 +7954,12 @@ class Theatre {
 	static isActorStaged(actor) {
 		if (!actor) return false; 
 		return !!Theatre.instance.stage[Theatre._getTheatreId(actor)]
+	}
+
+	static clearStage() {
+		Object.keys(Theatre.instance.stage).forEach(theatreId => {
+			Theatre.removeFromNavBar(Theatre.instance.stage[theatreId].actor)
+		})
 	}
 
 	/**
