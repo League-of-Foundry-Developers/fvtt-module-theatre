@@ -62,6 +62,8 @@
 	"Theatre.MOTD.OldVersion" : "Theatre is currently out of date, please have the GM update theatre in the setup screen.",
 
 	"Theatre.UI.Config.Stage" : "Stage",
+	"Theatre.UI.Config.AddToStage" : "Add to Stage",
+	"Theatre.UI.Config.RemoveFromStage" : "Remove from Stage",
 	"Theatre.UI.Config.Theatre" : "Theatre",
 	"Theatre.UI.Config.ConfigureTheatre" : "Configure Theatre",
 	"Theatre.UI.Config.Main" : "Main",

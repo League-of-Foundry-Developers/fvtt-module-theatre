@@ -191,7 +191,7 @@ Hooks.on("init", function() {
       }
       buttons = [
         {
-          label: "Theatre.UI.Config.Stage",
+          label: "Theatre.UI.Config.AddToStage",
           class: "add-to-theatre-navbar",
           icon: "fas fa-theater-masks",
           onclick: ev => {

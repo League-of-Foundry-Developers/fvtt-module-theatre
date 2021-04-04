@@ -7842,8 +7842,18 @@ class Theatre {
 	 */
 	static onAddToNavBar(ev,actorSheet) {
 		if (Theatre.DEBUG) console.log("Click Event on Add to NavBar!!",actorSheet,actorSheet.actor,actorSheet.position); 
-		let actor = actorSheet.object.data; 
-		Theatre.addToNavBar(actor); 
+		const actor = actorSheet.object.data; 
+		const addLabel = game.i18n.localize("Theatre.UI.Config.AddToStage");
+		const removeLabel = game.i18n.localize("Theatre.UI.Config.RemoveFromStage");
+		let newText;
+		if (Theatre.isActorStaged(actor)) {
+			Theatre.removeFromNavBar(actor)
+			newText = addLabel
+		} else {
+			Theatre.addToNavBar(actor); 
+			newText = removeLabel;
+		}
+		ev.currentTarget.innerHTML = `<i class="fas fa-theater-masks"></i>${newText}`
 	}
 
 	static _getTheatreId(actor) {
@@ -7866,7 +7876,7 @@ class Theatre {
 		// add click handler to push it into the theatre bar, if it already exists on the bar, remove it
 		// from the bar
 		// add click handler logic to remove it from the stage
-		let theatreId = Theatre.instance._getTheatreId(actor);
+		let theatreId = Theatre._getTheatreId(actor);
 		let portrait = (actor.img ? actor.img : "icons/mystery-man.png"); 
 		let optAlign = "top"; 
 		let name = actor.name; 
@@ -7915,7 +7925,7 @@ class Theatre {
 		// stage event
 		Theatre.instance.stageInsertById(theatreId); 
 		// Store reference
-		Theatre.instance.stage[theatreId] = new TheatreActor(actor, navElement);
+		Theatre.instance.stage[theatreId] = new TheatreActor(actor, navItem);
 	}
 
 	/**
@@ -7925,8 +7935,8 @@ class Theatre {
 	 */
 	static removeFromNavBar(actor) {
 		if (!actor) return; 
-		const theatreId = Theatre.instance._getTheatreId(actor);
-		const staged = Theatre.instance.stage(theatreId);
+		const theatreId = Theatre._getTheatreId(actor);
+		const staged = Theatre.instance.stage[theatreId];
 		if(staged && staged.navElement) {
 			Theatre.instance.theatreNavBar.removeChild(staged.navElement);
 			delete Theatre.instance.stage[theatreId];
@@ -7940,7 +7950,7 @@ class Theatre {
 	 */
 	static isActorStaged(actor) {
 		if (!actor) return false; 
-		return !!Theatre.instance.stage[Theatre.instance._getTheatreId(actor)]
+		return !!Theatre.instance.stage[Theatre._getTheatreId(actor)]
 	}
 
 	/**

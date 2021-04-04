@@ -62,6 +62,8 @@
 	"Theatre.MOTD.OldVersion" : "Theater ist aktuell veraltet, bitte lass es von deinem SL in den Einstellungen aktualisieren.",
 
 	"Theatre.UI.Config.Stage" : "Bühne",
+	"Theatre.UI.Config.AddToStage" : "Add to Stage",
+	"Theatre.UI.Config.RemoveFromStage" : "Remove from Stage",
 	"Theatre.UI.Config.Theatre" : "Theater",
 	"Theatre.UI.Config.ConfigureTheatre" : "Theater konfigurieren",
 	"Theatre.UI.Config.Main" : "Haupt",
