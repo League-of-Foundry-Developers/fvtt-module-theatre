@@ -191,7 +191,7 @@ Hooks.on("init", function() {
       }
       buttons = [
         {
-          label: "Theatre.UI.Config.AddToStage",
+          label: Theatre.isActorStaged(this.actor.data) ? "Theatre.UI.Config.RemoveFromStage" : "Theatre.UI.Config.AddToStage",
           class: "add-to-theatre-navbar",
           icon: "fas fa-theater-masks",
           onclick: ev => {

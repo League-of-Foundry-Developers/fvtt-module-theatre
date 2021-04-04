@@ -6046,7 +6046,7 @@ class Theatre {
 				let cimg = Theatre.instance.getTheatreCoverPortrait(); 
 				if (ev.ctrlKey) {
 					// unstage the actor
-					ev.currentTarget.parentNode.removeChild(ev.currentTarget); 
+					Theatre.instance._removeFromStage(id);
 					return; 
 				}
 				if (!removed) {
@@ -7931,11 +7931,21 @@ class Theatre {
 	/**
 	 * Removes the actor from the nav bar.
 	 *
-	 * @params actor (Actor) : The actor from which to add to the NavBar staging area. 
+	 * @params actor (Actor) : The actor to remove from the NavBar staging area. 
 	 */
 	static removeFromNavBar(actor) {
 		if (!actor) return; 
 		const theatreId = Theatre._getTheatreId(actor);
+		Theatre.instance._removeFromStage(theatreId);
+
+	}
+
+	/**
+	 * Removes the actor from the stage.
+	 *
+	 * @params id (string) : The theatreId to remove from the stage.
+	 */
+	 _removeFromStage(theatreId) {
 		const staged = Theatre.instance.stage[theatreId];
 		if(staged) {
 			if(staged.navElement) {
@@ -7944,7 +7954,6 @@ class Theatre {
 			Theatre.instance.removeInsertById(theatreId);
 			delete Theatre.instance.stage[theatreId];
 		}
-
 	}
 
 	/**
@@ -7958,7 +7967,7 @@ class Theatre {
 
 	static clearStage() {
 		Object.keys(Theatre.instance.stage).forEach(theatreId => {
-			Theatre.removeFromNavBar(Theatre.instance.stage[theatreId].actor)
+			Theatre._removeFromStage(theatreId);
 		})
 	}
 
