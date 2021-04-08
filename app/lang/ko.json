@@ -57,6 +57,8 @@
 	"Theatre.MOTD.OldVersion" : "극장 모드가 현재 오래된 버전입니다. GM은 구성 화면에서 극장 모드를 업데이트 해주세요.",
 
 	"Theatre.UI.Config.Stage" : "무대",
+	"Theatre.UI.Config.AddToStage" : "Add to Stage",
+	"Theatre.UI.Config.RemoveFromStage" : "Remove from Stage",
 	"Theatre.UI.Config.Theatre" : "극장",
 	"Theatre.UI.Config.ConfigureTheatre" : "극장 구성",
 	"Theatre.UI.Config.Main" : "메인",

@@ -62,6 +62,8 @@
 	"Theatre.MOTD.OldVersion" : "劇院當前已過時，請在設置屏幕中啓用GM更新劇場。",
 
 	"Theatre.UI.Config.Stage" : "入場",
+	"Theatre.UI.Config.AddToStage" : "Add to Stage",
+	"Theatre.UI.Config.RemoveFromStage" : "Remove from Stage",
 	"Theatre.UI.Config.Theatre" : "立繪",
 	"Theatre.UI.Config.ConfigureTheatre" : "設置立繪的各種屬性",
 	"Theatre.UI.Config.Main" : "主要",

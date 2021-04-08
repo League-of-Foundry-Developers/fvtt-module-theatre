@@ -58,6 +58,8 @@
 	"Theatre.MOTD.OldVersion" : "Théâtre n'est plus a jour, s'il vous plait demandez au GM de mètre a jour Théâtre.",
 
 	"Theatre.UI.Config.Stage" : "Scène",
+	"Theatre.UI.Config.AddToStage" : "Add to Stage",
+	"Theatre.UI.Config.RemoveFromStage" : "Remove from Stage",
 	"Theatre.UI.Config.Theatre" : "Théâtre",
 	"Theatre.UI.Config.ConfigureTheatre" : "Configurer Théâtre",
 	"Theatre.UI.Config.Main" : "Principal",
