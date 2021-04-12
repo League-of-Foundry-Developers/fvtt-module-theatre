@@ -363,6 +363,29 @@ class Theatre {
 			}
 		});
 
+		game.settings.register(Theatre.SETTINGS, "nameFont", {
+			name: "Theatre.UI.Settings.nameFont",
+			hint: "Theatre.UI.Settings.nameFontHint",
+			scope: "world",
+			config: true,
+			default: Theatre.instance.titleFont,
+			type: String,
+		choices: Theatre.FONTS.reduce((a, font) => { a[font]=font;
+			return a;
+		}, {}),
+			onChange: theatreStyle => Theatre.instance.configTheatreStyle(theatreStyle)
+		});
+
+		game.settings.register(Theatre.SETTINGS, "nameFontSize", {
+			name: "Theatre.UI.Settings.nameFontSize",
+			hint: "Theatre.UI.Settings.nameFontSizeHint",
+			scope: "world",
+			config: true,
+			default: 44,
+			type: Number,
+			onChange: theatreStyle => Theatre.instance.configTheatreStyle(theatreStyle)
+		});
+		
 		game.settings.register(Theatre.SETTINGS, "textDecayMin", {
 			name: "Theatre.UI.Settings.textDecayMin",
 			hint: "Theatre.UI.Settings.textDecayMinHint",
@@ -2400,7 +2423,7 @@ class Theatre {
 		if (!insert.label) {
 			let textStyle = new PIXI.TextStyle({
 				align: "center",
-				fontFamily: this.titleFont,
+				fontFamily: game.settings.get(Theatre.SETTINGS,"nameFont"),
 				fontSize: 44,
 				lineHeight: 64,
 				//fontStyle: 'italic',
@@ -6140,8 +6163,8 @@ class Theatre {
 				}
 			}
 			// pre-split measurement
-			insert.label.style.fontSize = 44; 
-			insert.label.style.lineHeight = 44*1.5; 
+			insert.label.style.fontSize = game.settings.get(Theatre.SETTINGS,"nameFontSize");
+			insert.label.style.lineHeight = game.settings.get(Theatre.SETTINGS,"nameFontSize")*1.5; 
 			insert.label.style.wordWrap = false; 
 			insert.label.style.wordWrapWidth = insert.portrait.width; 
 			let labelExceeds = (insert.label.width+20+insert.label.style.fontSize) > textBox.offsetWidth; 
