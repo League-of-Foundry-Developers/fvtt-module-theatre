@@ -58,6 +58,10 @@
 	"Theatre.UI.Settings.textDecayMinHint" : "El tiempo mínimo en segundos antes de que la entrada de texto del teatro comience a desaparecer",
 	"Theatre.UI.Settings.textDecayRate" : "Tasa de desaparición de texto",
 	"Theatre.UI.Settings.textDecayRateHint" : "La tasa a la que desaparece el texto en segundos, depende de la longitud del texto. Este ajuste es *por jugador*, de modo que un mensaje de 100 caracteres tardará 100s antes de desaparecer si la tasa es de 1s O el tiempo de desaparición mínimo, lo que sea mayor",
+	"Theatre.UI.Settings.nameFont": "Fuente de nombre del actor",
+	"Theatre.UI.Settings.nameFontHint": "Introduzca el nombre de la fuente que desee usar. Solo funcionará si la fuente existe en Theatre. Es necesario que se vuelvan a poner los actores en el escenario o que el GM resincronice",
+	"Theatre.UI.Settings.nameFontSize": "Tamaño de nombre del actor (experimental)",
+	"Theatre.UI.Settings.nameFontSizeHint": "Ajusta el tamaño de fuente de los nombres. Nótese que los tamaños pueden variar dependiendo del monitor o la fuente elegida. No se recomienza usar tamaños demasiado grandes",
 
 	"Theatre.MOTD.Header" : "Notificaciones del teatro",
 	"Theatre.MOTD.OldVersion" : "Teatro está desactualizado, pida al GM que lo actualice desde la ventana de configuración",
