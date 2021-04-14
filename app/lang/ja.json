@@ -54,6 +54,11 @@
 	"Theatre.UI.Settings.textDecayMinHint" : "立ち絵のテキストボックスに表示されたテキストが白紙状態に戻されリセットされるまでの最低時間です。リセット時ログからテキストが消えることはありません。",
 	"Theatre.UI.Settings.textDecayRate" : "リセット率",
 	"Theatre.UI.Settings.textDecayRateHint" : "文字数と掛け合わせてリセット時間（秒）が計算されます。つまり、リセット率が1の場合、100文字がリセットされるまでの時間は100秒となります。最低リセット時間と比べて長いほうが適用されます。",
+	"Theatre.UI.Settings.nameFont": "キャラ名フォント",
+	"Theatre.UI.Settings.nameFontHint": "キャラ名が使用するフォントを選んでください。設定後はキャラを出し直すか、GMのシンクロ要求後に反映されます。",
+	"Theatre.UI.Settings.nameFontSize": "キャラ名大きさ（試験用）",
+	"Theatre.UI.Settings.nameFontSizeHint": "フォントの大きさを設定します。この設定は使用しているフォントや大きさによっては適切に機能しないかもしれません。大きすぎるフォントはお勧めしません。",
+
 
 	"Theatre.MOTD.Header" : "立ち絵ツール通知",
 	"Theatre.MOTD.OldVersion" : "立ち絵ツールの新しいバージョンがあります、オーナーはツールのセットアップ画面から更新してください。",
