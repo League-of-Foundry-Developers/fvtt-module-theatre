@@ -1,5 +1,5 @@
 {
-	"I18N.MAINTAINERS" : ["Ken L"],
+	"I18N.MAINTAINERS" : ["PakkiSukibe"],
 
 	"Header.Override.Token" : "Token",
 	"Header.Override.Sheet" : "Sheet",
@@ -57,11 +57,20 @@
 	"Theatre.UI.Settings.textDecayMinHint" : "The minimum amount of time in seconds before a theatre text entry will decay.",
 	"Theatre.UI.Settings.textDecayRate" : "Text Decay Rate",
 	"Theatre.UI.Settings.textDecayRateHint" : "The rate at which text will decay, based on the length of the message in seconds. This is applied *per character*, thus a 100 character message is 100s before decay if the decay rate is 1s, OR the minimum decay time, whichever is greater.",
-
+	"Theatre.UI.Settings.displayMode" : "Theatre Bar Display Mode",
+	"Theatre.UI.Settings.displayMode" : "Theatre Bar Display Mode",
+	"Theatre.UI.Settings.nameFont": "Actor Name Font",
+	"Theatre.UI.Settings.nameFontHint": "Put in the name of the font you want to use. If the font exists in Theatre, it can be used. Requires actors to re-stage or for the GM to resync.",
+	"Theatre.UI.Settings.nameFontSize": "Actor Name Size (Experimental)",
+	"Theatre.UI.Settings.nameFontSizeHint": "Sets the size of the name font. Note that the sizes may be different depending on your display or font choice. Using huge sizes is not recommended.",
+	
+	
 	"Theatre.MOTD.Header" : "Theatre Notification",
 	"Theatre.MOTD.OldVersion" : "Theatre is currently out of date, please have the GM update theatre in the setup screen.",
 
 	"Theatre.UI.Config.Stage" : "Stage",
+	"Theatre.UI.Config.AddToStage" : "Add to Stage",
+	"Theatre.UI.Config.RemoveFromStage" : "Remove from Stage",
 	"Theatre.UI.Config.Theatre" : "Theatre",
 	"Theatre.UI.Config.ConfigureTheatre" : "Configure Theatre",
 	"Theatre.UI.Config.Main" : "Main",
@@ -129,7 +138,7 @@
 	"Theatre.Emote.Lazy" : "Lazy",
 	"Theatre.Emote.Ambitious" : "Ambitious",
 	"Theatre.Emote.Correct" : "Correct",
-	"Theatre.Emote.Correct" : "Wrong",
+	"Theatre.Emote.Wrong" : "Wrong",
 
 	"Theatre.Flyin.Label" : "Fly-In",
 	"Theatre.Flyin.Typewriter" : "Typewriter",

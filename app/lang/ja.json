@@ -41,6 +41,7 @@
 	"Theatre.UI.Notification.InvalidDecayMin" : "最低リセット時間の設定が無効です、デフォルトの30sに設定します。",
 	"Theatre.UI.Notification.InvalidDecayRate" : "リセット率の設定が無効です、デフォルトの1sに設定します。",	
 	"Theatre.UI.Notification.ErrorFatal" : "致命的なエラーが発生しました、コンソールログと共にバグ報告をしてください。",
+	"Theatre.UI.Notification.BadFilepath" : "ファイルパスが不正です、変更を破棄しました：",
 
 	"Theatre.UI.Settings.displayMode" : "表示モード",
 	"Theatre.UI.Settings.displayModeHint" : "立ち絵のテキストボックスが表示されるときのモードを切り替えます。テキストボックスは従来のもので、テキストセッション向きです。簡易ボックスはボイスとテキストを両方使うセッション向きです。クリアボックスはボイスのみのセッション向きでテキストが読みづらくなる変わりに立ち絵を強調して表情と動きで見栄えをよくできるものです。",
@@ -58,6 +59,8 @@
 	"Theatre.MOTD.OldVersion" : "立ち絵ツールの新しいバージョンがあります、オーナーはツールのセットアップ画面から更新してください。",
 
 	"Theatre.UI.Config.Stage" : "控室",
+	"Theatre.UI.Config.AddToStage" : "控室に追加",
+	"Theatre.UI.Config.RemoveFromStage" : "控室を退出",
 	"Theatre.UI.Config.Theatre" : "立ち絵",
 	"Theatre.UI.Config.ConfigureTheatre" : "立ち絵設定",
 	"Theatre.UI.Config.Main" : "メイン",
@@ -124,6 +127,8 @@
 	"Theatre.Emote.Pleased" : "満足",
 	"Theatre.Emote.Lazy" : "怠け",
 	"Theatre.Emote.Ambitious" : "やる気",
+	"Theatre.Emote.Correct" : "肯定",
+	"Theatre.Emote.Wrong" : "否定",
 
 	"Theatre.Flyin.Label" : "字幕効果",
 	"Theatre.Flyin.Typewriter" : "タイプライター",
@@ -151,4 +156,5 @@
 
 	"Theatre.Other" : "その他",
 	"Theatre.NotYet" : "未実装"
+
 }

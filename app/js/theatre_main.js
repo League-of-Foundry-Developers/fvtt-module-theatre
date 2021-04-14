@@ -191,7 +191,7 @@ Hooks.on("init", function() {
       }
       buttons = [
         {
-          label: "Theatre.UI.Config.Stage",
+          label: Theatre.isActorStaged(this.actor.data) ? "Theatre.UI.Config.RemoveFromStage" : "Theatre.UI.Config.AddToStage",
           class: "add-to-theatre-navbar",
           icon: "fas fa-theater-masks",
           onclick: ev => {
@@ -429,6 +429,7 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
   // slash commands are pass through
   let chatData = chatEntity.data;
   if (
+    chatData.content.startsWith("<") || //Bandaid fix so that texts that start with html formatting don't utterly break it
     chatData.content.startsWith("/") ||
     chatData.roll ||
     chatData.emote ||
@@ -629,13 +630,21 @@ Hooks.on("renderChatLog", function() {
  * Add to stage button on ActorDirectory Sidebar
  */
 Hooks.on("getActorDirectoryEntryContext", async (html, options) => {
+
+  const getActorData = target => {
+    const actor = game.actors.get(target.attr("data-entity-id"));
+    return actor.data;
+  }
+
   options.splice(3, 0, {
     name: "Add to Stage",
-    condition: true,
+    condition: target => !Theatre.isActorStaged(getActorData(target)),
     icon: '<i class="fas fa-theater-masks"></i>',
-    callback: target => {
-	  const actor = game.actors.get(target.attr("data-entity-id"));
-	  Theatre.addToNavBar(actor.data);
-    }
+    callback: target => Theatre.addToNavBar(getActorData(target))
+  }, {
+    name: "Remove from Stage",
+    condition: target => Theatre.isActorStaged(getActorData(target)),
+    icon: '<i class="fas fa-theater-masks"></i>',
+    callback: target => Theatre.removeFromNavBar(getActorData(target))
   });
 });

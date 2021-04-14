@@ -67,7 +67,9 @@ class Theatre {
 			this.rendering = false; 
 			this.renderAnims = 0; 
 			// global insert state related
-			this.speakingAs = null; 
+			this.speakingAs = null;
+			// Map of theatreId to TheatreActor
+			this.stage = {};
 			this.portraitDocks = []; 
 			this.userEmotes = {}; 
 			this.usersTyping = {}; 
@@ -361,6 +363,29 @@ class Theatre {
 			}
 		});
 
+		game.settings.register(Theatre.SETTINGS, "nameFont", {
+			name: "Theatre.UI.Settings.nameFont",
+			hint: "Theatre.UI.Settings.nameFontHint",
+			scope: "world",
+			config: true,
+			default: Theatre.instance.titleFont,
+			type: String,
+		choices: Theatre.FONTS.reduce((a, font) => { a[font]=font;
+			return a;
+		}, {}),
+			onChange: theatreStyle => Theatre.instance.configTheatreStyle(theatreStyle)
+		});
+
+		game.settings.register(Theatre.SETTINGS, "nameFontSize", {
+			name: "Theatre.UI.Settings.nameFontSize",
+			hint: "Theatre.UI.Settings.nameFontSizeHint",
+			scope: "world",
+			config: true,
+			default: 44,
+			type: Number,
+			onChange: theatreStyle => Theatre.instance.configTheatreStyle(theatreStyle)
+		});
+		
 		game.settings.register(Theatre.SETTINGS, "textDecayMin", {
 			name: "Theatre.UI.Settings.textDecayMin",
 			hint: "Theatre.UI.Settings.textDecayMinHint",
@@ -2398,7 +2423,7 @@ class Theatre {
 		if (!insert.label) {
 			let textStyle = new PIXI.TextStyle({
 				align: "center",
-				fontFamily: this.titleFont,
+				fontFamily: game.settings.get(Theatre.SETTINGS,"nameFont"),
 				fontSize: 44,
 				lineHeight: 64,
 				//fontStyle: 'italic',
@@ -3037,7 +3062,7 @@ class Theatre {
 	 * "Stages" an insert by pre-loading the base + all emote images
 	 *
 	 * @params theatreId (String) : The theatreId of the insert to load.
-	 * @params remote (Boolean) : Wither this is being invoked remotely or locally. 
+	 * @params remote (Boolean) : Whether this is being invoked remotely or locally. 
 	 */
 	stageInsertById(theatreId,remote) {
 		let actorId = theatreId.replace("theatre-",""); 
@@ -3787,10 +3812,9 @@ class Theatre {
 	 * @return (HTMLElement) : The nav item, if found, else undefined. 
 	 */
 	getNavItemById(id) {
-		for (let navItem of this.theatreNavBar.children) {
-			if (navItem.getAttribute("imgId") == id)
-				return navItem; 
-		}
+		const theatreActor = this.stage[id];
+		if (theatreActor)
+			return theatreActor.navElement;
 	}
 
 	/**
@@ -3864,7 +3888,7 @@ class Theatre {
 	/**
 	 * Get insert dock by Name
 	 *
-	 * @params id (String) : The theatreId of an insert we want.
+	 * @params name (String) : The name of an insert we want.
 	 *
 	 * @return (Object) : The Object representing the insert, or undefined.
 	 */
@@ -6045,7 +6069,7 @@ class Theatre {
 				let cimg = Theatre.instance.getTheatreCoverPortrait(); 
 				if (ev.ctrlKey) {
 					// unstage the actor
-					ev.currentTarget.parentNode.removeChild(ev.currentTarget); 
+					Theatre.instance._removeFromStage(id);
 					return; 
 				}
 				if (!removed) {
@@ -6139,8 +6163,8 @@ class Theatre {
 				}
 			}
 			// pre-split measurement
-			insert.label.style.fontSize = 44; 
-			insert.label.style.lineHeight = 44*1.5; 
+			insert.label.style.fontSize = game.settings.get(Theatre.SETTINGS,"nameFontSize");
+			insert.label.style.lineHeight = game.settings.get(Theatre.SETTINGS,"nameFontSize")*1.5; 
 			insert.label.style.wordWrap = false; 
 			insert.label.style.wordWrapWidth = insert.portrait.width; 
 			let labelExceeds = (insert.label.width+20+insert.label.style.fontSize) > textBox.offsetWidth; 
@@ -7841,8 +7865,22 @@ class Theatre {
 	 */
 	static onAddToNavBar(ev,actorSheet) {
 		if (Theatre.DEBUG) console.log("Click Event on Add to NavBar!!",actorSheet,actorSheet.actor,actorSheet.position); 
-		let actor = actorSheet.object.data; 
-		Theatre.addToNavBar(actor); 
+		const actor = actorSheet.object.data; 
+		const addLabel = game.i18n.localize("Theatre.UI.Config.AddToStage");
+		const removeLabel = game.i18n.localize("Theatre.UI.Config.RemoveFromStage");
+		let newText;
+		if (Theatre.isActorStaged(actor)) {
+			Theatre.removeFromNavBar(actor)
+			newText = addLabel
+		} else {
+			Theatre.addToNavBar(actor); 
+			newText = removeLabel;
+		}
+		ev.currentTarget.innerHTML = `<i class="fas fa-theater-masks"></i>${newText}`
+	}
+
+	static _getTheatreId(actor) {
+		return `theatre-${actor._id}`; 
 	}
 
 	/**
@@ -7861,7 +7899,7 @@ class Theatre {
 		// add click handler to push it into the theatre bar, if it already exists on the bar, remove it
 		// from the bar
 		// add click handler logic to remove it from the stage
-		let theatreId = `theatre-${actor._id}`; 
+		let theatreId = Theatre._getTheatreId(actor);
 		let portrait = (actor.img ? actor.img : "icons/mystery-man.png"); 
 		let optAlign = "top"; 
 		let name = actor.name; 
@@ -7881,12 +7919,11 @@ class Theatre {
 				optAlign = actor.flags.theatre.optalign; 
 		}
 
-		for (let ni of Theatre.instance.theatreNavBar.children) {
-			if (ni.getAttribute("imgId") == theatreId) {
-				ui.notifications.info(actor.name + game.i18n.localize("Theatre.UI.Notification.AlreadyStaged"));
-				return; 
-			}
+		if (Theatre.instance.stage[theatreId]) {
+			ui.notifications.info(actor.name + game.i18n.localize("Theatre.UI.Notification.AlreadyStaged"));
+			return; 
 		}
+
 		if (Theatre.DEBUG) console.log("new theatre id: " + theatreId); 
 
 		let navItem = document.createElement("img");
@@ -7910,6 +7947,51 @@ class Theatre {
 		Theatre.instance.theatreNavBar.appendChild(navItem); 
 		// stage event
 		Theatre.instance.stageInsertById(theatreId); 
+		// Store reference
+		Theatre.instance.stage[theatreId] = new TheatreActor(actor, navItem);
+	}
+
+	/**
+	 * Removes the actor from the nav bar.
+	 *
+	 * @params actor (Actor) : The actor to remove from the NavBar staging area. 
+	 */
+	static removeFromNavBar(actor) {
+		if (!actor) return; 
+		const theatreId = Theatre._getTheatreId(actor);
+		Theatre.instance._removeFromStage(theatreId);
+
+	}
+
+	/**
+	 * Removes the actor from the stage.
+	 *
+	 * @params id (string) : The theatreId to remove from the stage.
+	 */
+	 _removeFromStage(theatreId) {
+		const staged = Theatre.instance.stage[theatreId];
+		if(staged) {
+			if(staged.navElement) {
+				Theatre.instance.theatreNavBar.removeChild(staged.navElement);
+			}
+			Theatre.instance.removeInsertById(theatreId);
+			delete Theatre.instance.stage[theatreId];
+		}
+	}
+
+	/**
+	 * Returns whether the actor is on the stage.
+	 * @params actor (Actor) : The actor. 
+	 */
+	static isActorStaged(actor) {
+		if (!actor) return false; 
+		return !!Theatre.instance.stage[Theatre._getTheatreId(actor)]
+	}
+
+	static clearStage() {
+		Object.keys(Theatre.instance.stage).forEach(theatreId => {
+			Theatre._removeFromStage(theatreId);
+		})
 	}
 
 	/**

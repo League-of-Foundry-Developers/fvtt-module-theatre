@@ -58,6 +58,8 @@
 	"Theatre.MOTD.OldVersion" : "Theatre ขณะนี้ล้าสมัย, กรุณาบอก GM ให้อัปเดต theatre ในหน้าตั้งค่า",
 
 	"Theatre.UI.Config.Stage" : "Stage",
+	"Theatre.UI.Config.AddToStage" : "Add to Stage",
+	"Theatre.UI.Config.RemoveFromStage" : "Remove from Stage",
 	"Theatre.UI.Config.Theatre" : "Theatre",
 	"Theatre.UI.Config.ConfigureTheatre" : "กำหนดค่า Theatre",
 	"Theatre.UI.Config.Main" : "หลัก",
