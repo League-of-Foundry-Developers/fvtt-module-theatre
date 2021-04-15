@@ -373,7 +373,6 @@ class Theatre {
 		choices: Theatre.FONTS.reduce((a, font) => { a[font]=font;
 			return a;
 		}, {}),
-			onChange: theatreStyle => Theatre.instance.configTheatreStyle(theatreStyle)
 		});
 
 		game.settings.register(Theatre.SETTINGS, "nameFontSize", {
@@ -383,7 +382,6 @@ class Theatre {
 			config: true,
 			default: 44,
 			type: Number,
-			onChange: theatreStyle => Theatre.instance.configTheatreStyle(theatreStyle)
 		});
 		
 		game.settings.register(Theatre.SETTINGS, "textDecayMin", {
