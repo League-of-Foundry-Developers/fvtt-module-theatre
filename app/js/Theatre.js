@@ -2041,7 +2041,8 @@ class Theatre {
 
 		let app = new PIXI.Application({ 
 			transparent: true , 
-			antialias: true
+			antialias: true ,
+			width: document.body.offsetWidth;
 		});
 
 		let canvas = app.view; 
