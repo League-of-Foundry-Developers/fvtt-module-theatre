@@ -291,7 +291,8 @@ Hooks.on("deleteCombat", function() {
  * Pre-process chat message to set 'speaking as' to correspond
  * to our 'speaking as'
  */
-Hooks.on("preCreateChatMessage", function(chatData) {
+Hooks.on("preCreateChatMessage", function(chatMessage) {
+  let chatData = chatMessage.data
   if (Theatre.DEBUG) console.log("preCreateChatMessage", chatData);
   // If theatre isn't even ready, then just no
   if (!Theatre.instance) return;
@@ -433,7 +434,7 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
     chatData.content.startsWith("/") ||
     chatData.roll ||
     chatData.emote ||
-    chatData.type == CONST.CHAT_MESSAGE_TYPES.OOC ||
+    //chatData.type == CONST.CHAT_MESSAGE_TYPES.OOC ||
     //|| Object.keys(chatData.speaker).length == 0
     chatData.content.match(/@[a-zA-Z0-9]+\[[a-zA-Z0-9]+\]/) ||
     chatData.content.match(/\<div.*\>[\s\S]*\<\/div\>/)
