@@ -291,44 +291,42 @@ Hooks.on("deleteCombat", function() {
  * Pre-process chat message to set 'speaking as' to correspond
  * to our 'speaking as'
  */
-Hooks.on("preCreateChatMessage", function(chatData) {
-  if (Theatre.DEBUG) console.log("preCreateChatMessage", chatData);
+Hooks.on("preCreateChatMessage", function(chatMessage) {
+  let chatData = {
+      speaker:{}
+    };
+  if (Theatre.DEBUG) console.log("preCreateChatMessage", chatMessage.data);
   // If theatre isn't even ready, then just no
   if (!Theatre.instance) return;
 
   // make the message OOC if needed
-  if (!chatData.roll && game.keyboard.isDown("Control")) {
-    let user = game.users.get(chatData.user);
-    if (chatData.speaker) {
-      chatData.speaker.alias = game.users.get(chatData.user).data.name;
-      chatData.speaker.actor = null;
-      chatData.speaker.scene = null;
-    } else {
-      chatData.speaker = {};
-      chatData.speaker.alias = game.users.get(chatData.user).data.name;
-      chatData.speaker.actor = null;
-      chatData.speaker.scene = null;
-    }
+  if (!chatMessage.data.roll && game.keyboard.isDown("Control")) {
+    const user = game.users.get(chatMessage.data.user);
+    chatData.speaker.alias = user.data.name;
+    chatData.speaker.actor = null;
+    chatData.speaker.scene = null;
     chatData.type = CONST.CHAT_MESSAGE_TYPES.OOC;
+
+    chatMessage.data.update(chatData);
     return;
   }
 
   if (
-    !chatData.roll &&
+    !chatMessage.data.roll &&
     Theatre.instance.speakingAs &&
-    Theatre.instance.usersTyping[chatData.user]
+    Theatre.instance.usersTyping[chatMessage.data.user]
   ) {
-    let theatreId = Theatre.instance.usersTyping[chatData.user].theatreId;
+    let theatreId = Theatre.instance.usersTyping[chatMessage.data.user].theatreId;
     let insert = Theatre.instance.getInsertById(theatreId);
     let actorId = theatreId.replace("theatre-", "");
     let actor = game.actors.get(actorId) || null;
     if (Theatre.DEBUG) console.log("speakingAs %s", theatreId);
 
-    if (insert && chatData.speaker) {
+    if (insert && chatMessage.data.speaker) {
       let label = Theatre.instance._getLabelFromInsert(insert);
       let name = label.text;
       let theatreColor = Theatre.instance.getPlayerFlashColor(
-        chatData.user,
+        chatMessage.data.user,
         insert.textColor
       );
       if (Theatre.DEBUG) console.log("name is %s", name);
@@ -394,21 +392,23 @@ Hooks.on("preCreateChatMessage", function(chatData) {
   }
   // alter message data
   // append chat emote braces TODO make a setting
-  if (Theatre.DEBUG) console.log("speaker? ", chatData.speaker);
+  if (Theatre.DEBUG) console.log("speaker? ", chatMessage.data.speaker);
   if (
     Theatre.instance.isQuoteAuto &&
-    !chatData.roll &&
-    chatData.speaker &&
+    !chatMessage.data.roll &&
+    chatMessage.data.speaker &&
     (chatData.speaker.actor ||
-      chatData.speaker.token ||
-      chatData.speaker.alias) &&
-    !chatData.content.match(/\<div.*\>[\s\S]*\<\/div\>/)
+        chatData.speaker.token ||
+        chatData.speaker.alias) &&
+    !chatMessage.data.content.match(/\<div.*\>[\s\S]*\<\/div\>/)
   ) {
     chatData.content =
       game.i18n.localize("Theatre.Text.OpenBracket") +
-      chatData.content +
+      chatMessage.data.content +
       game.i18n.localize("Theatre.Text.CloseBracket");
   }
+
+  chatMessage.data.update(chatData);
 });
 
 /**

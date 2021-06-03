@@ -1,79 +1,79 @@
 {
-	"name": "theatre",
-	"title": "Theatre Inserts",
-	"description": "Theater Inserts with a visual novel style made for heavy roleplay scenes",
-	"version": "1.1.5",
-	"author": "Ken L, Noah Zorbaugh, U~man, KaKaRoTo",
-	"socket": true,
-	"languages": [
-		{
-			"lang": "en",
-			"name": "English",
-			"path": "app/lang/en.json"
-		},
-		{
-			"lang": "ja",
-			"name": "日本語 (Japanese)",
-			"path": "app/lang/ja.json"
-		},
-		{
-			"lang": "ko",
-			"name": "한국어 (Korean)",
-			"path": "app/lang/ko.json"
-		},
-		{
-			"lang": "pt-BR",
-			"name": "Português (Portuguese [Brasil])",
-			"path": "app/lang/pt-BR.json"
-		},
-		{
-			"lang": "fr",
-			"name": "Français (French)",
-			"path": "app/lang/fr.json"
-		},
-		{
-			"lang": "th",
-			"name": "ภาษาไทย (Thai)",
-			"path": "app/lang/th.json"
-		},
-		{
-			"lang": "cn",
-			"name": "中文 (Chinese)",
-			"path": "app/lang/cn.json"
-		},
-		{
-			"lang": "zh-tw",
-			"name": "正體中文",
-			"path": "app/lang/zh-tw.json"
-    		},
-    		{
-			"lang": "es",
-			"name": "Español",
-			"path": "app/lang/es.json"
-     		},
-    		{
-			"lang": "de",
-			"name": "Deutsch (German)",
-			"path": "app/lang/de.json"
-     		}
-		
-
-	],
-	"scripts": [
-		"greensock/dist/gsap.min.js",
-		"greensock/dist/PixiPlugin.min.js",
-		"greensock/dist/ScrollToPlugin.min.js",
-		"greensock/dist/SplitText.min.js",
-		"app/js/TheatreActorConfig.js",
-		"app/js/TheatreActor.js",
-		"app/js/Theatre.js",
-		"app/js/theatre_main.js"
-	],
-	"styles" : ["app/css/theatre.css"],
-	"packs": [],
-	"url" : "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre",
-	"download" : "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/v1.1.5/theatre.zip",
-	"manifest" : "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/latest/module.json",
-	"minimumCoreVersion": "0.7.7",
-	"compatibleCoreVersion": "0.8.0"
+    "name": "theatre",
+    "title": "Theatre Inserts",
+    "description": "Theater Inserts with a visual novel style made for heavy roleplay scenes",
+    "version": "1.16.2",
+    "author": "Ken L, Noah Zorbaugh, U~man, KaKaRoTo, elizeuangelo",
+    "socket": true,
+    "languages": [
+        {
+            "lang": "en",
+            "name": "English",
+            "path": "app/lang/en.json"
+        },
+        {
+            "lang": "ja",
+            "name": "日本語 (Japanese)",
+            "path": "app/lang/ja.json"
+        },
+        {
+            "lang": "ko",
+            "name": "한국어 (Korean)",
+            "path": "app/lang/ko.json"
+        },
+        {
+            "lang": "pt-BR",
+            "name": "Português (Portuguese [Brasil])",
+            "path": "app/lang/pt-BR.json"
+        },
+        {
+            "lang": "fr",
+            "name": "Français (French)",
+            "path": "app/lang/fr.json"
+        },
+        {
+            "lang": "th",
+            "name": "ภาษาไทย (Thai)",
+            "path": "app/lang/th.json"
+        },
+        {
+            "lang": "cn",
+            "name": "中文 (Chinese)",
+            "path": "app/lang/cn.json"
+        },
+        {
+            "lang": "zh-tw",
+            "name": "正體中文",
+            "path": "app/lang/zh-tw.json"
+        },
+        {
+            "lang": "es",
+            "name": "Español",
+            "path": "app/lang/es.json"
+        },
+        {
+            "lang": "de",
+            "name": "Deutsch (German)",
+            "path": "app/lang/de.json"
+        }
+    ],
+    "scripts": [
+        "greensock/dist/gsap.min.js",
+        "greensock/dist/PixiPlugin.min.js",
+        "greensock/dist/ScrollToPlugin.min.js",
+        "greensock/dist/SplitText.min.js",
+        "app/js/TheatreActorConfig.js",
+        "app/js/TheatreActor.js",
+        "app/js/Theatre.js",
+        "app/js/theatre_main.js"
+    ],
+    "styles": [
+        "app/css/theatre.css"
+    ],
+    "packs": [],
+    "url": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre",
+    "download": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/v1.16.2/theatre.zip",
+    "manifest": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/latest/module.json",
+    "minimumCoreVersion": "0.8.6",
+    "compatibleCoreVersion": "0.8.6"
 }

@@ -629,13 +629,10 @@ class Theatre {
 
 		game.socket.emit(Theatre.SOCKET, 
 				{
-					senderId: game.user._id, 
+					senderId: game.user.id, 
 					type: "sceneevent", 
 					subtype: eventType, 
 					data: eventData
-				}, 
-				resp =>{
-					if (Theatre.DEBUG) console.log("submitted Scene event, response: ", resp); 
 				}
 		);
 
@@ -677,16 +674,13 @@ class Theatre {
 
 		game.socket.emit(Theatre.SOCKET, 
 				{
-					senderId: game.user._id, 
+					senderId: game.user.id, 
 					type: "typingevent", 
 					data: {
 						insertid : this.speakingAs,
 						emotions: emotedata
 					}
-				}, 
-				resp =>{
-					if (Theatre.DEBUG) console.log("submitted Typing event, response: ", resp); 
-				}
+				},
 		);
 
 	}
@@ -707,7 +701,7 @@ class Theatre {
 
 		game.socket.emit(Theatre.SOCKET, 
 				{
-					senderId: game.user._id, 
+					senderId: game.user.id, 
 					type: "resyncevent", 
 					subtype: (game.user.isGM ? "gm" : "player"), 
 					data: {
@@ -715,10 +709,7 @@ class Theatre {
 						insertdata: insertData,
 						narrator: this.isNarratorActive
 					}
-				}, 
-				resp =>{
-					if (Theatre.DEBUG) console.log("submitted Resync event, response: ", resp); 
-				}
+				},
 		);
 
 	}
@@ -789,14 +780,11 @@ class Theatre {
 
 		game.socket.emit(Theatre.SOCKET, 
 				{
-					senderId: game.user._id, 
+					senderId: game.user.id, 
 					type: "reqresync", 
 					subtype: type || "any",
 					data: data
-				}, 
-				resp =>{
-					if (Theatre.DEBUG) console.log("submitted Resync event, response: ", resp); 
-				}
+				},
 		);
 
 		if (type != "players") {
@@ -839,7 +827,7 @@ class Theatre {
 			// process this as if it were a resyncevent
 			this.resync.timeoutId = 1; 
 			this._processResyncEvent("gm",senderId,{
-				targetid : game.user._id,
+				targetid : game.user.id,
 				insertdata : data.insertdata,
 				narrator : data.narrator
 			}); 
@@ -864,7 +852,7 @@ class Theatre {
 	_processResyncEvent(type, senderId, data) {
 		if (Theatre.DEBUG) console.log("Processing resync event %s :",type,data,game.users.get(senderId)); 
 		// if we're resyncing and it's us that's the target
-		if (this.resync.timeoutId && (data.targetid == game.user._id || ("gm" == this.resync.type == type))) {
+		if (this.resync.timeoutId && (data.targetid == game.user.id || ("gm" == this.resync.type == type))) {
 			// drop all other resync responses, first come, first process
 			window.clearTimeout(this.resync.timeoutId); 
 			this.resync.timeoutId = null; 
@@ -1023,7 +1011,7 @@ class Theatre {
 	 *
 	 * @private
 	 */
-	_processSceneEvent(senderId,type, data) {
+	_processSceneEvent(senderId, type, data) {
 		if (Theatre.DEBUG) console.log("Processing scene event %s",type,data); 
 		let insert,actorId,params,emote,port,emotions,resName,app,insertEmote,render; 
 
@@ -1440,7 +1428,7 @@ class Theatre {
 				if (insert) {
 					// if we're delaying our emote, and ths user is us, hold off on setting it
 					if (this.isDelayEmote 
-					&& userId == game.user._id
+					&& userId == game.user.id
 					&& (this.delayedSentState == 0 || this.delayedSentState == 1)) {
 						if (this.delayedSentState == 0) {
 							insert.delayedOldEmote = insert.emote; 
@@ -2040,9 +2028,9 @@ class Theatre {
 		// by each container portrait
 
 		let app = new PIXI.Application({ 
-			transparent: true , 
-			antialias: true ,
-			width: document.body.offsetWidth;
+			transparent: true, 
+			antialias: true,
+			width: document.body.offsetWidth
 		});
 
 		let canvas = app.view; 
@@ -2079,12 +2067,12 @@ class Theatre {
 	_renderTheatre(time) {
 		// let the ticker update all its objects
 		this.pixiCTX.ticker.update(time); 
-		//this.pixiCTX.renderer.clear(); // PIXI.v5 does not respect transparency for clear
+		// this.pixiCTX.renderer.clear(); // PIXI.v6 does not respect transparency for clear
 		for (let insert of this.portraitDocks) {
 			if (insert.dockContainer) {
 				if (Theatre.DEBUG) this._updateTheatreDebugInfo(insert); 
-				// PIXI.v5 automatically clears displayObjects that are re-rendered, so artifacts are not an issue in the 'false' parameter
-				this.pixiCTX.renderer.render(insert.dockContainer,null,false); 
+				// PIXI.v6 The renderer should not clear the canvas on rendering
+				this.pixiCTX.renderer.render(insert.dockContainer, { clear: false });
 			}
 			else {
 				console.log("INSERT HAS NO CONTAINER! _renderTheatre : HOT-EJECTING it! ",insert); 
@@ -3672,7 +3660,7 @@ class Theatre {
 	 * @private
 	 */
 	_removeInsert(toRemoveInsert,toRemoveTextBox,remote) {
-		let isOwner = this.isActorOwner(game.user._id,toRemoveInsert.imgId); 
+		let isOwner = this.isActorOwner(game.user.id,toRemoveInsert.imgId); 
 		// permission check
 		if (!remote && !isOwner) {
 			ui.notifications.info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"));
@@ -4092,7 +4080,7 @@ class Theatre {
 		if (!remote && (!this.isPlayerOwned(insert1.imgId) || !this.isPlayerOwned(insert2.imgId))) {
 			ui.notifications.info(game.i18n.localize("Theatre.UI.Notification.CannotSwapControlled"));
 			return; 
-		} else if (!remote && (!this.isActorOwner(game.user._id,insert1.imgId) && !this.isActorOwner(game.user._id,insert2.imgId))) {
+		} else if (!remote && (!this.isActorOwner(game.user.id,insert1.imgId) && !this.isActorOwner(game.user.id,insert2.imgId))) {
 			ui.notifications.info(game.i18n.localize("Theatre.UI.Notification.CannotSwapOwner"));
 			return; 
 		}
@@ -4212,7 +4200,7 @@ class Theatre {
 		let adjSwap = false; 
 
 		// permission check
-		if (!remote && !this.isActorOwner(game.user._id,insert2.imgId)) {
+		if (!remote && !this.isActorOwner(game.user.id,insert2.imgId)) {
 			ui.notifications.info(game.i18n.localize("Theatre.UI.Notification.CannotMoveOwner"));
 			return; 
 		} else if (!remote && (!this.isPlayerOwned(insert1.imgId) || !this.isPlayerOwned(insert2.imgId))) {
@@ -4383,7 +4371,7 @@ class Theatre {
 		if (!!!firstInsert || !!!lastInsert || !!!firstTextBox || !!!lastTextBox) return; 
 
 		// permission check
-		if (!remote && !this.isActorOwner(game.user._id,insert.imgId)) {
+		if (!remote && !this.isActorOwner(game.user.id,insert.imgId)) {
 			ui.notifications.info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"));
 			return; 
 		} else if (!remote && (isLeft ? !this.isPlayerOwned(firstInsert.imgId) : !this.isPlayerOwned(lastInsert.imgId))) {
@@ -4467,7 +4455,7 @@ class Theatre {
 	 */
 	_mirrorInsert(insert,remote) {
 		// permission check
-		if (!remote && (!this.isActorOwner(game.user._id,insert.imgId))) {
+		if (!remote && (!this.isActorOwner(game.user.id,insert.imgId))) {
 			ui.notifications.info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"));
 			return; 
 		}
@@ -4549,7 +4537,7 @@ class Theatre {
 	 */
 	_resetPortraitPosition(insert, remote) {
 		// permission check
-		if (!remote && !this.isActorOwner(game.user._id,insert.imgId)) {
+		if (!remote && !this.isActorOwner(game.user.id,insert.imgId)) {
 			ui.notifications.info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"));
 			return; 
 		}
@@ -4724,27 +4712,27 @@ class Theatre {
 		if (Theatre.DEBUG) console.log("use default? %s", !useDefault); 
 		let emotions = {
 				emote : (!useDefault && params.settings.emote ? params.settings.emote : null)
-					|| (this.userEmotes[game.user._id] ? this.userEmotes[game.user._id].emote : null),
+					|| (this.userEmotes[game.user.id] ? this.userEmotes[game.user.id].emote : null),
 				textFlyin : (!useDefault && params.settings.emote && params.emotes[params.settings.emote] && params.emotes[params.settings.emote].settings 
 						? params.emotes[params.settings.emote].settings.textflyin : null)
 					|| (!useDefault ? params.settings.textflyin : null)
-					|| (this.userEmotes[game.user._id] ? this.userEmotes[game.user._id].textFlyin : null),
+					|| (this.userEmotes[game.user.id] ? this.userEmotes[game.user.id].textFlyin : null),
 				textStanding : (!useDefault && params.settings.emote && params.emotes[params.settings.emote] && params.emotes[params.settings.emote].settings 
 						? params.emote.settings.textstanding : null)
 					|| (!useDefault ? params.settings.textstanding : null)
-					|| (this.userEmotes[game.user._id] ? this.userEmotes[game.user._id].textStanding : null),
+					|| (this.userEmotes[game.user.id] ? this.userEmotes[game.user.id].textStanding : null),
 				textFont : (!useDefault && params.settings.emote && params.emotes[params.settings.emote] && params.emotes[params.settings.emote].settings 
 						? params.emote.settings.textfont : null)
 					|| (!useDefault ? params.settings.textfont : null)
-					|| (this.userEmotes[game.user._id] ? this.userEmotes[game.user._id].textFont : null),
+					|| (this.userEmotes[game.user.id] ? this.userEmotes[game.user.id].textFont : null),
 				textSize : (!useDefault && params.settings.emote && params.emotes[params.settings.emote] && params.emotes[params.settings.emote].settings 
 						? params.emote.settings.textsize : null)
 					|| (!useDefault ? params.settings.textsize : null)
-					|| (this.userEmotes[game.user._id] ? this.userEmotes[game.user._id].textSize : null),
+					|| (this.userEmotes[game.user.id] ? this.userEmotes[game.user.id].textSize : null),
 				textColor : (!useDefault && params.settings.emote && params.emotes[params.settings.emote] && params.emotes[params.settings.emote].settings 
 						? params.emote.settings.textcolor : null)
 					|| (!useDefault ? params.settings.textcolor : null)
-					|| (this.userEmotes[game.user._id] ? this.userEmotes[game.user._id].textColor : null)
+					|| (this.userEmotes[game.user.id] ? this.userEmotes[game.user.id].textColor : null)
 			}
 		return emotions; 
 	}
@@ -4832,15 +4820,15 @@ class Theatre {
 				chatMessage.focus(); 
 				// send typing event
 				//this._sendTypingEvent(); 
-				//this.setUserTyping(game.user._id,this.speakingAs); 
+				//this.setUserTyping(game.user.id,this.speakingAs); 
 			} else {
 				this.speakingAs = null; 
 				// clear cover
 				cimg.removeAttribute("src"); 
 				cimg.style.opacity = "0"; 
 				// clear typing theatreId data
-				this.removeUserTyping(game.user._id); 
-				this.usersTyping[game.user._id].theatreId = null; 
+				this.removeUserTyping(game.user.id); 
+				this.usersTyping[game.user.id].theatreId = null; 
 			}
 		} else {
 			let src = params.src; 
@@ -4904,7 +4892,7 @@ class Theatre {
 		}
 		// send typing event
 		this._sendTypingEvent(); 
-		this.setUserTyping(game.user._id,this.speakingAs); 
+		this.setUserTyping(game.user.id,this.speakingAs); 
 		// re-render the emote menu (expensive)
 		this.renderEmoteMenu(); 
 	}
@@ -4921,7 +4909,7 @@ class Theatre {
 		let textBox = this._getTextBoxById(theatreId); 
 		if (!textBox || !insert) return;
 
-		if (!remote && !this.isActorOwner(game.user._id,theatreId)) {
+		if (!remote && !this.isActorOwner(game.user.id,theatreId)) {
 			ui.notifications.info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"));
 			return; 
 		}
@@ -5084,26 +5072,26 @@ class Theatre {
 				let textColor = Theatre.instance.theatreNarrator.getAttribute("textcolor"); 
 
 				Theatre.instance.theatreNarrator.setAttribute("textflyin", textFlyin ? textFlyin
-						: (Theatre.instance.userEmotes[game.user._id] ? Theatre.instance.userEmotes[game.user._id].textFlyin : null))
+						: (Theatre.instance.userEmotes[game.user.id] ? Theatre.instance.userEmotes[game.user.id].textFlyin : null))
 				Theatre.instance.theatreNarrator.setAttribute("textstanding", textStanding ? textStanding
-						: (Theatre.instance.userEmotes[game.user._id] ? Theatre.instance.userEmotes[game.user._id].textStanding : null))
+						: (Theatre.instance.userEmotes[game.user.id] ? Theatre.instance.userEmotes[game.user.id].textStanding : null))
 				Theatre.instance.theatreNarrator.setAttribute("textfont", textFont ? textFont 
-						: (Theatre.instance.userEmotes[game.user._id] ? Theatre.instance.userEmotes[game.user._id].textFont : null))
+						: (Theatre.instance.userEmotes[game.user.id] ? Theatre.instance.userEmotes[game.user.id].textFont : null))
 				Theatre.instance.theatreNarrator.setAttribute("textsize", textSize ? textSize
-						: (Theatre.instance.userEmotes[game.user._id] ? Theatre.instance.userEmotes[game.user._id].textSize : null))
+						: (Theatre.instance.userEmotes[game.user.id] ? Theatre.instance.userEmotes[game.user.id].textSize : null))
 				Theatre.instance.theatreNarrator.setAttribute("textcolor", textColor ? textColor 
-						: (Theatre.instance.userEmotes[game.user._id] ? Theatre.instance.userEmotes[game.user._id].textColor : null))
+						: (Theatre.instance.userEmotes[game.user.id] ? Theatre.instance.userEmotes[game.user.id].textColor : null))
 
 				let cimg = Theatre.instance.getTheatreCoverPortrait(); 
 				// clear cover
 				cimg.removeAttribute("src"); 
 				cimg.style.opacity = "0"; 
 				// clear typing theatreId data
-				Theatre.instance.removeUserTyping(game.user._id); 
-				Theatre.instance.usersTyping[game.user._id].theatreId = null; 
+				Theatre.instance.removeUserTyping(game.user.id); 
+				Theatre.instance.usersTyping[game.user.id].theatreId = null; 
 				// Mark speaking as Narrator
 				Theatre.instance.speakingAs = Theatre.NARRATOR; 
-				Theatre.instance.setUserTyping(game.user._id,Theatre.NARRATOR); 
+				Theatre.instance.setUserTyping(game.user.id,Theatre.NARRATOR); 
 				// push focus to chat-message
 				let chatMessage = document.getElementById("chat-message"); 
 				chatMessage.focus(); 
@@ -5141,8 +5129,8 @@ class Theatre {
 				KHelpers.removeClass(btnNarrator,"theatre-control-nav-bar-item-speakingas"); 
 				// clear narrator
 				Theatre.instance.speakingAs = null; 
-				Theatre.instance.removeUserTyping(game.user._id); 
-				Theatre.instance.usersTyping[game.user._id].theatreId = null; 
+				Theatre.instance.removeUserTyping(game.user.id); 
+				Theatre.instance.usersTyping[game.user.id].theatreId = null; 
 				// send event to turn off the narrator bar
 				if (!remote)
 					Theatre.instance._sendSceneEvent("narrator",{active: false}); 
@@ -5201,12 +5189,12 @@ class Theatre {
 				//if (fonts.includes(insert.textFont)) fontSelect.value = insert.textFont;
 				//else fontSelect.value = fonts[0]; 
 				fontSelect.value = insert.textFont; 
-			} else if (Theatre.instance.userEmotes[game.user._id] && Theatre.instance.userEmotes[game.user._id].textFont) {
-				//if (fonts.includes(Theatre.instance.userEmotes[game.user._id].textFont)) 
-					//fontSelect.value = Theatre.instance.userEmotes[game.user._id].textFont;
+			} else if (Theatre.instance.userEmotes[game.user.id] && Theatre.instance.userEmotes[game.user.id].textFont) {
+				//if (fonts.includes(Theatre.instance.userEmotes[game.user.id].textFont)) 
+					//fontSelect.value = Theatre.instance.userEmotes[game.user.id].textFont;
 				//else 
 					//fontSelect.value = fonts[0]; 
-				fontSelect.value = Theatre.instance.userEmotes[game.user._id].textFont; 
+				fontSelect.value = Theatre.instance.userEmotes[game.user.id].textFont; 
 				if (insert) insert.textFont = fontSelect.value; 
 			} else {
 				fontSelect.value = fonts[0];
@@ -5214,8 +5202,8 @@ class Theatre {
 			// assign color from insert
 			if (insert && insert.textColor) {
 				colorSelect.value = insert.textColor;
-			} else if (Theatre.instance.userEmotes[game.user._id] && Theatre.instance.userEmotes[game.user._id].textColor) {
-				colorSelect.value = Theatre.instance.userEmotes[game.user._id].textColor; 
+			} else if (Theatre.instance.userEmotes[game.user.id] && Theatre.instance.userEmotes[game.user.id].textColor) {
+				colorSelect.value = Theatre.instance.userEmotes[game.user.id].textColor; 
 				if (insert) insert.textColor = colorSelect.value; 
 			}
 			// assgin font size
@@ -5223,8 +5211,8 @@ class Theatre {
 			let sizeValue = 2; 
 			if (insert)
 				sizeValue = insert.textSize;
-			else if (Theatre.instance.userEmotes[game.user._id])
-				sizeValue = Theatre.instance.userEmotes[game.user._id].textSize; 
+			else if (Theatre.instance.userEmotes[game.user.id])
+				sizeValue = Theatre.instance.userEmotes[game.user.id].textSize; 
 
 			switch (sizeValue) {
 				case 3:
@@ -5240,13 +5228,14 @@ class Theatre {
 			sizeSelect.appendChild(sizeIcon); 
 
 			sizeSelect.addEventListener("click",ev=>{
+				
 				let insert = Theatre.instance.getInsertById(Theatre.instance.speakingAs); 
 				let icon = sizeSelect.children[0]; 
 				let value = 2; 
 				if (insert)
 					value = insert.textSize;
-				else if (Theatre.instance.userEmotes[game.user._id])
-					value = Theatre.instance.userEmotes[game.user._id].textSize; 
+				else if (Theatre.instance.userEmotes[game.user.id])
+					value = Theatre.instance.userEmotes[game.user.id].textSize; 
 
 
 				switch (value) {
@@ -5266,14 +5255,14 @@ class Theatre {
 						value = 1; 
 						break; 
 				}
-				Theatre.instance.setUserEmote(game.user._id,Theatre.instance.speakingAs,'textsize',value); 
+				Theatre.instance.setUserEmote(game.user.id,Theatre.instance.speakingAs,'textsize',value); 
 			}); 
 			fontSelect.addEventListener("change",ev=>{
-				Theatre.instance.setUserEmote(game.user._id,Theatre.instance.speakingAs,'textfont',ev.currentTarget.value); 
+				Theatre.instance.setUserEmote(game.user.id,Theatre.instance.speakingAs,'textfont',ev.currentTarget.value); 
 				Theatre.instance.renderEmoteMenu(); 
 			}); 
 			colorSelect.addEventListener("change",ev=>{
-				Theatre.instance.setUserEmote(game.user._id,Theatre.instance.speakingAs,'textcolor',ev.currentTarget.value); 
+				Theatre.instance.setUserEmote(game.user.id,Theatre.instance.speakingAs,'textcolor',ev.currentTarget.value); 
 			}); 
 
 
@@ -5330,14 +5319,14 @@ class Theatre {
 					if (ev.button == 0) {
 						if (KHelpers.hasClass(ev.currentTarget,"textflyin-active")) {
 							KHelpers.removeClass(ev.currentTarget,"textflyin-active"); 
-							Theatre.instance.setUserEmote(game.user._id,Theatre.instance.speakingAs,'textflyin',null); 
+							Theatre.instance.setUserEmote(game.user.id,Theatre.instance.speakingAs,'textflyin',null); 
 						} else {
 							let lastActives = Theatre.instance.theatreEmoteMenu.getElementsByClassName("textflyin-active"); 
 							for (let la of lastActives)
 								KHelpers.removeClass(la,"textflyin-active"); 
 							//if (insert || Theatre.instance.speakingAs == Theatre.NARRATOR) {
 							KHelpers.addClass(ev.currentTarget,"textflyin-active"); 
-							Theatre.instance.setUserEmote(game.user._id,Theatre.instance.speakingAs,'textflyin',ev.currentTarget.getAttribute("name")); 
+							Theatre.instance.setUserEmote(game.user.id,Theatre.instance.speakingAs,'textflyin',ev.currentTarget.getAttribute("name")); 
 							//}
 						}
 						// push focus to chat-message
@@ -5363,7 +5352,7 @@ class Theatre {
 						//TweenMax.to(flyinBox,.4,{scrollTo:{y:child.offsetTop, offsetY:flyinBox.offsetHeight/2}})
 						flyinBox.scrollTop = child.offsetTop-Math.max(flyinBox.offsetHeight/2,0); 
 					}
-				} else if (!insert && Theatre.instance.userEmotes[game.user._id] && (child.getAttribute("name") == Theatre.instance.userEmotes[game.user._id].textFlyin)) {
+				} else if (!insert && Theatre.instance.userEmotes[game.user.id] && (child.getAttribute("name") == Theatre.instance.userEmotes[game.user.id].textFlyin)) {
 					KHelpers.addClass(child,"textflyin-active"); 
 					// scroll to
 					//TweenMax.to(flyinBox,.4,{scrollTo:{y:child.offsetTop, offsetY:flyinBox.offsetHeight/2}})
@@ -5401,14 +5390,14 @@ class Theatre {
 					if (ev.button == 0) {
 						if (KHelpers.hasClass(ev.currentTarget,"textstanding-active")) {
 							KHelpers.removeClass(ev.currentTarget,"textstanding-active"); 
-							Theatre.instance.setUserEmote(game.user._id,Theatre.instance.speakingAs,'textstanding',null); 
+							Theatre.instance.setUserEmote(game.user.id,Theatre.instance.speakingAs,'textstanding',null); 
 						} else {
 							let lastActives = Theatre.instance.theatreEmoteMenu.getElementsByClassName("textstanding-active"); 
 							for (let la of lastActives)
 								KHelpers.removeClass(la,"textstanding-active"); 
 							//if (insert || Theatre.instance.speakingAs == Theatre.NARRATOR) {
 							KHelpers.addClass(ev.currentTarget,"textstanding-active"); 
-							Theatre.instance.setUserEmote(game.user._id,Theatre.instance.speakingAs,'textstanding',ev.currentTarget.getAttribute("name")); 
+							Theatre.instance.setUserEmote(game.user.id,Theatre.instance.speakingAs,'textstanding',ev.currentTarget.getAttribute("name")); 
 							//}
 						}
 						// push focus to chat-message
@@ -5433,7 +5422,7 @@ class Theatre {
 						//TweenMax.to(standingBox,.4,{scrollTo:{y:child.offsetTop, offsetY:standingBox.offsetHeight/2}})
 						standingBox.scrollTop = child.offsetTop-Math.max(standingBox.offsetHeight/2,0); 
 					}
-				} else if (Theatre.instance.userEmotes[game.user._id] && (child.getAttribute("name") ==  Theatre.instance.userEmotes[game.user._id].textStanding)) {
+				} else if (Theatre.instance.userEmotes[game.user.id] && (child.getAttribute("name") ==  Theatre.instance.userEmotes[game.user.id].textStanding)) {
 					KHelpers.addClass(child,"textstanding-active"); 
 					// scroll to
 					//TweenMax.to(standingBox,.4,{scrollTo:{y:child.offsetTop, offsetY:standingBox.offsetHeight/2}})
@@ -5462,14 +5451,14 @@ class Theatre {
 							if (KHelpers.hasClass(ev.currentTarget,"emote-active")) {
 								KHelpers.removeClass(ev.currentTarget,"emote-active"); 
 								// if speaking set to base
-								Theatre.instance.setUserEmote(game.user._id,Theatre.instance.speakingAs,'emote',null); 
+								Theatre.instance.setUserEmote(game.user.id,Theatre.instance.speakingAs,'emote',null); 
 							} else {
 								let lastActives = Theatre.instance.theatreEmoteMenu.getElementsByClassName("emote-active"); 
 								for (let la of lastActives)
 									KHelpers.removeClass(la,"emote-active"); 
 								KHelpers.addClass(ev.currentTarget,"emote-active"); 
 								// if speaking, then set our emote!
-								Theatre.instance.setUserEmote(game.user._id,Theatre.instance.speakingAs,'emote',emName); 
+								Theatre.instance.setUserEmote(game.user.id,Theatre.instance.speakingAs,'emote',emName); 
 							}
 							// push focus to chat-message
 							let chatMessage = document.getElementById("chat-message"); 
@@ -5495,7 +5484,7 @@ class Theatre {
 							KHelpers.addClass(child,"emote-imgavail");
 
 					}
-					if (!insert && Theatre.instance.userEmotes[game.user._id] && (childEmote == Theatre.instance.userEmotes[game.user._id].emote)) {
+					if (!insert && Theatre.instance.userEmotes[game.user.id] && (childEmote == Theatre.instance.userEmotes[game.user.id].emote)) {
 						KHelpers.addClass(child,"emote-active"); 
 						//emContainer.scrollTop = child.offsetTop-Math.max(emContainer.offsetHeight/2,0); 
 					}
@@ -5645,7 +5634,7 @@ class Theatre {
 		|| ev.key == "Control") return; 
 		if (Theatre.DEBUG) console.log("keydown in chat-message"); 
 		Theatre.instance.lastTyping = now; 
-		Theatre.instance.setUserTyping(game.user._id,Theatre.instance.speakingAs)
+		Theatre.instance.setUserTyping(game.user.id,Theatre.instance.speakingAs)
 		Theatre.instance._sendTypingEvent(); 
 	}
 
@@ -5690,7 +5679,7 @@ class Theatre {
 	}
 
 	/**
-	 * Handle the Quote toggle click
+	 * Handle the Delay Emote toggle click
 	 *
 	 * @param ev (Event) : The Event that triggered this handler
 	 */
@@ -5741,8 +5730,10 @@ class Theatre {
 	 */
 	handleBtnResyncClick(ev) {
 		if (Theatre.DEBUG) console.log("resync click"); 
-		if (game.user.isGM) 
+		if (game.user.isGM) {
 			Theatre.instance._sendResyncRequest("players"); 
+            ui.notifications.info(game.i18n.localize("Theatre.UI.Notification.ResyncGM"));
+        }
 		else {
 			Theatre.instance._sendResyncRequest("gm"); 
 		}
@@ -5897,7 +5888,7 @@ class Theatre {
 				let insert = Theatre.instance.getInsertById(id); 
 
 				// permission check
-				if (!Theatre.instance.isActorOwner(game.user._id,insert.imgId)) {
+				if (!Theatre.instance.isActorOwner(game.user.id,insert.imgId)) {
 					ui.notifications.info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"));
 					return; 
 				}
@@ -6128,6 +6119,7 @@ class Theatre {
 				continue; 
 			}
 			// if somehow the containers are not setup, skip and hope the next re-order has them ready
+			
 			if (!insert.portrait || !insert.label) {
 				if (Theatre.DEBUG) console.log("WARN: %s : %s was not ready!",insert.name,insert.imgId); 
 				continue; 
@@ -7903,7 +7895,7 @@ class Theatre {
 		let optAlign = "top"; 
 		let name = actor.name; 
 
-		if (!Theatre.instance.isActorOwner(game.user._id,theatreId)) {
+		if (!Theatre.instance.isActorOwner(game.user.id,theatreId)) {
 			ui.notifications.info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"));
 			return; 
 		}
