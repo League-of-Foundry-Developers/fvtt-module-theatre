@@ -2028,7 +2028,7 @@ class Theatre {
 		// by each container portrait
 
 		let app = new PIXI.Application({ 
-			transparent: true , 
+			transparent: true, 
 			antialias: true,
 			width: document.body.offsetWidth
 		});
