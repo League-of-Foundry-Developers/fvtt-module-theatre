@@ -61,6 +61,8 @@
 	"Theatre.UI.Settings.nameFontHint": "为角色名设置你想要的字体。小剧场中需要有这个字体。需要角色重新上场或与GM同步。",
 	"Theatre.UI.Settings.nameFontSize": "角色名大小（实验功能）",
 	"Theatre.UI.Settings.nameFontSizeHint": "为角色名设置字体大小。字体大小会跟你选择的字体有关，因此不推荐使用大尺寸。",
+	"Theatre.UI.Settings.autoHideBottom": "自动隐藏底边栏",
+	"Theatre.UI.Settings.autoHideBottomHint": "当显示立绘时，自动隐藏底部UI（玩家面板和快捷栏面板）。",
 
 	"Theatre.MOTD.Header" : "通知",
 	"Theatre.MOTD.OldVersion" : "小剧场版本过旧，请在设置屏幕中启用GM更新小剧场。",
@@ -137,7 +139,7 @@
 	"Theatre.Emote.Correct" : "正确",
 	"Theatre.Emote.Wrong" : "错误",
 
-	"Theatre.Flyin.Label" : "进入效果",W
+	"Theatre.Flyin.Label" : "进入效果",
 	"Theatre.Flyin.Typewriter" : "逐字",
 	"Theatre.Flyin.Fadein" : "渐入",
 	"Theatre.Flyin.Slidein" : "滑入",
