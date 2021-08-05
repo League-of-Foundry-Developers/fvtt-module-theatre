@@ -61,6 +61,8 @@
 	"Theatre.UI.Settings.nameFontHint": "Put in the name of the font you want to use. If the font exists in Theatre, it can be used. Requires actors to re-stage or for the GM to resync.",
 	"Theatre.UI.Settings.nameFontSize": "Actor Name Size (Experimental)",
 	"Theatre.UI.Settings.nameFontSizeHint": "Sets the size of the name font. Note that the sizes may be different depending on your display or font choice. Using huge sizes is not recommended.",
+	"Theatre.UI.Settings.autoHideBottom": "Auto Hide Bottom",
+	"Theatre.UI.Settings.autoHideBottomHint": "Hide bottom UI(player&hotbar) when actor shows on stage.",
 	
 	"Theatre.MOTD.Header" : "Theatre Notification",
 	"Theatre.MOTD.OldVersion" : "Theatre is currently out of date, please have the GM update theatre in the setup screen.",
