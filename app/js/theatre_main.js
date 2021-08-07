@@ -556,6 +556,13 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
         "textcolor"
       );
     }
+    if (polyglot) {
+      const lang = chatData.flags.polyglot.language;
+      if (!polyglot.polyglot.known_languages.has(lang)) {
+        if (lang != polyglot.polyglot.defaultLanguage) insertFontType = polyglot.polyglot._getFontStyle(lang).slice(5);
+        textContent = polyglot.polyglot.scrambleString(textContent, chatData._id, lang);
+      }
+    }
 
     let fontSize = Number(textBox.getAttribute("osize") || 28);
     //console.log("font PRE(%s): ",insertFontSize,fontSize)
