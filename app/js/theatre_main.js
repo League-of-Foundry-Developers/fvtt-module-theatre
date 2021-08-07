@@ -556,13 +556,6 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
         "textcolor"
       );
     }
-    if (polyglot) {
-      const lang = chatData.flags.polyglot.language;
-      if (!polyglot.polyglot.known_languages.has(lang)) {
-        if (lang != polyglot.polyglot.defaultLanguage) insertFontType = polyglot.polyglot._getFontStyle(lang).slice(5);
-        textContent = polyglot.polyglot.scrambleString(textContent, chatData._id, lang);
-      }
-    }
 
     let fontSize = Number(textBox.getAttribute("osize") || 28);
     //console.log("font PRE(%s): ",insertFontSize,fontSize)
@@ -576,6 +569,17 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
       default:
         break;
     }
+    
+    if (polyglot) {
+      const lang = chatData.flags.polyglot.language;
+      if (!polyglot.polyglot.understands(lang)) {
+        const fontStyle = polyglot.polyglot._getFontStyle(lang);
+        fontSize *= Math.floor(Number(fontStyle.slice(0,3))/100);
+        insertFontType = fontStyle.slice(5);
+        textContent = polyglot.polyglot.scrambleString(textContent, chatData._id, lang);
+      }
+    }
+    
     if (Theatre.DEBUG)
       console.log("font size is (%s): ", insertFontSize, fontSize);
     Theatre.instance._applyFontFamily(
