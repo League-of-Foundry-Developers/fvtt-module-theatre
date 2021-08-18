@@ -569,6 +569,17 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
       default:
         break;
     }
+    
+    if (polyglot) {
+      const lang = chatData.flags.polyglot.language;
+      if (!polyglot.polyglot.understands(lang)) {
+        const fontStyle = polyglot.polyglot._getFontStyle(lang);
+        fontSize *= Math.floor(Number(fontStyle.slice(0,3))/100);
+        insertFontType = fontStyle.slice(5);
+        textContent = polyglot.polyglot.scrambleString(textContent, chatData._id, lang);
+      }
+    }
+    
     if (Theatre.DEBUG)
       console.log("font size is (%s): ", insertFontSize, fontSize);
     Theatre.instance._applyFontFamily(
