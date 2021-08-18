@@ -444,7 +444,15 @@ class Theatre {
 				// NOOP
 			}
 		});
-
+		
+		game.settings.register(Theatre.SETTINGS, "autoHideBottom", {
+			name: "Theatre.UI.Settings.autoHideBottom",
+		  	hint: "Theatre.UI.Settings.autoHideBottomHint",
+		  	scope: "world",
+		  	config: true,
+		  	type: Boolean,
+		  	default: false
+		});
 
 		// Load in default settings (theatreStyle is loaded on HTML Injection)
 		this.settings.decayMin = (game.settings.get(Theatre.SETTINGS,"textDecayMin")||30)*1000; 
@@ -2073,6 +2081,11 @@ class Theatre {
 				if (Theatre.DEBUG) this._updateTheatreDebugInfo(insert); 
 				// PIXI.v6 The renderer should not clear the canvas on rendering
 				this.pixiCTX.renderer.render(insert.dockContainer, { clear: false });
+				let autoHide = game.settings.get(Theatre.SETTINGS,"autoHideBottom");
+				if (autoHide == true){
+					$('#players').hide();
+					$('#hotbar').hide();
+				}
 			}
 			else {
 				console.log("INSERT HAS NO CONTAINER! _renderTheatre : HOT-EJECTING it! ",insert); 
@@ -2197,6 +2210,8 @@ class Theatre {
 			insert.dockContainer = null; 
 			let idx = this.portraitDocks.findIndex(e => e.imgId == imgId);
 			this.portraitDocks.splice(idx,1); 
+			$('#players').show();
+			$('#hotbar').show();
 		}
 		// force a render update
 		//app.render(); 
