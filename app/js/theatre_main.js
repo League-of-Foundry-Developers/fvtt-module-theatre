@@ -570,7 +570,7 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
         break;
     }
     
-    if (polyglot) {
+    if (typeof polyglot !== 'undefined') {
       const lang = chatData.flags.polyglot.language;
       if (!polyglot.polyglot.understands(lang)) {
         const fontStyle = polyglot.polyglot._getFontStyle(lang);
