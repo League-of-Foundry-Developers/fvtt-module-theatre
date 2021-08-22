@@ -62,6 +62,8 @@
 	"Theatre.UI.Settings.nameFontHint": "Introduzca el nombre de la fuente que desee usar. Solo funcionará si la fuente existe en Theatre. Es necesario que se vuelvan a poner los actores en el escenario o que el GM resincronice",
 	"Theatre.UI.Settings.nameFontSize": "Tamaño de nombre del actor (experimental)",
 	"Theatre.UI.Settings.nameFontSizeHint": "Ajusta el tamaño de fuente de los nombres. Nótese que los tamaños pueden variar dependiendo del monitor o la fuente elegida. No se recomienza usar tamaños demasiado grandes",
+	"Theatre.UI.Settings.autoHideBottom": "Autoocultar UI inferior",
+	"Theatre.UI.Settings.autoHideBottomHint": "Oculta la UI inferior (jugador & barra de acceso rápido) cuando un actor sale a escena",
 
 	"Theatre.MOTD.Header" : "Notificaciones del teatro",
 	"Theatre.MOTD.OldVersion" : "Teatro está desactualizado, pida al GM que lo actualice desde la ventana de configuración",
