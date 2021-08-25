@@ -29,7 +29,7 @@
  *
  * ============================================================
  */
-var KHelpers = (function() {
+ var KHelpers = (function() {
   function hasClass(el, className) {
     return el.classList
       ? el.classList.contains(className)
@@ -124,85 +124,30 @@ Handlebars.registerHelper("resprop", function(propPath, hash) {
 /**
  * Hook in on Actorsheet's Header buttons + context menus
  */
-Hooks.on("init", function() {
-  // Swap in prototype for ours
-  ActorSheet.prototype._getHeaderButtons = function() {
-    let buttons = [];
-
-    // APPLICATION
-    buttons.push({
-      label: "Header.Override.Close",
-      class: "close",
-      icon: "fas fa-times",
-      onclick: ev => this.close()
-    });
-
-    // FORM APPLICATION
-    // (None)
-
-    // BASE ENTITY SHEET
-    if (this.options.compendium) {
-      buttons.unshift({
-        label: "Header.Override.Import",
-        class: "import",
-        icon: "fas fa-download",
-        onclick: async ev => {
-          await this.close();
-          this.entity.collection.importFromCollection(
-            this.options.compendium,
-            this.entity._id
-          );
-        }
-      });
+ Hooks.on("getActorSheetHeaderButtons",(app,buttons)=>{
+  let theatreButtons = []
+  if (app.object.owner) {
+    // only prototype actors
+    if (!app.object.token) {
+      
+      theatreButtons.push({
+          label: "Theatre.UI.Config.Theatre",
+          class: "configure-theatre",
+          icon: "fas fa-user-edit",
+          onclick: ev => Theatre.onConfigureInsert(ev, app.object.sheet)
+        })
+      
     }
-
-    // Modified ActorSheet (Target)
-    let canConfigure =
-      this.options.editable &&
-      (game.user.isGM || (this.actor.owner && game.user.isTrusted));
-    if (canConfigure) {
-      buttons = [
-        {
-          label: "Header.Override.Sheet",
-          class: "configure-sheet",
-          icon: "fas fa-cog",
-          onclick: ev => this._onConfigureSheet(ev)
-        },
-        {
-          label: "Header.Override.Token",
-          class: "configure-token",
-          icon: "fas fa-user-circle",
-          onclick: ev => this._onConfigureToken(ev)
+    theatreButtons.push({
+        label: Theatre.isActorStaged(app.object.data) ? "Theatre.UI.Config.RemoveFromStage" : "Theatre.UI.Config.AddToStage",
+        class: "add-to-theatre-navbar",
+        icon: "fas fa-theater-masks",
+        onclick: ev => {
+          Theatre.onAddToNavBar(ev, app.object.sheet);
         }
-      ].concat(buttons);
-    }
-    // Owners
-    if (this.actor.owner) {
-      // only prototype actors
-      if (!this.actor.token) {
-        buttons = [
-          {
-            label: "Theatre.UI.Config.Theatre",
-            class: "configure-theatre",
-            icon: "fas fa-user-edit",
-            onclick: ev => Theatre.onConfigureInsert(ev, this)
-          }
-        ].concat(buttons);
-      }
-      buttons = [
-        {
-          label: Theatre.isActorStaged(this.actor.data) ? "Theatre.UI.Config.RemoveFromStage" : "Theatre.UI.Config.AddToStage",
-          class: "add-to-theatre-navbar",
-          icon: "fas fa-theater-masks",
-          onclick: ev => {
-            Theatre.onAddToNavBar(ev, this);
-          }
-        }
-      ].concat(buttons);
-    }
-
-    return buttons;
-  };
+      })
+  }
+  buttons.unshift(...theatreButtons)
 });
 
 /**
@@ -569,17 +514,6 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
       default:
         break;
     }
-    
-    if (typeof polyglot !== 'undefined') {
-      const lang = chatData.flags.polyglot.language;
-      if (!polyglot.polyglot.understands(lang)) {
-        const fontStyle = polyglot.polyglot._getFontStyle(lang);
-        fontSize *= Math.floor(Number(fontStyle.slice(0,3))/100);
-        insertFontType = fontStyle.slice(5);
-        textContent = polyglot.polyglot.scrambleString(textContent, chatData._id, lang);
-      }
-    }
-    
     if (Theatre.DEBUG)
       console.log("font size is (%s): ", insertFontSize, fontSize);
     Theatre.instance._applyFontFamily(
