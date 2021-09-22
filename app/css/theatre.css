@@ -1,4 +1,13 @@
 @charset "UTF-8";
+
+@font-face {
+  font-family: "Caslon";
+  src: url("../graphics/fonts/en/ACaslonPro-Bold.otf"); }
+
+@font-face {
+  font-family: "CaslonAntique";
+  src: url("../graphics/fonts/en/CaslonAntique-Bold.ttf"); }
+
 @font-face {
   font-family: "SignikaBold";
   src: url("../graphics/fonts/en/Signika-Bold.ttf"); }

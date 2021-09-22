@@ -6633,6 +6633,8 @@ class Theatre {
 					Theatre.instance.textFont = "SignikaBold"; 
 					Theatre.instance.fontWeight = "normal";
 					Theatre.FONTS = [
+						"Caslon",
+						"CaslonAntique",
 						"SignikaBold", 
 						"Riffic",
 						"IronSans",
@@ -6705,6 +6707,8 @@ class Theatre {
 					Theatre.instance.textFont = "SignikaBold"; 
 					Theatre.instance.fontWeight = "normal"; 
 					Theatre.FONTS = [
+						"Caslon",
+						"CaslonAntique",
 						"SignikaBold", 
 						"Riffic",
 						"LinLibertine",
