@@ -1944,8 +1944,8 @@ class Theatre {
 			app.stage.height = scaledHeight; 
 
 			app.stage.addChild(sprite); 
-			app.stage.scale.x = ratio*2; 
-			app.stage.scale.y = ratio*2; 
+			app.stage.scale.x = ratio;
+			app.stage.scale.y = ratio;
 			app.stage.y = 70 - (portHeight*ratio)/2; 
 		} else {
 			// scale portHeight to 200px, assign width as a fraction
@@ -1956,8 +1956,8 @@ class Theatre {
 			app.stage.height = scaledHeight; 
 
 			app.stage.addChild(sprite); 
-			app.stage.scale.x = ratio*2; 
-			app.stage.scale.y = ratio*2; 
+			app.stage.scale.x = ratio;
+			app.stage.scale.y = ratio;
 			app.stage.x = 70 - (portWidth*ratio*2)/2; 
 		}
 
