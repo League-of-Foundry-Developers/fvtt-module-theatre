@@ -69,8 +69,8 @@
 	"Theatre.MOTD.OldVersion" : "Teatro está desactualizado, pida al GM que lo actualice desde la ventana de configuración",
 
 	"Theatre.UI.Config.Stage" : "Escenario",
-	"Theatre.UI.Config.AddToStage" : "Add to Stage",
-	"Theatre.UI.Config.RemoveFromStage" : "Remove from Stage",
+	"Theatre.UI.Config.AddToStage" : "Añadir al escenario",
+	"Theatre.UI.Config.RemoveFromStage" : "Quitar del escenario",
 	"Theatre.UI.Config.Theatre" : "Teatro",
 	"Theatre.UI.Config.ConfigureTheatre" : "Configurar teatro",
 	"Theatre.UI.Config.Main" : "Principal",
@@ -85,7 +85,7 @@
 	"Theatre.UI.Config.SetDefaultInsert" : "Ajuste valores por defecto de encartes de teatro",
 	"Theatre.UI.Config.BaseInsert" : "Encarte de teatro base",
 	"Theatre.UI.Config.SaveSettings" : "Guardar ajustes",
-	"Theatre.UI.Config.PathPlaceholder" : "path/image.png",
+	"Theatre.UI.Config.PathPlaceholder" : "ruta/imagen.png",
 	"Theatre.UI.Config.CustomEmotePlaceholder" : "Nombre personalizado",
 	"Theatre.UI.Config.DisableDefaultAnim" : "Deshabilitar animaciones por defecto",
 	"Theatre.UI.Config.DisableDefaultAnimHint" : "Deshabilita todas las animaciones por defecto de los emoticonos, incluyendo los globos o cualquier otra animación que existiese al instalar el módulo",
@@ -96,7 +96,7 @@
 	"Theatre.Text.FontSizeNormal" : "Normal",
 	"Theatre.Text.FontSizeLarge" : "Grande",
 
-	"Theatre.Emote.Label" : "Emotes",
+	"Theatre.Emote.Label" : "Emoticonos",
 	"Theatre.Emote.Happy" : "Feliz",
 	"Theatre.Emote.Smile" : "Sonreir",
 	"Theatre.Emote.Grin" : "Sonrisa burlona",
