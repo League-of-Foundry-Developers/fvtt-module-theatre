@@ -126,7 +126,7 @@ Handlebars.registerHelper("resprop", function(propPath, hash) {
  */
  Hooks.on("getActorSheetHeaderButtons",(app,buttons)=>{
   let theatreButtons = []
-  if (app.object.owner) {
+  if (app.object.isOwner) {
     // only prototype actors
     if (!app.object.token) {
       
