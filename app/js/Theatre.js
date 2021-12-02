@@ -454,6 +454,15 @@ class Theatre {
 		  	default: false
 		});
 
+		game.settings.register(Theatre.SETTINGS, "removeLabelSheetHeader", {
+			name: "Theatre.UI.Settings.removeLabelSheetHeader",
+		  	hint: "Theatre.UI.Settings.removeLabelSheetHeaderHint",
+		  	scope: "world",
+		  	config: true,
+		  	type: Boolean,
+		  	default: false
+		});
+
 		// Load in default settings (theatreStyle is loaded on HTML Injection)
 		this.settings.decayMin = (game.settings.get(Theatre.SETTINGS,"textDecayMin")||30)*1000; 
 		this.settings.decayRate = (game.settings.get(Theatre.SETTINGS,"textDecayRate")||1)*1000; 
@@ -7873,11 +7882,11 @@ class Theatre {
 	 *
 	 * @params ev (Event) : The event that triggered adding to the NavBar staging area.
 	 */
-	static onAddToNavBar(ev,actorSheet) {
+	static onAddToNavBar(ev,actorSheet,removeLabelSheetHeader) {
 		if (Theatre.DEBUG) console.log("Click Event on Add to NavBar!!",actorSheet,actorSheet.actor,actorSheet.position); 
 		const actor = actorSheet.object.data; 
-		const addLabel = game.i18n.localize("Theatre.UI.Config.AddToStage");
-		const removeLabel = game.i18n.localize("Theatre.UI.Config.RemoveFromStage");
+		const addLabel = removeLabelSheetHeader ? "" : game.i18n.localize("Theatre.UI.Config.AddToStage");
+		const removeLabel = removeLabelSheetHeader ? "" : game.i18n.localize("Theatre.UI.Config.RemoveFromStage");
 		let newText;
 		if (Theatre.isActorStaged(actor)) {
 			Theatre.removeFromNavBar(actor)
@@ -7886,7 +7895,7 @@ class Theatre {
 			Theatre.addToNavBar(actor); 
 			newText = removeLabel;
 		}
-		ev.currentTarget.innerHTML = `<i class="fas fa-theater-masks"></i>${newText}`
+		ev.currentTarget.innerHTML = Theatre.isActorStaged(actor) ? `<i class="fas fa-theater-masks"></i>${newText}` :  `<i class="fas fa-mask"></i>${newText}`;
 	}
 
 	static _getTheatreId(actor) {
