@@ -126,13 +126,12 @@ Handlebars.registerHelper("resprop", function(propPath, hash) {
  */
  Hooks.on("getActorSheetHeaderButtons",(app,buttons)=>{
   let theatreButtons = []
-  let removeLabelSheetHeader = game.settings.get(Theatre.SETTINGS,"removeLabelSheetHeader");
   if (app.object.isOwner) {
     // only prototype actors
     if (!app.object.token) {
       
       theatreButtons.push({
-          label: removeLabelSheetHeader ? "" : "Theatre.UI.Config.Theatre",
+          label: "Theatre.UI.Config.Theatre",
           class: "configure-theatre",
           icon: "fas fa-user-edit",
           onclick: ev => Theatre.onConfigureInsert(ev, app.object.sheet)
@@ -140,11 +139,11 @@ Handlebars.registerHelper("resprop", function(propPath, hash) {
       
     }
     theatreButtons.push({
-        label: removeLabelSheetHeader ? "" : (Theatre.isActorStaged(app.object.data) ? "Theatre.UI.Config.RemoveFromStage" : "Theatre.UI.Config.AddToStage"),
+        label: Theatre.isActorStaged(app.object.data) ? "Theatre.UI.Config.RemoveFromStage" : "Theatre.UI.Config.AddToStage",
         class: "add-to-theatre-navbar",
-        icon: (Theatre.isActorStaged(app.object.data) ? "fas fa-theater-masks" : "fas fa-mask"),
+        icon: "fas fa-theater-masks",
         onclick: ev => {
-          Theatre.onAddToNavBar(ev, app.object.sheet, removeLabelSheetHeader);
+          Theatre.onAddToNavBar(ev, app.object.sheet);
         }
       })
   }
