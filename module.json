@@ -70,7 +70,14 @@
     "styles": [
         "app/css/theatre.css"
     ],
-    "packs": [],
+    "packs": [
+        {
+            "name": "theatre-inserts-macros",
+            "label": "Theatre Inserts Macros",
+            "path": "app/packs/theatre-inserts-macros.db",
+            "entity": "Macro"
+        }
+    ],
     "url": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre",
     "download": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/v1.16.2/theatre.zip",
     "manifest": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/latest/module.json",
