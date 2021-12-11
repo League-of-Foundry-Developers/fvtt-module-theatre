@@ -1126,13 +1126,12 @@
   background-image: url("../graphics/ooc.png");
   box-shadow: inset 0px 0px 10px 2px blue; }
 
-.theatre-emote-menu {
-  display: none;
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  width: 300px;
-  height: 400px; }
+  .theatre-emote-menu {
+    display: none;
+    position: absolute;
+    top: 0px;
+    width: 300px;
+    height: 400px; }
 
 .theatre-emote-menu .emote-box {
   padding: 2px;
