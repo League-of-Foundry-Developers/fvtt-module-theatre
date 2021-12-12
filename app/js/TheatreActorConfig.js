@@ -69,8 +69,7 @@ class TheatreActorConfig extends FormApplication {
    * @return (Object) : The Object to be used in handlebars compile
    */
   getData() {
-	  debugger
-    const entityName = this.object.name;
+    const entityName = this.object.entity;
     return {
       entityName: entityName,
       isGM: game.user.isGM,
