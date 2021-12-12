@@ -578,7 +578,7 @@ Hooks.on("renderChatLog", function() {
 Hooks.on("getActorDirectoryEntryContext", async (html, options) => {
 
   const getActorData = target => {
-    const actor = game.actors.get(target.attr("data-entity-id"));
+    const actor = game.actors.get(target.data("documentId"));
     return actor.data;
   }
 
