@@ -599,7 +599,7 @@ Hooks.on("getActorDirectoryEntryContext", async (html, options) => {
  * Hide player list (and macro hotbar) when stage is active (and not suppressed)
  */
 Hooks.on("theatreDockActive", insertCount => {
-  if (!game.settings.get(Theatre.SETTINGS,"autoHideBottom")) return;
+  if (!game.settings.get(Theatre.SETTINGS, "autoHideBottom")) return;
   if (!insertCount) return;
   
   $('#players').hide();
@@ -610,7 +610,8 @@ Hooks.on("theatreDockActive", insertCount => {
  * Hide/show macro hotbar when stage is suppressed
  */
 Hooks.on("theatreSuppression", suppressed => {
-  if (!game.settings.get(Theatre.SETTINGS,"autoHideBottom")) return;
+  if (!game.settings.get(Theatre.SETTINGS, "autoHideBottom")) return;
+  if (!game.settings.get(Theatre.SETTINGS, "suppressMacroHotbar")) return;
   if (!theatre.dockActive) return;
 
   if (suppressed) $(`#hotbar`).show();

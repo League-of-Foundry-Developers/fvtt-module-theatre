@@ -454,6 +454,15 @@ class Theatre {
 		  	default: false
 		});
 
+		game.settings.register(Theatre.SETTINGS, "supressMacroHotbar", {
+			name: "Theatre.UI.Settings.suppressMacroHotbar",
+		  	hint: "",
+		  	scope: "world",
+		  	config: true,
+		  	type: Boolean,
+		  	default: false
+		});
+
 		game.settings.register(Theatre.SETTINGS, "removeLabelSheetHeader", {
 			name: "Theatre.UI.Settings.removeLabelSheetHeader",
 		  	hint: "Theatre.UI.Settings.removeLabelSheetHeaderHint",
