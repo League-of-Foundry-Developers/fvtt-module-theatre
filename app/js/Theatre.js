@@ -454,7 +454,7 @@ class Theatre {
 		  	default: false
 		});
 
-		game.settings.register(Theatre.SETTINGS, "supressMacroHotbar", {
+		game.settings.register(Theatre.SETTINGS, "suppressMacroHotbar", {
 			name: "Theatre.UI.Settings.suppressMacroHotbar",
 		  	hint: "",
 		  	scope: "world",
