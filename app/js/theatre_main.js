@@ -594,3 +594,25 @@ Hooks.on("getActorDirectoryEntryContext", async (html, options) => {
     callback: target => Theatre.removeFromNavBar(getActorData(target))
   });
 });
+
+/**
+ * Hide player list (and macro hotbar) when stage is active (and not suppressed)
+ */
+Hooks.on("theatreDockActive", insertCount => {
+  if (!game.settings.get(Theatre.SETTINGS,"autoHideBottom")) return;
+  if (!insertCount) return;
+  
+  $('#players').hide();
+  if (!theatre.isSuppressed) $('#hotbar').hide();
+});
+
+/**
+ * Hide/show macro hotbar when stage is suppressed
+ */
+Hooks.on("theatreSuppression", suppressed => {
+  if (!game.settings.get(Theatre.SETTINGS,"autoHideBottom")) return;
+  if (!theatre.dockActive) return;
+
+  if (suppressed) $(`#hotbar`).show();
+  else $(`#hotbar`).hide();
+});

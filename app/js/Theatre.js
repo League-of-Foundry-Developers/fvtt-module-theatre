@@ -2090,11 +2090,6 @@ class Theatre {
 				if (Theatre.DEBUG) this._updateTheatreDebugInfo(insert); 
 				// PIXI.v6 The renderer should not clear the canvas on rendering
 				this.pixiCTX.renderer.render(insert.dockContainer, { clear: false });
-				let autoHide = game.settings.get(Theatre.SETTINGS,"autoHideBottom");
-				if (autoHide == true){
-					$('#players').hide();
-					$('#hotbar').hide();
-				}
 			}
 			else {
 				console.log("INSERT HAS NO CONTAINER! _renderTheatre : HOT-EJECTING it! ",insert); 
