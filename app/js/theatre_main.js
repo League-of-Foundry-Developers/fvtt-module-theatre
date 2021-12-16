@@ -607,6 +607,19 @@ Hooks.on("theatreDockActive", insertCount => {
 });
 
 /**
+ * If Argon is active, wrap CombatHudCanvasElement#toggleMacroPlayers to prevent playesr list and macro hotbar from being shown
+ */
+ Hooks.once("ready", () => {
+  if (!game.settings.get(Theatre.SETTINGS, "autoHideBottom")) return;
+  if (!game.modules.get("enhancedcombathud")?.active) return;
+  
+  libWrapper.register(Theatre.SETTINGS, "CombatHudCanvasElement.prototype.toggleMacroPlayers", (wrapped, togg) => {
+    if (togg && theatre?.dockActive) return;
+    return wrapped(togg);
+  }, "MIXED");
+});
+
+/**
  * Hide/show macro hotbar when stage is suppressed
  */
 Hooks.on("theatreSuppression", suppressed => {
