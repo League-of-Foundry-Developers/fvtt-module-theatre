@@ -31,7 +31,7 @@ Another button next to chat, the Megaphone, causes a black box to appear in the 
 ## For a detailed list of instructions, visit the original Repo by Ken L: https://gitlab.com/Ayanzo/theatre/-/wikis/home/Introduction%20to%20Theatre
 
 ### Contributors
-The original and immense work is from `Ken L`, Theatre Inserts was then be picked up by `NoahZorbaugh`, and then by `U~Man` who maintained the day to day updates. `Brother Sharp` commissioned on behalf of the Japanese TRPG community the port of the module to Foundry VTT 0.7.7, done by `KaKaRoTo`. Latest update (0.8.6) by `elizeuangelo`. Thanks!
+The original and immense work is from `Ken L`, Theatre Inserts was then be picked up by `NoahZorbaugh`, and then by `U~Man` who maintained the day to day updates. `Brother Sharp` commissioned on behalf of the Japanese TRPG community the port of the module to Foundry VTT 0.7.7, done by `KaKaRoTo`. Update (0.8.6) by `elizeuangelo`. Latest Update (v9) by enso#0361, Thanks!
 
 The Japanese community will be placing bounties for maintaining theatre inserts through major updates. If you wish to contribute to the cause of keeping this module alive, please consider joining our Patreon. You won't be getting any perks, but your money will be used on this module. (https://www.patreon.com/onsekobo)
 
