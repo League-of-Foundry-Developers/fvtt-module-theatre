@@ -26,6 +26,8 @@
 	"Theatre.UI.Title.FontColor" : "フォント色",
 
 	"Theatre.UI.Notification.CannotSwapControlled" : "PLが操作していないキャラとは入れ替えできません",
+	"Theatre.UI.Notification.CannotMoveOwner" : "立ち絵を動かすにはそのアクターの権限が必要です。",
+	"Theatre.UI.Notification.CannotMoveControlled" : "PLが操作していないアクターの立ち絵へは移動できません。",
 	"Theatre.UI.Notification.CannotSwapOwner" : "入れ替えたいキャラのいずれかを操作する権限が必要です",
 	"Theatre.UI.Notification.DoNotControl" : "あなたの権限でこのキャラは操作できません",
 	"Theatre.UI.Notification.CannotPushFront" : "PLが操作するキャラではないため、このキャラを前面に出すことはできません",
@@ -58,7 +60,11 @@
 	"Theatre.UI.Settings.nameFontHint": "キャラ名が使用するフォントを選んでください。設定後はキャラを出し直すか、GMのシンクロ要求後に反映されます。",
 	"Theatre.UI.Settings.nameFontSize": "キャラ名大きさ（試験用）",
 	"Theatre.UI.Settings.nameFontSizeHint": "フォントの大きさを設定します。この設定は使用しているフォントや大きさによっては適切に機能しないかもしれません。大きすぎるフォントはお勧めしません。",
-
+    "Theatre.UI.Settings.autoHideBottom": "PLリストとマクロを非表示",
+	"Theatre.UI.Settings.autoHideBottomHint": "立ち絵が出ているときに、画面の下部にあるPLリストとマクロバーを非表示にします。立ち絵の透明化を行うと再び出現します。",
+    "Theatre.UI.Settings.suppressMacroHotbar": "透明化時にマクロバーを表示",
+	"Theatre.UI.Settings.removeLabelSheetHeader": "控室に追加＋立ち絵設定の文字を消す",
+	"Theatre.UI.Settings.removeLabelSheetHeaderHint": "ウィンドウの上部に出る「控室に追加」や「立ち絵設定」の文字を消して文字数を少なくします。",
 
 	"Theatre.MOTD.Header" : "立ち絵ツール通知",
 	"Theatre.MOTD.OldVersion" : "立ち絵ツールの新しいバージョンがあります、オーナーはツールのセットアップ画面から更新してください。",
