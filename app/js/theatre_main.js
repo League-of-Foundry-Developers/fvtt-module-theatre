@@ -29,7 +29,7 @@
  *
  * ============================================================
  */
- var KHelpers = (function() {
+var KHelpers = (function () {
   function hasClass(el, className) {
     return el.classList
       ? el.classList.contains(className)
@@ -107,7 +107,7 @@
 /**
  * Concat helper
  */
-Handlebars.registerHelper("cat", function(arg1, arg2, hash) {
+Handlebars.registerHelper("cat", function (arg1, arg2, hash) {
   let res = String(arg1) + String(arg2);
   return res;
 });
@@ -116,7 +116,7 @@ Handlebars.registerHelper("cat", function(arg1, arg2, hash) {
  * Given a string representing a property, resolve it as an actual property,
  * this is meant to be used in subexpressions rather than a final target
  */
-Handlebars.registerHelper("resprop", function(propPath, hash) {
+Handlebars.registerHelper("resprop", function (propPath, hash) {
   let prop = getProperty(hash.data.root, propPath);
   return prop;
 });
@@ -124,36 +124,107 @@ Handlebars.registerHelper("resprop", function(propPath, hash) {
 /**
  * Hook in on Actorsheet's Header buttons + context menus
  */
- Hooks.on("getActorSheetHeaderButtons",(app,buttons)=>{
-  let theatreButtons = []
-  if (app.object.isOwner) {
-    // only prototype actors
-    if (!app.object.token) {
-      
-      theatreButtons.push({
-          label: "Theatre.UI.Config.Theatre",
-          class: "configure-theatre",
-          icon: "fas fa-user-edit",
-          onclick: ev => Theatre.onConfigureInsert(ev, app.object.sheet)
-        })
-      
-    }
-    theatreButtons.push({
-        label: Theatre.isActorStaged(app.object.data) ? "Theatre.UI.Config.RemoveFromStage" : "Theatre.UI.Config.AddToStage",
-        class: "add-to-theatre-navbar",
-        icon: "fas fa-theater-masks",
-        onclick: ev => {
-          Theatre.onAddToNavBar(ev, app.object.sheet);
+Hooks.on("init", function () {
+  // Create keybind shortcut for GMs to quickly add tokens to the stage!
+  game.keybindings.register("theatre", "theatreToggleTokenStaged", {
+    name: "Name",
+    hint: "Hint",
+    editable: [
+      {
+        key: "KeyS",
+        modifiers: ["Alt"]
+      }
+    ],
+    onDown: () => { },
+    onUp: () => { Theatre.toggleSelectedTokens(); },
+    restricted: false,
+    precedence: CONST.KEYBINDING_PRECEDENCE.NORMAL
+  });
+
+  // Swap in prototype for ours
+  ActorSheet.prototype._getHeaderButtons = function () {
+    let buttons = [];
+
+    // APPLICATION
+    buttons.push({
+      label: "Header.Override.Close",
+      class: "close",
+      icon: "fas fa-times",
+      onclick: ev => this.close()
+    });
+
+    // FORM APPLICATION
+    // (None)
+
+    // BASE ENTITY SHEET
+    if (this.options.compendium) {
+      buttons.unshift({
+        label: "Header.Override.Import",
+        class: "import",
+        icon: "fas fa-download",
+        onclick: async ev => {
+          await this.close();
+          this.entity.collection.importFromCollection(
+            this.options.compendium,
+            this.entity._id
+          );
         }
-      })
-  }
-  buttons.unshift(...theatreButtons)
+      });
+    }
+
+    // Modified ActorSheet (Target)
+    let canConfigure =
+      this.options.editable &&
+      (game.user.isGM || (this.actor.owner && game.user.isTrusted));
+    if (canConfigure) {
+      buttons = [
+        {
+          label: "Header.Override.Sheet",
+          class: "configure-sheet",
+          icon: "fas fa-cog",
+          onclick: ev => this._onConfigureSheet(ev)
+        },
+        {
+          label: "Header.Override.Token",
+          class: "configure-token",
+          icon: "fas fa-user-circle",
+          onclick: ev => this._onConfigureToken(ev)
+        }
+      ].concat(buttons);
+    }
+    // Owners
+    if (this.actor.owner) {
+      // only prototype actors
+      if (!this.actor.token) {
+        buttons = [
+          {
+            label: "Theatre.UI.Config.Theatre",
+            class: "configure-theatre",
+            icon: "fas fa-user-edit",
+            onclick: ev => Theatre.onConfigureInsert(ev, this)
+          }
+        ].concat(buttons);
+      }
+      buttons = [
+        {
+          label: Theatre.isActorStaged(this.actor.data) ? "Theatre.UI.Config.RemoveFromStage" : "Theatre.UI.Config.AddToStage",
+          class: "add-to-theatre-navbar",
+          icon: "fas fa-theater-masks",
+          onclick: ev => {
+            Theatre.onAddToNavBar(ev, this);
+          }
+        }
+      ].concat(buttons);
+    }
+
+    return buttons;
+  };
 });
 
 /**
  * Sidebar collapse hook
  */
-Hooks.on("sidebarCollapse", function(a, collapsed) {
+Hooks.on("sidebarCollapse", function (a, collapsed) {
   // If theatre isn't even ready, then just no
   if (!Theatre.instance) return;
 
@@ -197,7 +268,7 @@ Hooks.on("sidebarCollapse", function(a, collapsed) {
 /**
  * Handle combat start
  */
-Hooks.on("createCombat", function() {
+Hooks.on("createCombat", function () {
   // If theatre isn't even ready, then just no
   if (!Theatre.instance) return;
 
@@ -218,7 +289,7 @@ Hooks.on("createCombat", function() {
 /**
  * Handle combat end
  */
-Hooks.on("deleteCombat", function() {
+Hooks.on("deleteCombat", function () {
   // If theatre isn't even ready, then just no
   if (!Theatre.instance) return;
 
@@ -236,16 +307,16 @@ Hooks.on("deleteCombat", function() {
  * Pre-process chat message to set 'speaking as' to correspond
  * to our 'speaking as'
  */
-Hooks.on("preCreateChatMessage", function(chatMessage) {
+Hooks.on("preCreateChatMessage", function (chatMessage) {
   let chatData = {
-      speaker:{}
-    };
+    speaker: {}
+  };
   if (Theatre.DEBUG) console.log("preCreateChatMessage", chatMessage.data);
   // If theatre isn't even ready, then just no
   if (!Theatre.instance) return;
 
   // make the message OOC if needed
-  if (!chatMessage.data.roll && $(theatre.theatreChatCover).hasClass("theatre-control-chat-cover-ooc")) {
+  if (!chatMessage.data.roll && game.keyboard.downKeys.has("Control")) {
     const user = game.users.get(chatMessage.data.user);
     chatData.speaker.alias = user.data.name;
     chatData.speaker.actor = null;
@@ -343,8 +414,8 @@ Hooks.on("preCreateChatMessage", function(chatMessage) {
     !chatMessage.data.roll &&
     chatMessage.data.speaker &&
     (chatData.speaker.actor ||
-        chatData.speaker.token ||
-        chatData.speaker.alias) &&
+      chatData.speaker.token ||
+      chatData.speaker.alias) &&
     !chatMessage.data.content.match(/\<div.*\>[\s\S]*\<\/div\>/)
   ) {
     chatData.content =
@@ -359,7 +430,7 @@ Hooks.on("preCreateChatMessage", function(chatMessage) {
 /**
  * Chat message Binding
  */
-Hooks.on("createChatMessage", function(chatEntity, _, userId) {
+Hooks.on("createChatMessage", function (chatEntity, _, userId) {
   if (Theatre.DEBUG) console.log("createChatMessage");
   let theatreId = null;
 
@@ -439,7 +510,7 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
         ease: Power3.easeOut,
         repeat: 1,
         yoyo: true,
-        onComplete: function(ctx, imgId, tweenId) {
+        onComplete: function (ctx, imgId, tweenId) {
           // decrement the rendering accumulator
           let insert = Theatre.instance.getInsertById(imgId);
           if (insert) {
@@ -462,7 +533,7 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
         ease: Power3.easeOut,
         repeat: 1,
         yoyo: true,
-        onComplete: function(ctx, imgId, tweenId) {
+        onComplete: function (ctx, imgId, tweenId) {
           // decrement the rendering accumulator
           this.targets()[0].tint = 0xffffff;
           ctx._removeDockTween(imgId, this, tweenId);
@@ -557,7 +628,7 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
 
 // Fixed global singleton/global object
 var theatre = null;
-Hooks.on("renderChatLog", function() {
+Hooks.on("renderChatLog", function () {
   theatre = new Theatre();
   // window may not be ready?
   console.log(
@@ -577,7 +648,8 @@ Hooks.on("renderChatLog", function() {
 Hooks.on("getActorDirectoryEntryContext", async (html, options) => {
 
   const getActorData = target => {
-    const actor = game.actors.get(target.data("documentId"));
+    console.log(target);
+    const actor = game.actors.get(target.data().documentId);
     return actor.data;
   }
 
@@ -592,40 +664,4 @@ Hooks.on("getActorDirectoryEntryContext", async (html, options) => {
     icon: '<i class="fas fa-theater-masks"></i>',
     callback: target => Theatre.removeFromNavBar(getActorData(target))
   });
-});
-
-/**
- * Hide player list (and macro hotbar) when stage is active (and not suppressed)
- */
-Hooks.on("theatreDockActive", insertCount => {
-  if (!game.settings.get(Theatre.SETTINGS, "autoHideBottom")) return;
-  if (!insertCount) return;
-  
-  $('#players').hide();
-  if (!theatre.isSuppressed) $('#hotbar').hide();
-});
-
-/**
- * If Argon is active, wrap CombatHudCanvasElement#toggleMacroPlayers to prevent playesr list and macro hotbar from being shown
- */
- Hooks.once("ready", () => {
-  if (!game.settings.get(Theatre.SETTINGS, "autoHideBottom")) return;
-  if (!game.modules.get("enhancedcombathud")?.active) return;
-  
-  libWrapper.register(Theatre.SETTINGS, "CombatHudCanvasElement.prototype.toggleMacroPlayers", (wrapped, togg) => {
-    if (togg && theatre?.dockActive) return;
-    return wrapped(togg);
-  }, "MIXED");
-});
-
-/**
- * Hide/show macro hotbar when stage is suppressed
- */
-Hooks.on("theatreSuppression", suppressed => {
-  if (!game.settings.get(Theatre.SETTINGS, "autoHideBottom")) return;
-  if (!game.settings.get(Theatre.SETTINGS, "suppressMacroHotbar")) return;
-  if (!theatre.dockActive) return;
-
-  if (suppressed) $(`#hotbar`).show();
-  else $(`#hotbar`).hide();
 });

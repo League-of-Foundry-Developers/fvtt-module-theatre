@@ -444,39 +444,17 @@ class Theatre {
 				// NOOP
 			}
 		});
-		
-		game.settings.register(Theatre.SETTINGS, "autoHideBottom", {
-			name: "Theatre.UI.Settings.autoHideBottom",
-		  	hint: "Theatre.UI.Settings.autoHideBottomHint",
-		  	scope: "world",
-		  	config: true,
-		  	type: Boolean,
-		  	default: false
-		});
 
-		game.settings.register(Theatre.SETTINGS, "suppressMacroHotbar", {
-			name: "Theatre.UI.Settings.suppressMacroHotbar",
-		  	hint: "",
-		  	scope: "world",
-		  	config: true,
-		  	type: Boolean,
-		  	default: false
-		});
-
-		game.settings.register(Theatre.SETTINGS, "removeLabelSheetHeader", {
-			name: "Theatre.UI.Settings.removeLabelSheetHeader",
-		  	hint: "Theatre.UI.Settings.removeLabelSheetHeaderHint",
-		  	scope: "world",
-		  	config: true,
-		  	type: Boolean,
-		  	default: false
-		});
 
 		// Load in default settings (theatreStyle is loaded on HTML Injection)
 		this.settings.decayMin = (game.settings.get(Theatre.SETTINGS,"textDecayMin")||30)*1000; 
 		this.settings.decayRate = (game.settings.get(Theatre.SETTINGS,"textDecayRate")||1)*1000; 
 		this.settings.motdNewInfo = game.settings.get(Theatre.SETTINGS,"motdNewInfo")||1; 
 
+		//Add localization to keybinding
+		let keybinding = game.keybindings.actions.get("theatre.theatreToggleTokenStaged");
+        keybinding.name = game.i18n.localize("Theatre.Keybindings.Stage.Name");
+        keybinding.hint = game.i18n.localize("Theatre.Keybindings.Stage.Hint");
 	}
 
 	/**
@@ -2223,8 +2201,6 @@ class Theatre {
 			insert.dockContainer = null; 
 			let idx = this.portraitDocks.findIndex(e => e.imgId == imgId);
 			this.portraitDocks.splice(idx,1); 
-			$('#players').show();
-			$('#hotbar').show();
 		}
 		// force a render update
 		//app.render(); 
@@ -6646,8 +6622,6 @@ class Theatre {
 					Theatre.instance.textFont = "SignikaBold"; 
 					Theatre.instance.fontWeight = "normal";
 					Theatre.FONTS = [
-						"Caslon",
-						"CaslonAntique",
 						"SignikaBold", 
 						"Riffic",
 						"IronSans",
@@ -6720,8 +6694,6 @@ class Theatre {
 					Theatre.instance.textFont = "SignikaBold"; 
 					Theatre.instance.fontWeight = "normal"; 
 					Theatre.FONTS = [
-						"Caslon",
-						"CaslonAntique",
 						"SignikaBold", 
 						"Riffic",
 						"LinLibertine",
@@ -7886,11 +7858,11 @@ class Theatre {
 	 *
 	 * @params ev (Event) : The event that triggered adding to the NavBar staging area.
 	 */
-	static onAddToNavBar(ev,actorSheet,removeLabelSheetHeader) {
+	static onAddToNavBar(ev,actorSheet) {
 		if (Theatre.DEBUG) console.log("Click Event on Add to NavBar!!",actorSheet,actorSheet.actor,actorSheet.position); 
 		const actor = actorSheet.object.data; 
-		const addLabel = removeLabelSheetHeader ? "" : game.i18n.localize("Theatre.UI.Config.AddToStage");
-		const removeLabel = removeLabelSheetHeader ? "" : game.i18n.localize("Theatre.UI.Config.RemoveFromStage");
+		const addLabel = game.i18n.localize("Theatre.UI.Config.AddToStage");
+		const removeLabel = game.i18n.localize("Theatre.UI.Config.RemoveFromStage");
 		let newText;
 		if (Theatre.isActorStaged(actor)) {
 			Theatre.removeFromNavBar(actor)
@@ -7899,7 +7871,7 @@ class Theatre {
 			Theatre.addToNavBar(actor); 
 			newText = removeLabel;
 		}
-		ev.currentTarget.innerHTML = Theatre.isActorStaged(actor) ? `<i class="fas fa-theater-masks"></i>${newText}` :  `<i class="fas fa-mask"></i>${newText}`;
+		ev.currentTarget.innerHTML = `<i class="fas fa-theater-masks"></i>${newText}`
 	}
 
 	static _getTheatreId(actor) {
@@ -8594,6 +8566,22 @@ class Theatre {
 			return Theatre.FLYIN_ANIMS[name].func; 
 		else
 			return Theatre.FLYIN_ANIMS["typewriter"].func; 
+	}
+
+	/**
+	 * Adds/Removes the selected token(s) from the stage.
+	 * 
+	 */
+	static toggleSelectedTokens() {
+		if (canvas.tokens.controlled) {
+			for (let token of canvas.tokens.controlled) {
+				if(Theatre.isActorStaged(token.actor.data)) {
+					Theatre.removeFromNavBar(token.actor.data);
+				} else {
+					Theatre.addToNavBar(token.actor.data);
+				}
+			} 
+		}
 	}
 
 }

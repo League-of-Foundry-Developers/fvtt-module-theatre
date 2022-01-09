@@ -61,12 +61,6 @@
 	"Theatre.UI.Settings.nameFontHint": "Put in the name of the font you want to use. If the font exists in Theatre, it can be used. Requires actors to re-stage or for the GM to resync.",
 	"Theatre.UI.Settings.nameFontSize": "Actor Name Size (Experimental)",
 	"Theatre.UI.Settings.nameFontSizeHint": "Sets the size of the name font. Note that the sizes may be different depending on your display or font choice. Using huge sizes is not recommended.",
-	"Theatre.UI.Settings.autoHideBottom": "Auto Hide Bottom",
-	"Theatre.UI.Settings.autoHideBottomHint": "Hide bottom UI(player&hotbar) when actor shows on stage.",
-	"Theatre.UI.Settings.suppressMacroHotbar": "Show Macro Hotbar When Stage is Suppressed",
-	"Theatre.UI.Settings.removeLabelSheetHeader": "Remove label from the header character sheet",
-	"Theatre.UI.Settings.removeLabelSheetHeaderHint": "Remove label from the header character sheet, Useful for little screen and mobile",
-	
 	
 	"Theatre.MOTD.Header" : "Theatre Notification",
 	"Theatre.MOTD.OldVersion" : "Theatre is currently out of date, please have the GM update theatre in the setup screen.",
@@ -168,5 +162,8 @@
 	"Theatre.Standing.None" : "None",
 
 	"Theatre.Other" : "Other",
-	"Theatre.NotYet" : "Not yet implemented"
+	"Theatre.NotYet" : "Not yet implemented",
+
+	"Theatre.Keybindings.Stage.Name": "Toggle Selected Tokens to Stage",
+	"Theatre.Keybindings.Stage.Hint": "Keybinding to toggle all selected tokens on and off the stage."
 }
