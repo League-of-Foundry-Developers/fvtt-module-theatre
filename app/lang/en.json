@@ -63,6 +63,7 @@
 	"Theatre.UI.Settings.nameFontSizeHint": "Sets the size of the name font. Note that the sizes may be different depending on your display or font choice. Using huge sizes is not recommended.",
 	"Theatre.UI.Settings.autoHideBottom": "Auto Hide Bottom",
 	"Theatre.UI.Settings.autoHideBottomHint": "Hide bottom UI(player&hotbar) when actor shows on stage.",
+	"Theatre.UI.Settings.suppressMacroHotbar": "Show Macro Hotbar When Stage is Suppressed",
 	"Theatre.UI.Settings.removeLabelSheetHeader": "Remove label from the header character sheet",
 	"Theatre.UI.Settings.removeLabelSheetHeaderHint": "Remove label from the header character sheet, Useful for little screen and mobile",
 

@@ -759,3 +759,39 @@ Hooks.once("init", () => {
   }
 
 });
+
+/**
+ * Hide player list (and macro hotbar) when stage is active (and not suppressed)
+ */
+Hooks.on("theatreDockActive", insertCount => {
+  if (!game.settings.get(Theatre.SETTINGS, "autoHideBottom")) return;
+  if (!insertCount) return;
+  
+  $('#players').hide();
+  if (!theatre.isSuppressed) $('#hotbar').hide();
+});
+
+/**
+ * If Argon is active, wrap CombatHudCanvasElement#toggleMacroPlayers to prevent playesr list and macro hotbar from being shown
+ */
+ Hooks.once("ready", () => {
+  if (!game.settings.get(Theatre.SETTINGS, "autoHideBottom")) return;
+  if (!game.modules.get("enhancedcombathud")?.active) return;
+  
+  libWrapper.register(Theatre.SETTINGS, "CombatHudCanvasElement.prototype.toggleMacroPlayers", (wrapped, togg) => {
+    if (togg && theatre?.dockActive) return;
+    return wrapped(togg);
+  }, "MIXED");
+});
+
+/**
+ * Hide/show macro hotbar when stage is suppressed
+ */
+Hooks.on("theatreSuppression", suppressed => {
+  if (!game.settings.get(Theatre.SETTINGS, "autoHideBottom")) return;
+  if (!game.settings.get(Theatre.SETTINGS, "suppressMacroHotbar")) return;
+  if (!theatre.dockActive) return;
+
+  if (suppressed) $(`#hotbar`).show();
+  else $(`#hotbar`).hide();
+});
