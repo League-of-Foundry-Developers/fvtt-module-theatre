@@ -599,7 +599,7 @@ Hooks.once("init", () => {
   // module keybinds
 
   game.keybindings.register("theatre", "unfocusTextArea", {
-    name: "Theatre.UI.Keybinds.addOwnedToStage",
+    name: "Theatre.UI.Keybinds.unfocusTextArea",
     hint: "",
     editable: [{
       key: "Escape"

@@ -67,6 +67,7 @@
 	"Theatre.UI.Settings.removeLabelSheetHeader": "Remove label from the header character sheet",
 	"Theatre.UI.Settings.removeLabelSheetHeaderHint": "Remove label from the header character sheet, Useful for little screen and mobile",
 
+	"Theatre.UI.Keybinds.unfocusTextArea": "Unfocus Text Area",
 	"Theatre.UI.Keybinds.addOwnedToStage": "Add Owned Actors to Stage",
 	"Theatre.UI.Keybinds.addSelectedToStage": "Add Selected Tokens to Stage",
 	"Theatre.UI.Keybinds.narratorMode": "Activate Narrator Mode",
