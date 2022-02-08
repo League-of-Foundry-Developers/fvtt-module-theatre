@@ -5644,6 +5644,11 @@ class Theatre {
 	 * @param ev (Event) : The Event that triggered this handler
 	 */
 	handleChatMessageKeyDown(ev) {
+		if (ev.key === "Escape") {
+			ev.preventDefault();
+			ev.stopPropagation();
+			return document.getElementById("chat-message").blur();
+		}
 		let now = Date.now(); 
 
 		if (!ev.repeat 

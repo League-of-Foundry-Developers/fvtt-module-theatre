@@ -72,6 +72,8 @@
 	"Theatre.UI.Keybinds.flipPortrait": "Flip Portrait",
 	"Theatre.UI.Keybinds.nudgePortraitLeft": "Nudge Portrait Left",
 	"Theatre.UI.Keybinds.nudgePortraitRight": "Nudge Portrait Right",
+	"Theatre.UI.Keybinds.nudgePortraitUp": "Nudge Portrait Up",
+	"Theatre.UI.Keybinds.nudgePortraitDown": "Nudge Portrait Down",
 	"Theatre.UI.Keybinds.activateStaged1": "Activate Staged Actor Number 1",
 	"Theatre.UI.Keybinds.activateStaged2": "Activate Staged Actor Number 2",
 	"Theatre.UI.Keybinds.activateStaged3": "Activate Staged Actor Number 3",

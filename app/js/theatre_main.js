@@ -633,11 +633,9 @@ Hooks.once("init", () => {
       modifiers: ['Control']
     }],
     onDown: () => {
-      if (KHelpers.hasClass(ev.currentTarget, "theatre-control-nav-bar-item-speakingas")) {
-        Theatre.instance.toggleNarratorBar(false);
-      } else {
-        Theatre.instance.toggleNarratorBar(true);
-      }
+      const narratorButton = $(document).find(`div.theatre-icon-narrator`).closest(`div.theatre-control-btn`);
+      if (KHelpers.hasClass(narratorButton[0], "theatre-control-nav-bar-item-speakingas")) Theatre.instance.toggleNarratorBar(false);
+      else  Theatre.instance.toggleNarratorBar(true);
     },
     restricted: false
   });
@@ -723,6 +721,77 @@ Hooks.once("init", () => {
     },
     restricted: false
   });
+
+  game.keybindings.register("theatre", "nudgePortraitUp", {
+    name: "Theatre.UI.Keybinds.nudgePortraitUp",
+    hint: "",
+    editable: [{
+      key: "ArrowUp",
+      modifiers: ['Shift']
+    }],
+    onDown: () => {
+      const imgId = Theatre.instance.speakingAs;
+      if (!imgId) return;
+
+      const insert = Theatre.instance.portraitDocks.find(p => p.imgId === imgId);
+      const oleft = insert.portraitContainer.x, otop = insert.portraitContainer.y;
+      const tweenId = "portraitMove";
+      const tween = TweenMax.to(insert.portraitContainer, 0.5, {
+        pixi: { x: oleft, y: otop - 50},
+        ease: Power3.easeOut,
+        onComplete: function (ctx, imgId, tweenId) {
+          // decrement the rendering accumulator
+          ctx._removeDockTween(imgId, this, tweenId);
+          // remove our own reference from the dockContainer tweens
+        },
+        onCompleteParams: [Theatre.instance, insert.imgId, tweenId]
+      });
+      Theatre.instance._addDockTween(insert.imgId, tween, tweenId);
+
+      // send sceneEvent
+      Theatre.instance._sendSceneEvent("positionupdate", {
+        insertid: insert.imgId,
+        position: { x: oleft, y: otop - 50, mirror: insert.mirrored }
+      });
+    },
+    restricted: false
+  });
+
+  game.keybindings.register("theatre", "nudgePortraitDown", {
+    name: "Theatre.UI.Keybinds.nudgePortraitDown",
+    hint: "",
+    editable: [{
+      key: "ArrowDown",
+      modifiers: ['Shift']
+    }],
+    onDown: () => {
+      const imgId = Theatre.instance.speakingAs;
+      if (!imgId) return;
+
+      const insert = Theatre.instance.portraitDocks.find(p => p.imgId === imgId);
+      const oleft = insert.portraitContainer.x, otop = insert.portraitContainer.y;
+      const tweenId = "portraitMove";
+      const tween = TweenMax.to(insert.portraitContainer, 0.5, {
+        pixi: { x: oleft, y: otop + 50},
+        ease: Power3.easeOut,
+        onComplete: function (ctx, imgId, tweenId) {
+          // decrement the rendering accumulator
+          ctx._removeDockTween(imgId, this, tweenId);
+          // remove our own reference from the dockContainer tweens
+        },
+        onCompleteParams: [Theatre.instance, insert.imgId, tweenId]
+      });
+      Theatre.instance._addDockTween(insert.imgId, tween, tweenId);
+
+      // send sceneEvent
+      Theatre.instance._sendSceneEvent("positionupdate", {
+        insertid: insert.imgId,
+        position: { x: oleft, y: otop + 50, mirror: insert.mirrored }
+      });
+    },
+    restricted: false
+  });
+
 
   for (let i = 1; i < 11; i++) {
     game.keybindings.register("theatre", `activateStaged${i}`, {
