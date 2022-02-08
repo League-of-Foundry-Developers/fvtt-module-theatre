@@ -5653,6 +5653,14 @@ class Theatre {
 			ev.stopPropagation();
 			return document.getElementById("chat-message").blur();
 		}
+		
+		const context = KeyboardManager.getKeyboardEventContext(ev);
+		const actions = KeyboardManager._getMatchingActions(context);
+		for (const action of actions) {
+			if (!action.action.includes("theatre")) continue;
+			action.onDown.call(context);
+		}
+
 		let now = Date.now(); 
 
 		if (!ev.repeat 

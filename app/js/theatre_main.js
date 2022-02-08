@@ -635,7 +635,9 @@ Hooks.once("init", () => {
     onDown: () => {
       const narratorButton = $(document).find(`div.theatre-icon-narrator`).closest(`div.theatre-control-btn`);
       if (KHelpers.hasClass(narratorButton[0], "theatre-control-nav-bar-item-speakingas")) Theatre.instance.toggleNarratorBar(false);
-      else  Theatre.instance.toggleNarratorBar(true);
+      else Theatre.instance.toggleNarratorBar(true);
+
+      document.getElementById("chat-message").blur();
     },
     restricted: false
   });
@@ -804,8 +806,9 @@ Hooks.once("init", () => {
       onDown: () => {
         const ids = Object.keys(Theatre.instance.stage);
         const id = ids[i - 1];
-        console.log(ids)
-        if (id) Theatre.instance.activateInsertById(id); 
+        if (id) Theatre.instance.activateInsertById(id);
+
+        document.getElementById("chat-message").blur();
       },
       restricted: false
     });
@@ -820,7 +823,6 @@ Hooks.once("init", () => {
       onDown: () => {
         const ids = Object.keys(Theatre.instance.stage);
         const id = ids[i - 1];
-        console.log(ids)
         if (id) Theatre.instance.removeInsertById(id); 
       },
       restricted: false
