@@ -598,6 +598,22 @@ Hooks.on("getActorDirectoryEntryContext", async (html, options) => {
 Hooks.once("init", () => {
   // module keybinds
 
+  game.keybindings.register("theatre", "unfocusTextArea", {
+    name: "Theatre.UI.Keybinds.addOwnedToStage",
+    hint: "",
+    editable: [{
+      key: "Escape"
+    }],
+    onDown: () => {
+      if (document.activeElement === document.getElementById("chat-message")) {
+        event.preventDefault();
+        event.stopPropagation();  
+        document.getElementById("chat-message").blur();
+      }
+    },
+    restricted: false
+  });
+
   game.keybindings.register("theatre", "addOwnedToStage", {
     name: "Theatre.UI.Keybinds.addOwnedToStage",
     hint: "",

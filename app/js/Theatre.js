@@ -5648,12 +5648,6 @@ class Theatre {
 	 * @param ev (Event) : The Event that triggered this handler
 	 */
 	handleChatMessageKeyDown(ev) {
-		if (ev.key === "Escape") {
-			ev.preventDefault();
-			ev.stopPropagation();
-			return document.getElementById("chat-message").blur();
-		}
-		
 		const context = KeyboardManager.getKeyboardEventContext(ev);
 		const actions = KeyboardManager._getMatchingActions(context);
 		for (const action of actions) {
