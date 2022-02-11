@@ -662,7 +662,8 @@ Hooks.once("init", () => {
     name: "Theatre.UI.Keybinds.flipPortrait",
     hint: "",
     editable: [{
-      key: "KeyR"
+      key: "KeyR",
+      modifiers: ["Alt"]
     }],
     onDown: () => {
       if (Theatre.instance.speakingAs) Theatre.instance.mirrorInsertById(Theatre.instance.speakingAs);
