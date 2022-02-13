@@ -5648,6 +5648,13 @@ class Theatre {
 	 * @param ev (Event) : The Event that triggered this handler
 	 */
 	handleChatMessageKeyDown(ev) {
+		const context = KeyboardManager.getKeyboardEventContext(ev);
+		const actions = KeyboardManager._getMatchingActions(context);
+		for (const action of actions) {
+			if (!action.action.includes("theatre")) continue;
+			action.onDown.call(context);
+		}
+
 		let now = Date.now(); 
 
 		if (!ev.repeat 
