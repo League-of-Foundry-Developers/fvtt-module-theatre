@@ -17,11 +17,11 @@ Find Theatre Inserts in the module browser integrated in Foundry VTT
 ### Key Binds
 Theatre inserts now supports keybinds through the keybind API. The default keybinds are as follows (on windows):
 
-- **Add OWNED Actors to Stage**: Control + Enter
+- **Add OWNED Actors to Stage**: ALT+ Enter
 - **Add SELECTED Tokens to Stage**: Shift + Enter
 - **Toggle Narrator Mode**: Control + N
 - **Flip Portrait**: ALT+R
-- **Nudge Portrait**: Shift + Left/Right/Up/Down
+- **Nudge Portrait**: Alt + Z/C/S/X
 - **Activate Staged Actor Number 1/2/3...**: Control + 1/2/3...
 - **Remove Staged Actor Number 1/2/3...**: Control + Alt + 1/2/3...
 
