@@ -619,7 +619,7 @@ Hooks.once("init", () => {
     hint: "",
     editable: [{
       key: "Enter",
-      modifiers: ['Control']
+      modifiers: ['Alt']
     }],
     onDown: () => {
       const ownedActors = game.actors.filter(a => a.permission === 3);
@@ -646,7 +646,7 @@ Hooks.once("init", () => {
     hint: "",
     editable: [{
       key: "KeyN",
-      modifiers: ['Control']
+      modifiers: ['Alt']
     }],
     onDown: () => {
       const narratorButton = $(document).find(`div.theatre-icon-narrator`).closest(`div.theatre-control-btn`);
@@ -675,8 +675,8 @@ Hooks.once("init", () => {
     name: "Theatre.UI.Keybinds.nudgePortraitLeft",
     hint: "",
     editable: [{
-      key: "ArrowLeft",
-      modifiers: ['Shift']
+      key: "KeyZ",
+      modifiers: ['Alt']
     }],
     onDown: () => {
       const imgId = Theatre.instance.speakingAs;
@@ -710,8 +710,8 @@ Hooks.once("init", () => {
     name: "Theatre.UI.Keybinds.nudgePortraitRight",
     hint: "",
     editable: [{
-      key: "ArrowRight",
-      modifiers: ['Shift']
+      key: "KeyC",
+      modifiers: ['Alt']
     }],
     onDown: () => {
       const imgId = Theatre.instance.speakingAs;
@@ -745,8 +745,8 @@ Hooks.once("init", () => {
     name: "Theatre.UI.Keybinds.nudgePortraitUp",
     hint: "",
     editable: [{
-      key: "ArrowUp",
-      modifiers: ['Shift']
+      key: "KeyS",
+      modifiers: ['Alt']
     }],
     onDown: () => {
       const imgId = Theatre.instance.speakingAs;
@@ -780,8 +780,8 @@ Hooks.once("init", () => {
     name: "Theatre.UI.Keybinds.nudgePortraitDown",
     hint: "",
     editable: [{
-      key: "ArrowDown",
-      modifiers: ['Shift']
+      key: "KeyX",
+      modifiers: ['Alt']
     }],
     onDown: () => {
       const imgId = Theatre.instance.speakingAs;
