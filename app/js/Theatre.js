@@ -451,7 +451,7 @@ class Theatre {
 		  	scope: "world",
 		  	config: true,
 		  	type: Boolean,
-		  	default: false
+		  	default: true
 		});
 
 		game.settings.register(Theatre.SETTINGS, "suppressMacroHotbar", {
@@ -460,7 +460,7 @@ class Theatre {
 		  	scope: "world",
 		  	config: true,
 		  	type: Boolean,
-		  	default: false
+		  	default: true
 		});
 
 		game.settings.register(Theatre.SETTINGS, "removeLabelSheetHeader", {
