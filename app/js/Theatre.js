@@ -2223,8 +2223,10 @@ class Theatre {
 			insert.dockContainer = null; 
 			let idx = this.portraitDocks.findIndex(e => e.imgId == imgId);
 			this.portraitDocks.splice(idx,1); 
-			$('#players').show();
-			$('#hotbar').show();
+			// The "MyTab" module inserts another element with id "pause". Use querySelectorAll to make sure we catch both
+			document.querySelectorAll("#pause").forEach(ele => KHelpers.removeClass(ele, "theatre-centered"));
+			$('#players').removeClass("theatre-invisible");
+			$('#hotbar').removeClass("theatre-invisible");
 		}
 		// force a render update
 		//app.render(); 

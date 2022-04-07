@@ -1410,7 +1410,10 @@
   pointer-events: none; } */
 
 #pause {
-  top: calc(50% - 50px); }
+  transition: bottom 500ms ease 0ms;}
+
+#pause.theatre-centered {
+  bottom: calc(50% - 50px); }
 
 #players {
   z-index: 1; }
