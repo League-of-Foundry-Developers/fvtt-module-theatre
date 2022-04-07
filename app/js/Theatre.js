@@ -95,16 +95,19 @@ class Theatre {
 			//this._initFaceAPI(); 
 			// module settings
 			this._initModuleSettings(); 
-			// inject HTML
-			this._injectHTML(); 
-			// socket 
-			this._initSocket(); 
-			// global listeners
-			window.addEventListener("resize",this.handleWindowResize);
-			// request a resync if needed
-			this._sendResyncRequest("any"); 
 		}
 		return Theatre.instance; 
+	}
+
+	initialize() {
+		// inject HTML
+		this._injectHTML(); 
+		// socket 
+		this._initSocket(); 
+		// global listeners
+		window.addEventListener("resize",this.handleWindowResize);
+		// request a resync if needed
+		this._sendResyncRequest("any"); 
 	}
 
 	/**
@@ -191,6 +194,9 @@ class Theatre {
 		this.theatreNavBar = document.createElement("div"); 
 		this.theatreChatCover = document.createElement("div"); 
 
+		if (!game.user.isGM && game.settings.get(Theatre.SETTINGS, "gmOnly")) {
+			this.theatreControls.style.display = "none";
+		}
 
 		let imgCover = document.createElement("img"); 
 		let btnSuppress = document.createElement("div"); 
@@ -273,32 +279,34 @@ class Theatre {
 		btnQuote.style["margin"] = "0 4px";
 		btnResync.style["margin"] = "0 4px";
 
-		if (controlButtons) {
-			controlButtons.style["flex-basis"] = "150px";
-			KHelpers.insertBefore(btnResync,controlButtons.children[0]); 
-			KHelpers.insertBefore(btnQuote,btnResync); 
-			KHelpers.insertBefore(btnDelayEmote,btnQuote); 
-		} else {
-			controlButtons = document.createElement("div");
-			KHelpers.addClass(controlButtons,"control-buttons"); 
-			controlButtons.style["flex-basis"] = "66px"; 
-			controlButtons.appendChild(btnDelayEmote);
-			controlButtons.appendChild(btnQuote); 
-			controlButtons.appendChild(btnResync); 
-			chatControls.appendChild(controlButtons); 
+		if (game.user.isGM || !game.settings.get(Theatre.SETTINGS, "gmOnly")) {
+			if (controlButtons) {
+				controlButtons.style["flex-basis"] = "150px";
+				KHelpers.insertBefore(btnResync,controlButtons.children[0]);
+				KHelpers.insertBefore(btnQuote,btnResync);
+				KHelpers.insertBefore(btnDelayEmote,btnQuote);
+			} else {
+				controlButtons = document.createElement("div");
+				KHelpers.addClass(controlButtons,"control-buttons");
+				controlButtons.style["flex-basis"] = "66px";
+				controlButtons.appendChild(btnDelayEmote);
+				controlButtons.appendChild(btnQuote);
+				controlButtons.appendChild(btnResync);
+				chatControls.appendChild(controlButtons);
+			}
 		}
 
 		KHelpers.insertBefore(this.theatreControls,chatControls); 
 		KHelpers.insertAfter(this.theatreChatCover,chatMessage); 
 
-		// bind lisener to chat message
+		// bind listener to chat message
 		chatMessage.addEventListener("keydown",this.handleChatMessageKeyDown); 
 		chatMessage.addEventListener("keyup",this.handleChatMessageKeyUp); 
 		chatMessage.addEventListener("focusout",this.handleChatMessageFocusOut); 
 
 		/*
-		 * Emote Menu
-		 */
+		* Emote Menu
+		*/
 		this.theatreEmoteMenu = document.createElement("div"); 
 		KHelpers.addClass(this.theatreEmoteMenu,"theatre-emote-menu"); 
 		KHelpers.addClass(this.theatreEmoteMenu,"app"); 
@@ -308,7 +316,6 @@ class Theatre {
 		 * Tooltip
 		 */
 		this.theatreEmoteMenu.addEventListener("mousemove",this.handleEmoteMenuMouseMove); 
-
 	}
 
 	/**
@@ -318,6 +325,16 @@ class Theatre {
 	 */
 	_initModuleSettings() {
 		// module settings
+
+		game.settings.register(Theatre.SETTINGS, "gmOnly", {
+			name: "Theatre.UI.Settings.gmOnly",
+			hint: "Theatre.UI.Settings.gmOnlyHint",
+			scope: "world",
+			config: true,
+			defualt: false,
+			type: Boolean,
+			onChange: () => {if (!game.user.isGM) location.reload();},
+		});
 
 		game.settings.register(Theatre.SETTINGS, "theatreStyle", {
 			name: "Theatre.UI.Settings.displayMode",
@@ -5781,34 +5798,43 @@ class Theatre {
 	 */
 	handleBtnSuppressClick(ev) {
 		if (Theatre.DEBUG) console.log("suppression click"); 
-		let primeBar = document.getElementById("theatre-prime-bar"); 
-		let secondBar = document.getElementById("theatre-second-bar"); 
-
 		if (Theatre.instance.isSuppressed) {
 			if (KHelpers.hasClass(ev.currentTarget,"theatre-control-btn-down")) {
 				KHelpers.removeClass(ev.currentTarget,"theatre-control-btn-down"); 
 			}
-			Theatre.instance.isSuppressed = false; 
-			//Theatre.instance.theatreGroup.style.opacity = "1"; 
-			Theatre.instance.theatreDock.style.opacity = "1"; 
-			Theatre.instance.theatreBar.style.opacity = "1"; 
-			Theatre.instance.theatreNarrator.style.opacity = "1"; 
-
-			primeBar.style["pointer-events"] = "all"; 
-			secondBar.style["pointer-events"] = "all"; 
-		} else {
-			let combatActive = game.combats.active; 
+		}
+		else {
 			KHelpers.addClass(ev.currentTarget,"theatre-control-btn-down"); 
+		}
+		Theatre.instance.updateSuppression(!Theatre.instance.isSuppressed);
+	}
+
+	updateSuppression(suppress) {
+		Theatre.instance.isSuppressed = suppress;
+
+		let primeBar = document.getElementById("theatre-prime-bar");
+		let secondBar = document.getElementById("theatre-second-bar");
+		if (Theatre.instance.isSuppressed) {
+			let combatActive = game.combats.active; 
 			Theatre.instance.isSuppressed = true; 
-			//Theatre.instance.theatreGroup.style.opacity = (combatActive ? "0.05" : "0.20"); 
-			Theatre.instance.theatreDock.style.opacity = (combatActive ? "0.05" : "0.20"); 
-			Theatre.instance.theatreBar.style.opacity = (combatActive ? "0.05" : "0.20"); 
-			Theatre.instance.theatreNarrator.style.opacity = (combatActive ? "0.05" : "0.20"); 
+			//Theatre.instance.theatreGroup.style.opacity = (combatActive ? "0.05" : "0.20");
+			Theatre.instance.theatreDock.style.opacity = (combatActive ? "0.05" : "0.20");
+			Theatre.instance.theatreBar.style.opacity = (combatActive ? "0.05" : "0.20");
+			Theatre.instance.theatreNarrator.style.opacity = (combatActive ? "0.05" : "0.20");
 
 
 			primeBar.style["pointer-events"] = "none"; 
 			secondBar.style["pointer-events"] = "none"; 
+		} else {
+			//Theatre.instance.theatreGroup.style.opacity = "1";
+			Theatre.instance.theatreDock.style.opacity = "1";
+			Theatre.instance.theatreBar.style.opacity = "1";
+			Theatre.instance.theatreNarrator.style.opacity = "1";
+
+			primeBar.style["pointer-events"] = "all";
+			secondBar.style["pointer-events"] = "all"; 
 		}
+
 		// call hooks
 		Hooks.call("theatreSuppression", Theatre.instance.isSuppressed);
 	}
