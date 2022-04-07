@@ -1418,6 +1418,20 @@
 #players {
   z-index: 1; }
 
+#players, #hotbar {
+  transition: opacity 500ms ease 0ms;}
+
+/* id.class is utilized to gain priority over styling rules of the "Minimal UI" module */
+#players.theatre-invisible,
+#hotbar.theatre-invisible {
+  opacity: 0;
+  pointer-events: none;}
+
+#hotbar.theatre-invisible #hotbar-directory-controls,
+#hotbar.theatre-invisible #action-bar,
+#hotbar.theatre-invisible #hotbar-page-controls {
+  pointer-events: none;}
+
 @-moz-document url-prefix() {
   .emote-box .emotebar .colorselect {
     padding: 3px; }
