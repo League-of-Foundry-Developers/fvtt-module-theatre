@@ -852,11 +852,15 @@ Hooks.once("init", () => {
  * Hide player list (and macro hotbar) when stage is active (and not suppressed)
  */
 Hooks.on("theatreDockActive", insertCount => {
-  if (!game.settings.get(Theatre.SETTINGS, "autoHideBottom")) return;
   if (!insertCount) return;
-  
-  $('#players').hide();
-  if (!theatre.isSuppressed) $('#hotbar').hide();
+
+  // The "MyTab" module inserts another element with id "pause". Use querySelectorAll to make sure we catch both
+  document.querySelectorAll("#pause").forEach(ele => KHelpers.addClass(ele, "theatre-centered"));
+
+  if (!game.settings.get(Theatre.SETTINGS, "autoHideBottom")) return;
+
+  $('#players').addClass("theatre-invisible");
+  if (!theatre.isSuppressed) $('#hotbar').addClass("theatre-invisible");
 });
 
 /**
@@ -880,6 +884,12 @@ Hooks.on("theatreSuppression", suppressed => {
   if (!game.settings.get(Theatre.SETTINGS, "suppressMacroHotbar")) return;
   if (!theatre.dockActive) return;
 
-  if (suppressed) $(`#hotbar`).show();
-  else $(`#hotbar`).hide();
+  if (suppressed) $(`#hotbar`).removeClass("theatre-invisible");
+  else $(`#hotbar`).addClass("theatre-invisible");
+});
+
+Hooks.on("renderPause", () => {
+  if (!theatre?.dockActive) return;
+  // The "MyTab" module inserts another element with id "pause". Use querySelectorAll to make sure we catch both
+  document.querySelectorAll("#pause").forEach(ele => KHelpers.addClass(ele, "theatre-centered"));
 });
