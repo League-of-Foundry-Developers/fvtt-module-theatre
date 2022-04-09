@@ -64,7 +64,6 @@
 	"Theatre.UI.Settings.nameFontSizeHint": "Ajusta el tamaño de fuente de los nombres. Nótese que los tamaños pueden variar dependiendo del monitor o la fuente elegida. No se recomienza usar tamaños demasiado grandes",
 	"Theatre.UI.Settings.autoHideBottom": "Autoocultar UI inferior",
 	"Theatre.UI.Settings.autoHideBottomHint": "Oculta la UI inferior (jugador & barra de acceso rápido) cuando un actor sale a escena",
-	"Theatre.UI.Settings.suppressMacroHotbar": "Mostrar barra de macros cuando se quita el escenario",
 	"Theatre.UI.Settings.removeLabelSheetHeader": "Quitar etiquetas de las hojas de personaje",
 	"Theatre.UI.Settings.removeLabelSheetHeaderHint": "Quita la etiqueta del encabezado de las hojas de personaje, es útil cuando se usan monitores pequeños o dispositivos móviles",
 
