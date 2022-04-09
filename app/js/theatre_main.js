@@ -883,3 +883,14 @@ Hooks.on("theatreSuppression", suppressed => {
   if (suppressed) $(`#hotbar`).show();
   else $(`#hotbar`).hide();
 });
+
+/**
+ * If an actor changes, update the stage accordingly
+ */
+Hooks.on("updateActor", (actor, data) => {
+  const insert = Theatre.instance.getInsertById(`theatre-${actor.id}`);
+  if (!insert) return;
+
+  insert.label.text = Theatre.getActorDisplayName(actor.id);
+  Theatre.instance._renderTheatre(performance.now());
+});

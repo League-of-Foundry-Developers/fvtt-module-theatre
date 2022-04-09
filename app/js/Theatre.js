@@ -1728,7 +1728,7 @@ class Theatre {
 		let theatreId = `theatre-${actor._id}`; 
 		let portrait = (actor.img ? actor.img : "icons/mystery-man.png"); 
 		let optAlign = "top"; 
-		let name = actor.name; 
+		let name = Theatre.getActorDisplayName(actor._id); 
 		let emotes = {}; 
 		let settings = {}; 
 
@@ -6802,6 +6802,18 @@ class Theatre {
 		}
 
 		return Theatre.FONTS; 
+	}
+
+	static getActorDisplayName(actorId) {
+		const actor = game.actors.get(actorId);
+		if (game.modules.get("combat-utility-belt")?.active) {
+			if (game.settings.get("combat-utility-belt", "enableHideNPCNames")) {
+				if (game.cub.hideNames.constructor.shouldReplaceName(actor)) {
+					return game.cub.hideNames.constructor.getReplacementName(actor);
+				}
+			}
+		}
+		return actor.name;
 	}
 
 	/**
