@@ -125,6 +125,8 @@ Handlebars.registerHelper("resprop", function(propPath, hash) {
  * Hook in on Actorsheet's Header buttons + context menus
  */
  Hooks.on("getActorSheetHeaderButtons",(app,buttons)=>{
+  if (!game.user.isGM && game.settings.get("theatre", "gmOnly")) return;
+
   let theatreButtons = []
   if (app.object.isOwner) {
     // only prototype actors
@@ -555,10 +557,8 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
   }
 });
 
-// Fixed global singleton/global object
-var theatre = null;
 Hooks.on("renderChatLog", function() {
-  theatre = new Theatre();
+  theatre.initialize();
   // window may not be ready?
   console.log(
     "%cTheatre Inserts",
@@ -575,6 +575,7 @@ Hooks.on("renderChatLog", function() {
  * Add to stage button on ActorDirectory Sidebar
  */
 Hooks.on("getActorDirectoryEntryContext", async (html, options) => {
+  if (!game.user.isGM && game.settings.get("theatre", "gmOnly")) return;
 
   const getActorData = target => {
     const actor = game.actors.get(target.data("documentId"));
@@ -594,8 +595,10 @@ Hooks.on("getActorDirectoryEntryContext", async (html, options) => {
   });
 });
 
-
+// Fixed global singleton/global object
+var theatre = null;
 Hooks.once("init", () => {
+  theatre = new Theatre();
   // module keybinds
 
   game.keybindings.register("theatre", "unfocusTextArea", {
@@ -912,3 +915,20 @@ Hooks.on("updateActor", (actor, data) => {
   insert.label.text = Theatre.getActorDisplayName(actor.id);
   Theatre.instance._renderTheatre(performance.now());
 });
+
+Hooks.on("getSceneControlButtons", controls => {
+  // Use "theatre", since Theatre.SETTINGS may not be available yet
+  if (!game.user.isGM && game.settings.get("theatre", "gmOnly")) {
+    const suppressTheatreTool = {
+      name: "suppressTheatre",
+      title: "Theatre.UI.Title.SuppressTheatre",
+      icon: "fas fa-theater-masks",
+      toggle: true,
+      active: false,
+      onClick: toggle => Theatre.instance.updateSuppression(toggle), // TODO Suppress theatre
+      visible: true,
+    };
+    const tokenControls = controls.find(group => group.name === "token").tools;
+    tokenControls.push(suppressTheatreTool);
+  }
+})

@@ -51,6 +51,8 @@
 	"Theatre.UI.Settings.displayModeTextBox" : "Text Box Style",
 	"Theatre.UI.Settings.displayModeLightBox" : "Light Box Style",
 	"Theatre.UI.Settings.displayModeClearBox" : "Clear Box Style",
+	"Theatre.UI.Settings.gmOnly" : "GM controls only",
+	"Theatre.UI.Settings.gmOnlyHint" : "If enabled, only the GM will be able to control the stage. The Theatre controls will be hidden for the players.",
 	"Theatre.UI.Settings.narrHeight" : "Narrator Bar Position",
 	"Theatre.UI.Settings.narrHeightHint" : "The position of the narrator bar as a percentage of the screen height.",
 	"Theatre.UI.Settings.textDecayMin" : "Minimum Text Decay Time",

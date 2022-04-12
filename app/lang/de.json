@@ -51,6 +51,8 @@
 	"Theatre.UI.Settings.displayModeTextBox" : "Textbox-Stil",
 	"Theatre.UI.Settings.displayModeLightBox" : "Lichtkasten-Stil",
 	"Theatre.UI.Settings.displayModeClearBox" : "Transparenter Box-Stil",
+	"Theatre.UI.Settings.gmOnly" : "SSteuerung nur für Spielleiter",
+	"Theatre.UI.Settings.gmOnlyHint" : "Wenn diese Option aktiviert ist, kann nur der Spielleiter die Bühne steuern. Die Theatre-Steuerelemente werden für die Spieler ausgeblendet.",
 	"Theatre.UI.Settings.narrHeight" : "Erzähler-Leisten-Position",
 	"Theatre.UI.Settings.narrHeightHint" : "Die Position der Erzähler-Leiste als Prozentwert der Bildschirmhöhe.",
 	"Theatre.UI.Settings.textDecayMin" : "Minimum Textverfall-Zeit",
