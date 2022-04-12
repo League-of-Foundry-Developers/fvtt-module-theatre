@@ -63,7 +63,6 @@
 	"Theatre.UI.Settings.nameFontSizeHint": "액터 이름 글자의 크기를 조정합니다. ※주의 : 사용자의 디스플레이나 폰트 종류에 따라 사이즈가 달라질 수 있습니다. 너무 큰 크기는 권장하지 않습니다.",
 	"Theatre.UI.Settings.autoHideBottom": "하단 자동 감춤",
 	"Theatre.UI.Settings.autoHideBottomHint": "액터가 화면에 표시될 때 하단 UI (플레이어 목록, 단축바)를 감춥니다.",
-    	"Theatre.UI.Settings.suppressMacroHotbar": "무대 숨김 시 매크로 단축바 보이기",
 	"Theatre.UI.Settings.removeLabelSheetHeader": "캐릭터 시트 헤더에서 라벨 미표시",
 	"Theatre.UI.Settings.removeLabelSheetHeaderHint": "캐릭터 시트 헤더에서 라벨을 없앱니다. 작은 화면이나 모바일에서 유용합니다.",
 

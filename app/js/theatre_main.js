@@ -859,8 +859,10 @@ Hooks.on("theatreDockActive", insertCount => {
 
   if (!game.settings.get(Theatre.SETTINGS, "autoHideBottom")) return;
 
-  $('#players').addClass("theatre-invisible");
-  if (!theatre.isSuppressed) $('#hotbar').addClass("theatre-invisible");
+  if (!theatre.isSuppressed) {
+    $('#players').addClass("theatre-invisible");
+    $('#hotbar').addClass("theatre-invisible");
+  }
 });
 
 /**
@@ -884,8 +886,14 @@ Hooks.on("theatreSuppression", suppressed => {
   if (!game.settings.get(Theatre.SETTINGS, "suppressMacroHotbar")) return;
   if (!theatre.dockActive) return;
 
-  if (suppressed) $(`#hotbar`).removeClass("theatre-invisible");
-  else $(`#hotbar`).addClass("theatre-invisible");
+  if (suppressed) {
+    $("#players").removeClass("theatre-invisible");
+    $("#hotbar").removeClass("theatre-invisible");
+  }
+  else {
+    $("#players").addClass("theatre-invisible");
+    $("#hotbar").addClass("theatre-invisible");
+  }
 });
 
 Hooks.on("renderPause", () => {
