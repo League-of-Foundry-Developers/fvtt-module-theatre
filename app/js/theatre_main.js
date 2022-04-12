@@ -901,3 +901,14 @@ Hooks.on("renderPause", () => {
   // The "MyTab" module inserts another element with id "pause". Use querySelectorAll to make sure we catch both
   document.querySelectorAll("#pause").forEach(ele => KHelpers.addClass(ele, "theatre-centered"));
 });
+
+/**
+ * If an actor changes, update the stage accordingly
+ */
+Hooks.on("updateActor", (actor, data) => {
+  const insert = Theatre.instance.getInsertById(`theatre-${actor.id}`);
+  if (!insert) return;
+
+  insert.label.text = Theatre.getActorDisplayName(actor.id);
+  Theatre.instance._renderTheatre(performance.now());
+});
