@@ -597,8 +597,11 @@ Hooks.on("getActorDirectoryEntryContext", async (html, options) => {
 
 // Fixed global singleton/global object
 var theatre = null;
-Hooks.once("init", () => {
+Hooks.once("setup", () => {
   theatre = new Theatre();
+});
+
+Hooks.once("init", () => {
   // module keybinds
 
   game.keybindings.register("theatre", "unfocusTextArea", {
