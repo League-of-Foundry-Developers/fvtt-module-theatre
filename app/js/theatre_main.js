@@ -396,6 +396,7 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
   textContent = textContent.replace(/&gt;/g, ">");
   textContent = textContent.replace(/&lt;/g, "<");
   textContent = textContent.replace(/&amp;/g, "&");
+  textContent = textContent.replace(/<br>/g, "\n");
 
   if (textBox) {
     // kill all tweens
