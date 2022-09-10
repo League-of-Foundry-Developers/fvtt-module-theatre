@@ -51,6 +51,8 @@
 	"Theatre.UI.Settings.displayModeTextBox" : "Text Box Style",
 	"Theatre.UI.Settings.displayModeLightBox" : "Light Box Style",
 	"Theatre.UI.Settings.displayModeClearBox" : "Clear Box Style",
+	"Theatre.UI.Settings.gmOnly" : "GM controls only",
+	"Theatre.UI.Settings.gmOnlyHint" : "If enabled, only the GM will be able to control the stage. The Theatre controls will be hidden for the players.",
 	"Theatre.UI.Settings.narrHeight" : "Narrator Bar Position",
 	"Theatre.UI.Settings.narrHeightHint" : "The position of the narrator bar as a percentage of the screen height.",
 	"Theatre.UI.Settings.textDecayMin" : "Minimum Text Decay Time",
@@ -63,7 +65,7 @@
 	"Theatre.UI.Settings.nameFontSizeHint": "Sets the size of the name font. Note that the sizes may be different depending on your display or font choice. Using huge sizes is not recommended.",
 	"Theatre.UI.Settings.autoHideBottom": "Auto Hide Bottom",
 	"Theatre.UI.Settings.autoHideBottomHint": "Hide bottom UI(player&hotbar) when actor shows on stage.",
-	"Theatre.UI.Settings.suppressMacroHotbar": "Show Macro Hotbar When Stage is Suppressed",
+	"Theatre.UI.Settings.suppressMacroHotbar": "Show Player List and Macro Hotbar When Stage is Suppressed",
 	"Theatre.UI.Settings.removeLabelSheetHeader": "Remove label from the header character sheet",
 	"Theatre.UI.Settings.removeLabelSheetHeaderHint": "Remove label from the header character sheet, Useful for little screen and mobile",
 

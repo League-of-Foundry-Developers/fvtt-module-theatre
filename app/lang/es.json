@@ -79,6 +79,7 @@
 	"Theatre.UI.Keybinds.nudgePortraitRight": "Mover retrato a la derecha",
 	"Theatre.UI.Keybinds.nudgePortraitUp": "Mover retrato arriba",
 	"Theatre.UI.Keybinds.nudgePortraitDown": "Mover retrato abajo",
+
 	"Theatre.UI.Keybinds.activateStaged1": "Activar actor 1 del escenario",
 	"Theatre.UI.Keybinds.activateStaged2": "Activar actor 2 del escenario",
 	"Theatre.UI.Keybinds.activateStaged3": "Activar actor 3 del escenario",

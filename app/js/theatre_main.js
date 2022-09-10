@@ -125,6 +125,8 @@ Handlebars.registerHelper("resprop", function(propPath, hash) {
  * Hook in on Actorsheet's Header buttons + context menus
  */
  Hooks.on("getActorSheetHeaderButtons",(app,buttons)=>{
+  if (!game.user.isGM && game.settings.get("theatre", "gmOnly")) return;
+
   let theatreButtons = []
   if (app.object.isOwner) {
     // only prototype actors
@@ -394,6 +396,7 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
   textContent = textContent.replace(/&gt;/g, ">");
   textContent = textContent.replace(/&lt;/g, "<");
   textContent = textContent.replace(/&amp;/g, "&");
+  textContent = textContent.replace(/<br>/g, "\n");
 
   if (textBox) {
     // kill all tweens
@@ -555,10 +558,8 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
   }
 });
 
-// Fixed global singleton/global object
-var theatre = null;
 Hooks.on("renderChatLog", function() {
-  theatre = new Theatre();
+  theatre.initialize();
   // window may not be ready?
   console.log(
     "%cTheatre Inserts",
@@ -575,6 +576,7 @@ Hooks.on("renderChatLog", function() {
  * Add to stage button on ActorDirectory Sidebar
  */
 Hooks.on("getActorDirectoryEntryContext", async (html, options) => {
+  if (!game.user.isGM && game.settings.get("theatre", "gmOnly")) return;
 
   const getActorData = target => {
     const actor = game.actors.get(target.data("documentId"));
@@ -594,6 +596,11 @@ Hooks.on("getActorDirectoryEntryContext", async (html, options) => {
   });
 });
 
+// Fixed global singleton/global object
+var theatre = null;
+Hooks.once("setup", () => {
+  theatre = new Theatre();
+});
 
 Hooks.once("init", () => {
   // module keybinds
@@ -852,11 +859,17 @@ Hooks.once("init", () => {
  * Hide player list (and macro hotbar) when stage is active (and not suppressed)
  */
 Hooks.on("theatreDockActive", insertCount => {
-  if (!game.settings.get(Theatre.SETTINGS, "autoHideBottom")) return;
   if (!insertCount) return;
-  
-  $('#players').hide();
-  if (!theatre.isSuppressed) $('#hotbar').hide();
+
+  // The "MyTab" module inserts another element with id "pause". Use querySelectorAll to make sure we catch both
+  document.querySelectorAll("#pause").forEach(ele => KHelpers.addClass(ele, "theatre-centered"));
+
+  if (!game.settings.get(Theatre.SETTINGS, "autoHideBottom")) return;
+
+  if (!theatre.isSuppressed) {
+    $('#players').addClass("theatre-invisible");
+    $('#hotbar').addClass("theatre-invisible");
+  }
 });
 
 /**
@@ -880,6 +893,46 @@ Hooks.on("theatreSuppression", suppressed => {
   if (!game.settings.get(Theatre.SETTINGS, "suppressMacroHotbar")) return;
   if (!theatre.dockActive) return;
 
-  if (suppressed) $(`#hotbar`).show();
-  else $(`#hotbar`).hide();
+  if (suppressed) {
+    $("#players").removeClass("theatre-invisible");
+    $("#hotbar").removeClass("theatre-invisible");
+  }
+  else {
+    $("#players").addClass("theatre-invisible");
+    $("#hotbar").addClass("theatre-invisible");
+  }
 });
+
+Hooks.on("renderPause", () => {
+  if (!theatre?.dockActive) return;
+  // The "MyTab" module inserts another element with id "pause". Use querySelectorAll to make sure we catch both
+  document.querySelectorAll("#pause").forEach(ele => KHelpers.addClass(ele, "theatre-centered"));
+});
+
+/**
+ * If an actor changes, update the stage accordingly
+ */
+Hooks.on("updateActor", (actor, data) => {
+  const insert = Theatre.instance.getInsertById(`theatre-${actor.id}`);
+  if (!insert) return;
+
+  insert.label.text = Theatre.getActorDisplayName(actor.id);
+  Theatre.instance._renderTheatre(performance.now());
+});
+
+Hooks.on("getSceneControlButtons", controls => {
+  // Use "theatre", since Theatre.SETTINGS may not be available yet
+  if (!game.user.isGM && game.settings.get("theatre", "gmOnly")) {
+    const suppressTheatreTool = {
+      name: "suppressTheatre",
+      title: "Theatre.UI.Title.SuppressTheatre",
+      icon: "fas fa-theater-masks",
+      toggle: true,
+      active: false,
+      onClick: toggle => Theatre.instance.updateSuppression(toggle), // TODO Suppress theatre
+      visible: true,
+    };
+    const tokenControls = controls.find(group => group.name === "token").tools;
+    tokenControls.push(suppressTheatreTool);
+  }
+})
