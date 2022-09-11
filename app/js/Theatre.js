@@ -331,7 +331,7 @@ class Theatre {
 			hint: "Theatre.UI.Settings.gmOnlyHint",
 			scope: "world",
 			config: true,
-			defualt: false,
+			default: false,
 			type: Boolean,
 			onChange: () => {if (!game.user.isGM) location.reload();},
 		});
