@@ -331,7 +331,7 @@ class Theatre {
 			hint: "Theatre.UI.Settings.gmOnlyHint",
 			scope: "world",
 			config: true,
-			default: false,
+			defualt: false,
 			type: Boolean,
 			onChange: () => {if (!game.user.isGM) location.reload();},
 		});
@@ -387,7 +387,7 @@ class Theatre {
 			config: true,
 			default: Theatre.instance.titleFont,
 			type: String,
-		    choices: Theatre.FONTS.reduce((a, font) => { a[font]=font;
+		choices: Theatre.FONTS.reduce((a, font) => { a[font]=font;
 			return a;
 		}, {}),
 		});
