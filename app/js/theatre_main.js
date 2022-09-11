@@ -558,7 +558,8 @@ Hooks.on("createChatMessage", function(chatEntity, _, userId) {
   }
 });
 
-Hooks.on("renderChatLog", function() {
+Hooks.on("renderChatLog", function(app, html, data) {
+  if (data.cssId === "chat-popout") return;
   theatre.initialize();
   // window may not be ready?
   console.log(
