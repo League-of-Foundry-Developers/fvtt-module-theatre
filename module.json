@@ -76,6 +76,6 @@
     "url": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre",
     "download": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/v1.16.2/theatre.zip",
     "manifest": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/latest/module.json",
-    "minimumCoreVersion": "9",
-    "compatibleCoreVersion": "9"
+    "minimumCoreVersion": "10",
+    "compatibleCoreVersion": "10"
 }
