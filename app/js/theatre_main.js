@@ -248,7 +248,7 @@ Hooks.on("preCreateChatMessage", function(chatMessage) {
 
   // make the message OOC if needed
   if (!chatMessage.data.roll && $(theatre.theatreChatCover).hasClass("theatre-control-chat-cover-ooc")) {
-    const user = game.users.get(chatMessage.data.user);
+    const user = game.users.get(chatMessage.data.user.id);
     chatData.speaker.alias = user.data.name;
     chatData.speaker.actor = null;
     chatData.speaker.scene = null;
@@ -261,9 +261,9 @@ Hooks.on("preCreateChatMessage", function(chatMessage) {
   if (
     !chatMessage.data.roll &&
     Theatre.instance.speakingAs &&
-    Theatre.instance.usersTyping[chatMessage.data.user]
+    Theatre.instance.usersTyping[chatMessage.data.user.id]
   ) {
-    let theatreId = Theatre.instance.usersTyping[chatMessage.data.user].theatreId;
+    let theatreId = Theatre.instance.usersTyping[chatMessage.data.user.id].theatreId;
     let insert = Theatre.instance.getInsertById(theatreId);
     let actorId = theatreId.replace("theatre-", "");
     let actor = game.actors.get(actorId) || null;
@@ -273,7 +273,7 @@ Hooks.on("preCreateChatMessage", function(chatMessage) {
       let label = Theatre.instance._getLabelFromInsert(insert);
       let name = label.text;
       let theatreColor = Theatre.instance.getPlayerFlashColor(
-        chatMessage.data.user,
+        chatMessage.data.user.id,
         insert.textColor
       );
       if (Theatre.DEBUG) console.log("name is %s", name);
