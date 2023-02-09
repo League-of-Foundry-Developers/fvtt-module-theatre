@@ -31,7 +31,13 @@
 class TheatreActorConfig extends FormApplication {
 	constructor(object = {}, options = {}) {
 		if (object._theatre_mod_configTab) {
-			options.tabs = [{ navSelector: ".tabs", contentSelector: ".theatre-config-contents", initial: object._theatre_mod_configTab }];
+			options.tabs = [
+				{
+					navSelector: ".tabs",
+					contentSelector: ".theatre-config-contents",
+					initial: object._theatre_mod_configTab,
+				},
+			];
 			if (object._theatre_mod_configTab === "emotes") {
 				options.height = 775;
 			}
@@ -70,7 +76,7 @@ class TheatreActorConfig extends FormApplication {
 			entityName: entityName,
 			isGM: game.user.isGM,
 			object: duplicate(this.object.data),
-			emote: Theatre.getActorEmotes(this.object.data._id),
+			emote: Theatre.getActorEmotes(this.object._id),
 			options: this.options,
 		};
 	}
@@ -214,16 +220,16 @@ class TheatreActorConfig extends FormApplication {
 		let baseInsert = formData["flags.theatre.baseinsert"];
 		let optAlign = formData["flags.theatre.optalign"];
 		let name = formData["flags.theatre.name"];
-		let newBaseInsert = this.object.data.flags.theatre.baseinsert || (this.object.img ? this.object.img : "icons/mystery-man.png");
-		let newName = this.object.data.flags.theatre.name || this.object.data.name;
-		let newAlign = this.object.data.flags.theatre.optalign || "top";
+		let newBaseInsert = this.object.flags.theatre.baseinsert || (this.object.img ? this.object.img : "icons/mystery-man.png");
+		let newName = this.object.flags.theatre.name || this.object.name;
+		let newAlign = this.object.flags.theatre.optalign || "top";
 
 		// update Navbar of the corresponding ID
-		let theatreId = `theatre-${this.object.data._id}`;
+		let theatreId = `theatre-${this.object._id}`;
 		let navItem = Theatre.instance.getNavItemById(theatreId);
 		let cImg = Theatre.instance.getTheatreCoverPortrait();
 
-		if (baseInsert != this.object.data.flags.theatre.baseinsert) {
+		if (baseInsert != this.object.flags.theatre.baseinsert) {
 			if (Theatre.DEBUG) console.log("baseinsert changed!");
 			insertDirty = true;
 			newBaseInsert = baseInsert == "" ? (this.object.img ? this.object.img : "icons/mystery-man.png") : baseInsert;
@@ -232,19 +238,19 @@ class TheatreActorConfig extends FormApplication {
 				cImg.setAttribute("src", newBaseInsert);
 			}
 		}
-		if (optAlign != this.object.data.flags.theatre.optalign) {
+		if (optAlign != this.object.flags.theatre.optalign) {
 			if (Theatre.DEBUG) console.log("optalign changed!");
 			insertDirty = true;
 			newAlign = optAlign == "" ? "top" : optAlign;
 			if (navItem) navItem.setAttribute("optalign", newAlign);
 		}
-		if (name != this.object.data.flags.theatre.name) {
+		if (name != this.object.flags.theatre.name) {
 			if (Theatre.DEBUG) console.log("name changed!");
 			insertDirty = true;
-			newName = name == "" ? this.object.data.name : name;
+			newName = name == "" ? this.object.name : name;
 			if (navItem) {
 				navItem.setAttribute("name", newName);
-				navItem.setAttribute("title", newName + (newName == this.object.data.name ? "" : ` (${this.object.data.name})`));
+				navItem.setAttribute("title", newName + (newName == this.object.name ? "" : ` (${this.object.name})`));
 			}
 		}
 		// Add label information to update if it has data-edit
@@ -281,10 +287,9 @@ class TheatreActorConfig extends FormApplication {
 						let formBaseInsert = formData["flags.theatre.baseinsert"];
 						if (k.endsWith("insert") && !k.endsWith("baseinsert")) {
 							if (formBaseInsert && formBaseInsert != "") resName = formBaseInsert;
-							else if (this.object.data.flags.theatre.baseinsert && this.object.data.flags.theatre.baseinsert != "")
-								resName = this.object.data.flags.theatre.baseinsert;
-							else resName = this.object.data.img ? this.object.data.img : "icons/mystery-man.png";
-						} else resName = this.object.data.img ? this.object.data.img : "icons/mystery-man.png";
+							else if (this.object.flags.theatre.baseinsert && this.object.flags.theatre.baseinsert != "") resName = this.object.flags.theatre.baseinsert;
+							else resName = this.object.img ? this.object.img : "icons/mystery-man.png";
+						} else resName = this.object.img ? this.object.img : "icons/mystery-man.png";
 					}
 
 					// ensure resource exists
@@ -330,11 +335,10 @@ class TheatreActorConfig extends FormApplication {
 							if (Theatre.DEBUG) console.log("RE-RENDERING with NEW texture resource %s ", newSrcImg);
 
 							let resName = "icons/myster-man.png";
-							if (insert.emote && this.object.data.flags.theatre.emotes[insert.emote].insert && this.object.data.flags.theatre.emotes[insert.emote].insert != "")
-								resName = this.object.data.flags.theatre.emotes[insert.emote].insert;
-							else if (this.object.data.flags.theatre.baseinsert && this.object.data.flags.theatre.baseinsert != "")
-								resName = this.object.data.flags.theatre.baseinsert;
-							else if (this.object.data.img && this.object.data.img != "") resName = this.object.data.img;
+							if (insert.emote && this.object.flags.theatre.emotes[insert.emote].insert && this.object.flags.theatre.emotes[insert.emote].insert != "")
+								resName = this.object.flags.theatre.emotes[insert.emote].insert;
+							else if (this.object.flags.theatre.baseinsert && this.object.flags.theatre.baseinsert != "") resName = this.object.flags.theatre.baseinsert;
+							else if (this.object.img && this.object.img != "") resName = this.object.img;
 
 							// bubble up dataum from the update
 							insert.optAlign = newAlign;
@@ -365,10 +369,10 @@ class TheatreActorConfig extends FormApplication {
 			if (insertDirty && insert) {
 				if (Theatre.DEBUG) console.log("Insert is dirty, re-render it!");
 				let resName = "icons/myster-man.png";
-				if (insert.emote && this.object.data.flags.theatre.emotes[insert.emote].insert && this.object.data.flags.theatre.emotes[insert.emote].insert != "")
-					resName = this.object.data.flags.theatre.emotes[insert.emote].insert;
-				else if (this.object.data.flags.theatre.baseinsert && this.object.data.flags.theatre.baseinsert != "") resName = this.object.data.flags.theatre.baseinsert;
-				else if (this.object.data.img && this.object.data.img != "") resName = this.object.data.img;
+				if (insert.emote && this.object.flags.theatre.emotes[insert.emote].insert && this.object.flags.theatre.emotes[insert.emote].insert != "")
+					resName = this.object.flags.theatre.emotes[insert.emote].insert;
+				else if (this.object.flags.theatre.baseinsert && this.object.flags.theatre.baseinsert != "") resName = this.object.flags.theatre.baseinsert;
+				else if (this.object.img && this.object.img != "") resName = this.object.img;
 
 				// bubble up dataum from the update
 				insert.optAlign = newAlign;
@@ -423,9 +427,13 @@ class TheatreActorConfig extends FormApplication {
 		let customIdx = customElems.length > 0 ? customElems[customElems.length - 1].sortidx + 1 : 1;
 
 		let customObjElems = [];
-		for (let k in this.object.data.flags.theatre.emotes) {
+		for (let k in this.object.flags.theatre.emotes) {
 			let eName = k;
-			if (eName && eName.startsWith("custom")) customObjElems.push({ sortidx: Number(eName.match(/\d+/)[0]), elem: this.object.data.flags.theatre.emotes[k] });
+			if (eName && eName.startsWith("custom"))
+				customObjElems.push({
+					sortidx: Number(eName.match(/\d+/)[0]),
+					elem: this.object.flags.theatre.emotes[k],
+				});
 		}
 		// we grab max index, we don't care about possible missing indexes from removed custom emotes
 		// so we'll just leave them as gaps

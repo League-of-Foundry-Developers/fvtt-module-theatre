@@ -221,39 +221,39 @@ Hooks.on("deleteCombat", function () {
  */
 Hooks.on("preCreateChatMessage", function (chatMessage) {
 	let chatData = {
-		speaker: {},
+		speaker: {
+			actor: null,
+			scene: null,
+			flags: {},
+		},
 	};
-	if (Theatre.DEBUG) console.log("preCreateChatMessage", chatMessage.data);
+	if (Theatre.DEBUG) console.log("preCreateChatMessage", chatMessage);
 	// If theatre isn't even ready, then just no
 	if (!Theatre.instance) return;
 
 	// make the message OOC if needed
-	if (!chatMessage.data.roll && $(theatre.theatreChatCover).hasClass("theatre-control-chat-cover-ooc")) {
-		const user = game.users.get(chatMessage.data.user.id);
-		chatData.speaker.alias = user.data.name;
-		chatData.speaker.actor = null;
-		chatData.speaker.scene = null;
+	if (!chatMessage.rolls.length && $(theatre.theatreChatCover).hasClass("theatre-control-chat-cover-ooc")) {
+		const user = game.users.get(chatMessage.user.id);
+		chatData.speaker.alias = user.name;
 		chatData.type = CONST.CHAT_MESSAGE_TYPES.OOC;
 
-		chatMessage.data.update(chatData);
+		chatMessage.updateSource(chatData);
 		return;
 	}
 
-	if (!chatMessage.data.roll && Theatre.instance.speakingAs && Theatre.instance.usersTyping[chatMessage.data.user.id]) {
-		let theatreId = Theatre.instance.usersTyping[chatMessage.data.user.id].theatreId;
+	if (!chatMessage.rolls.length && Theatre.instance.speakingAs && Theatre.instance.usersTyping[chatMessage.user.id]) {
+		let theatreId = Theatre.instance.usersTyping[chatMessage.user.id].theatreId;
 		let insert = Theatre.instance.getInsertById(theatreId);
 		let actorId = theatreId.replace("theatre-", "");
 		let actor = game.actors.get(actorId) || null;
 		if (Theatre.DEBUG) console.log("speakingAs %s", theatreId);
 
-		if (insert && chatMessage.data.speaker) {
+		if (insert && chatMessage.speaker) {
 			let label = Theatre.instance._getLabelFromInsert(insert);
 			let name = label.text;
-			let theatreColor = Theatre.instance.getPlayerFlashColor(chatMessage.data.user.id, insert.textColor);
+			let theatreColor = Theatre.instance.getPlayerFlashColor(chatMessage.user.id, insert.textColor);
 			if (Theatre.DEBUG) console.log("name is %s", name);
 			chatData.speaker.alias = name;
-			chatData.speaker.actor = null;
-			chatData.speaker.scene = null;
 			//chatData.flags.theatreColor = theatreColor;
 			chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
 			// if delay emote is active
@@ -267,10 +267,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage) {
 			let label = Theatre.instance._getLabelFromInsert(insert);
 			let name = label.text;
 			let theatreColor = Theatre.instance.getPlayerFlashColor(chatData.user, insert.textColor);
-			chatData.speaker = {};
 			chatData.speaker.alias = name;
-			chatData.speaker.actor = null;
-			chatData.speaker.scene = null;
 			//chatData.flags.theatreColor = theatreColor;
 			chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
 			// if delay emote is active
@@ -281,27 +278,29 @@ Hooks.on("preCreateChatMessage", function (chatMessage) {
 				Theatre.instance.delayedSentState = 0;
 			}
 		} else if (Theatre.instance.speakingAs == Theatre.NARRATOR) {
-			chatData.speaker = {};
 			chatData.speaker.alias = game.i18n.localize("Theatre.UI.Chat.Narrator");
-			chatData.speaker.actor = null;
-			chatData.speaker.scene = null;
 			chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
 		}
+
+		if (!chatData.flags) chatData.flags = {};
+		chatData.flags[Theatre.SETTINGS] = { theatreMessage: true };
 	}
 	// alter message data
-	// append chat emote braces TODO make a setting
-	if (Theatre.DEBUG) console.log("speaker? ", chatMessage.data.speaker);
+	// append chat emote braces
+	if (Theatre.DEBUG) console.log("speaker? ", chatMessage.speaker);
 	if (
 		Theatre.instance.isQuoteAuto &&
-		!chatMessage.data.roll &&
-		chatMessage.data.speaker &&
+		!chatMessage.rolls.length &&
+		chatMessage.speaker &&
 		(chatData.speaker.actor || chatData.speaker.token || chatData.speaker.alias) &&
-		!chatMessage.data.content.match(/\<div.*\>[\s\S]*\<\/div\>/)
+		!chatMessage.content.match(/\<div.*\>[\s\S]*\<\/div\>/)
 	) {
-		chatData.content = game.i18n.localize("Theatre.Text.OpenBracket") + chatMessage.data.content + game.i18n.localize("Theatre.Text.CloseBracket");
+		chatData.content =
+			game.i18n.localize(`Theatre.Text.OpenBracket.${Theatre.instance.settings.quoteType}`) +
+			chatMessage.content +
+			game.i18n.localize(`Theatre.Text.CloseBracket.${Theatre.instance.settings.quoteType}`);
 	}
-
-	chatMessage.data.update(chatData);
+	chatMessage.updateSource(chatData);
 });
 
 /**
@@ -320,11 +319,11 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
 	}
 
 	// slash commands are pass through
-	let chatData = chatEntity.data;
+	let chatData = chatEntity;
 	if (
 		chatData.content.startsWith("<") || //Bandaid fix so that texts that start with html formatting don't utterly break it
 		chatData.content.startsWith("/") ||
-		chatData.roll ||
+		chatData.rolls.length ||
 		chatData.emote ||
 		chatData.type == CONST.CHAT_MESSAGE_TYPES.OOC ||
 		//|| Object.keys(chatData.speaker).length == 0
@@ -474,6 +473,11 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
 	}
 });
 
+Hooks.on("renderChatMessage", function (ChatMessage, html, data) {
+	if (Theatre.instance.settings.ignoreMessagesToChat && ChatMessage.flags?.[Theatre.SETTINGS]?.theatreMessage) html[0].style.display = "none";
+	return true;
+});
+
 Hooks.on("renderChatLog", function (app, html, data) {
 	if (data.cssId === "chat-popout") return;
 	theatre.initialize();
@@ -490,8 +494,7 @@ Hooks.on("getActorDirectoryEntryContext", async (html, options) => {
 	if (!game.user.isGM && game.settings.get("theatre", "gmOnly")) return;
 
 	const getActorData = (target) => {
-		const actor = game.actors.get(target.data("documentId"));
-		return actor.data;
+		return game.actors.get(target.data("documentId"));
 	};
 
 	options.splice(
@@ -516,11 +519,8 @@ Hooks.on("getActorDirectoryEntryContext", async (html, options) => {
 var theatre = null;
 Hooks.once("setup", () => {
 	theatre = new Theatre();
-});
 
-Hooks.once("init", () => {
 	// module keybinds
-
 	game.keybindings.register("theatre", "unfocusTextArea", {
 		name: "Theatre.UI.Keybinds.unfocusTextArea",
 		hint: "",
@@ -551,7 +551,7 @@ Hooks.once("init", () => {
 		onDown: () => {
 			const ownedActors = game.actors.filter((a) => a.permission === 3);
 			const ownedTokens = ownedActors.map((a) => a.getActiveTokens());
-			for (const tokenArray of ownedTokens) tokenArray.forEach((t) => Theatre.addToNavBar(t.actor.data));
+			for (const tokenArray of ownedTokens) tokenArray.forEach((t) => Theatre.addToNavBar(t.actor));
 		},
 		restricted: false,
 	});
@@ -566,9 +566,19 @@ Hooks.once("init", () => {
 			},
 		],
 		onDown: () => {
-			for (const tkn of canvas.tokens.controlled) Theatre.addToNavBar(tkn.actor.data);
+			for (const tkn of canvas.tokens.controlled) Theatre.addToNavBar(tkn.actor);
 		},
-		restricted: false,
+		restricted: true,
+	});
+
+	game.keybindings.register("theatre", `removeSelectedFromStage`, {
+		name: "Theatre.UI.Keybinds.removeSelectedFromStage",
+		hint: "",
+		editable: [],
+		onDown: (context) => {
+			for (const tkn of canvas.tokens.controlled) Theatre.removeFromNavBar(tkn.actor);
+		},
+		restricted: true,
 	});
 
 	game.keybindings.register("theatre", "narratorMode", {
@@ -587,7 +597,7 @@ Hooks.once("init", () => {
 
 			document.getElementById("chat-message").blur();
 		},
-		restricted: false,
+		restricted: true,
 	});
 
 	game.keybindings.register("theatre", "flipPortrait", {
@@ -759,7 +769,7 @@ Hooks.once("init", () => {
 
 	for (let i = 1; i < 11; i++) {
 		game.keybindings.register("theatre", `activateStaged${i}`, {
-			name: `Theatre.UI.Keybinds.activateStaged${i}`,
+			name: game.i18n.format(`Theatre.UI.Keybinds.activateStaged`, { number: i }),
 			hint: "",
 			editable: [
 				{
@@ -775,10 +785,11 @@ Hooks.once("init", () => {
 				document.getElementById("chat-message").blur();
 			},
 			restricted: false,
+			reservedModifiers: ["Shift"],
 		});
 
 		game.keybindings.register("theatre", `removeStaged${i}`, {
-			name: `Theatre.UI.Keybinds.removeStaged${i}`,
+			name: game.i18n.format(`Theatre.UI.Keybinds.removeStaged`, { number: i }),
 			hint: "",
 			editable: [
 				{
@@ -791,7 +802,7 @@ Hooks.once("init", () => {
 				const id = ids[i - 1];
 				if (id) Theatre.instance.removeInsertById(id);
 			},
-			restricted: false,
+			restricted: true,
 		});
 	}
 });

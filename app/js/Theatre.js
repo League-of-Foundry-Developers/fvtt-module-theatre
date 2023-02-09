@@ -96,6 +96,20 @@ class Theatre {
 		return Theatre.instance;
 	}
 
+	functions = {
+		addToNavBar: (actor) => Theatre.addToNavBar(actor),
+		removeFromNavBar: (actor) => Theatre.removeFromNavBar(actor),
+		activateStagedByID: (i) => {
+			const ids = Object.keys(Theatre.instance.stage);
+			Theatre.instance.activateInsertById(ids[i]);
+			document.getElementById("chat-message").blur();
+		},
+		removeFromStagedByID: (i) => {
+			const ids = Object.keys(Theatre.instance.stage);
+			Theatre.instance.removeInsertById(ids[i]);
+		},
+	};
+
 	initialize() {
 		// inject HTML
 		this._injectHTML();
@@ -487,10 +501,43 @@ class Theatre {
 			default: false,
 		});
 
+		game.settings.register(Theatre.SETTINGS, "ignoreMessagesToChat", {
+			name: "Theatre.UI.Settings.ignoreMessagesToChat",
+			hint: "Theatre.UI.Settings.ignoreMessagesToChatHint",
+			scope: "world",
+			config: true,
+			type: Boolean,
+			default: false,
+			onChange: (value) => {
+				this.settings.ignoreMessagesToChat = value;
+			},
+		});
+
+		game.settings.register(Theatre.SETTINGS, "quoteType", {
+			name: "Theatre.UI.Settings.quoteType",
+			hint: game.i18n.format("Theatre.UI.Settings.quoteTypeHint", { setting: game.i18n.localize("Theatre.UI.Title.QuoteToggle") }),
+			scope: "world",
+			config: true,
+			type: Number,
+			default: 1,
+			choices: {
+				0: game.i18n.localize("Theatre.UI.Settings.quoteTypeChoices.0"),
+				1: game.i18n.localize("Theatre.UI.Settings.quoteTypeChoices.1"),
+				2: game.i18n.localize("Theatre.UI.Settings.quoteTypeChoices.2"),
+				3: game.i18n.localize("Theatre.UI.Settings.quoteTypeChoices.3"),
+				4: game.i18n.localize("Theatre.UI.Settings.quoteTypeChoices.4"),
+			},
+			onChange: (value) => {
+				this.settings.quoteType = value;
+			},
+		});
+
 		// Load in default settings (theatreStyle is loaded on HTML Injection)
 		this.settings.decayMin = (game.settings.get(Theatre.SETTINGS, "textDecayMin") || 30) * 1000;
 		this.settings.decayRate = (game.settings.get(Theatre.SETTINGS, "textDecayRate") || 1) * 1000;
 		this.settings.motdNewInfo = game.settings.get(Theatre.SETTINGS, "motdNewInfo") || 1;
+		this.settings.ignoreMessagesToChat = game.settings.get(Theatre.SETTINGS, "ignoreMessagesToChat");
+		this.settings.quoteType = game.settings.get(Theatre.SETTINGS, "quoteType");
 	}
 
 	/**
@@ -879,7 +926,7 @@ class Theatre {
 			for (let insert of this.portraitDocks) this.removeInsertById(insert.imgId, true);
 
 			if (type == "gm") ui.notifications.info(game.i18n.localize("Theatre.UI.Notification.ResyncGM"));
-			else ui.notifications.info(game.i18n.localize("Theatre.UI.Notification.ResyncPlayer") + game.users.get(senderId).data.name);
+			else ui.notifications.info(game.i18n.localize("Theatre.UI.Notification.ResyncPlayer") + game.users.get(senderId).name);
 
 			let theatreId, insert, port, actorId, actor, params;
 			let toInject = [];
@@ -974,7 +1021,7 @@ class Theatre {
 								// apply mirror state
 								/*
 								if (Boolean(dat.position.mirror) != insert.mirrored)
-									this._mirrorInsert(port,true); 
+									this._mirrorInsert(port,true);
 								*/
 								if (Theatre.DEBUG) console.log("Mirror ? %s : %s", dat.position.mirror, insert.mirrored);
 								if (Boolean(dat.position.mirror) != insert.mirrored) {
@@ -1697,7 +1744,6 @@ class Theatre {
 			console.log("ERROR, ACTOR %s DOES NOT EXIST!", actorId);
 			return null;
 		}
-		actor = actor.data;
 		//console.log("getting params from actor: ",actor);
 
 		let theatreId = `theatre-${actor._id}`;
@@ -1746,7 +1792,7 @@ class Theatre {
 
 		if (Theatre.DEBUG) console.log("isDefaultDisabled ", actor);
 
-		if (actor.data.flags.theatre && actor.data.flags.theatre.disabledefault) return true;
+		if (actor.flags.theatre && actor.flags.theatre.disabledefault) return true;
 		return false;
 	}
 
@@ -1769,8 +1815,7 @@ class Theatre {
 			console.log("ERROR, ACTOR %s DOES NOT EXIST!", actorId);
 			return false;
 		}
-		actor = actor.data;
-		if ((actor.permission[userId] && actor.permission[userId] >= 3) || (actor.permission["default"] && actor.permission["default"] >= 3)) return true;
+		if ((actor.ownership[userId] && actor.ownership[userId] >= 3) || (actor.ownership["default"] && actor.ownership["default"] >= 3)) return true;
 		return false;
 	}
 
@@ -1791,13 +1836,12 @@ class Theatre {
 			console.log("ERROR, ACTOR %s DOES NOT EXIST!", actorId);
 			return;
 		}
-		actor = actor.data;
-		for (let perm in actor.permission) {
+		for (let perm in actor.ownership) {
 			if (perm != "default") {
 				user = game.users.get(perm);
 				if (!user.isGM) return true;
 			} else {
-				if (actor.permission[perm] >= 1) return true;
+				if (actor.ownership[perm] >= 1) return true;
 			}
 		}
 		return false;
@@ -1952,33 +1996,33 @@ class Theatre {
 		// face detect
 		/*
 		faceapi.detectSingleFace(app.view,new faceapi.TinyFaceDetectorOptions()).then((detection)=>{
-			console.log("face detected: ", detection); 
+			console.log("face detected: ", detection);
 			if (detection) {
-				let box = detection.box; 
-				console.log("successful preview face detection: ", box); 
-				let graphics = new PIXI.Graphics(); 
-				graphics.lineStyle (2,0xFFFFFF,1); 
+				let box = detection.box;
+				console.log("successful preview face detection: ", box);
+				let graphics = new PIXI.Graphics();
+				graphics.lineStyle (2,0xFFFFFF,1);
 
 				if (maxSide == portWidth) {
 					graphics.moveTo(box.x/(ratio*2)+70,box.y/(ratio*2));
 					graphics.lineTo(box.x/(ratio*2) + box.width/(ratio*2)+70,box.y/(ratio*2));
-					graphics.lineTo(box.x/(ratio*2) + box.width/(ratio*2)+70,box.y/(ratio*2)+box.height/(ratio*2)); 
-					graphics.lineTo(box.x/(ratio*2)+70,box.y/(ratio*2)+box.height/(ratio*2)); 
-					graphics.lineTo(box.x/(ratio*2)+70,box.y/(ratio*2)); 
+					graphics.lineTo(box.x/(ratio*2) + box.width/(ratio*2)+70,box.y/(ratio*2)+box.height/(ratio*2));
+					graphics.lineTo(box.x/(ratio*2)+70,box.y/(ratio*2)+box.height/(ratio*2));
+					graphics.lineTo(box.x/(ratio*2)+70,box.y/(ratio*2));
 				} else {
 					graphics.moveTo(box.x/(ratio*2),box.y/(ratio*2)+70);
 					graphics.lineTo(box.x/(ratio*2) + box.width/(ratio*2),box.y/(ratio*2)+70);
-					graphics.lineTo(box.x/(ratio*2) + box.width/(ratio*2),box.y/(ratio*2)+box.height/(ratio*2)+70); 
-					graphics.lineTo(box.x/(ratio*2),box.y/(ratio*2)+box.height/(ratio*2)+70); 
-					graphics.lineTo(box.x/(ratio*2),box.y/(ratio*2)+70); 
+					graphics.lineTo(box.x/(ratio*2) + box.width/(ratio*2),box.y/(ratio*2)+box.height/(ratio*2)+70);
+					graphics.lineTo(box.x/(ratio*2),box.y/(ratio*2)+box.height/(ratio*2)+70);
+					graphics.lineTo(box.x/(ratio*2),box.y/(ratio*2)+70);
 				}
-				app.stage.addChild(graphics); 
-				app.render(); 
+				app.stage.addChild(graphics);
+				app.render();
 			} else {
-				console.log("FAILED TO FIND PREVIEW FACE"); 
+				console.log("FAILED TO FIND PREVIEW FACE");
 			}
-			this.theatreToolTip.style.opacity = 1; 
-		}); 
+			this.theatreToolTip.style.opacity = 1;
+		});
 		*/
 	}
 
@@ -2257,7 +2301,10 @@ class Theatre {
 
 		let imgSrcs = [];
 
-		imgSrcs.push({ imgpath: "modules/theatre/app/graphics/typing.png", resname: "modules/theatre/app/graphics/typing.png" });
+		imgSrcs.push({
+			imgpath: "modules/theatre/app/graphics/typing.png",
+			resname: "modules/theatre/app/graphics/typing.png",
+		});
 		imgSrcs.push({ imgpath: imgPath, resname: imgPath });
 		if (Theatre.DEBUG) console.log("Adding %s with src %s", portName, imgPath);
 		// get actor, load all emote images
@@ -2381,7 +2428,7 @@ class Theatre {
 			portraitContainer.scale.x = -1;
 			/*
 			if (reorder)
-				portraitContainer.x = portWidth; 
+				portraitContainer.x = portWidth;
 			*/
 		}
 		// setup label if not setup
@@ -2724,7 +2771,7 @@ class Theatre {
 		let loader = PIXI.Loader.shared;
 		/*
 		if (loader.resources[resName])
-			loader.resources[resName] = null; 
+			loader.resources[resName] = null;
 		*/
 
 		// if we have no resName then just return the cb
@@ -2795,7 +2842,7 @@ class Theatre {
 		let loader = PIXI.Loader.shared;
 		/*
 		if (loader.resources[resName])
-			loader.resources[resName] = null; 
+			loader.resources[resName] = null;
 		*/
 
 		// if we have an emtpy imgSrc array, just return the cb
@@ -3085,8 +3132,8 @@ class Theatre {
 		let actor = game.actors.get(actorId);
 		if (!actor) return;
 
-		let baseInsert = actor.data.img ? actor.data.img : "icons/mystery-man.png";
-		if (actor.data.flags.theatre) baseInsert = actor.data.flags.theatre.baseinsert ? actor.data.flags.theatre.baseinsert : baseInsert;
+		let baseInsert = actor.img ? actor.img : "icons/mystery-man.png";
+		if (actor.flags.theatre) baseInsert = actor.flags.theatre.baseinsert ? actor.flags.theatre.baseinsert : baseInsert;
 		let emotes = Theatre.getActorEmotes(actorId);
 
 		// emote already active
@@ -3670,7 +3717,7 @@ class Theatre {
 		TweenMax.killTweensOf(toRemoveTextBox);
 		/*
 		for (let c of toRemoveTextBox.children)
-			c.parentNode.removeChild(c); 
+			c.parentNode.removeChild(c);
 		*/
 		// fade away text box
 		toRemoveTextBox.style.opacity = 0;
@@ -4278,12 +4325,12 @@ class Theatre {
 
 		/*
 		if (this.reorderTOId)
-			window.clearTimeout(this.reorderTOId); 
+			window.clearTimeout(this.reorderTOId);
 
 		this.reorderTOId = window.setTimeout(()=>{
-			Theatre.reorderInserts(); 
-			this.reorderTOId = null; 
-		},500); 
+			Theatre.reorderInserts();
+			this.reorderTOId = null;
+		},500);
 		*/
 		Theatre.reorderInserts();
 
@@ -4553,7 +4600,7 @@ class Theatre {
 				yoyo: yoyo,
 				yoyoEase: yoyoEase,
 				/*onRepeat: function() {
-					console.log("ANIMATION tween is repeating!",this); 
+					console.log("ANIMATION tween is repeating!",this);
 				}, */
 				onComplete: function (ctx, imgId, tweenId) {
 					if (Theatre.DEBUG) console.log("ANIMATION tween complete!");
@@ -4573,8 +4620,8 @@ class Theatre {
 	 * intitial emotion set when displaying an insert
 	 * which was previously staged, or not active
 	 *
-	 * first : actor.data.flags.theatre.<emote>.settings.<parameter>
-	 * second : actor.data.flags.theatre.settings.<parameter>
+	 * first : actor.flags.theatre.<emote>.settings.<parameter>
+	 * second : actor.flags.theatre.settings.<parameter>
 	 * third : Theatre.instance.userEmotes[<userid>].<parameter>
 	 *
 	 * @params params (Object) : The set of emotion properties.
@@ -4634,7 +4681,7 @@ class Theatre {
 		let navItem = this.getNavItemById(id);
 		if (!navItem) {
 			let actor = game.actors.get(actorId);
-			Theatre.addToNavBar(actor.data);
+			Theatre.addToNavBar(actor);
 			navItem = this.getNavItemById(id);
 		}
 		if (!navItem) return;
@@ -4673,7 +4720,9 @@ class Theatre {
 			if (this.speakingAs != id) {
 				this.speakingAs = id;
 				KHelpers.addClass(navItem, "theatre-control-nav-bar-item-speakingas");
-				TweenMax.to(Theatre.instance.theatreNavBar, 0.4, { scrollTo: { x: navItem.offsetLeft, offsetX: Theatre.instance.theatreNavBar.offsetWidth / 2 } });
+				TweenMax.to(Theatre.instance.theatreNavBar, 0.4, {
+					scrollTo: { x: navItem.offsetLeft, offsetX: Theatre.instance.theatreNavBar.offsetWidth / 2 },
+				});
 
 				// add label pulse
 				insert.label.tint = 0xffffff;
@@ -4732,7 +4781,9 @@ class Theatre {
 
 			this.speakingAs = id;
 			KHelpers.addClass(navItem, "theatre-control-nav-bar-item-speakingas");
-			TweenMax.to(Theatre.instance.theatreNavBar, 0.4, { scrollTo: { x: navItem.offsetLeft, offsetX: Theatre.instance.theatreNavBar.offsetWidth / 2 } });
+			TweenMax.to(Theatre.instance.theatreNavBar, 0.4, {
+				scrollTo: { x: navItem.offsetLeft, offsetX: Theatre.instance.theatreNavBar.offsetWidth / 2 },
+			});
 
 			window.setTimeout(() => {
 				insert = this.getInsertById(id);
@@ -5036,7 +5087,12 @@ class Theatre {
 		let textFlyin = Theatre.FLYIN_ANIMS;
 		let textStanding = Theatre.STANDING_ANIMS;
 		let sideBar = document.getElementById("sidebar");
-		renderTemplate("modules/theatre/app/templates/emote_menu.html", { emotes, textFlyin, textStanding, fonts }).then((template) => {
+		renderTemplate("modules/theatre/app/templates/emote_menu.html", {
+			emotes,
+			textFlyin,
+			textStanding,
+			fonts,
+		}).then((template) => {
 			if (Theatre.DEBUG) console.log("emote window template rendered");
 			Theatre.instance.theatreEmoteMenu.style.top = `${Theatre.instance.theatreControls.offsetTop - 410}px`;
 			Theatre.instance.theatreEmoteMenu.innerHTML = template;
@@ -5527,9 +5583,9 @@ class Theatre {
 		ui.notifications.info(game.i18n.localize("Theatre.NotYet"));
 		/*
 		if (KHelpers.hasClass(ev.currentTarget,"theatre-control-small-btn-down")) {
-			KHelpers.removeClass(ev.currentTarget,"theatre-control-small-btn-down"); 
+			KHelpers.removeClass(ev.currentTarget,"theatre-control-small-btn-down");
 		} else {
-			KHelpers.addClass(ev.currentTarget,"theatre-control-small-btn-down"); 
+			KHelpers.addClass(ev.currentTarget,"theatre-control-small-btn-down");
 			ui.notifications.info(game.i18n.localize("Theatre.NotYet"));
 		}
 		*/
@@ -5825,7 +5881,7 @@ class Theatre {
 				ev.stopPropagation();
 			} else if (ev.altKey) {
 				let actor = game.actors.get(id.replace("theatre-", ""));
-				Theatre.addToNavBar(actor.data);
+				Theatre.addToNavBar(actor);
 			} else if (Theatre.instance.swapTarget) {
 				if (Theatre.instance.swapTarget != id) {
 					//Theatre.instance.swapInsertsById(id,Theatre.instance.swapTarget);
@@ -6620,12 +6676,10 @@ class Theatre {
 	 */
 	static getActorEmotes(actorId, disableDefault) {
 		let actor = game.actors.get(actorId);
-		let data, ae, de, re;
+		let ae, de, re;
 
-		if (actor) data = actor.data;
-
-		if (data && data.flags.theatre) {
-			ae = data.flags.theatre.emotes;
+		if (actor && actor.flags.theatre) {
+			ae = actor.flags.theatre.emotes;
 			if (disableDefault) {
 				re = ae;
 			} else {
@@ -6649,14 +6703,12 @@ class Theatre {
 	 */
 	static getActorRiggingResources(actorId) {
 		let actor = game.actors.get(actorId);
-		let data, ar, dr, rr;
-
-		if (actor) data = actor.data;
+		let ar, dr, rr;
 
 		dr = Theatre.getDefaultRiggingResources();
-		if (data && data.flags.theatre && data.flags.theatre.rigging && data.flags.theatre.rigging.resources) {
-			ar = data.flags.theatre.rigging.resources;
-			rr = dr.concat(ar);
+		if (actor && actor.flags.theatre && actor.flags.theatre.rigging && actor.flags.theatre.rigging.resources) {
+			ar = actor.flags.theatre.rigging.resources;
+			rr = defaultRiggingResources.concat(ar);
 		} else rr = dr;
 
 		return rr;
@@ -6794,12 +6846,30 @@ class Theatre {
 				rigging: {
 					animations: [
 						{ name: "happytears", syntax: "happytears|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" },
-						{ name: "line_a", syntax: "line|0.5;(ease:bounce);x:40%,35%;y:5%,0%;rotation:-20,-20|0.5;(repeat:-1,yoyo:true);scaleX:1,1.2;scaleY:1,1.5" },
-						{ name: "line_b", syntax: "line|0.5;(ease:bounce);x:30%,20%;y:15%,12%;rotation:-65,-65|0.5;(repeat:-1,yoyo:true);scaleX:1,1.2;scaleY:1,1.5" },
-						{ name: "line_c", syntax: "line|0.5;(ease:bounce);x:60%,65%;y:5%,0%;rotation:20,20|0.5;(repeat:-1,yoyo:true);scaleX:1,1.2;scaleY:1,1.5" },
-						{ name: "line_d", syntax: "line|0.5;(ease:bounce);x:70%,80%;y:15%,12%;rotation:65,65|0.5;(repeat:-1,yoyo:true);scaleX:1,1.2;scaleY:1,1.5" },
-						{ name: "tears_a", syntax: "tears|0.5;(repeat:-1,repeatDelay:1.7);x:60%,110%;y:25%,40%;rotation:-30,-30;alpha:0.5,0|0;scaleX:-1,-1" },
-						{ name: "tears_b", syntax: "tears|0.5;(repeat:-1,repeatDelay:0.8);x:40%,-10%;y:25%,40%;rotation:30,30;alpha:0.5,0" },
+						{
+							name: "line_a",
+							syntax: "line|0.5;(ease:bounce);x:40%,35%;y:5%,0%;rotation:-20,-20|0.5;(repeat:-1,yoyo:true);scaleX:1,1.2;scaleY:1,1.5",
+						},
+						{
+							name: "line_b",
+							syntax: "line|0.5;(ease:bounce);x:30%,20%;y:15%,12%;rotation:-65,-65|0.5;(repeat:-1,yoyo:true);scaleX:1,1.2;scaleY:1,1.5",
+						},
+						{
+							name: "line_c",
+							syntax: "line|0.5;(ease:bounce);x:60%,65%;y:5%,0%;rotation:20,20|0.5;(repeat:-1,yoyo:true);scaleX:1,1.2;scaleY:1,1.5",
+						},
+						{
+							name: "line_d",
+							syntax: "line|0.5;(ease:bounce);x:70%,80%;y:15%,12%;rotation:65,65|0.5;(repeat:-1,yoyo:true);scaleX:1,1.2;scaleY:1,1.5",
+						},
+						{
+							name: "tears_a",
+							syntax: "tears|0.5;(repeat:-1,repeatDelay:1.7);x:60%,110%;y:25%,40%;rotation:-30,-30;alpha:0.5,0|0;scaleX:-1,-1",
+						},
+						{
+							name: "tears_b",
+							syntax: "tears|0.5;(repeat:-1,repeatDelay:0.8);x:40%,-10%;y:25%,40%;rotation:30,30;alpha:0.5,0",
+						},
 					],
 				},
 			},
@@ -6832,18 +6902,54 @@ class Theatre {
 				rigging: {
 					animations: [
 						{ name: "sad", syntax: "sad|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" },
-						{ name: "swirl_a", syntax: "swirl|0.5;(ease:power4);x:110%,75%;y:0%,10%;alpha:0,1|1;(repeat:-1);rotation:0,360" },
-						{ name: "swirl_b", syntax: "swirl|0.5;(ease:power4);x:110%,65%;y:0%,40%;alpha:0,1|1;(repeat:-1);rotation:0,360" },
-						{ name: "swirl_c", syntax: "swirl|0.5;(ease:power4);x:110%,90%;y:110%,50%;alpha:0,1|1;(repeat:-1);rotation:0,360" },
-						{ name: "swirl_d", syntax: "swirl|0.5;(ease:power4);x:110%,85%;y:110%,70%;alpha:0,1|1;(repeat:-1);rotation:0,360" },
-						{ name: "swirl_e", syntax: "swirl|0.5;(ease:power4);x:-10%,25%;y:0%,15%;alpha:0,1|1;(repeat:-1);rotation:0,360" },
-						{ name: "swirl_f", syntax: "swirl|0.5;(ease:power4);x:-10%,15%;y:0%,38%;alpha:0,1|1;(repeat:-1);rotation:0,360" },
-						{ name: "swirl_g", syntax: "swirl|0.5;(ease:power4);x:-10%,20%;y:110%,55%;alpha:0,1|1;(repeat:-1);rotation:0,360" },
-						{ name: "swirl_h", syntax: "swirl|0.5;(ease:power4);x:-10%,35%;y:110%,67%;alpha:0,1|1;(repeat:-1);rotation:0,360" },
-						{ name: "swirl_i", syntax: "swirl|0.5;(ease:power4);x:-10%,10%;y:110%,85%;alpha:0,1|1;(repeat:-1);rotation:0,360" },
-						{ name: "swirl_j", syntax: "swirl|0.5;(ease:power4);x:-10%,45%;y:110%,95%;alpha:0,1|1;(repeat:-1);rotation:0,360" },
-						{ name: "swirl_k", syntax: "swirl|0.5;(ease:power4);x:110%,95%;y:110%,90%;alpha:0,1|1;(repeat:-1);rotation:0,360" },
-						{ name: "swirl_l", syntax: "swirl|0.5;(ease:power4);x:110%,70%;y:110%,82%;alpha:0,1|1;(repeat:-1);rotation:0,360" },
+						{
+							name: "swirl_a",
+							syntax: "swirl|0.5;(ease:power4);x:110%,75%;y:0%,10%;alpha:0,1|1;(repeat:-1);rotation:0,360",
+						},
+						{
+							name: "swirl_b",
+							syntax: "swirl|0.5;(ease:power4);x:110%,65%;y:0%,40%;alpha:0,1|1;(repeat:-1);rotation:0,360",
+						},
+						{
+							name: "swirl_c",
+							syntax: "swirl|0.5;(ease:power4);x:110%,90%;y:110%,50%;alpha:0,1|1;(repeat:-1);rotation:0,360",
+						},
+						{
+							name: "swirl_d",
+							syntax: "swirl|0.5;(ease:power4);x:110%,85%;y:110%,70%;alpha:0,1|1;(repeat:-1);rotation:0,360",
+						},
+						{
+							name: "swirl_e",
+							syntax: "swirl|0.5;(ease:power4);x:-10%,25%;y:0%,15%;alpha:0,1|1;(repeat:-1);rotation:0,360",
+						},
+						{
+							name: "swirl_f",
+							syntax: "swirl|0.5;(ease:power4);x:-10%,15%;y:0%,38%;alpha:0,1|1;(repeat:-1);rotation:0,360",
+						},
+						{
+							name: "swirl_g",
+							syntax: "swirl|0.5;(ease:power4);x:-10%,20%;y:110%,55%;alpha:0,1|1;(repeat:-1);rotation:0,360",
+						},
+						{
+							name: "swirl_h",
+							syntax: "swirl|0.5;(ease:power4);x:-10%,35%;y:110%,67%;alpha:0,1|1;(repeat:-1);rotation:0,360",
+						},
+						{
+							name: "swirl_i",
+							syntax: "swirl|0.5;(ease:power4);x:-10%,10%;y:110%,85%;alpha:0,1|1;(repeat:-1);rotation:0,360",
+						},
+						{
+							name: "swirl_j",
+							syntax: "swirl|0.5;(ease:power4);x:-10%,45%;y:110%,95%;alpha:0,1|1;(repeat:-1);rotation:0,360",
+						},
+						{
+							name: "swirl_k",
+							syntax: "swirl|0.5;(ease:power4);x:110%,95%;y:110%,90%;alpha:0,1|1;(repeat:-1);rotation:0,360",
+						},
+						{
+							name: "swirl_l",
+							syntax: "swirl|0.5;(ease:power4);x:110%,70%;y:110%,82%;alpha:0,1|1;(repeat:-1);rotation:0,360",
+						},
 					],
 				},
 			},
@@ -6855,12 +6961,30 @@ class Theatre {
 				rigging: {
 					animations: [
 						{ name: "cry", syntax: "cry|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" },
-						{ name: "tears_a", syntax: "tears|0.5;(repeat:-1,repeatDelay:0.7);x:60%,110%;y:25%,40%;rotation:-30,-30;alpha:0.5,0|0;scaleX:-1,-1" },
-						{ name: "tears_b", syntax: "tears|0.5;(repeat:-1,repeatDelay:0.3);x:40%,-10%;y:25%,40%;rotation:30,30;alpha:0.5,0" },
-						{ name: "tears_c", syntax: "tears|0.5;(repeat:-1,repeatDelay:0.8);x:60%,90%;y:25%,50%;rotation:-10,-10;alpha:0.5,0|0;scaleX:-1,-1" },
-						{ name: "tears_d", syntax: "tears|0.5;(repeat:-1,repeatDelay:1.0);x:40%,10%;y:25%,50%;rotation:10,10;alpha:0.5,0" },
-						{ name: "tears_e", syntax: "tears|0.5;(repeat:-1,repeatDelay:0.2);x:60%,90%;y:25%,30%;rotation:-50,-50;alpha:0.5,0|0;scaleX:-1,-1" },
-						{ name: "tears_f", syntax: "tears|0.5;(repeat:-1,repeatDelay:1.2);x:40%,10%;y:25%,30%;rotation:50,50;alpha:0.5,0" },
+						{
+							name: "tears_a",
+							syntax: "tears|0.5;(repeat:-1,repeatDelay:0.7);x:60%,110%;y:25%,40%;rotation:-30,-30;alpha:0.5,0|0;scaleX:-1,-1",
+						},
+						{
+							name: "tears_b",
+							syntax: "tears|0.5;(repeat:-1,repeatDelay:0.3);x:40%,-10%;y:25%,40%;rotation:30,30;alpha:0.5,0",
+						},
+						{
+							name: "tears_c",
+							syntax: "tears|0.5;(repeat:-1,repeatDelay:0.8);x:60%,90%;y:25%,50%;rotation:-10,-10;alpha:0.5,0|0;scaleX:-1,-1",
+						},
+						{
+							name: "tears_d",
+							syntax: "tears|0.5;(repeat:-1,repeatDelay:1.0);x:40%,10%;y:25%,50%;rotation:10,10;alpha:0.5,0",
+						},
+						{
+							name: "tears_e",
+							syntax: "tears|0.5;(repeat:-1,repeatDelay:0.2);x:60%,90%;y:25%,30%;rotation:-50,-50;alpha:0.5,0|0;scaleX:-1,-1",
+						},
+						{
+							name: "tears_f",
+							syntax: "tears|0.5;(repeat:-1,repeatDelay:1.2);x:40%,10%;y:25%,30%;rotation:50,50;alpha:0.5,0",
+						},
 					],
 				},
 			},
@@ -6882,7 +7006,10 @@ class Theatre {
 				rigging: {
 					animations: [
 						{ name: "annoyed", syntax: "annoyed|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" },
-						{ name: "ziggy", syntax: "ziggy|0;x:25%,25%;y:20%,20%|0.25;(repeat:-1,yoyo:true);rotation:-2,2" },
+						{
+							name: "ziggy",
+							syntax: "ziggy|0;x:25%,25%;y:20%,20%|0.25;(repeat:-1,yoyo:true);rotation:-2,2",
+						},
 						{
 							name: "ziggy_2",
 							syntax: "ziggy|1;(repeat:-1,delay:1,repeatDelay:2);scaleX:1,2;scaleY:1,2;x:25%,25%;y:20%,20%;alpha:0.5,0|0.25;(repeat:-1,yoyo:true);rotation:0,5",
@@ -6899,7 +7026,10 @@ class Theatre {
 				rigging: {
 					animations: [
 						{ name: "frustrated", syntax: "frustrated|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" },
-						{ name: "veins", syntax: "veins|0.5;x:45%,45%;y:10%,10%;alpha:0,1|1;(repeat:-1,yoyo:true,ease:bounce);scaleX:0.7,1;scaleY:0.7,1" },
+						{
+							name: "veins",
+							syntax: "veins|0.5;x:45%,45%;y:10%,10%;alpha:0,1|1;(repeat:-1,yoyo:true,ease:bounce);scaleX:0.7,1;scaleY:0.7,1",
+						},
 					],
 				},
 			},
@@ -6915,10 +7045,22 @@ class Theatre {
 							name: "veins",
 							syntax: "veins_red|0.5;x:45%,45%;y:10%,10%;alpha:0,1|1;(repeat:-1,yoyo:true,ease:elastic);scaleX:0.5,1;scaleY:0.5,1|0.25;(repeat:-1,yoyo:true);rotation:0,10",
 						},
-						{ name: "puff_a", syntax: "puff|0;x:80%,80%;y:15%,15%;rotation:0,0|1;(repeat:-1,delay:1,yoyo:true,ease:power4);scaleX:0.3,1;scaleY:0.3,1;alpha:0,0.5" },
-						{ name: "puff_b", syntax: "puff|0;x:20%,20%;y:15%,15%;rotation:0,0|1;(repeat:-1,delay:1.5,yoyo:true,ease:power4);scaleX:-0.3,-1;scaleY:0.3,1;alpha:0,0.5" },
-						{ name: "puff_c", syntax: "puff|0;x:70%,70%;y:5%,5%;rotation:330,330|1;(repeat:-1,delay:2,yoyo:true,ease:power4);scaleX:0.3,1;scaleY:0.3,1;alpha:0,0.5" },
-						{ name: "puff_d", syntax: "puff|0;x:30%,30%;y:5%,5%;rotation:30,30|1;(repeat:-1,delay:2.5,yoyo:true,ease:power4);scaleX:-0.3,-1;scaleY:0.3,1;alpha:0,0.5" },
+						{
+							name: "puff_a",
+							syntax: "puff|0;x:80%,80%;y:15%,15%;rotation:0,0|1;(repeat:-1,delay:1,yoyo:true,ease:power4);scaleX:0.3,1;scaleY:0.3,1;alpha:0,0.5",
+						},
+						{
+							name: "puff_b",
+							syntax: "puff|0;x:20%,20%;y:15%,15%;rotation:0,0|1;(repeat:-1,delay:1.5,yoyo:true,ease:power4);scaleX:-0.3,-1;scaleY:0.3,1;alpha:0,0.5",
+						},
+						{
+							name: "puff_c",
+							syntax: "puff|0;x:70%,70%;y:5%,5%;rotation:330,330|1;(repeat:-1,delay:2,yoyo:true,ease:power4);scaleX:0.3,1;scaleY:0.3,1;alpha:0,0.5",
+						},
+						{
+							name: "puff_d",
+							syntax: "puff|0;x:30%,30%;y:5%,5%;rotation:30,30|1;(repeat:-1,delay:2.5,yoyo:true,ease:power4);scaleX:-0.3,-1;scaleY:0.3,1;alpha:0,0.5",
+						},
 					],
 				},
 			},
@@ -6944,8 +7086,14 @@ class Theatre {
 				label: game.i18n.localize("Theatre.Emote.LaughingSquint"),
 				rigging: {
 					animations: [
-						{ name: "laughingsquint", syntax: "laughingsquint|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" },
-						{ name: "loud", syntax: "loud|0.5;x:25%,25%;y:20%,20%;alpha:0,1|0.5;(ease:bounce);scaleX:0.1,1;scaleY:0.1,1|0.125;(repeat:-1,yoyo:true);rotation:-1,1" },
+						{
+							name: "laughingsquint",
+							syntax: "laughingsquint|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1",
+						},
+						{
+							name: "loud",
+							syntax: "loud|0.5;x:25%,25%;y:20%,20%;alpha:0,1|0.5;(ease:bounce);scaleX:0.1,1;scaleY:0.1,1|0.125;(repeat:-1,yoyo:true);rotation:-1,1",
+						},
 					],
 				},
 			},
@@ -6957,12 +7105,30 @@ class Theatre {
 				rigging: {
 					animations: [
 						{ name: "rofl", syntax: "rofl|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" },
-						{ name: "loud_a", syntax: "loud|0.5;(ease:bounce);x:20%,20%;y:20%,20%;scaleX:0.1,1;scaleY:0.1,1|0.125;(repeat:-1,yoyo:true);rotation:-2,2" },
-						{ name: "loud_b", syntax: "loud|0.5;(ease:bounce);x:80%,80%;y:20%,20%;scaleX:-0.1,-1;scaleY:0.1,1|0.125;(repeat:-1,yoyo:true);rotation:-2,2" },
-						{ name: "loud_c", syntax: "loud|0;x:20%,20%;y:20%,20%|0.125;(repeat:-1,yoyo:true);rotation:-2,2|1;(repeat:-1);scaleX:1,1.5;scaleY:1,2;alpha:0.25,0" },
-						{ name: "loud_d", syntax: "loud|0;x:80%,80%;y:20%,20%|0.125;(repeat:-1,yoyo:true);rotation:-2,2|1;(repeat:-1);scaleX:-1,-1.5;scaleY:1,2;alpha:0.25,0" },
-						{ name: "tears_a", syntax: "tears|0.5;(repeat:-1,repeatDelay:1.7);x:60%,110%;y:25%,40%;rotation:-30,-30;alpha:0.5,0|0;scaleX:-1,-1" },
-						{ name: "tears_b", syntax: "tears|0.5;(repeat:-1,repeatDelay:0.8);x:40%,-10%;y:25%,40%;rotation:30,30;alpha:0.5,0" },
+						{
+							name: "loud_a",
+							syntax: "loud|0.5;(ease:bounce);x:20%,20%;y:20%,20%;scaleX:0.1,1;scaleY:0.1,1|0.125;(repeat:-1,yoyo:true);rotation:-2,2",
+						},
+						{
+							name: "loud_b",
+							syntax: "loud|0.5;(ease:bounce);x:80%,80%;y:20%,20%;scaleX:-0.1,-1;scaleY:0.1,1|0.125;(repeat:-1,yoyo:true);rotation:-2,2",
+						},
+						{
+							name: "loud_c",
+							syntax: "loud|0;x:20%,20%;y:20%,20%|0.125;(repeat:-1,yoyo:true);rotation:-2,2|1;(repeat:-1);scaleX:1,1.5;scaleY:1,2;alpha:0.25,0",
+						},
+						{
+							name: "loud_d",
+							syntax: "loud|0;x:80%,80%;y:20%,20%|0.125;(repeat:-1,yoyo:true);rotation:-2,2|1;(repeat:-1);scaleX:-1,-1.5;scaleY:1,2;alpha:0.25,0",
+						},
+						{
+							name: "tears_a",
+							syntax: "tears|0.5;(repeat:-1,repeatDelay:1.7);x:60%,110%;y:25%,40%;rotation:-30,-30;alpha:0.5,0|0;scaleX:-1,-1",
+						},
+						{
+							name: "tears_b",
+							syntax: "tears|0.5;(repeat:-1,repeatDelay:0.8);x:40%,-10%;y:25%,40%;rotation:30,30;alpha:0.5,0",
+						},
 					],
 				},
 			},
@@ -6986,7 +7152,10 @@ class Theatre {
 				rigging: {
 					animations: [
 						{ name: "surprised", syntax: "surprised|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" },
-						{ name: "notice", syntax: "notice|0.5;x:25%,25%;y:20%,20%;alpha:0,1|0.5;(ease:bounce);scaleX:0.1,1;scaleY:0.1,1" },
+						{
+							name: "notice",
+							syntax: "notice|0.5;x:25%,25%;y:20%,20%;alpha:0,1|0.5;(ease:bounce);scaleX:0.1,1;scaleY:0.1,1",
+						},
 					],
 				},
 			},
@@ -6998,18 +7167,54 @@ class Theatre {
 				rigging: {
 					animations: [
 						{ name: "awe-struck", syntax: "awe-struck|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" },
-						{ name: "glimmer_a", syntax: "glimmer|0.5;x:10%,10%;y:58%,58%|0.5;(delay:0.2,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "glimmer_b", syntax: "glimmer|0.5;x:85%,85%;y:20%,20%|0.5;(delay:0.3,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "glimmer_c", syntax: "glimmer|0.5;x:40%,40%;y:45%,45%|0.5;(delay:0.5,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "glimmer_d", syntax: "glimmer|0.5;x:35%,35%;y:30%,30%|0.5;(delay:0.6,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "glimmer_e", syntax: "glimmer|0.5;x:65%,65%;y:35%,35%|0.5;(delay:0.4,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "glimmer_f", syntax: "glimmer|0.5;x:80%,80%;y:50%,50%|0.5;(delay:0.1,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "glimmer_g", syntax: "glimmer|0.5;x:16%,16%;y:81%,81%|0.5;(delay:0.8,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "glimmer_h", syntax: "glimmer|0.5;x:55%,55%;y:64%,64%|0.5;(delay:0.9,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "glimmer_i", syntax: "glimmer|0.5;x:44%,44%;y:95%,95%|0.5;(delay:0.7,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "glimmer_j", syntax: "glimmer|0.5;x:67%,67%;y:84%,84%|0.5;(delay:0.35,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "glimmer_k", syntax: "glimmer|0.5;x:44%,44%;y:70%,70%|0.5;(delay:0,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "glimmer_l", syntax: "glimmer|0.5;x:20%,20%;y:23%,23%|0.5;(delay:0.65,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1" },
+						{
+							name: "glimmer_a",
+							syntax: "glimmer|0.5;x:10%,10%;y:58%,58%|0.5;(delay:0.2,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "glimmer_b",
+							syntax: "glimmer|0.5;x:85%,85%;y:20%,20%|0.5;(delay:0.3,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "glimmer_c",
+							syntax: "glimmer|0.5;x:40%,40%;y:45%,45%|0.5;(delay:0.5,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "glimmer_d",
+							syntax: "glimmer|0.5;x:35%,35%;y:30%,30%|0.5;(delay:0.6,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "glimmer_e",
+							syntax: "glimmer|0.5;x:65%,65%;y:35%,35%|0.5;(delay:0.4,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "glimmer_f",
+							syntax: "glimmer|0.5;x:80%,80%;y:50%,50%|0.5;(delay:0.1,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "glimmer_g",
+							syntax: "glimmer|0.5;x:16%,16%;y:81%,81%|0.5;(delay:0.8,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "glimmer_h",
+							syntax: "glimmer|0.5;x:55%,55%;y:64%,64%|0.5;(delay:0.9,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "glimmer_i",
+							syntax: "glimmer|0.5;x:44%,44%;y:95%,95%|0.5;(delay:0.7,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "glimmer_j",
+							syntax: "glimmer|0.5;x:67%,67%;y:84%,84%|0.5;(delay:0.35,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "glimmer_k",
+							syntax: "glimmer|0.5;x:44%,44%;y:70%,70%|0.5;(delay:0,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "glimmer_l",
+							syntax: "glimmer|0.5;x:20%,20%;y:23%,23%|0.5;(delay:0.65,repeat:-1,yoyo:true);scaleX:0.0,1;scaleY:0.0,1",
+						},
 					],
 				},
 			},
@@ -7107,7 +7312,10 @@ class Theatre {
 				rigging: {
 					animations: [
 						{ name: "thinking", syntax: "thinking|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" },
-						{ name: "thoughtbubble", syntax: "thoughtbubble|0.5;(ease:power3);x:25%,25%;y:10%,10%;alpha:0,1|0.5;(repeat:-1,yoyo:true);scaleX:0.95,1;scaleY:0.95,1" },
+						{
+							name: "thoughtbubble",
+							syntax: "thoughtbubble|0.5;(ease:power3);x:25%,25%;y:10%,10%;alpha:0,1|0.5;(repeat:-1,yoyo:true);scaleX:0.95,1;scaleY:0.95,1",
+						},
 						{
 							name: "bubbledot_a",
 							syntax: "bubbledot|0.5;(ease:power3);x:28%,28%;y:18%,18%;alpha:0,1|1;(repeat:-1,yoyo:true,repeatDelay:0.3);scaleX:0.5,1;scaleY:0.5,1|5;(repeat:-1);rotation:0,360",
@@ -7163,7 +7371,10 @@ class Theatre {
 				rigging: {
 					animations: [
 						{ name: "meh", syntax: "meh|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" },
-						{ name: "sigh", syntax: "sigh|3;(ease:power2);x:30%,10%;y:25%,45%;alpha:1,0;rotation:225,225;scaleX:1,1.5;scaleY:1,1.5" },
+						{
+							name: "sigh",
+							syntax: "sigh|3;(ease:power2);x:30%,10%;y:25%,45%;alpha:1,0;rotation:225,225;scaleX:1,1.5;scaleY:1,1.5",
+						},
 					],
 				},
 			},
@@ -7185,9 +7396,18 @@ class Theatre {
 				rigging: {
 					animations: [
 						{ name: "wink", syntax: "wink|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" },
-						{ name: "kawaii_a", syntax: "star|4;(ease:expo);x:45%,-10%;y:25%,25%;alpha:1,0|2;(repeat:4);rotation:0,360" },
-						{ name: "kawaii_b", syntax: "star|3;(ease:expo);x:45%,10%;y:25%,12%;alpha:1,0|2;(repeat:4);rotation:0,360" },
-						{ name: "kawaii_c", syntax: "star|3;(ease:expo);x:45%,10%;y:25%,38%;alpha:1,0|2;(repeat:4);rotation:0,360" },
+						{
+							name: "kawaii_a",
+							syntax: "star|4;(ease:expo);x:45%,-10%;y:25%,25%;alpha:1,0|2;(repeat:4);rotation:0,360",
+						},
+						{
+							name: "kawaii_b",
+							syntax: "star|3;(ease:expo);x:45%,10%;y:25%,12%;alpha:1,0|2;(repeat:4);rotation:0,360",
+						},
+						{
+							name: "kawaii_c",
+							syntax: "star|3;(ease:expo);x:45%,10%;y:25%,38%;alpha:1,0|2;(repeat:4);rotation:0,360",
+						},
 					],
 				},
 			},
@@ -7199,7 +7419,10 @@ class Theatre {
 				rigging: {
 					animations: [
 						{ name: "tongue", syntax: "tongue|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" },
-						{ name: "kawaii", syntax: "star|4;(ease:expo,delay:2);x:30%,30%;y:25%,25%;alpha:1,0;scaleX:1.3,0.1;scaleY:1.3,0.1|2;(repeat:4);rotation:0,360" },
+						{
+							name: "kawaii",
+							syntax: "star|4;(ease:expo,delay:2);x:30%,30%;y:25%,25%;alpha:1,0;scaleX:1.3,0.1;scaleY:1.3,0.1|2;(repeat:4);rotation:0,360",
+						},
 					],
 				},
 			},
@@ -7211,14 +7434,38 @@ class Theatre {
 				rigging: {
 					animations: [
 						{ name: "playful", syntax: "playful|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" },
-						{ name: "kawaii_a", syntax: "star|3;(ease:expo);x:40%,-10%;y:25%,-15%;alpha:1,0|2;(repeat:4);rotation:0,360" },
-						{ name: "kawaii_b", syntax: "star|4;(ease:expo);x:40%,-40%;y:25%,30%;alpha:1,0|2;(repeat:4);rotation:0,360" },
-						{ name: "kawaii_c", syntax: "star|3;(ease:expo);x:40%,-10%;y:25%,55%;alpha:1,0|2;(repeat:4);rotation:0,360" },
-						{ name: "kawaii_d", syntax: "star|3;(ease:expo);x:60%,110%;y:25%,-15%;alpha:1,0|2;(repeat:4);rotation:0,360" },
-						{ name: "kawaii_e", syntax: "star|4;(ease:expo);x:60%,140%;y:25%,30%;alpha:1,0|2;(repeat:4);rotation:0,360" },
-						{ name: "kawaii_f", syntax: "star|3;(ease:expo);x:60%,110%;y:25%,55%;alpha:1,0|2;(repeat:4);rotation:0,360" },
-						{ name: "kawaii_g", syntax: "star|4;(ease:expo);x:50%,50%;y:15%,-35%;alpha:1,0|2;(repeat:4);rotation:0,360" },
-						{ name: "kawaii_h", syntax: "star|4;(ease:expo);x:50%,50%;y:35%,85%;alpha:1,0|2;(repeat:4);rotation:0,360" },
+						{
+							name: "kawaii_a",
+							syntax: "star|3;(ease:expo);x:40%,-10%;y:25%,-15%;alpha:1,0|2;(repeat:4);rotation:0,360",
+						},
+						{
+							name: "kawaii_b",
+							syntax: "star|4;(ease:expo);x:40%,-40%;y:25%,30%;alpha:1,0|2;(repeat:4);rotation:0,360",
+						},
+						{
+							name: "kawaii_c",
+							syntax: "star|3;(ease:expo);x:40%,-10%;y:25%,55%;alpha:1,0|2;(repeat:4);rotation:0,360",
+						},
+						{
+							name: "kawaii_d",
+							syntax: "star|3;(ease:expo);x:60%,110%;y:25%,-15%;alpha:1,0|2;(repeat:4);rotation:0,360",
+						},
+						{
+							name: "kawaii_e",
+							syntax: "star|4;(ease:expo);x:60%,140%;y:25%,30%;alpha:1,0|2;(repeat:4);rotation:0,360",
+						},
+						{
+							name: "kawaii_f",
+							syntax: "star|3;(ease:expo);x:60%,110%;y:25%,55%;alpha:1,0|2;(repeat:4);rotation:0,360",
+						},
+						{
+							name: "kawaii_g",
+							syntax: "star|4;(ease:expo);x:50%,50%;y:15%,-35%;alpha:1,0|2;(repeat:4);rotation:0,360",
+						},
+						{
+							name: "kawaii_h",
+							syntax: "star|4;(ease:expo);x:50%,50%;y:35%,85%;alpha:1,0|2;(repeat:4);rotation:0,360",
+						},
 					],
 				},
 			},
@@ -7232,21 +7479,66 @@ class Theatre {
 					animations: [
 						{ name: "evil", syntax: "evil|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" },
 						{ name: "shroud", syntax: "darkness|0;x:50%,50%;y:50%,50%" },
-						{ name: "miasma_a", syntax: "miasma|0;x:25%,25%;y:78%,78%|3;(repeat:-1,delay:0.3);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "miasma_b", syntax: "miasma|0;x:73%,73%;y:68%,68%|3;(repeat:-1,delay:1.3);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "miasma_c", syntax: "miasma|0;x:15%,15%;y:60%,60%|3;(repeat:-1,delay:0.8);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "miasma_d", syntax: "miasma|0;x:45%,45%;y:85%,85%|3;(repeat:-1,delay:2.6);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "miasma_e", syntax: "miasma|0;x:90%,90%;y:80%,80%|3;(repeat:-1,delay:3.5);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "miasma_f", syntax: "miasma|0;x:55%,55%;y:60%,60%|3;(repeat:-1,delay:2.1);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "miasma_g", syntax: "miasma|0;x:10%,10%;y:90%,90%|3;(repeat:-1,delay:3.8);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "miasma_h", syntax: "miasma|0;x:95%,95%;y:70%,70%|3;(repeat:-1,delay:1.8);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "miasma_i", syntax: "miasma|0;x:50%,50%;y:72%,72%|3;(repeat:-1,delay:5.8);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "miasma_j", syntax: "miasma|0;x:10%,10%;y:66%,66%|3;(repeat:-1,delay:3.6);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "miasma_k", syntax: "miasma|0;x:3%,3%;y:88%,88%|3;(repeat:-1,delay:2.2);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "miasma_l", syntax: "miasma|0;x:78%,78%;y:75%,75%|3;(repeat:-1,delay:1.7);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "miasma_m", syntax: "miasma|0;x:65%,65%;y:98%,98%|3;(repeat:-1,delay:.7);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "miasma_n", syntax: "miasma|0;x:33%,33%;y:78%,78%|3;(repeat:-1,delay:4.4);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1" },
-						{ name: "miasma_o", syntax: "miasma|0;x:80%,80%;y:92%,92%|3;(repeat:-1,delay:5.2);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1" },
+						{
+							name: "miasma_a",
+							syntax: "miasma|0;x:25%,25%;y:78%,78%|3;(repeat:-1,delay:0.3);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "miasma_b",
+							syntax: "miasma|0;x:73%,73%;y:68%,68%|3;(repeat:-1,delay:1.3);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "miasma_c",
+							syntax: "miasma|0;x:15%,15%;y:60%,60%|3;(repeat:-1,delay:0.8);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "miasma_d",
+							syntax: "miasma|0;x:45%,45%;y:85%,85%|3;(repeat:-1,delay:2.6);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "miasma_e",
+							syntax: "miasma|0;x:90%,90%;y:80%,80%|3;(repeat:-1,delay:3.5);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "miasma_f",
+							syntax: "miasma|0;x:55%,55%;y:60%,60%|3;(repeat:-1,delay:2.1);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "miasma_g",
+							syntax: "miasma|0;x:10%,10%;y:90%,90%|3;(repeat:-1,delay:3.8);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "miasma_h",
+							syntax: "miasma|0;x:95%,95%;y:70%,70%|3;(repeat:-1,delay:1.8);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "miasma_i",
+							syntax: "miasma|0;x:50%,50%;y:72%,72%|3;(repeat:-1,delay:5.8);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "miasma_j",
+							syntax: "miasma|0;x:10%,10%;y:66%,66%|3;(repeat:-1,delay:3.6);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "miasma_k",
+							syntax: "miasma|0;x:3%,3%;y:88%,88%|3;(repeat:-1,delay:2.2);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "miasma_l",
+							syntax: "miasma|0;x:78%,78%;y:75%,75%|3;(repeat:-1,delay:1.7);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "miasma_m",
+							syntax: "miasma|0;x:65%,65%;y:98%,98%|3;(repeat:-1,delay:.7);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "miasma_n",
+							syntax: "miasma|0;x:33%,33%;y:78%,78%|3;(repeat:-1,delay:4.4);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1",
+						},
+						{
+							name: "miasma_o",
+							syntax: "miasma|0;x:80%,80%;y:92%,92%|3;(repeat:-1,delay:5.2);alpha:1,0;scaleX:0.0,1;scaleY:0.0,1",
+						},
 					],
 				},
 			},
@@ -7259,7 +7551,10 @@ class Theatre {
 				rigging: {
 					animations: [
 						{ name: "innocent", syntax: "innocent|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" },
-						{ name: "halo", syntax: "halo|2;(ease:power2);x:50%,50%;alpha:0,1|2;(ease:sine,repeat:-1,yoyo:true,yoyoEase:sine);y:-3%,-5%" },
+						{
+							name: "halo",
+							syntax: "halo|2;(ease:power2);x:50%,50%;alpha:0,1|2;(ease:sine,repeat:-1,yoyo:true,yoyoEase:sine);y:-3%,-5%",
+						},
 					],
 				},
 			},
@@ -7295,17 +7590,44 @@ class Theatre {
 				rigging: {
 					animations: [
 						{ name: "panic", syntax: "panic|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" },
-						{ name: "line_a", syntax: "linesteep|0;x:50%,50%;y:-10%,-10%|1;(repeat:-1,yoyo:true);scaleX:0.5,1;scaleY:0.5,1" },
+						{
+							name: "line_a",
+							syntax: "linesteep|0;x:50%,50%;y:-10%,-10%|1;(repeat:-1,yoyo:true);scaleX:0.5,1;scaleY:0.5,1",
+						},
 
-						{ name: "line_b", syntax: "linesteep|0;x:35%,35%;y:-5%,-5%;rotation:-22.5,-22.5|1;(repeat:-1,yoyo:true);scaleX:0.5,1;scaleY:0.5,1" },
-						{ name: "line_c", syntax: "linesteep|0;x:15%,15%;y:5%,5%;rotation:-45,-45|1;(repeat:-1,yoyo:true);scaleX:0.5,1;scaleY:0.5,1" },
-						{ name: "line_d", syntax: "linesteep|0;x:0%,0%;y:20%,20%;rotation:-67.5,-67.5|1;(repeat:-1,yoyo:true);scaleX:0.5,1;scaleY:0.5,1" },
-						{ name: "line_e", syntax: "linesteep|0;x:-10%,-10%;y:30%,30%;rotation:-90,-90|1;(repeat:-1,yoyo:true);scaleX:0.5,1;scaleY:0.5,1" },
+						{
+							name: "line_b",
+							syntax: "linesteep|0;x:35%,35%;y:-5%,-5%;rotation:-22.5,-22.5|1;(repeat:-1,yoyo:true);scaleX:0.5,1;scaleY:0.5,1",
+						},
+						{
+							name: "line_c",
+							syntax: "linesteep|0;x:15%,15%;y:5%,5%;rotation:-45,-45|1;(repeat:-1,yoyo:true);scaleX:0.5,1;scaleY:0.5,1",
+						},
+						{
+							name: "line_d",
+							syntax: "linesteep|0;x:0%,0%;y:20%,20%;rotation:-67.5,-67.5|1;(repeat:-1,yoyo:true);scaleX:0.5,1;scaleY:0.5,1",
+						},
+						{
+							name: "line_e",
+							syntax: "linesteep|0;x:-10%,-10%;y:30%,30%;rotation:-90,-90|1;(repeat:-1,yoyo:true);scaleX:0.5,1;scaleY:0.5,1",
+						},
 
-						{ name: "line_f", syntax: "linesteep|0;x:65%,65%;y:-5%,-5%;rotation:22.5,22.5|1;(repeat:-1,yoyo:true);scaleX:0.5,1;scaleY:0.5,1" },
-						{ name: "line_g", syntax: "linesteep|0;x:85%,85%;y:5%,5%;rotation:45,45|1;(repeat:-1,yoyo:true);scaleX:0.5,1;scaleY:0.5,1" },
-						{ name: "line_h", syntax: "linesteep|0;x:100%,100%;y:20%,20%;rotation:67.5,67.5|1;(repeat:-1,yoyo:true);scaleX:0.5,1;scaleY:0.5,1" },
-						{ name: "line_i", syntax: "linesteep|0;x:110%,110%;y:30%,30%;rotation:90,90|1;(repeat:-1,yoyo:true);scaleX:0.5,1;scaleY:0.5,1" },
+						{
+							name: "line_f",
+							syntax: "linesteep|0;x:65%,65%;y:-5%,-5%;rotation:22.5,22.5|1;(repeat:-1,yoyo:true);scaleX:0.5,1;scaleY:0.5,1",
+						},
+						{
+							name: "line_g",
+							syntax: "linesteep|0;x:85%,85%;y:5%,5%;rotation:45,45|1;(repeat:-1,yoyo:true);scaleX:0.5,1;scaleY:0.5,1",
+						},
+						{
+							name: "line_h",
+							syntax: "linesteep|0;x:100%,100%;y:20%,20%;rotation:67.5,67.5|1;(repeat:-1,yoyo:true);scaleX:0.5,1;scaleY:0.5,1",
+						},
+						{
+							name: "line_i",
+							syntax: "linesteep|0;x:110%,110%;y:30%,30%;rotation:90,90|1;(repeat:-1,yoyo:true);scaleX:0.5,1;scaleY:0.5,1",
+						},
 					],
 				},
 			},
@@ -7776,8 +8098,8 @@ class Theatre {
 		ev.preventDefault();
 		if (Theatre.DEBUG) console.log("Click Event on Configure Theatre!!!", actorSheet, actorSheet.actor, actorSheet.position);
 
-		if (!actorSheet.actor.data.flags.theatre) {
-			actorSheet.actor.data.flags.theatre = { baseinsert: "", name: "" };
+		if (!actorSheet.actor.flags.theatre) {
+			actorSheet.actor.flags.theatre = { baseinsert: "", name: "" };
 		}
 
 		new TheatreActorConfig(actorSheet.actor, {
@@ -7822,9 +8144,9 @@ class Theatre {
 		if (Theatre.DEBUG) console.log("actor is valid!");
 		// if already on stage, dont add it again
 		// create nav-list-item
-		// set picture as actor.data.img
+		// set picture as actor.img
 		// set attribute "theatre-id" to "theatre" + _id
-		// set attribute "insertImg" to object.data.flags.theatre.baseinsert or img if not specified
+		// set attribute "insertImg" to object.flags.theatre.baseinsert or img if not specified
 		// add click handler to push it into the theatre bar, if it already exists on the bar, remove it
 		// from the bar
 		// add click handler logic to remove it from the stage
