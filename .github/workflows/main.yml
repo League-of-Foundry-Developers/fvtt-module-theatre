@@ -32,7 +32,7 @@ jobs:
           download: https://github.com/${{github.repository}}/releases/download/${{ steps.get_version.outputs.VERSION }}/theatre.zip
 
       - name: Zip files
-        run: zip -r theatre * -x ".github/*"
+        run: zip -r theatre * -x ".github/* wiki/*"
 
      # Create a release for this specific version
       - name: Create Release
