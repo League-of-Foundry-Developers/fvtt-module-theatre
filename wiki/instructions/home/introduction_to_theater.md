@@ -20,9 +20,9 @@ _It's Showtime_
 
 Theatre typically works in the following matter:
 
-1. Open actor sheet you want to [stage](/wiki/instructions/reference/terminologies#stage).
-2. Click the [stage](/wiki/instructions/reference/terminologies#stage) button in the actor's title bar to add the actor to the [staging-area](/wiki/instructions/reference/terminologies#staging-area).
-3. Return to chat tab, and left click the [stage-item](/wiki/instructions/reference/terminologies#stage-item) for the actor on the [staging-area](/wiki/instructions/reference/terminologies#staging-area).
+1. Open actor sheet you want to [stage](/wiki/instructions/reference/terminologies.md#stage).
+2. Click the [stage](/wiki/instructions/reference/terminologies.md#stage) button in the actor's title bar to add the actor to the [staging-area](/wiki/instructions/reference/terminologies.md#staging-area).
+3. Return to chat tab, and left click the [stage-item](/wiki/instructions/reference/terminologies.md#stage-item) for the actor on the [staging-area](/wiki/instructions/reference/terminologies.md#staging-area).
 4. Type in the message box and submit a message as that character.
 
 The [control reference](/wiki/instructions/reference/control_reference.md) will have the remaining details on control. It's also useful to see the [terminologies](/wiki/instructions/reference/terminologies.md) that will be used, as they're referenced throughout this documentation. In the event of bug reports, I will also use this terminology, and expect it when reading such bugs.

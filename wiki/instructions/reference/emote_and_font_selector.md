@@ -4,10 +4,10 @@ The Emote and Font selector is triggered by activating the 'smiley' icon button,
 
 ![img1](/wiki/images/emote_and_font_selector_1.png)
 
-- [Emote selector](/wiki/instructions/reference/emote_and_font_selector#emote-selector)
-- [Font controls](/wiki/instructions/reference/emote_and_font_selector#font-controls)
-- [Fly-in Text Animation](/wiki/instructions/reference/emote_and_font_selector#fly-in-text-animation)
-- [Standing Text Animation](/wiki/instructions/reference/emote_and_font_selector#standing-text-animation)
+- [Emote selector](/wiki/instructions/reference/emote_and_font_selector.md#emote-selector)
+- [Font controls](/wiki/instructions/reference/emote_and_font_selector.md#font-controls)
+- [Fly-in Text Animation](/wiki/instructions/reference/emote_and_font_selector.md#fly-in-text-animation)
+- [Standing Text Animation](/wiki/instructions/reference/emote_and_font_selector.md#standing-text-animation)
 
 Also, all inserts when *removed* from the theatre dock, will save their current emote/text/font settings to the actor from which they are derived. This will allow GMs and Players to set 'themes' for NPCs that they can save for later, without the need to constantly re-apply it for each actor upon re-staging at later sessions.
 
