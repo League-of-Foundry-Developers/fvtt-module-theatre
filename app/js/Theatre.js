@@ -8236,7 +8236,7 @@ class Theatre {
 
 	static clearStage() {
 		Object.keys(Theatre.instance.stage).forEach((theatreId) => {
-			Theatre._removeFromStage(theatreId);
+			Theatre.instance._removeFromStage(theatreId);
 		});
 	}
 
