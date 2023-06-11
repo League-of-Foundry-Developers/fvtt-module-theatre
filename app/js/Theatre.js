@@ -940,110 +940,109 @@ class Theatre {
 				toInject.push({ params: params, emotions: dat.emotions });
 			}
 			// let the clearing animation complete
-			window.setTimeout(() => {
+			window.setTimeout(async () => {
 				// stage all inserts;
 				let ids = data.insertdata.map((e) => e.insertid);
 				//once all inserts are staged, start our injections
-				this.stageAllInserts(ids, (loader, resources) => {
-					// due to the 'dual dock' mode and how it combines, we can't just push the reverse
-					// if we want to preserve order
-					if (toInject.length >= 2) {
-						this.injectLeftPortrait(
-							toInject[toInject.length - 2].params.src,
-							toInject[toInject.length - 2].params.name,
-							toInject[toInject.length - 2].params.imgId,
-							toInject[toInject.length - 2].params.optalign,
+				await this.stageAllInserts(ids);
+				// due to the 'dual dock' mode and how it combines, we can't just push the reverse
+				// if we want to preserve order
+				if (toInject.length >= 2) {
+					await this.injectLeftPortrait(
+						toInject[toInject.length - 2].params.src,
+						toInject[toInject.length - 2].params.name,
+						toInject[toInject.length - 2].params.imgId,
+						toInject[toInject.length - 2].params.optalign,
+						{
+							emote: toInject[toInject.length - 2].emotions.emote,
+							textFlyin: toInject[toInject.length - 2].emotions.textflyin,
+							textStanding: toInject[toInject.length - 2].emotions.textstanding,
+							textFont: toInject[toInject.length - 2].emotions.textfont,
+							textSize: toInject[toInject.length - 2].emotions.textsize,
+							textColor: toInject[toInject.length - 2].emotions.textcolor,
+						},
+						true
+					);
+					await this.injectLeftPortrait(
+						toInject[toInject.length - 1].params.src,
+						toInject[toInject.length - 1].params.name,
+						toInject[toInject.length - 1].params.imgId,
+						toInject[toInject.length - 1].params.optalign,
+						{
+							emote: toInject[toInject.length - 1].emotions.emote,
+							textFlyin: toInject[toInject.length - 1].emotions.textflyin,
+							textStanding: toInject[toInject.length - 1].emotions.textstanding,
+							textFont: toInject[toInject.length - 1].emotions.textfont,
+							textSize: toInject[toInject.length - 1].emotions.textsize,
+							textColor: toInject[toInject.length - 1].emotions.textcolor,
+						},
+						true
+					);
+					for (let idx = toInject.length - 3; idx >= 0; --idx)
+					await this.injectLeftPortrait(
+							toInject[idx].params.src,
+							toInject[idx].params.name,
+							toInject[idx].params.imgId,
+							toInject[idx].params.optalign,
 							{
-								emote: toInject[toInject.length - 2].emotions.emote,
-								textFlyin: toInject[toInject.length - 2].emotions.textflyin,
-								textStanding: toInject[toInject.length - 2].emotions.textstanding,
-								textFont: toInject[toInject.length - 2].emotions.textfont,
-								textSize: toInject[toInject.length - 2].emotions.textsize,
-								textColor: toInject[toInject.length - 2].emotions.textcolor,
+								emote: toInject[idx].emotions.emote,
+								textFlyin: toInject[idx].emotions.textflyin,
+								textStanding: toInject[idx].emotions.textstanding,
+								textFont: toInject[idx].emotions.textfont,
+								textSize: toInject[idx].emotions.textsize,
+								textColor: toInject[idx].emotions.textcolor,
 							},
 							true
 						);
-						this.injectLeftPortrait(
-							toInject[toInject.length - 1].params.src,
-							toInject[toInject.length - 1].params.name,
-							toInject[toInject.length - 1].params.imgId,
-							toInject[toInject.length - 1].params.optalign,
-							{
-								emote: toInject[toInject.length - 1].emotions.emote,
-								textFlyin: toInject[toInject.length - 1].emotions.textflyin,
-								textStanding: toInject[toInject.length - 1].emotions.textstanding,
-								textFont: toInject[toInject.length - 1].emotions.textfont,
-								textSize: toInject[toInject.length - 1].emotions.textsize,
-								textColor: toInject[toInject.length - 1].emotions.textcolor,
-							},
-							true
-						);
-						for (let idx = toInject.length - 3; idx >= 0; --idx)
-							this.injectLeftPortrait(
-								toInject[idx].params.src,
-								toInject[idx].params.name,
-								toInject[idx].params.imgId,
-								toInject[idx].params.optalign,
-								{
-									emote: toInject[idx].emotions.emote,
-									textFlyin: toInject[idx].emotions.textflyin,
-									textStanding: toInject[idx].emotions.textstanding,
-									textFont: toInject[idx].emotions.textfont,
-									textSize: toInject[idx].emotions.textsize,
-									textColor: toInject[idx].emotions.textcolor,
-								},
-								true
-							);
-					} else if (toInject.length == 1) {
-						this.injectLeftPortrait(
-							toInject[0].params.src,
-							toInject[0].params.name,
-							toInject[0].params.imgId,
-							toInject[0].params.optalign,
-							{
-								emote: toInject[0].emotions.emote,
-								textFlyin: toInject[0].emotions.textflyin,
-								textStanding: toInject[0].emotions.textstanding,
-								textFont: toInject[0].emotions.textfont,
-								textSize: toInject[0].emotions.textsize,
-								textColor: toInject[0].emotions.textcolor,
-							},
-							true
-						);
-					}
-					// finally apply positioning for 3n total run speed
-					window.setTimeout(() => {
-						for (let dat of data.insertdata) {
-							insert = this.getInsertById(dat.insertid);
-							//console.log("attempting to apply position to ",insert,dat.insertid,dat);
-							if (insert) {
-								if (Theatre.DEBUG) console.log("insert active post resync add, appying position");
-								// apply mirror state
-								/*
-								if (Boolean(dat.position.mirror) != insert.mirrored)
-									this._mirrorInsert(port,true);
-								*/
-								if (Theatre.DEBUG) console.log("Mirror ? %s : %s", dat.position.mirror, insert.mirrored);
-								if (Boolean(dat.position.mirror) != insert.mirrored) {
-									if (Theatre.DEBUG) console.log("no match!");
-									insert.mirrored = Boolean(dat.position.mirror);
-								}
-								// apply positioning data
-								insert.portraitContainer.scale.x = insert.mirrored ? -1 : 1;
-								insert.portraitContainer.x = dat.position.x;
-								insert.portraitContainer.y = dat.position.y;
-								// apply texyflyin/textstanding data
-								insert.textFlyin = dat.emotions.textflyin;
-								insert.textStanding = dat.emotions.textstanding;
-								insert.textFont = dat.emotions.textfont;
-								insert.textSize = dat.emotions.textsize;
-								insert.textColor = dat.emotions.textcolor;
+				} else if (toInject.length == 1) {
+					await this.injectLeftPortrait(
+						toInject[0].params.src,
+						toInject[0].params.name,
+						toInject[0].params.imgId,
+						toInject[0].params.optalign,
+						{
+							emote: toInject[0].emotions.emote,
+							textFlyin: toInject[0].emotions.textflyin,
+							textStanding: toInject[0].emotions.textstanding,
+							textFont: toInject[0].emotions.textfont,
+							textSize: toInject[0].emotions.textsize,
+							textColor: toInject[0].emotions.textcolor,
+						},
+						true
+					);
+				}
+				// finally apply positioning for 3n total run speed
+				window.setTimeout(() => {
+					for (let dat of data.insertdata) {
+						insert = this.getInsertById(dat.insertid);
+						//console.log("attempting to apply position to ",insert,dat.insertid,dat);
+						if (insert) {
+							if (Theatre.DEBUG) console.log("insert active post resync add, appying position");
+							// apply mirror state
+							/*
+							if (Boolean(dat.position.mirror) != insert.mirrored)
+								this._mirrorInsert(port,true);
+							*/
+							if (Theatre.DEBUG) console.log("Mirror ? %s : %s", dat.position.mirror, insert.mirrored);
+							if (Boolean(dat.position.mirror) != insert.mirrored) {
+								if (Theatre.DEBUG) console.log("no match!");
+								insert.mirrored = Boolean(dat.position.mirror);
 							}
+							// apply positioning data
+							insert.portraitContainer.scale.x = insert.mirrored ? -1 : 1;
+							insert.portraitContainer.x = dat.position.x;
+							insert.portraitContainer.y = dat.position.y;
+							// apply texyflyin/textstanding data
+							insert.textFlyin = dat.emotions.textflyin;
+							insert.textStanding = dat.emotions.textstanding;
+							insert.textFont = dat.emotions.textfont;
+							insert.textSize = dat.emotions.textsize;
+							insert.textColor = dat.emotions.textcolor;
 						}
-						// apply Narrator bar last
-						this.toggleNarratorBar(data.narrator);
-					}, 1000);
-				});
+					}
+					// apply Narrator bar last
+					this.toggleNarratorBar(data.narrator);
+				}, 1000);
 			}, 1600);
 		}
 	}
@@ -1075,7 +1074,7 @@ class Theatre {
 	 *
 	 * @private
 	 */
-	_processSceneEvent(senderId, type, data) {
+	async _processSceneEvent(senderId, type, data) {
 		if (Theatre.DEBUG) console.log("Processing scene event %s", type, data);
 		let insert, actorId, params, emote, port, emotions, resName, app, insertEmote, render;
 
@@ -1096,8 +1095,8 @@ class Theatre {
 					  };
 				if (!params) return;
 				if (Theatre.DEBUG) console.log("params: ", params);
-				if (data.isleft) this.injectLeftPortrait(params.src, params.name, params.imgId, params.optalign, emotions, true);
-				else this.injectRightPortrait(params.src, params.name, params.imgId, params.optalign, emotions, true);
+				if (data.isleft) await this.injectLeftPortrait(params.src, params.name, params.imgId, params.optalign, emotions, true);
+				else await this.injectRightPortrait(params.src, params.name, params.imgId, params.optalign, emotions, true);
 
 				break;
 			case "exitscene":
@@ -1156,7 +1155,7 @@ class Theatre {
 				this.setUserEmote(senderId, data.insertid, "textcolor", textColor, true);
 				if (data.insertid == this.speakingAs) this.renderEmoteMenu();
 				break;
-			case "addtexture":
+			case "addtexture": {
 				if (Theatre.DEBUG) console.log("texturereplace:", data);
 				insert = this.getInsertById(data.insertid);
 				actorId = data.insertid.replace("theatre-", "");
@@ -1170,40 +1169,38 @@ class Theatre {
 				if (insertEmote == data.emote) render = true;
 				else if (!data.emote) render = true;
 
-				this._AddTextureResource(
+				const resources = await this._AddTextureResource(
 					data.imgsrc,
 					data.resname,
 					data.insertid,
 					data.emote,
-					(loader, resources) => {
-						// if oure emote is active and we're replacing the emote texture, or base is active, and we're replacing the base texture
-
-						if (Theatre.DEBUG) console.log("add replacement complete! ", resources[data.resname], insertEmote, data.emote, render);
-						if (render && app && insert && insert.dockContainer) {
-							if (Theatre.DEBUG) console.log("RE-RENDERING with NEW texture resource %s : %s", data.resname, data.imgsrc);
-
-							// bubble up dataum from the update
-							insert.optAlign = params.optalign;
-							insert.name = params.name;
-							insert.label.text = params.name;
-
-							this._clearPortraitContainer(data.insertid);
-							this._setupPortraitContainer(data.insertid, insert.optAlign, data.resname, resources);
-							// re-attach label + typingBubble
-							insert.dockContainer.addChild(insert.label);
-							insert.dockContainer.addChild(insert.typingBubble);
-
-							this._repositionInsertElements(insert);
-
-							if (data.insertid == this.speakingAs);
-							this.renderEmoteMenu();
-							if (!this.rendering) this._renderTheatre(performance.now());
-						}
-					},
 					true
 				);
+				// if oure emote is active and we're replacing the emote texture, or base is active, and we're replacing the base texture
+				if (Theatre.DEBUG) console.log("add replacement complete! ", resources[data.resname], insertEmote, data.emote, render);
+				if (render && app && insert && insert.dockContainer) {
+					if (Theatre.DEBUG) console.log("RE-RENDERING with NEW texture resource %s : %s", data.resname, data.imgsrc);
+
+					// bubble up dataum from the update
+					insert.optAlign = params.optalign;
+					insert.name = params.name;
+					insert.label.text = params.name;
+
+					this._clearPortraitContainer(data.insertid);
+					await this._setupPortraitContainer(data.insertid, insert.optAlign, data.resname, resources);
+					// re-attach label + typingBubble
+					insert.dockContainer.addChild(insert.label);
+					insert.dockContainer.addChild(insert.typingBubble);
+
+					this._repositionInsertElements(insert);
+
+					if (data.insertid == this.speakingAs);
+					this.renderEmoteMenu();
+					if (!this.rendering) this._renderTheatre(performance.now());
+				}
 				break;
-			case "addalltextures":
+			}
+			case "addalltextures": {
 				if (Theatre.DEBUG) console.log("textureallreplace:", data);
 				insert = this.getInsertById(data.insertid);
 				actorId = data.insertid.replace("theatre-", "");
@@ -1217,40 +1214,39 @@ class Theatre {
 				if (insertEmote == data.emote) render = true;
 				else if (!data.emote) render = true;
 
-				this._AddAllTextureResources(
+				const resources = await this._AddAllTextureResources(
 					data.imgsrcs,
 					data.insertid,
 					data.emote,
 					data.eresname,
-					(loader, resources) => {
-						// if oure emote is active and we're replacing the emote texture, or base is active, and we're replacing the base texture
-
-						if (Theatre.DEBUG) console.log("add all textures complete! ", data.emote, data.eresname, params.emotes[data.emote]);
-						if (render && app && insert && insert.dockContainer && data.eresname) {
-							if (Theatre.DEBUG) console.log("RE-RENDERING with NEW texture resource %s", data.eresname);
-
-							// bubble up dataum from the update
-							insert.optAlign = params.optalign;
-							insert.name = params.name;
-							insert.label.text = params.name;
-
-							this._clearPortraitContainer(data.insertid);
-							this._setupPortraitContainer(data.insertid, insert.optAlign, data.eresname, resources);
-							// re-attach label + typingBubble
-							insert.dockContainer.addChild(insert.label);
-							insert.dockContainer.addChild(insert.typingBubble);
-
-							this._repositionInsertElements(insert);
-
-							if (data.insertid == this.speakingAs);
-							this.renderEmoteMenu();
-							if (!this.rendering) this._renderTheatre(performance.now());
-						}
-					},
 					true
 				);
+				// if oure emote is active and we're replacing the emote texture, or base is active, and we're replacing the base texture
+
+				if (Theatre.DEBUG) console.log("add all textures complete! ", data.emote, data.eresname, params.emotes[data.emote]);
+				if (render && app && insert && insert.dockContainer && data.eresname) {
+					if (Theatre.DEBUG) console.log("RE-RENDERING with NEW texture resource %s", data.eresname);
+
+					// bubble up dataum from the update
+					insert.optAlign = params.optalign;
+					insert.name = params.name;
+					insert.label.text = params.name;
+
+					this._clearPortraitContainer(data.insertid);
+					await this._setupPortraitContainer(data.insertid, insert.optAlign, data.eresname, resources);
+					// re-attach label + typingBubble
+					insert.dockContainer.addChild(insert.label);
+					insert.dockContainer.addChild(insert.typingBubble);
+
+					this._repositionInsertElements(insert);
+
+					if (data.insertid == this.speakingAs);
+					this.renderEmoteMenu();
+					if (!this.rendering) this._renderTheatre(performance.now());
+				}
 
 				break;
+			}
 			case "stage":
 				if (Theatre.DEBUG) console.log("staging insert", data.insertid);
 				this.stageInsertById(data.insertid, true);
@@ -1265,7 +1261,7 @@ class Theatre {
 				break;
 			case "renderinsert":
 				insert = this.getInsertById(data.insertid);
-				if (insert) this.renderInsertById(data.insertid);
+				if (insert) await this.renderInsertById(data.insertid);
 				break;
 			default:
 				console.log("UNKNOWN SCENE EVENT: %s with data: ", type, data);
@@ -1853,7 +1849,7 @@ class Theatre {
 	 *
 	 * @params id (String) : The theatreId of the insert to render.
 	 */
-	renderInsertById(id) {
+	async renderInsertById(id) {
 		let insert = this.getInsertById(id);
 		let actorId = id.replace("theatre-", "");
 		let resName = "icons/myster-man.png";
@@ -1869,7 +1865,7 @@ class Theatre {
 		insert.label.text = params.name;
 
 		this._clearPortraitContainer(id);
-		this._setupPortraitContainer(id, params.optalign, resName, PIXI.Loader.shared.resources);
+		await this._setupPortraitContainer(id, params.optalign, resName);
 		// re attach label + typing bubble
 		insert.dockContainer.addChild(insert.label);
 		insert.dockContainer.addChild(insert.typingBubble);
@@ -1922,12 +1918,11 @@ class Theatre {
 	 * @params emote (String) : The emote of the theatreId to get for dispay
 	 *                          in the theatre tool tip.
 	 */
-	configureTheatreToolTip(theatreId, emote) {
+	async configureTheatreToolTip(theatreId, emote) {
 		if (!theatreId || theatreId == Theatre.NARRATOR) return;
 
 		let actorId = theatreId.replace("theatre-", "");
 		let params = this._getInsertParamsFromActorId(actorId);
-		let resources = PIXI.Loader.shared.resources;
 
 		if (!params) {
 			console.log("ERROR actor no longer exists for %s", theatreId);
@@ -1936,8 +1931,10 @@ class Theatre {
 
 		let resName = emote && params.emotes[emote] && params.emotes[emote].insert ? params.emotes[emote].insert : params.src;
 
-		if (!resources[resName] || !resources[resName].texture) {
-			console.log("ERROR could not load texture (for tooltip) %s", resName, resources);
+		const texture = await PIXI.Assets.load(resName);
+
+		if (texture) {
+			console.log("ERROR could not load texture (for tooltip) %s", resName);
 			return;
 		}
 
@@ -1950,9 +1947,9 @@ class Theatre {
 			//app.stage.removeChildAt(idx);
 		}
 
-		let sprite = new PIXI.Sprite(resources[resName].texture);
-		let portWidth = resources[resName].texture.width;
-		let portHeight = resources[resName].texture.height;
+		let sprite = new PIXI.Sprite(texture);
+		let portWidth = texture.width;
+		let portHeight = texture.height;
 		let maxSide = Math.max(portWidth, portHeight);
 		let scaledWidth, scaledHeight, ratio;
 		if (maxSide == portWidth) {
@@ -2243,7 +2240,7 @@ class Theatre {
 	 *
 	 * @private
 	 */
-	_createPortraitPIXIContainer(imgPath, portName, imgId, optAlign, emotions, isLeft) {
+	async _createPortraitPIXIContainer(imgPath, portName, imgId, optAlign, emotions, isLeft) {
 		// given an image, we will generate a PIXI container to add to the theatreDock and size
 		// it to the image loaded
 		let dockContainer = new PIXI.Container();
@@ -2329,29 +2326,27 @@ class Theatre {
 				if (params.emotes[emName].insert && params.emotes[emName].insert != "")
 					imgSrcs.push({ imgpath: params.emotes[emName].insert, resname: params.emotes[emName].insert });
 
-		// handles the waiting game of grabbing loader for us
-		this._addSpritesToPixi(imgSrcs, (loader, resources) => {
-			// PIXI Container is ready!
-			// Setup the dockContainer to display the base insert
-			if (Theatre.DEBUG) console.log("Sprites added to PIXI _createPortraitPIXIContainer", resources);
-			let portWidth = ename && params.emotes[ename] && params.emotes[ename].insert ? resources[params.emotes[ename].insert].texture.width : resources[imgPath].texture.width;
-			let initX = isLeft ? -1 * portWidth : this.theatreDock.offsetWidth + portWidth;
+		const resources = await this._addSpritesToPixi(imgSrcs)
+		// PIXI Container is ready!
+		// Setup the dockContainer to display the base insert
+		if (Theatre.DEBUG) console.log("Sprites added to PIXI _createPortraitPIXIContainer", resources);
+		let portWidth = ename && params.emotes[ename] && params.emotes[ename].insert ? resources[params.emotes[ename].insert].width : resources[imgPath].width;
+		let initX = isLeft ? -1 * portWidth : this.theatreDock.offsetWidth + portWidth;
 
-			if (!ename) {
-				// load in default portrait
-				dockContainer.x = initX;
-				this._setupPortraitContainer(imgId, optAlign, imgPath, resources, true);
+		if (!ename) {
+			// load in default portrait
+			dockContainer.x = initX;
+			await this._setupPortraitContainer(imgId, optAlign, imgPath, resources, true);
+		} else {
+			// load in the ename emote portrait instead if possible, else load the default
+			if (params.emotes[ename] && params.emotes[ename].insert) {
+				dockContainer.x = isLeft ? -1 * portWidth : this.theatreDock.offsetWidth + portWidth;
+				await this._setupPortraitContainer(imgId, optAlign, params.emotes[ename].insert, resources, true);
 			} else {
-				// load in the ename emote portrait instead if possible, else load the default
-				if (params.emotes[ename] && params.emotes[ename].insert) {
-					dockContainer.x = isLeft ? -1 * portWidth : this.theatreDock.offsetWidth + portWidth;
-					this._setupPortraitContainer(imgId, optAlign, params.emotes[ename].insert, resources, true);
-				} else {
-					dockContainer.x = initX;
-					this._setupPortraitContainer(imgId, optAlign, imgPath, resources, true);
-				}
+				dockContainer.x = initX;
+				await this._setupPortraitContainer(imgId, optAlign, imgPath, resources, true);
 			}
-		});
+		}
 	}
 
 	/**
@@ -2360,13 +2355,12 @@ class Theatre {
 	 *
 	 * @params imgId (String) : The theatreId of the insert whose portrait we're setting up.
 	 * @params resName (String) : The resource name of the sprite to configure.
-	 * @params resources (Object) : The resource object from PIXI.Loader.shared.
 	 * @params reorder (Boolean) : Boolean to indicate if a reorder should be performed after
 	 *                             an update.
 	 *
 	 * @private
 	 */
-	_setupPortraitContainer(imgId, optAlign, resName, resources, reorder) {
+	async _setupPortraitContainer(imgId, optAlign, resName, resources, reorder) {
 		let insert = this.getInsertById(imgId);
 
 		if (!insert || !insert.dockContainer) {
@@ -2378,7 +2372,7 @@ class Theatre {
 			return;
 		}
 
-		if (!resources[resName] || !resources[resName].texture) {
+		if (!resources[resName]) {
 			console.error("ERROR could not load texture %s", resName, resources);
 			ui.notifications.error(
 				`${game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P1")} ${imgId} ${game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P2")} ${resName}`
@@ -2391,9 +2385,9 @@ class Theatre {
 		let dockContainer = insert.dockContainer;
 		let portraitContainer = insert.portraitContainer;
 
-		let sprite = new PIXI.Sprite(resources[resName].texture);
-		let portWidth = resources[resName].texture.width;
-		let portHeight = resources[resName].texture.height;
+		let sprite = new PIXI.Sprite(resources[resName]);
+		let portWidth = resources[resName].width;
+		let portHeight = resources[resName].height;
 		let maxHeight = game.settings.get(Theatre.SETTINGS, "theatreImageSize");
 		if (portHeight > maxHeight) {
 			portWidth *= maxHeight / portHeight;
@@ -2465,7 +2459,7 @@ class Theatre {
 		// setup typing bubble
 		if (!insert.typingBubble) {
 			let typingBubble = new PIXI.Sprite();
-			typingBubble.texture = resources["modules/theatre/app/graphics/typing.png"].texture;
+			typingBubble.texture = resources["modules/theatre/app/graphics/typing.png"];
 			typingBubble.width = 55;
 			typingBubble.height = 55;
 			typingBubble.theatreComponentName = "typingBubble";
@@ -2507,7 +2501,7 @@ class Theatre {
 			let rigResMap = Theatre.getActorRiggingResources(actorId);
 			if (emotes[insert.emote] && emotes[insert.emote].rigging) {
 				for (let anim of emotes[insert.emote].rigging.animations) {
-					this.addTweensFromAnimationSyntax(anim.name, anim.syntax, rigResMap, insert);
+					await this.addTweensFromAnimationSyntax(anim.name, anim.syntax, rigResMap, insert);
 				}
 			}
 		}
@@ -2743,7 +2737,7 @@ class Theatre {
 	 *
 	 * @private
 	 */
-	async _AddTextureResource(imgSrc, resName, imgId, emote, cb, remote) {
+	async _AddTextureResource(imgSrc, resName, imgId, emote, remote) {
 		// First we pull the insert,canvas,and pixi app from the imgId.
 		// Second, we want to verify that the source image exists, if so,
 		// then we'll proceed.
@@ -2768,23 +2762,14 @@ class Theatre {
 			return;
 		}
 
-		let loader = PIXI.Loader.shared;
-		/*
-		if (loader.resources[resName])
-			loader.resources[resName] = null;
-		*/
-
-		// if we have no resName then just return the cb
+		// if we have no resName then just return empty map
 		if (!resName || resName == "") {
-			cb.call(this, loader, loader.resources);
-			return;
+			return {};
 		}
 
 		let imgSrcs = [{ resname: resName, imgpath: imgSrc }];
 		if (Theatre.DEBUG) console.log("replace textures", imgSrcs);
-		this._addSpritesToPixi(imgSrcs, (loader, resources) => {
-			cb.call(this, loader, resources);
-		});
+		
 
 		// Send to socket
 		if (!remote) {
@@ -2796,6 +2781,7 @@ class Theatre {
 				emote: emote,
 			});
 		}
+		return await this._addSpritesToPixi(imgSrcs);
 	}
 
 	/**
@@ -2813,7 +2799,7 @@ class Theatre {
 	 *
 	 * @private
 	 */
-	async _AddAllTextureResources(imgSrcs, imgId, emote, eresName, cb, remote) {
+	async _AddAllTextureResources(imgSrcs, imgId, emote, eresName, remote) {
 		// First we pull the insert,canvas,and pixi app from the imgId.
 		// Second, we want to verify that the source image exists, if so,
 		// then we'll proceed.
@@ -2839,22 +2825,13 @@ class Theatre {
 				return;
 			}
 
-		let loader = PIXI.Loader.shared;
-		/*
-		if (loader.resources[resName])
-			loader.resources[resName] = null;
-		*/
-
-		// if we have an emtpy imgSrc array, just return the cb
+		// if we have an emtpy imgSrc array, just return empty map
 		if (imgSrcs.length <= 0) {
-			cb.call(this, loader, loader.resources);
-			return;
+			return {};
 		}
 
 		if (Theatre.DEBUG) console.log("replace textures", imgSrcs);
-		this._addSpritesToPixi(imgSrcs, (loader, resources) => {
-			cb.call(this, loader, resources);
-		});
+		
 
 		// Send to socket
 		if (!remote) {
@@ -2866,6 +2843,7 @@ class Theatre {
 				eresname: eresName,
 			});
 		}
+		return await this._addSpritesToPixi(imgSrcs);
 	}
 
 	/**
@@ -2944,64 +2922,18 @@ class Theatre {
 	 *
 	 * @private
 	 */
-	_addSpritesToPixi(imgSrcs, cb) {
+	async _addSpritesToPixi(imgSrcs) {
 		if (Theatre.DEBUG) console.log("adding sprite to dockContainer");
-		let loader = PIXI.Loader.shared;
 
-		// Load in our resources if needed
-
-		// if loader is running, we will stick a timeout and wait,
-		// possibly fighting with others on the event looop for the loader
-		if (!loader.loading) {
-			if (Theatre.DEBUG) console.log("resources", loader);
-			for (let imgTuple of imgSrcs) {
-				let resName = imgTuple.resname;
-				if (!loader.resources[resName]) loader.add(resName, imgTuple.imgpath);
-			}
-
-			loader.load((loader, resources) => {
-				cb.call(this, loader, resources);
-			});
-		} else {
-			window.setTimeout(() => {
-				if (Theatre.DEBUG) console.log("loader not done, waiting");
-				this._getLoaderChainWait(this, imgSrcs, cb).call(this);
-			}, 200);
-		}
+		const resources = {};
+		await Promise.all(imgSrcs.map(async ({resname, imgpath}) => {
+			resources[resname] = resources[imgpath] = await PIXI.Assets.load(imgpath);
+			
+		}))
+		if (Theatre.DEBUG) console.log("resources", resources);
+		return resources;
 	}
 
-	/**
-	 * Loader chain waiting
-	 *
-	 * @params ctx (Context) : The context to invoke the callback with
-	 * @params imcSrcs (Array[Object]) : An array of {imgsrc: (String), resname (String)} pairs
-	 *                                   representing the assets to be loaded into PIXI's loader.
-	 * @params cb (Function) : The function to invoke once the assets are loaded.
-	 *
-	 * @private
-	 */
-	_getLoaderChainWait(ctx, imgSrcs, cb) {
-		let loader = PIXI.Loader.shared;
-		let func = function () {
-			if (!loader.loading) {
-				if (Theatre.DEBUG) console.log("delayed loading resources", loader);
-				for (let imgTuple of imgSrcs) {
-					let resName = imgTuple.resname;
-					if (!loader.resources[resName]) loader.add(resName, imgTuple.imgpath);
-				}
-
-				loader.load((loader, resources) => {
-					cb.call(ctx, loader, resources);
-				});
-			} else {
-				window.setTimeout(() => {
-					if (Theatre.DEBUG) console.log("loader not done, waiting");
-					this._getLoaderChainWait(this, imgSrcs, cb).call(this);
-				}, 200);
-			}
-		};
-		return func;
-	}
 
 	/**
 	 * Given an array of theatreIds, stage them all
@@ -3009,7 +2941,7 @@ class Theatre {
 	 * @params ids (Array[(String)] : An array of theatreIds of inserts to load.
 	 * @params cb (Function) : The function to invoke once the assets are loaded.
 	 */
-	stageAllInserts(ids, cb) {
+	async stageAllInserts(ids) {
 		let actorId, params;
 		let imgSrcs = [];
 		for (let id of ids) {
@@ -3035,7 +2967,7 @@ class Theatre {
 		}
 
 		// load in the sprites
-		this._addSpritesToPixi(imgSrcs, cb);
+		await this._addSpritesToPixi(imgSrcs);
 	}
 
 	/**
@@ -3044,7 +2976,7 @@ class Theatre {
 	 * @params theatreId (String) : The theatreId of the insert to load.
 	 * @params remote (Boolean) : Whether this is being invoked remotely or locally.
 	 */
-	stageInsertById(theatreId, remote) {
+	async stageInsertById(theatreId, remote) {
 		let actorId = theatreId.replace("theatre-", "");
 		let params = this._getInsertParamsFromActorId(actorId);
 		if (!params) return;
@@ -3075,9 +3007,8 @@ class Theatre {
 					imgSrcs.push({ imgpath: params.emotes[emName].insert, resname: params.emotes[emName].insert });
 
 		// load in the sprites
-		this._addSpritesToPixi(imgSrcs, (loader, resources) => {
-			if (Theatre.DEBUG) console.log("staging complete for %s", theatreId, resources);
-		});
+		await this._addSpritesToPixi(imgSrcs);
+		if (Theatre.DEBUG) console.log("staging complete for %s", theatreId);
 
 		// Send socket event
 		if (!remote) Theatre.instance._sendSceneEvent("stage", { insertid: theatreId });
@@ -3117,7 +3048,7 @@ class Theatre {
 	 *
 	 * @private
 	 */
-	_setEmoteForInsert(ename, insert, remote) {
+	async _setEmoteForInsert(ename, insert, remote) {
 		// given the emote name, get the image if possible,
 		// and add it to the insert canvas.
 		//
@@ -3151,37 +3082,33 @@ class Theatre {
 			let emoteResName = emotes[ename].insert;
 			imgSrcs.push({ imgpath: emotes[ename].insert, resname: emoteResName });
 			// add sprites
-			this._addSpritesToPixi(imgSrcs, (loader, resources) => {
-				if (Theatre.DEBUG) console.log("emote insert loaded", resources);
-				// Error loading the sprite
-				if (!resources[emoteResName] || resources[emoteResName].error) {
-					console.error("ERROR loading resource %s : %s : %s", insert.imgId, emoteResName, emotes[ename].insert);
-					ui.notifications.error(
-						game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P1") +
-							+emoteResName +
-							game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P2") +
-							emotes[ename].insert +
-							"'"
-					);
-					this.removeInsertById(insert.imgId);
-				}
+			const resources = await this._addSpritesToPixi(imgSrcs);
+			if (Theatre.DEBUG) console.log("emote insert loaded", resources);
+			// Error loading the sprite
+			if (!resources[emoteResName] || resources[emoteResName].error) {
+				console.error("ERROR loading resource %s : %s : %s", insert.imgId, emoteResName, emotes[ename].insert);
+				ui.notifications.error(
+					game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P1") +
+						+emoteResName +
+						game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P2") +
+						emotes[ename].insert +
+						"'"
+				);
+				this.removeInsertById(insert.imgId);
+			}
 
-				// flag our insert with our emote state
-				insert.emote = ename;
-				// now fix up the PIXI Container and make it pretty
-				this._setupPortraitContainer(insert.imgId, insert.optAlign, emoteResName, resources);
-				// re-attach label + typingBubble
-				insert.dockContainer.addChild(insert.label);
-				insert.dockContainer.addChild(insert.typingBubble);
+			// flag our insert with our emote state
+			insert.emote = ename;
+			// now fix up the PIXI Container and make it pretty
+			await this._setupPortraitContainer(insert.imgId, insert.optAlign, emoteResName, resources);
+			// re-attach label + typingBubble
+			insert.dockContainer.addChild(insert.label);
+			insert.dockContainer.addChild(insert.typingBubble);
 
-				this._repositionInsertElements(insert);
+			this._repositionInsertElements(insert);
 
-				if (!this.rendering) this._renderTheatre(performance.now());
-			});
+			if (!this.rendering) this._renderTheatre(performance.now());
 		} else {
-			// load base insert unless the base insert is already loaded
-			let loader = PIXI.Loader.shared;
-			let baseExists = false;
 
 			this._clearPortraitContainer(insert.imgId);
 
@@ -3190,49 +3117,35 @@ class Theatre {
 			if (ename) insert.emote = ename;
 			else insert.emote = null;
 
-			// if baseInsert is not present, put it in
-			if (!loader.resources[baseInsert]) {
-				let imgSrcs = [];
-				// clear the PIXI Container
-				imgSrcs.push({ imgpath: baseInsert, resname: baseInsert });
-				this._addSpritesToPixi(imgSrcs, (loader, resources) => {
-					if (Theatre.DEBUG) console.log("base insert re-loaded", resources);
-					// Error loading the sprite
-					if (!resources[baseInsert] || resources[baseInsert].error) {
-						console.error("ERROR loading resource %s : %s : %s", insert.imgId, baseInsert, baseInsert);
-						ui.notifications.error(
-							game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P1") +
-								+baseInsert +
-								game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P2") +
-								baseInsert +
-								"'"
-						);
-						this.removeInsertById(insert.imgId);
-					}
+			let imgSrcs = [];
+			// clear the PIXI Container
+			imgSrcs.push({ imgpath: baseInsert, resname: baseInsert });
+			const resources = await this._addSpritesToPixi(imgSrcs);
 
-					// now fix up the PIXI Container and make it pretty
-					this._setupPortraitContainer(insert.imgId, insert.optAlign, baseInsert, resources);
-
-					// re-attach label + typingBubble
-					insert.dockContainer.addChild(insert.label);
-					insert.dockContainer.addChild(insert.typingBubble);
-
-					this._repositionInsertElements(insert);
-
-					if (!this.rendering) this._renderTheatre(performance.now());
-				});
-			} else {
-				// base exists
-				this._setupPortraitContainer(insert.imgId, insert.optAlign, baseInsert, loader.resources);
-
-				// re-attach label + typingBubble
-				insert.dockContainer.addChild(insert.label);
-				insert.dockContainer.addChild(insert.typingBubble);
-
-				this._repositionInsertElements(insert);
-
-				if (!this.rendering) this._renderTheatre(performance.now());
+			if (Theatre.DEBUG) console.log("base insert loaded", resources);
+			// Error loading the sprite
+			if (!resources[baseInsert] || resources[baseInsert].error) {
+				console.error("ERROR loading resource %s : %s : %s", insert.imgId, baseInsert, baseInsert);
+				ui.notifications.error(
+					game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P1") +
+						+baseInsert +
+						game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P2") +
+						baseInsert +
+						"'"
+				);
+				this.removeInsertById(insert.imgId);
 			}
+
+			// now fix up the PIXI Container and make it pretty
+			await this._setupPortraitContainer(insert.imgId, insert.optAlign, baseInsert, resources);
+
+			// re-attach label + typingBubble
+			insert.dockContainer.addChild(insert.label);
+			insert.dockContainer.addChild(insert.typingBubble);
+
+			this._repositionInsertElements(insert);
+
+			if (!this.rendering) this._renderTheatre(performance.now());
 		}
 	}
 
@@ -3444,14 +3357,14 @@ class Theatre {
 	 * @params emotions (Object) : An Object containing the emote states to launch with.
 	 * @params remote (Boolean) : Boolean indicating if this is being invoked remotely, or locally.
 	 */
-	injectLeftPortrait(imgPath, portName, imgId, optAlign, emotions, remote) {
+	async injectLeftPortrait(imgPath, portName, imgId, optAlign, emotions, remote) {
 		if (!!this.getInsertById(imgId)) {
 			console.log('ID "%s" already exists! Refusing to inject %s', imgId, portName);
 			return;
 		}
 		if (this.portraitDocks.length == 1) {
 			// inject Right instread
-			this.injectRightPortrait(imgPath, portName, imgId, optAlign, emotions, remote);
+			await this.injectRightPortrait(imgPath, portName, imgId, optAlign, emotions, remote);
 			return;
 		}
 
@@ -3506,14 +3419,14 @@ class Theatre {
 	 * @params emotions (Object) : An Object containing the emote states to launch with.
 	 * @params remote (Boolean) : Boolean indicating if this is being invoked remotely, or locally.
 	 */
-	injectRightPortrait(imgPath, portName, imgId, optAlign, emotions, remote) {
+	async injectRightPortrait(imgPath, portName, imgId, optAlign, emotions, remote) {
 		if (!!this.getInsertById(imgId)) {
 			console.log('ID "%s" already exists! Refusing to inject %s', imgId, portName);
 			return;
 		}
 		if (this.portraitDocks.length == 0) {
 			// inject Left instread
-			this.injectLeftPortrait(imgPath, portName, imgId, optAlign, emotions, remote);
+			await this.injectLeftPortrait(imgPath, portName, imgId, optAlign, emotions, remote);
 			return;
 		}
 
@@ -4518,22 +4431,22 @@ class Theatre {
 	 * @params insert (Object) :  The object represeting the insert that will contain this
 	 *                            animation.
 	 */
-	addTweensFromAnimationSyntax(animName, animSyntax, resMap, insert) {
+	async addTweensFromAnimationSyntax(animName, animSyntax, resMap, insert) {
 		let tweenParams = Theatre.verifyAnimationSyntax(animSyntax);
 
 		let resTarget = resMap.find((e) => e.name == tweenParams[0].resName);
-		let resource = PIXI.Loader.shared.resources[resTarget.path];
+		let texture = PIXI.Assets.load(resTarget.path);
 
 		if (Theatre.DEBUG) console.log("Adding tweens for animation '%s' from syntax: %s with params: ", animName, animSyntax, tweenParams);
 		//console.log("Resource path is %s, resource: ", resTarget.path, resource);
-		if (!resource) {
+		if (!texture) {
 			console.log('ERROR: resource name : "%s" with path "%s" does not exist!', tweenParams[idx].resName, resTarget.path);
 			return;
 		}
 
-		let sprite = new PIXI.Sprite(resource.texture);
-		let spriteWidth = resource.texture.width;
-		let spriteHeight = resource.texture.height;
+		let sprite = new PIXI.Sprite(texture);
+		let spriteWidth = texture.width;
+		let spriteHeight = texture.height;
 		sprite.anchor.set(0.5);
 		insert.portraitContainer.addChild(sprite);
 
@@ -4676,7 +4589,7 @@ class Theatre {
 	 * @params id (String) : The theatreId of the insert to activate.
 	 * @params ev (Event) : The event that possibly triggered this activation.
 	 */
-	activateInsertById(id, ev) {
+	async activateInsertById(id, ev) {
 		let actorId = id.replace("theatre-", "");
 		let navItem = this.getNavItemById(id);
 		if (!navItem) {
@@ -4775,9 +4688,9 @@ class Theatre {
 			if (Theatre.DEBUG) console.log("ACTIVATING AND INJECTING with Emotions: ", emotions);
 
 			if (ev && !ev.shiftKey) {
-				if (game.user.isGM) this.injectLeftPortrait(src, name, id, optAlign, emotions);
-				else this.injectRightPortrait(src, name, id, optAlign, emotions);
-			} else this.injectRightPortrait(src, name, id, optAlign, emotions);
+				if (game.user.isGM) await this.injectLeftPortrait(src, name, id, optAlign, emotions);
+				else await this.injectRightPortrait(src, name, id, optAlign, emotions);
+			} else await this.injectRightPortrait(src, name, id, optAlign, emotions);
 
 			this.speakingAs = id;
 			KHelpers.addClass(navItem, "theatre-control-nav-bar-item-speakingas");
