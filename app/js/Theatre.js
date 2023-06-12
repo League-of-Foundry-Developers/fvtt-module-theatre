@@ -2040,7 +2040,7 @@ class Theatre {
 
 	/**
 	 * Create the initial dock canvas, future 'portraits'
-	 * witll be PIXI containers whom are sized to the portraits
+	 * will be PIXI containers whom are sized to the portraits
 	 * that they contain.
 	 *
 	 * @return (HTMLElement) : The canvas HTMLElement of the created PIXI Canvas,
@@ -2053,7 +2053,7 @@ class Theatre {
 		// by each container portrait
 
 		let app = new PIXI.Application({
-			transparent: true,
+			backgroundAlpha: 0,
 			antialias: true,
 			width: document.body.offsetWidth,
 		});
