@@ -4435,7 +4435,7 @@ class Theatre {
 		let tweenParams = Theatre.verifyAnimationSyntax(animSyntax);
 
 		let resTarget = resMap.find((e) => e.name == tweenParams[0].resName);
-		let texture = PIXI.Assets.load(resTarget.path);
+		let texture = await PIXI.Assets.load(resTarget.path);
 
 		if (Theatre.DEBUG) console.log("Adding tweens for animation '%s' from syntax: %s with params: ", animName, animSyntax, tweenParams);
 		//console.log("Resource path is %s, resource: ", resTarget.path, resource);
