@@ -379,8 +379,14 @@ class TheatreActorConfig extends FormApplication {
 				insert.name = newName;
 				insert.label.text = newName;
 
+				const proxy = new Proxy({}, {
+					get: function(target, name) {
+						return PIXI.Assets.cache.get(name);
+					}
+				});
 				Theatre.instance._clearPortraitContainer(theatreId);
-				Theatre.instance._setupPortraitContainer(theatreId, newAlign, resName, PIXI.Loader.shared.resources);
+				Theatre.instance._setupPortraitContainer(theatreId, newAlign, resName, proxy);
+				
 				// re-attach label + typingBubble
 				insert.dockContainer.addChild(insert.label);
 				insert.dockContainer.addChild(insert.typingBubble);
