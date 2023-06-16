@@ -75,7 +75,7 @@ class TheatreActorConfig extends FormApplication {
 		return {
 			entityName: entityName,
 			isGM: game.user.isGM,
-			object: duplicate(this.object.data),
+			object: duplicate(this.object),
 			emote: Theatre.getActorEmotes(this.object._id),
 			options: this.options,
 		};
@@ -139,9 +139,9 @@ class TheatreActorConfig extends FormApplication {
 				let namePath = mch + ".name";
 				if (Theatre.DEBUG) console.log("found %s", k, mch, cflagPath, namePath);
 				// if label is both the formData as well as the object, reject the submission
-				let emoteProp = getProperty(this.object.data, mch);
+				let emoteProp = getProperty(this.object, mch);
 				let labelProp = null;
-				if (emoteProp) labelProp = getProperty(this.object.data, labelPath);
+				if (emoteProp) labelProp = getProperty(this.object, labelPath);
 
 				if ((!labelProp || labelProp == "") && (!formData[labelPath] || formData[labelPath] == "")) {
 					console.log("ERROR: No label for custom emote defined!");
@@ -149,8 +149,8 @@ class TheatreActorConfig extends FormApplication {
 					return false;
 				}
 
-				if (!emoteProp || !getProperty(this.object.data, cflagPath)) formData[cflagPath] = true;
-				if (!emoteProp || !getProperty(this.object.data, namePath)) formData[namePath] = name;
+				if (!emoteProp || !getProperty(this.object, cflagPath)) formData[cflagPath] = true;
+				if (!emoteProp || !getProperty(this.object, namePath)) formData[namePath] = name;
 			}
 
 		// collect emote form updates + revised form updates
@@ -273,7 +273,7 @@ class TheatreActorConfig extends FormApplication {
 
 		for (let k in formData)
 			if (k.endsWith("insert") || k.endsWith("baseinsert")) {
-				let oldValue = getProperty(this.object.data, k);
+				let oldValue = getProperty(this.object, k);
 				// if the old value does not exist, we will continue
 				if (formData[k] != oldValue) {
 					let emote = k.match(/emotes\.[a-z0-9\-]+/);
@@ -306,7 +306,7 @@ class TheatreActorConfig extends FormApplication {
 			}
 
 		// check for null'd emotes, push the objects up a level if one exists
-		const newData = mergeObject(this.object.data, emoteFormData, { inplace: false });
+		const newData = mergeObject(this.object, emoteFormData, { inplace: false });
 		let emMerge = newData.flags.theatre.emotes;
 		let nEmotes = {};
 		for (let emProp in emMerge) {

@@ -8031,7 +8031,7 @@ class Theatre {
 	 */
 	static onAddToNavBar(ev, actorSheet, removeLabelSheetHeader) {
 		if (Theatre.DEBUG) console.log("Click Event on Add to NavBar!!", actorSheet, actorSheet.actor, actorSheet.position);
-		const actor = actorSheet.object.data;
+		const actor = actorSheet.object;
 		const addLabel = removeLabelSheetHeader ? "" : game.i18n.localize("Theatre.UI.Config.AddToStage");
 		const removeLabel = removeLabelSheetHeader ? "" : game.i18n.localize("Theatre.UI.Config.RemoveFromStage");
 		let newText;
