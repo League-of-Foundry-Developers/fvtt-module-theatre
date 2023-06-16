@@ -230,9 +230,10 @@ Hooks.on("preCreateChatMessage", function (chatMessage) {
 	if (Theatre.DEBUG) console.log("preCreateChatMessage", chatMessage);
 	// If theatre isn't even ready, then just no
 	if (!Theatre.instance) return;
+	if (chatMessage.rolls.length) return;
 
 	// make the message OOC if needed
-	if (!chatMessage.rolls.length && $(theatre.theatreChatCover).hasClass("theatre-control-chat-cover-ooc")) {
+	if ($(theatre.theatreChatCover).hasClass("theatre-control-chat-cover-ooc")) {
 		const user = game.users.get(chatMessage.user.id);
 		chatData.speaker.alias = user.name;
 		chatData.type = CONST.CHAT_MESSAGE_TYPES.OOC;
@@ -241,7 +242,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage) {
 		return;
 	}
 
-	if (!chatMessage.rolls.length && Theatre.instance.speakingAs && Theatre.instance.usersTyping[chatMessage.user.id]) {
+	if (Theatre.instance.speakingAs && Theatre.instance.usersTyping[chatMessage.user.id]) {
 		let theatreId = Theatre.instance.usersTyping[chatMessage.user.id].theatreId;
 		let insert = Theatre.instance.getInsertById(theatreId);
 		let actorId = theatreId.replace("theatre-", "");
@@ -290,7 +291,6 @@ Hooks.on("preCreateChatMessage", function (chatMessage) {
 	if (Theatre.DEBUG) console.log("speaker? ", chatMessage.speaker);
 	if (
 		Theatre.instance.isQuoteAuto &&
-		!chatMessage.rolls.length &&
 		chatMessage.speaker &&
 		(chatData.speaker.actor || chatData.speaker.token || chatData.speaker.alias) &&
 		!chatMessage.content.match(/\<div.*\>[\s\S]*\<\/div\>/)
