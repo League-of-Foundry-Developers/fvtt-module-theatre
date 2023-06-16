@@ -1961,9 +1961,10 @@ class Theatre {
 			app.stage.height = scaledHeight;
 
 			app.stage.addChild(sprite);
-			app.stage.scale.x = ratio * 2;
-			app.stage.scale.y = ratio * 2;
-			app.stage.y = 70 - (portHeight * ratio) / 2;
+			app.stage.scale.x = ratio;
+			app.stage.scale.y = ratio;
+			app.stage.x = 0;
+			app.stage.y = 70 - scaledHeight / 2;
 		} else {
 			// scale portHeight to 200px, assign width as a fraction
 			scaledHeight = 140;
@@ -1973,9 +1974,10 @@ class Theatre {
 			app.stage.height = scaledHeight;
 
 			app.stage.addChild(sprite);
-			app.stage.scale.x = ratio * 2;
-			app.stage.scale.y = ratio * 2;
-			app.stage.x = 70 - (portWidth * ratio * 2) / 2;
+			app.stage.scale.x = ratio;
+			app.stage.scale.y = ratio;
+			app.stage.x = 70 - scaledWidth / 2;
+			app.stage.y = 0;
 		}
 
 		// adjust dockContainer + portraitContainer dimensions to fit the image
