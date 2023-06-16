@@ -92,7 +92,7 @@
 	"download": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/latest/theatre.zip",
 	"manifest": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/latest/module.json",
 	"compatibility": {
-		"minimum": "10",
-		"verified": "10"
+		"minimum": "11",
+		"verified": "11"
 	}
 }
