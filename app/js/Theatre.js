@@ -1933,7 +1933,7 @@ class Theatre {
 
 		const texture = await PIXI.Assets.load(resName);
 
-		if (texture) {
+		if (!texture) {
 			console.log("ERROR could not load texture (for tooltip) %s", resName);
 			return;
 		}
