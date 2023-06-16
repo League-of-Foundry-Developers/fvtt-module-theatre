@@ -1,9 +1,5 @@
 # Introduction to Theatre
 
-## PLEASE NOTE: Theatre is migrating to a future VTT that is not FVTT which will integrate it as a first class tool with more support and features.
-
-### This was done due to actions taken by the developer of FVTT.
-
 ## Introduction
 
 Theatre is at its core is a simple portrait display mechanism to facilitate immersive role-play by utilizing character artwork. It was designed for ease of use to stay 'out of the way' when not needed, and displaying prominently when desired.
@@ -40,10 +36,6 @@ The [control reference](/wiki/instructions/reference/control_reference.md) will 
 ### [Auxiliary Controls](/wiki/instructions/reference/auxiliary_controls.md)
 
 ### [Theatre Settings](/wiki/instructions/reference/theatre_settings.md)
-
-## Suggestions
-
-You have a suggestion for more features? First take a look [here](/wiki/instructions/home/suggestions_and_improvements.md).
 
 ## Attribution Notice
 
