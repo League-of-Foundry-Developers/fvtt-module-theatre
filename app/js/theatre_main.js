@@ -432,7 +432,6 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
 			insertFontSize = Number(Theatre.instance.theatreNarrator.getAttribute("textsize"));
 			insertFontColor = Theatre.instance.theatreNarrator.getAttribute("textcolor");
 		}
-
 		let fontSize = Number(textBox.getAttribute("osize") || 28);
 		//console.log("font PRE(%s): ",insertFontSize,fontSize)
 		switch (insertFontSize) {
@@ -451,6 +450,34 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
 		textBox.style.color = insertFontColor || "white";
 		textBox.style["font-size"] = `${fontSize}px`;
 		textBox.scrollTop = 0;
+		if (typeof polyglot !== 'undefined') {
+			// Get current language being processed
+			const lang = chatData.flags.polyglot.language;
+			// Fetch the languages known by current user
+			let langs = game.polyglot.getUserLanguages();
+			let understood = false;
+			for (lang_set of langs.values()) {
+			  for (item of lang_set.values()) {
+				// If the user has a matching language in their list, we understand it
+				if (lang == item) {
+				  understood = true;
+				  break;
+				}
+			  }
+			}			
+		if (game.user.isGM || game.user.name == "Stream" || game.user.name == "stream"){
+			understood = true;
+		}
+		if (!understood) {
+			// If not understood, scramble the text
+			const fontStyle = game.polyglot._getFontStyle(lang);
+			fontSize *= Math.floor(Number(fontStyle.slice(0,3))/100);
+			insertFontType = fontStyle.slice(5);
+			textContent = game.polyglot.scrambleString(textContent, chatData._id, lang);
+			}
+		}
+
+
 
 		charSpans = Theatre.splitTextBoxToChars(textContent, textBox);
 
