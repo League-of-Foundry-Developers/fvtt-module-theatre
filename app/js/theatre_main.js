@@ -222,7 +222,8 @@ Hooks.on("deleteCombat", function () {
 Hooks.on("preCreateChatMessage", function (chatMessage) {
 	let chatData = {
 		speaker: {
-			actor: null,
+			//actor: null, 
+			//The above line is causing issues with chat buttons in v11 in certain systems. Will revert if it causes unforseen issues in other systems.
 			scene: null,
 			flags: {},
 		},
