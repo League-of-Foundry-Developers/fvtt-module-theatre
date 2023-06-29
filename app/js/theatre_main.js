@@ -219,7 +219,7 @@ Hooks.on("deleteCombat", function () {
  * Pre-process chat message to set 'speaking as' to correspond
  * to our 'speaking as'
  */
-Hooks.on("preCreateChatMessage", function (chatMessage) {
+/*Hooks.on("preCreateChatMessage", function (chatMessage) {
 	let chatData = {
 		speaker: {
 			//actor: null, 
@@ -302,7 +302,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage) {
 			game.i18n.localize(`Theatre.Text.CloseBracket.${Theatre.instance.settings.quoteType}`);
 	}
 	chatMessage.updateSource(chatData);
-});
+});*/
 
 /**
  * Chat message Binding
