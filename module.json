@@ -1,98 +1,100 @@
 {
-	"id": "theatre",
-	"title": "Theatre Inserts",
-	"description": "Theater Inserts with a visual novel style made for heavy roleplay scenes",
-	"version": "2.3.1",
-	"authors": [
-		{
-			"name": "Ken L"
-		},
-		{
-			"name": "Noah Zorbaugh"
-		},
-		{
-			"name": "U~man"
-		},
-		{
-			"name": "KaKaRoTo"
-		},
-		{
-			"name": "elizeuangelo"
-		}
-	],
-	"socket": true,
-	"languages": [
-		{
-			"lang": "en",
-			"name": "English",
-			"path": "app/lang/en.json"
-		},
-		{
-			"lang": "ja",
-			"name": "日本語 (Japanese)",
-			"path": "app/lang/ja.json"
-		},
-		{
-			"lang": "ko",
-			"name": "한국어 (Korean)",
-			"path": "app/lang/ko.json"
-		},
-		{
-			"lang": "pt-BR",
-			"name": "Português (Portuguese [Brasil])",
-			"path": "app/lang/pt-BR.json"
-		},
-		{
-			"lang": "fr",
-			"name": "Français (French)",
-			"path": "app/lang/fr.json"
-		},
-		{
-			"lang": "th",
-			"name": "ภาษาไทย (Thai)",
-			"path": "app/lang/th.json"
-		},
-		{
-			"lang": "zh-tw",
-			"name": "正體中文",
-			"path": "app/lang/zh-tw.json"
-		},
-		{
-			"lang": "es",
-			"name": "Español",
-			"path": "app/lang/es.json"
-		},
-		{
-			"lang": "de",
-			"name": "Deutsch (German)",
-			"path": "app/lang/de.json"
-		}
-	],
-	"scripts": [
-		"greensock/dist/gsap.min.js",
-		"greensock/dist/PixiPlugin.min.js",
-		"greensock/dist/ScrollToPlugin.min.js",
-		"greensock/dist/SplitText.min.js",
-		"app/js/TheatreActorConfig.js",
-		"app/js/TheatreActor.js",
-		"app/js/Theatre.js",
-		"app/js/theatre_main.js"
-	],
-	"styles": ["app/css/theatre.css"],
-	"packs": [
-		{
-			"name": "theatre-inserts-macros",
-			"label": "Theatre Inserts Macros",
-			"path": "app/packs/theatre-inserts-macros.db",
-			"type": "Macro",
-			"private": false
-		}
-	],
-	"url": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre",
-	"download": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/latest/theatre.zip",
-	"manifest": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/latest/module.json",
-	"compatibility": {
-		"minimum": "10",
-		"verified": "10"
-	}
+    "id": "theatre",
+    "title": "Theatre Inserts",
+    "description": "Theater Inserts with a visual novel style made for heavy roleplay scenes",
+    "version": "2.4.0",
+    "authors": [
+        {
+            "name": "Ken L"
+        },
+        {
+            "name": "Noah Zorbaugh"
+        },
+        {
+            "name": "U~man"
+        },
+        {
+            "name": "KaKaRoTo"
+        },
+        {
+            "name": "elizeuangelo"
+        }
+    ],
+    "socket": true,
+    "languages": [
+        {
+            "lang": "en",
+            "name": "English",
+            "path": "app/lang/en.json"
+        },
+        {
+            "lang": "ja",
+            "name": "日本語 (Japanese)",
+            "path": "app/lang/ja.json"
+        },
+        {
+            "lang": "ko",
+            "name": "한국어 (Korean)",
+            "path": "app/lang/ko.json"
+        },
+        {
+            "lang": "pt-BR",
+            "name": "Português (Portuguese [Brasil])",
+            "path": "app/lang/pt-BR.json"
+        },
+        {
+            "lang": "fr",
+            "name": "Français (French)",
+            "path": "app/lang/fr.json"
+        },
+        {
+            "lang": "th",
+            "name": "ภาษาไทย (Thai)",
+            "path": "app/lang/th.json"
+        },
+        {
+            "lang": "zh-tw",
+            "name": "正體中文",
+            "path": "app/lang/zh-tw.json"
+        },
+        {
+            "lang": "es",
+            "name": "Español",
+            "path": "app/lang/es.json"
+        },
+        {
+            "lang": "de",
+            "name": "Deutsch (German)",
+            "path": "app/lang/de.json"
+        }
+    ],
+    "scripts": [
+        "greensock/dist/gsap.min.js",
+        "greensock/dist/PixiPlugin.min.js",
+        "greensock/dist/ScrollToPlugin.min.js",
+        "greensock/dist/SplitText.min.js",
+        "app/js/TheatreActorConfig.js",
+        "app/js/TheatreActor.js",
+        "app/js/Theatre.js",
+        "app/js/theatre_main.js"
+    ],
+    "styles": [
+        "app/css/theatre.css"
+    ],
+    "packs": [
+        {
+            "name": "theatre-inserts-macros",
+            "label": "Theatre Inserts Macros",
+            "path": "app/packs/theatre-inserts-macros.db",
+            "type": "Macro",
+            "private": false
+        }
+    ],
+    "url": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre",
+    "download": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/v2.4.0/theatre.zip",
+    "manifest": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/v2.4.0/module.json",
+    "compatibility": {
+        "minimum": "10",
+        "verified": "10"
+    }
 }
