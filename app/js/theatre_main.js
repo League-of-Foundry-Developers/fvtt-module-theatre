@@ -451,7 +451,8 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
 		textBox.style.color = insertFontColor || "white";
 		textBox.style["font-size"] = `${fontSize}px`;
 		textBox.scrollTop = 0;
-		if (typeof polyglot !== 'undefined') {
+		// If polyglot is active, and message contains its flag (e.g. not an emote), begin processing
+		if (typeof polyglot !== 'undefined' && typeof chatData.flags.polyglot !== 'undefined') {
 			// Get current language being processed
 			const lang = chatData.flags.polyglot.language;
 			// Fetch the languages known by current user
