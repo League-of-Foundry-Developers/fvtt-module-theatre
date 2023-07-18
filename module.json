@@ -1,9 +1,25 @@
 {
-    "name": "theatre",
+    "id": "theatre",
     "title": "Theatre Inserts",
     "description": "Theater Inserts with a visual novel style made for heavy roleplay scenes",
-    "version": "1.16.2",
-    "author": "Ken L, Noah Zorbaugh, U~man, KaKaRoTo, elizeuangelo",
+    "version": "2.4.0",
+    "authors": [
+        {
+            "name": "Ken L"
+        },
+        {
+            "name": "Noah Zorbaugh"
+        },
+        {
+            "name": "U~man"
+        },
+        {
+            "name": "KaKaRoTo"
+        },
+        {
+            "name": "elizeuangelo"
+        }
+    ],
     "socket": true,
     "languages": [
         {
@@ -70,12 +86,15 @@
             "name": "theatre-inserts-macros",
             "label": "Theatre Inserts Macros",
             "path": "app/packs/theatre-inserts-macros.db",
-            "entity": "Macro"
+            "type": "Macro",
+            "private": false
         }
     ],
     "url": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre",
-    "download": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/v1.16.2/theatre.zip",
-    "manifest": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/latest/module.json",
-    "minimumCoreVersion": "9",
-    "compatibleCoreVersion": "9"
+    "download": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/v2.4.0/theatre.zip",
+    "manifest": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/v2.4.0/module.json",
+    "compatibility": {
+        "minimum": "10",
+        "verified": "10"
+    }
 }
