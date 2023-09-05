@@ -6541,7 +6541,7 @@ class Theatre {
 					break;
 			}
 			// Load some essential fonts we use in PIXI
-			WebFont.load({
+			FontsLoader.load({
 				custom: {
 					families: [Theatre.instance.titleFont, Theatre.instance.textFont],
 				},
@@ -6553,7 +6553,7 @@ class Theatre {
 				oFonts.push(Theatre.FONTS[idx]);
 			}
 			var aLoader = async function (fonts) {
-				WebFont.load({
+				FontsLoader.load({
 					custom: {
 						families: fonts,
 					},
@@ -6568,6 +6568,10 @@ class Theatre {
 
 	static getActorDisplayName(actorId) {
 		const actor = game.actors.get(actorId);
+		if (game.modules.get("anonymous")?.active) {
+			return game.modules.get('anonymous').api.getName(actor)
+		}
+		// TODO TO REMOVE ???
 		if (game.modules.get("combat-utility-belt")?.active) {
 			if (game.settings.get("combat-utility-belt", "enableHideNPCNames")) {
 				if (game.cub.hideNames.constructor.shouldReplaceName(actor)) {
@@ -6575,7 +6579,7 @@ class Theatre {
 				}
 			}
 		}
-		return actor.name;
+		return actor.name;;
 	}
 
 	/**
