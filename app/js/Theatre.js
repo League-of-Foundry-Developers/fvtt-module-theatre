@@ -28,7 +28,24 @@
  *
  * ============================================================
  */
-class Theatre {
+export class Theatre {
+
+	// TODO to move in a constants file on next pr...
+	static get SOCKET() {
+		return "module.theatre";
+	} 
+	static get SETTINGS() {
+		return "theatre";
+	}
+	static get NARRATOR() {
+		return "Narrator";
+	} 
+	static get ICONLIB() {
+		return "modules/theatre/app/graphics/emotes";
+	} 
+
+	static DEBUG = false;
+
 	/**
 	 * Make singleton and initalize the inner instance object.
 	 * Return singleton if already created.
@@ -36,11 +53,6 @@ class Theatre {
 	constructor() {
 		if (!Theatre.instance) {
 			// build theater-wide statics
-			Theatre.SOCKET = "module.theatre";
-			Theatre.SETTINGS = "theatre";
-			Theatre.NARRATOR = "Narrator";
-			Theatre.ICONLIB = "modules/theatre/app/graphics/emotes";
-			Theatre.DEBUG = false;
 			Theatre.instance = this;
 			Theatre.textStandingAnimation(null);
 			Theatre.textFlyinAnimation(null);
