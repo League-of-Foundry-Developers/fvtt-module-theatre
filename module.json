@@ -73,12 +73,9 @@
 		"greensock/dist/PixiPlugin.min.js",
 		"greensock/dist/ScrollToPlugin.min.js",
 		"greensock/dist/SplitText.min.js",
-		"app/js/TheatreActorConfig.js",
-		"app/js/TheatreActor.js",
-		"app/js/Theatre.js",
-		"app/js/theatre_main.js",
 		"app/lib/ffontsloader/fontsloader.js"
 	],
+	"esmodules": ["app/js/theatre_main.js"],
 	"styles": ["app/css/theatre.css"],
 	"packs": [
 		{

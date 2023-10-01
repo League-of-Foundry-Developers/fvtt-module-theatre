@@ -18,6 +18,10 @@
  *
  */
 
+import { KHelpers } from "./KHelpers.js";
+import { TheatreActor } from "./TheatreActor.js";
+import { TheatreActorConfig } from "./TheatreActorConfig.js";
+
 /**
  * ============================================================
  * Singleton Theatre
@@ -31,18 +35,10 @@
 export class Theatre {
 
 	// TODO to move in a constants file on next pr...
-	static get SOCKET() {
-		return "module.theatre";
-	} 
-	static get SETTINGS() {
-		return "theatre";
-	}
-	static get NARRATOR() {
-		return "Narrator";
-	} 
-	static get ICONLIB() {
-		return "modules/theatre/app/graphics/emotes";
-	} 
+	static SOCKET = "module.theatre";
+	static SETTINGS = "theatre";
+	static NARRATOR = "Narrator";
+	static ICONLIB = "modules/theatre/app/graphics/emotes";
 
 	static DEBUG = false;
 

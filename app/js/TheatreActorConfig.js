@@ -18,6 +18,8 @@
  *
  */
 
+import { KHelpers } from "./KHelpers.js";
+
 /**
  * ============================================================
  * Application to configure Actor Theatre-Inserts
@@ -28,7 +30,7 @@
  *
  * ============================================================
  */
-class TheatreActorConfig extends FormApplication {
+export class TheatreActorConfig extends FormApplication {
 	constructor(object = {}, options = {}) {
 		if (object._theatre_mod_configTab) {
 			options.tabs = [
