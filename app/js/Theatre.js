@@ -18,6 +18,10 @@
  *
  */
 
+import { KHelpers } from "./KHelpers.js";
+import { TheatreActor } from "./TheatreActor.js";
+import { TheatreActorConfig } from "./TheatreActorConfig.js";
+
 /**
  * ============================================================
  * Singleton Theatre
@@ -28,7 +32,16 @@
  *
  * ============================================================
  */
-class Theatre {
+export class Theatre {
+
+	// TODO to move in a constants file on next pr...
+	static SOCKET = "module.theatre";
+	static SETTINGS = "theatre";
+	static NARRATOR = "Narrator";
+	static ICONLIB = "modules/theatre/app/graphics/emotes";
+
+	static DEBUG = false;
+
 	/**
 	 * Make singleton and initalize the inner instance object.
 	 * Return singleton if already created.
@@ -36,11 +49,6 @@ class Theatre {
 	constructor() {
 		if (!Theatre.instance) {
 			// build theater-wide statics
-			Theatre.SOCKET = "module.theatre";
-			Theatre.SETTINGS = "theatre";
-			Theatre.NARRATOR = "Narrator";
-			Theatre.ICONLIB = "modules/theatre/app/graphics/emotes";
-			Theatre.DEBUG = false;
 			Theatre.instance = this;
 			Theatre.textStandingAnimation(null);
 			Theatre.textFlyinAnimation(null);
@@ -6541,7 +6549,7 @@ class Theatre {
 					break;
 			}
 			// Load some essential fonts we use in PIXI
-			WebFont.load({
+			FontsLoader.load({
 				custom: {
 					families: [Theatre.instance.titleFont, Theatre.instance.textFont],
 				},
@@ -6553,7 +6561,7 @@ class Theatre {
 				oFonts.push(Theatre.FONTS[idx]);
 			}
 			var aLoader = async function (fonts) {
-				WebFont.load({
+				FontsLoader.load({
 					custom: {
 						families: fonts,
 					},
@@ -6568,6 +6576,9 @@ class Theatre {
 
 	static getActorDisplayName(actorId) {
 		const actor = game.actors.get(actorId);
+		if (game.modules.get("anonymous")?.active) {
+		 	return game.modules.get('anonymous').api.getName(actor)
+		}
 		if (game.modules.get("combat-utility-belt")?.active) {
 			if (game.settings.get("combat-utility-belt", "enableHideNPCNames")) {
 				if (game.cub.hideNames.constructor.shouldReplaceName(actor)) {
@@ -6575,7 +6586,7 @@ class Theatre {
 				}
 			}
 		}
-		return actor.name;
+		return actor.name;;
 	}
 
 	/**
