@@ -42,15 +42,103 @@ Right-click an Actor in the list, and select "Add to stage." The Character will 
 
 ![img](/wiki/images/8KKAY0G.png)
 
-Right-Clicking that actor tile will cause the actor's image and name to appear in the bottom-left of the screen. You can apply Emotes to them via the Emote Selector button, just above the chat box. 
+Right-Clicking that actor tile will cause the actor's image and name to appear in the bottom-left of the screen. You can apply Emotes to them via the Emote Selector button, just above the chat box.
 
 While the actor is selected in the small box, anything that is typed into Chat will be written as the Actor, and will also appear below the Actor insert on the left side.
 
 Another button next to chat, the Megaphone, causes a black box to appear in the middle of the screen. Anything that the GM types to chat will appear in this box. This is good for describing a scene.
 
-## For a detailed list of instructions, checkout the [WIKI](/wiki/instructions/home.md) or visit the original Repo by Ken L: https://gitlab.com/Ayanzo/theatre/-/wikis/home/Introduction%20to%20Theatre, these wiki are pretty old so be aware
+## For a detailed list of instructions, checkout the [WIKI](/wiki/instructions/home.md)
 
-### Contributors
+# Build fast note
+
+### Prepare a release
+
+In the 99% of the case for prepare a release you must:
+
+- Launch `npm run build` this will generate all the code under the `dist` folder.
+- Launch `npm package` for zip all the contents on the `dist` folder, and build the zip file with the correct name under the  `package` folder.
+
+### Developing a release
+
+- Use `npm run build:watch` and `npm run build:link` and check some tutorial online
+
+# Build
+
+## Install all packages
+
+```bash
+npm install
+```
+## npm build scripts
+
+### build
+
+will build the code and copy all necessary assets into the dist folder and make a symlink to install the result into your foundry data; create a
+`foundryconfig.json` file with your Foundry Data path.
+
+```json
+{
+  "dataPath": "~/.local/share/FoundryVTT/"
+}
+```
+
+`build` will build and set up a symlink between `dist` and your `dataPath`.
+
+```bash
+npm run build
+```
+
+### NOTE:
+
+You don't need to build the `foundryconfig.json` file you can just copy the content of the `dist` folder on the module folder under `modules` of Foundry
+
+### build:watch
+
+`build:watch` will build and watch for changes, rebuilding automatically.
+
+```bash
+npm run build:watch
+```
+
+### clean
+
+`clean` will remove all contents in the dist folder (but keeps the link from build:install).
+
+```bash
+npm run clean
+```
+
+### prettier-format
+
+`prettier-format` launch the prettier plugin based on the configuration [here](./.prettierrc)
+
+```bash
+npm run prettier-format
+```
+
+### package
+
+`package` generates a zip file containing the contents of the dist folder generated previously with the `build` command. Useful for those who want to manually load the module or want to create their own release
+
+```bash
+npm run package
+```
+
+## [Changelog](./Changelog.md)
+
+## Issues
+
+Any issues, bugs, or feature requests are always welcome to be reported directly to the [Issue Tracker](https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/issues ), or using the [Bug Reporter Module](https://foundryvtt.com/packages/bug-reporter/).
+
+### License
+
+- **[Theatre](https://gitlab.com/Ayanzo/theatre/)**: [GPLv3](https://gitlab.com/Ayanzo/theatre/-/blob/master/LICENSE.txt)
+
+
+This package is under an [GPLv3](LICENSE) and the [Foundry Virtual Tabletop Limited License Agreement for module development](https://foundryvtt.com/article/license/).
+
+### Credits/Contributors
 
 The original and immense work is from `Ken L`, Theatre Inserts was then be picked up by `NoahZorbaugh`, and then by `U~Man` who maintained the day to day updates. `Brother Sharp` commissioned on behalf of the Japanese TRPG community the port of the module to Foundry VTT 0.7.7, done by `KaKaRoTo`. Update (0.8.6) by `elizeuangelo`. Latest Update (v9) by  `enso#0361`, Thanks!
 
@@ -58,7 +146,4 @@ The Japanese community will be placing bounties for maintaining theatre inserts 
 
 Contributions are most welcome, please do one Pull Request per feature.
 
-### License
-
-This package is under an [GPLv3](LICENSE) and the [Foundry Virtual Tabletop Limited License Agreement for module development](https://foundryvtt.com/article/license/).
-
+- [Ken L](https://gitlab.com/Ayanzo) for the module [Theatre](https://gitlab.com/Ayanzo/theatre/)
