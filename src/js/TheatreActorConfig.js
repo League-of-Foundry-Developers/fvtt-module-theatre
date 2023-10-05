@@ -53,7 +53,7 @@ export class TheatreActorConfig extends FormApplication {
 	static get defaultOptions() {
 		const options = super.defaultOptions;
 		options.id = "theatre-config";
-		options.template = "modules/theatre/app/templates/theatre_actor_config.html";
+		options.template = "modules/theatre/templates/theatre_actor_config.html";
 		options.width = 500;
 		options.height = 270;
 		options.tabs = [{ navSelector: ".tabs", contentSelector: ".theatre-config-contents", initial: "main" }];
@@ -388,7 +388,7 @@ export class TheatreActorConfig extends FormApplication {
 				});
 				Theatre.instance._clearPortraitContainer(theatreId);
 				Theatre.instance._setupPortraitContainer(theatreId, newAlign, resName, proxy);
-				
+
 				// re-attach label + typingBubble
 				insert.dockContainer.addChild(insert.label);
 				insert.dockContainer.addChild(insert.typingBubble);

@@ -38,7 +38,7 @@ export class Theatre {
 	static SOCKET = "module.theatre";
 	static SETTINGS = "theatre";
 	static NARRATOR = "Narrator";
-	static ICONLIB = "modules/theatre/app/graphics/emotes";
+	static ICONLIB = "modules/theatre/graphics/emotes";
 
 	static DEBUG = false;
 
@@ -2040,7 +2040,7 @@ export class Theatre {
 	 * @private
 	 */
 	_initFaceAPI() {
-		const MODEL_URL = "modules/theatre/app/weights";
+		const MODEL_URL = "modules/theatre/weights";
 
 		faceapi.loadSsdMobilenetv1Model(MODEL_URL);
 		faceapi.loadTinyFaceDetectorModel(MODEL_URL);
@@ -2309,8 +2309,8 @@ export class Theatre {
 		let imgSrcs = [];
 
 		imgSrcs.push({
-			imgpath: "modules/theatre/app/graphics/typing.png",
-			resname: "modules/theatre/app/graphics/typing.png",
+			imgpath: "modules/theatre/graphics/typing.png",
+			resname: "modules/theatre/graphics/typing.png",
 		});
 		imgSrcs.push({ imgpath: imgPath, resname: imgPath });
 		if (Theatre.DEBUG) console.log("Adding %s with src %s", portName, imgPath);
@@ -2469,7 +2469,7 @@ export class Theatre {
 		// setup typing bubble
 		if (!insert.typingBubble) {
 			let typingBubble = new PIXI.Sprite();
-			typingBubble.texture = resources["modules/theatre/app/graphics/typing.png"];
+			typingBubble.texture = resources["modules/theatre/graphics/typing.png"];
 			typingBubble.width = 55;
 			typingBubble.height = 55;
 			typingBubble.theatreComponentName = "typingBubble";
@@ -2779,7 +2779,7 @@ export class Theatre {
 
 		let imgSrcs = [{ resname: resName, imgpath: imgSrc }];
 		if (Theatre.DEBUG) console.log("replace textures", imgSrcs);
-		
+
 
 		// Send to socket
 		if (!remote) {
@@ -2841,7 +2841,7 @@ export class Theatre {
 		}
 
 		if (Theatre.DEBUG) console.log("replace textures", imgSrcs);
-		
+
 
 		// Send to socket
 		if (!remote) {
@@ -2938,7 +2938,7 @@ export class Theatre {
 		const resources = {};
 		await Promise.all(imgSrcs.map(async ({resname, imgpath}) => {
 			resources[resname] = resources[imgpath] = await PIXI.Assets.load(imgpath);
-			
+
 		}))
 		if (Theatre.DEBUG) console.log("resources", resources);
 		return resources;
@@ -5010,7 +5010,7 @@ export class Theatre {
 		let textFlyin = Theatre.FLYIN_ANIMS;
 		let textStanding = Theatre.STANDING_ANIMS;
 		let sideBar = document.getElementById("sidebar");
-		renderTemplate("modules/theatre/app/templates/emote_menu.html", {
+		renderTemplate("modules/theatre/templates/emote_menu.html", {
 			emotes,
 			textFlyin,
 			textStanding,
@@ -6649,77 +6649,77 @@ export class Theatre {
 	static getDefaultRiggingResources() {
 		return [
 			// bubbles
-			{ name: "angry", path: "modules/theatre/app/graphics/bubbles/angry.png" },
-			{ name: "frustrated", path: "modules/theatre/app/graphics/bubbles/frustrated.png" },
-			{ name: "annoyed", path: "modules/theatre/app/graphics/bubbles/annoyed.png" },
-			{ name: "hearts", path: "modules/theatre/app/graphics/bubbles/hearts.png" },
-			{ name: "sleeping", path: "modules/theatre/app/graphics/bubbles/sleeping.png" },
-			{ name: "surprised", path: "modules/theatre/app/graphics/bubbles/surprised.png" },
-			{ name: "confused", path: "modules/theatre/app/graphics/bubbles/confused.png" },
-			{ name: "awe-struck", path: "modules/theatre/app/graphics/bubbles/awe-struck.png" },
-			{ name: "kiss", path: "modules/theatre/app/graphics/bubbles/kiss.png" },
-			{ name: "blushing", path: "modules/theatre/app/graphics/bubbles/blushing.png" },
-			{ name: "cry", path: "modules/theatre/app/graphics/bubbles/cry.png" },
-			{ name: "dissatisfied", path: "modules/theatre/app/graphics/bubbles/dissatisfied.png" },
-			{ name: "dizzy", path: "modules/theatre/app/graphics/bubbles/dizzy.png" },
-			{ name: "evil", path: "modules/theatre/app/graphics/bubbles/evil.png" },
-			{ name: "frown", path: "modules/theatre/app/graphics/bubbles/frown.png" },
-			{ name: "happy", path: "modules/theatre/app/graphics/bubbles/happy.png" },
-			{ name: "grin", path: "modules/theatre/app/graphics/bubbles/grin.png" },
-			{ name: "happytears", path: "modules/theatre/app/graphics/bubbles/happytears.png" },
-			{ name: "laughing", path: "modules/theatre/app/graphics/bubbles/laughing.png" },
-			{ name: "laughingsquint", path: "modules/theatre/app/graphics/bubbles/laughingsquint.png" },
-			{ name: "meh", path: "modules/theatre/app/graphics/bubbles/meh.png" },
-			{ name: "worried", path: "modules/theatre/app/graphics/bubbles/worried.png" },
-			{ name: "panic", path: "modules/theatre/app/graphics/bubbles/panic.png" },
-			{ name: "rofl", path: "modules/theatre/app/graphics/bubbles/rofl.png" },
-			{ name: "sad", path: "modules/theatre/app/graphics/bubbles/sad.png" },
-			{ name: "scared", path: "modules/theatre/app/graphics/bubbles/scared.png" },
-			{ name: "smile", path: "modules/theatre/app/graphics/bubbles/smile.png" },
-			{ name: "playful", path: "modules/theatre/app/graphics/bubbles/playful.png" },
-			{ name: "smug", path: "modules/theatre/app/graphics/bubbles/smug.png" },
-			{ name: "tongue", path: "modules/theatre/app/graphics/bubbles/tongue.png" },
-			{ name: "wink", path: "modules/theatre/app/graphics/bubbles/wink.png" },
-			{ name: "speechless", path: "modules/theatre/app/graphics/bubbles/speechless.png" },
-			{ name: "thinking", path: "modules/theatre/app/graphics/bubbles/thinking.png" },
-			{ name: "idea", path: "modules/theatre/app/graphics/bubbles/idea.png" },
-			{ name: "serious", path: "modules/theatre/app/graphics/bubbles/serious.png" },
-			{ name: "innocent", path: "modules/theatre/app/graphics/bubbles/innocent.png" },
-			{ name: "carefree", path: "modules/theatre/app/graphics/bubbles/carefree.png" },
+			{ name: "angry", path: "modules/theatre/graphics/bubbles/angry.png" },
+			{ name: "frustrated", path: "modules/theatre/graphics/bubbles/frustrated.png" },
+			{ name: "annoyed", path: "modules/theatre/graphics/bubbles/annoyed.png" },
+			{ name: "hearts", path: "modules/theatre/graphics/bubbles/hearts.png" },
+			{ name: "sleeping", path: "modules/theatre/graphics/bubbles/sleeping.png" },
+			{ name: "surprised", path: "modules/theatre/graphics/bubbles/surprised.png" },
+			{ name: "confused", path: "modules/theatre/graphics/bubbles/confused.png" },
+			{ name: "awe-struck", path: "modules/theatre/graphics/bubbles/awe-struck.png" },
+			{ name: "kiss", path: "modules/theatre/graphics/bubbles/kiss.png" },
+			{ name: "blushing", path: "modules/theatre/graphics/bubbles/blushing.png" },
+			{ name: "cry", path: "modules/theatre/graphics/bubbles/cry.png" },
+			{ name: "dissatisfied", path: "modules/theatre/graphics/bubbles/dissatisfied.png" },
+			{ name: "dizzy", path: "modules/theatre/graphics/bubbles/dizzy.png" },
+			{ name: "evil", path: "modules/theatre/graphics/bubbles/evil.png" },
+			{ name: "frown", path: "modules/theatre/graphics/bubbles/frown.png" },
+			{ name: "happy", path: "modules/theatre/graphics/bubbles/happy.png" },
+			{ name: "grin", path: "modules/theatre/graphics/bubbles/grin.png" },
+			{ name: "happytears", path: "modules/theatre/graphics/bubbles/happytears.png" },
+			{ name: "laughing", path: "modules/theatre/graphics/bubbles/laughing.png" },
+			{ name: "laughingsquint", path: "modules/theatre/graphics/bubbles/laughingsquint.png" },
+			{ name: "meh", path: "modules/theatre/graphics/bubbles/meh.png" },
+			{ name: "worried", path: "modules/theatre/graphics/bubbles/worried.png" },
+			{ name: "panic", path: "modules/theatre/graphics/bubbles/panic.png" },
+			{ name: "rofl", path: "modules/theatre/graphics/bubbles/rofl.png" },
+			{ name: "sad", path: "modules/theatre/graphics/bubbles/sad.png" },
+			{ name: "scared", path: "modules/theatre/graphics/bubbles/scared.png" },
+			{ name: "smile", path: "modules/theatre/graphics/bubbles/smile.png" },
+			{ name: "playful", path: "modules/theatre/graphics/bubbles/playful.png" },
+			{ name: "smug", path: "modules/theatre/graphics/bubbles/smug.png" },
+			{ name: "tongue", path: "modules/theatre/graphics/bubbles/tongue.png" },
+			{ name: "wink", path: "modules/theatre/graphics/bubbles/wink.png" },
+			{ name: "speechless", path: "modules/theatre/graphics/bubbles/speechless.png" },
+			{ name: "thinking", path: "modules/theatre/graphics/bubbles/thinking.png" },
+			{ name: "idea", path: "modules/theatre/graphics/bubbles/idea.png" },
+			{ name: "serious", path: "modules/theatre/graphics/bubbles/serious.png" },
+			{ name: "innocent", path: "modules/theatre/graphics/bubbles/innocent.png" },
+			{ name: "carefree", path: "modules/theatre/graphics/bubbles/carefree.png" },
 
 			// effects
-			{ name: "swirl", path: "modules/theatre/app/graphics/effects/swirl.png" },
-			{ name: "sweatdrop", path: "modules/theatre/app/graphics/effects/sweatdrop.png" },
-			{ name: "notice", path: "modules/theatre/app/graphics/effects/notice.png" },
-			{ name: "loud", path: "modules/theatre/app/graphics/effects/loud.png" },
-			{ name: "semiloud", path: "modules/theatre/app/graphics/effects/semi-loud.png" },
-			{ name: "veins", path: "modules/theatre/app/graphics/effects/veins.png" },
-			{ name: "veins_red", path: "modules/theatre/app/graphics/effects/veins_red.png" },
-			{ name: "twisty", path: "modules/theatre/app/graphics/effects/twisty.png" },
-			{ name: "glimmer", path: "modules/theatre/app/graphics/effects/glimmer.png" },
-			{ name: "heart", path: "modules/theatre/app/graphics/effects/heart.png" },
-			{ name: "puff", path: "modules/theatre/app/graphics/effects/puff.png" },
-			{ name: "line", path: "modules/theatre/app/graphics/effects/line.png" },
-			{ name: "linesteep", path: "modules/theatre/app/graphics/effects/line_steep.png" },
-			{ name: "star", path: "modules/theatre/app/graphics/effects/star.png" },
-			{ name: "musicnote", path: "modules/theatre/app/graphics/effects/musicnote.png" },
-			//{name: "ghostball", path: "modules/theatre/app/graphics/effects/ghostball.png"},
-			{ name: "ghostball1", path: "modules/theatre/app/graphics/effects/ghostball1.png" },
-			{ name: "ghostball2", path: "modules/theatre/app/graphics/effects/ghostball2.png" },
-			{ name: "scribbleball", path: "modules/theatre/app/graphics/effects/scribbleball.png" },
-			{ name: "thoughtbubble", path: "modules/theatre/app/graphics/effects/thoughtbubble.png" },
-			{ name: "bubbledot", path: "modules/theatre/app/graphics/effects/bubbledot.png" },
-			{ name: "dot", path: "modules/theatre/app/graphics/effects/dot.png" },
-			{ name: "ziggy", path: "modules/theatre/app/graphics/effects/ziggy.png" },
-			{ name: "sinking", path: "modules/theatre/app/graphics/effects/sinking.png" },
-			{ name: "zzz", path: "modules/theatre/app/graphics/effects/zzz.png" },
-			{ name: "lightbulb", path: "modules/theatre/app/graphics/effects/lightbulb.png" },
-			{ name: "sigh", path: "modules/theatre/app/graphics/effects/sigh.png" },
-			{ name: "halo", path: "modules/theatre/app/graphics/effects/halo.png" },
-			{ name: "blush", path: "modules/theatre/app/graphics/effects/blush.png" },
-			{ name: "miasma", path: "modules/theatre/app/graphics/effects/miasma.png" },
-			{ name: "darkness", path: "modules/theatre/app/graphics/effects/darkness.png" },
-			{ name: "tears", path: "modules/theatre/app/graphics/effects/tears.png" },
+			{ name: "swirl", path: "modules/theatre/graphics/effects/swirl.png" },
+			{ name: "sweatdrop", path: "modules/theatre/graphics/effects/sweatdrop.png" },
+			{ name: "notice", path: "modules/theatre/graphics/effects/notice.png" },
+			{ name: "loud", path: "modules/theatre/graphics/effects/loud.png" },
+			{ name: "semiloud", path: "modules/theatre/graphics/effects/semi-loud.png" },
+			{ name: "veins", path: "modules/theatre/graphics/effects/veins.png" },
+			{ name: "veins_red", path: "modules/theatre/graphics/effects/veins_red.png" },
+			{ name: "twisty", path: "modules/theatre/graphics/effects/twisty.png" },
+			{ name: "glimmer", path: "modules/theatre/graphics/effects/glimmer.png" },
+			{ name: "heart", path: "modules/theatre/graphics/effects/heart.png" },
+			{ name: "puff", path: "modules/theatre/graphics/effects/puff.png" },
+			{ name: "line", path: "modules/theatre/graphics/effects/line.png" },
+			{ name: "linesteep", path: "modules/theatre/graphics/effects/line_steep.png" },
+			{ name: "star", path: "modules/theatre/graphics/effects/star.png" },
+			{ name: "musicnote", path: "modules/theatre/graphics/effects/musicnote.png" },
+			//{name: "ghostball", path: "modules/theatre/graphics/effects/ghostball.png"},
+			{ name: "ghostball1", path: "modules/theatre/graphics/effects/ghostball1.png" },
+			{ name: "ghostball2", path: "modules/theatre/graphics/effects/ghostball2.png" },
+			{ name: "scribbleball", path: "modules/theatre/graphics/effects/scribbleball.png" },
+			{ name: "thoughtbubble", path: "modules/theatre/graphics/effects/thoughtbubble.png" },
+			{ name: "bubbledot", path: "modules/theatre/graphics/effects/bubbledot.png" },
+			{ name: "dot", path: "modules/theatre/graphics/effects/dot.png" },
+			{ name: "ziggy", path: "modules/theatre/graphics/effects/ziggy.png" },
+			{ name: "sinking", path: "modules/theatre/graphics/effects/sinking.png" },
+			{ name: "zzz", path: "modules/theatre/graphics/effects/zzz.png" },
+			{ name: "lightbulb", path: "modules/theatre/graphics/effects/lightbulb.png" },
+			{ name: "sigh", path: "modules/theatre/graphics/effects/sigh.png" },
+			{ name: "halo", path: "modules/theatre/graphics/effects/halo.png" },
+			{ name: "blush", path: "modules/theatre/graphics/effects/blush.png" },
+			{ name: "miasma", path: "modules/theatre/graphics/effects/miasma.png" },
+			{ name: "darkness", path: "modules/theatre/graphics/effects/darkness.png" },
+			{ name: "tears", path: "modules/theatre/graphics/effects/tears.png" },
 		];
 	}
 
@@ -6918,7 +6918,7 @@ export class Theatre {
 				name: "serious",
 				fatype: "far",
 				faname: "fa-meh-rolling-eyes",
-				image: "modules/theatre/app/graphics/emotes/serious.png",
+				image: "modules/theatre/graphics/emotes/serious.png",
 				label: game.i18n.localize("Theatre.Emote.Serious"),
 				rigging: {
 					animations: [{ name: "serious", syntax: "serious|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" }],
@@ -6947,7 +6947,7 @@ export class Theatre {
 				name: "frustrated",
 				fatype: "far",
 				faname: "fa-meh-rolling-eyes",
-				image: "modules/theatre/app/graphics/emotes/frustrated.png",
+				image: "modules/theatre/graphics/emotes/frustrated.png",
 				label: game.i18n.localize("Theatre.Emote.Frustrated"),
 				rigging: {
 					animations: [
@@ -7233,7 +7233,7 @@ export class Theatre {
 				name: "thinking",
 				fatype: "far",
 				faname: "fa-blank",
-				image: "modules/theatre/app/graphics/emotes/thinking.png",
+				image: "modules/theatre/graphics/emotes/thinking.png",
 				label: game.i18n.localize("Theatre.Emote.Thinking"),
 				rigging: {
 					animations: [
@@ -7261,7 +7261,7 @@ export class Theatre {
 				name: "confused",
 				fatype: "far",
 				faname: "fa-question-circle",
-				image: "modules/theatre/app/graphics/emotes/confused.png",
+				image: "modules/theatre/graphics/emotes/confused.png",
 				label: game.i18n.localize("Theatre.Emote.Confused"),
 				rigging: {
 					animations: [
@@ -7277,7 +7277,7 @@ export class Theatre {
 				name: "idea",
 				fatype: "far",
 				faname: "fa-lightbulb",
-				image: "modules/theatre/app/graphics/emotes/idea.png",
+				image: "modules/theatre/graphics/emotes/idea.png",
 				label: game.i18n.localize("Theatre.Emote.Idea"),
 				rigging: {
 					animations: [
@@ -7308,7 +7308,7 @@ export class Theatre {
 				name: "smug",
 				fatype: "far",
 				faname: "fa-grin-tongue-wink",
-				image: "modules/theatre/app/graphics/emotes/smug.png",
+				image: "modules/theatre/graphics/emotes/smug.png",
 				label: game.i18n.localize("Theatre.Emote.Smug"),
 				rigging: {
 					animations: [{ name: "smug", syntax: "smug|1;(ease:elastic);x:80%,80%;y:0%,25%;alpha:0,1" }],
@@ -7399,7 +7399,7 @@ export class Theatre {
 				name: "mischevious",
 				fatype: "fas",
 				faname: "fa-book-dead",
-				image: "modules/theatre/app/graphics/emotes/evil.png",
+				image: "modules/theatre/graphics/emotes/evil.png",
 				label: game.i18n.localize("Theatre.Emote.Mischevious"),
 				rigging: {
 					animations: [
@@ -7472,7 +7472,7 @@ export class Theatre {
 				name: "innocent",
 				fatype: "fas",
 				faname: "fa-book-dead",
-				image: "modules/theatre/app/graphics/emotes/innocent.png",
+				image: "modules/theatre/graphics/emotes/innocent.png",
 				label: game.i18n.localize("Theatre.Emote.Innocent"),
 				rigging: {
 					animations: [
@@ -7488,7 +7488,7 @@ export class Theatre {
 				name: "carefree",
 				fatype: "fas",
 				faname: "fa-book-dead",
-				image: "modules/theatre/app/graphics/emotes/carefree.png",
+				image: "modules/theatre/graphics/emotes/carefree.png",
 				label: game.i18n.localize("Theatre.Emote.CareFree"),
 				rigging: {
 					animations: [
@@ -7588,7 +7588,7 @@ export class Theatre {
 				name: "speechless",
 				fatype: "far",
 				faname: "fa-comment-dots",
-				image: "modules/theatre/app/graphics/emotes/speechless.png",
+				image: "modules/theatre/graphics/emotes/speechless.png",
 				label: game.i18n.localize("Theatre.Emote.Speechless"),
 				rigging: {
 					animations: [
@@ -7655,7 +7655,7 @@ export class Theatre {
 				name: "sleeping",
 				fatype: "fas",
 				faname: "fa-bed",
-				image: "modules/theatre/app/graphics/emotes/sleeping.png",
+				image: "modules/theatre/graphics/emotes/sleeping.png",
 				label: game.i18n.localize("Theatre.Emote.Sleeping"),
 				rigging: {
 					animations: [
