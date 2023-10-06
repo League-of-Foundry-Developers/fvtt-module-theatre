@@ -127,8 +127,8 @@
     "greensock/dist/SplitText.min.js",
     "lib/ffontsloader/fontsloader.js"
   ],
-  "esmodules": ["js/theatre_main.js"],
-  "styles": ["css/theatre.css"],
+  "esmodules": ["scripts/theatre_main.js"],
+  "styles": ["styles/theatre.css"],
   "compatibility": {
     "minimum": 11,
     "verified": 11,
