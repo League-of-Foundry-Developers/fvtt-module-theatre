@@ -35,6 +35,7 @@
   "socket": true,
   "includes": [
     "./assets/**",
+    "./graphics/**",
     "./lang/**",
     "./languages/**",
     "./scripts/**",

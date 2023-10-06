@@ -124,6 +124,7 @@ jobs:
             js/                                  \
             packs/                               \
             assets/                              \
+            graphics/                            \
             lang/                                \
             templates/
           # Don't forget to add a backslash at the end of the line for any
