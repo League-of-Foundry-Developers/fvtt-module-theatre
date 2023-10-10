@@ -413,6 +413,8 @@ Hooks.on("renderChatMessage", function (ChatMessage, html, data) {
 Hooks.on("renderChatLog", function (app, html, data) {
 	if (data.cssId === "chat-popout") return;
 	theatre.initialize();
+	window.Theatre = {}
+	window.Theatre.instance = theatre;
 	// window may not be ready?
 	console.log("%cTheatre Inserts", "font-weight: bold; font-size: 30px; font-style: italic; color: black;");
 	// NOTE: Closed alpha/beta is currently all rights reserved!
