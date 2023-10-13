@@ -1,0 +1,1712 @@
+@charset "UTF-8";
+
+@font-face {
+  font-family: "Caslon";
+  src: url("../graphics/fonts/en/ACaslonPro-Bold.otf");
+}
+
+@font-face {
+  font-family: "CaslonAntique";
+  src: url("../graphics/fonts/en/CaslonAntique-Bold.ttf");
+}
+
+@font-face {
+  font-family: "SignikaBold";
+  src: url("../graphics/fonts/en/Signika-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Riffic";
+  src: url("../graphics/fonts/en/RifficFree-Bold.ttf");
+}
+
+@font-face {
+  font-family: "LinLibertine";
+  src: url("../graphics/fonts/en/LinLibertine_RB.ttf");
+}
+
+@font-face {
+  font-family: "GODOFWAR";
+  src: url("../graphics/fonts/en/GODOFWAR.ttf");
+}
+
+@font-face {
+  font-family: "OldLondon";
+  src: url("../graphics/fonts/en/OldLondon.ttf");
+}
+
+@font-face {
+  font-family: "Ethnocentric";
+  src: url("../graphics/fonts/en/ethnocentric-rg.ttf");
+}
+
+@font-face {
+  font-family: "Cardinal";
+  src: url("../graphics/fonts/en/Cardinal.ttf");
+}
+
+@font-face {
+  font-family: "Western";
+  src: url("../graphics/fonts/en/WEST.ttf");
+}
+
+@font-face {
+  font-family: "Luna";
+  src: url("../graphics/fonts/en/Luna.ttf");
+}
+
+@font-face {
+  font-family: "FastInMyCar";
+  src: url("../graphics/fonts/en/Fast-In-My-Car.ttf");
+}
+
+@font-face {
+  font-family: "StoneHenge";
+  src: url("../graphics/fonts/en/stonehen.ttf");
+}
+
+@font-face {
+  font-family: "Dungeon";
+  src: url("../graphics/fonts/en/DUNGRG.ttf");
+}
+
+@font-face {
+  font-family: "LemonTuesday";
+  src: url("../graphics/fonts/en/Lemon-Tuesday.otf");
+}
+
+@font-face {
+  font-family: "ChildWriting";
+  src: url("../graphics/fonts/en/ChildWriting-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Subscriber";
+  src: url("../graphics/fonts/en/SUBSCRIBER-Regular.otf");
+}
+
+@font-face {
+  font-family: "PaulSignature";
+  src: url("../graphics/fonts/en/Paul-Signature.ttf");
+}
+
+@font-face {
+  font-family: "TrashHand";
+  src: url("../graphics/fonts/en/TrashHand.ttf");
+}
+
+@font-face {
+  font-family: "Kindergarten";
+  src: url("../graphics/fonts/en/kindergarten.ttf");
+}
+
+@font-face {
+  font-family: "HoneyScript";
+  src: url("../graphics/fonts/en/HoneyScript-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: "GhostTheory2";
+  src: url("../graphics/fonts/en/Ghost-theory-2.ttf");
+}
+
+@font-face {
+  font-family: "GhostChase";
+  src: url("../graphics/fonts/en/GhostChase.ttf");
+}
+
+@font-face {
+  font-family: "Alamain";
+  src: url("../graphics/fonts/en/alamain1.ttf");
+}
+
+@font-face {
+  font-family: "SunnyDay";
+  src: url("../graphics/fonts/en/fontopoSunnyDay-Regular.otf");
+}
+
+@font-face {
+  font-family: "Subway";
+  src: url("../graphics/fonts/en/fontopoSUBWAY-Regular.otf");
+}
+
+@font-face {
+  font-family: "MagieraScript";
+  src: url("../graphics/fonts/en/Magiera_Script.ttf");
+}
+
+@font-face {
+  font-family: "Cathallina";
+  src: url("../graphics/fonts/en/Cathallina.ttf");
+}
+
+@font-face {
+  font-family: "BalletHarmony";
+  src: url("../graphics/fonts/en/BalletHarmony.ttf");
+}
+
+@font-face {
+  font-family: "FairProsper";
+  src: url("../graphics/fonts/en/FairProsper.ttf");
+}
+
+@font-face {
+  font-family: "Megadeth";
+  src: url("../graphics/fonts/en/Megadeth.ttf");
+}
+
+@font-face {
+  font-family: "Rooters";
+  src: url("../graphics/fonts/en/Rooters.otf");
+}
+
+@font-face {
+  font-family: "BadManners";
+  src: url("../graphics/fonts/en/MCF_bad_manners_ww.ttf");
+}
+
+@font-face {
+  font-family: "BaksoSapi";
+  src: url("../graphics/fonts/en/BaksoSapi.otf");
+}
+
+@font-face {
+  font-family: "Yikes";
+  src: url("../graphics/fonts/en/YIKES!.ttf");
+}
+
+@font-face {
+  font-family: "FuturaHandwritten";
+  src: url("../graphics/fonts/en/FuturaHandwritten.ttf");
+}
+
+@font-face {
+  font-family: "SuplexmentaryComic";
+  src: url("../graphics/fonts/en/Suplexmentary_Comic_NC.ttf");
+}
+
+@font-face {
+  font-family: "ComicInk";
+  src: url("../graphics/fonts/en/Comic-ink.otf");
+}
+
+@font-face {
+  font-family: "VarsityTeam";
+  src: url("../graphics/fonts/en/VarsityTeam-Bold.otf");
+}
+
+@font-face {
+  font-family: "Tiza";
+  src: url("../graphics/fonts/en/tiza.ttf");
+}
+
+@font-face {
+  font-family: "TimesNewYorker";
+  src: url("../graphics/fonts/en/times_new_yorker.ttf");
+}
+
+@font-face {
+  font-family: "RomanNewTimes";
+  src: url("../graphics/fonts/en/Roman_New_Times.otf");
+}
+
+@font-face {
+  font-family: "GangOfThree";
+  src: url("../graphics/fonts/en/go3v2.ttf");
+}
+
+@font-face {
+  font-family: "Yozakura";
+  src: url("../graphics/fonts/en/YOZAKURA-Regular.otf");
+}
+
+@font-face {
+  font-family: "ArabDances";
+  src: url("../graphics/fonts/en/ArabDances.ttf");
+}
+
+@font-face {
+  font-family: "BreakAway";
+  src: url("../graphics/fonts/en/breakaway.ttf");
+}
+
+@font-face {
+  font-family: "BrentonScrawlType";
+  src: url("../graphics/fonts/en/bwptype.ttf");
+}
+
+@font-face {
+  font-family: "DancingVampyrish";
+  src: url("../graphics/fonts/en/DancingVampyrish.ttf");
+}
+
+@font-face {
+  font-family: "Codex";
+  src: url("../graphics/fonts/en/codex.ttf");
+}
+
+@font-face {
+  font-family: "DSNetStamped";
+  src: url("../graphics/fonts/en/DSnet_Stamped.ttf");
+}
+
+@font-face {
+  font-family: "GlassHouses";
+  src: url("../graphics/fonts/en/glashou.ttf");
+}
+
+@font-face {
+  font-family: "MilTown";
+  src: url("../graphics/fonts/en/MLTWNII_.ttf");
+}
+
+@font-face {
+  font-family: "Shoplifter";
+  src: url("../graphics/fonts/en/shoplift.ttf");
+}
+
+@font-face {
+  font-family: "Lumos";
+  src: url("../graphics/fonts/en/LUMOS.ttf");
+}
+
+@font-face {
+  font-family: "IronSans";
+  src: url("../graphics/fonts/en/IronSans.ttf");
+}
+
+@font-face {
+  font-family: "StampAct";
+  src: url("../graphics/fonts/en/STAMPACT.ttf");
+}
+
+@font-face {
+  font-family: "TimesNewRomance";
+  src: url("../graphics/fonts/en/Times-New-Romance.ttf");
+}
+
+@font-face {
+  font-family: "DreamersBrush";
+  src: url("../graphics/fonts/en/DREAMERS-BRUSH.ttf");
+}
+
+@font-face {
+  font-family: "Hamish";
+  src: url("../graphics/fonts/en/Hamish.otf");
+}
+
+@font-face {
+  font-family: "Syemox";
+  src: url("../graphics/fonts/en/Syemox-italic.ttf");
+}
+
+@font-face {
+  font-family: "Himagsikan";
+  src: url("../graphics/fonts/en/himagsikan.otf");
+}
+
+@font-face {
+  font-family: "GoodBrush";
+  src: url("../graphics/fonts/en/Good-Brush.ttf");
+}
+
+@font-face {
+  font-family: "Fewriter";
+  src: url("../graphics/fonts/en/fewriter_memesbruh03.ttf");
+}
+
+@font-face {
+  font-family: "DreamyLand";
+  src: url("../graphics/fonts/en/Dreamy-Land-Medium.ttf");
+}
+
+@font-face {
+  font-family: "JianGkrik";
+  src: url("../graphics/fonts/en/JIANGKRIK.otf");
+}
+
+@font-face {
+  font-family: "Valentino";
+  src: url("../graphics/fonts/en/Valentino.ttf");
+}
+
+@font-face {
+  font-family: "Galactico";
+  src: url("../graphics/fonts/en/Galactico-Basic.otf");
+}
+
+@font-face {
+  font-family: "Hiroshio";
+  src: url("../graphics/fonts/en/Hiroshio.otf");
+}
+
+@font-face {
+  font-family: "Makayla";
+  src: url("../graphics/fonts/en/makayla.ttf");
+}
+
+@font-face {
+  font-family: "HappyFrushZero";
+  src: url("../graphics/fonts/en/happyfrushzero.ttf");
+}
+
+@font-face {
+  font-family: "Oko";
+  src: url("../graphics/fonts/en/oko.ttf");
+}
+
+@font-face {
+  font-family: "Stereofidelic";
+  src: url("../graphics/fonts/en/stereofidelic.ttf");
+}
+
+@font-face {
+  font-family: "Headache";
+  src: url("../graphics/fonts/en/Headache.ttf");
+}
+
+@font-face {
+  font-family: "YoungerThanMe";
+  src: url("../graphics/fonts/en/Younger-than-me.ttf");
+}
+
+@font-face {
+  font-family: "LPEducational";
+  src: url("../graphics/fonts/en/LPEducational.ttf");
+}
+
+@font-face {
+  font-family: "Kirsty";
+  src: url("../graphics/fonts/en/kirsty-rg.ttf");
+}
+
+@font-face {
+  font-family: "VenusRising";
+  src: url("../graphics/fonts/en/venus-rising-rg.ttf");
+}
+
+@font-face {
+  font-family: "NotoSansJPBold";
+  src: url("../graphics/fonts/ja/NotoSansJP-Bold.otf");
+}
+
+@font-face {
+  font-family: "CorporateLogoBold";
+  src: url("../graphics/fonts/ja/logotypejp.ttf");
+}
+
+@font-face {
+  font-family: "RiiPopkk";
+  src: url("../graphics/fonts/ja/RiiPopkkR.otf");
+}
+
+@font-face {
+  font-family: "PopRumCute";
+  src: url("../graphics/fonts/ja/PopRumCute.otf");
+}
+
+@font-face {
+  font-family: "ChikaraYowaku";
+  src: url("../graphics/fonts/ja/851CHIKARA-YOWAKU.ttf");
+}
+
+@font-face {
+  font-family: "Otsutome";
+  src: url("../graphics/fonts/ja/OtsutomeFont_Ver3.ttf");
+}
+
+@font-face {
+  font-family: "MaleCharacters";
+  src: url("../graphics/fonts/ja/male-characters.ttf");
+}
+
+@font-face {
+  font-family: "TanukiPermanentMarker";
+  src: url("../graphics/fonts/ja/TanukiMagic.ttf");
+}
+
+@font-face {
+  font-family: "CineCaption";
+  src: url("../graphics/fonts/ja/cinecaption.ttf");
+}
+
+@font-face {
+  font-family: "GenEiLateMin_v2";
+  src: url("../graphics/fonts/ja/GenEiLateMin_v2.ttc");
+}
+
+@font-face {
+  font-family: "ReallyScaryMinchotai";
+  src: url("../graphics/fonts/ja/ReallyScaryMinchotai.otf");
+}
+
+@font-face {
+  font-family: "Zomzi";
+  src: url("../graphics/fonts/ja/Zomzi.ttf");
+}
+
+@font-face {
+  font-family: "ComicHorror";
+  src: url("../graphics/fonts/ja/ComicHorror.ttf");
+}
+
+@font-face {
+  font-family: "GenkaiMincho";
+  src: url("../graphics/fonts/ja/genkai-mincho.ttf");
+}
+
+@font-face {
+  font-family: "Togalite";
+  src: url("../graphics/fonts/ja/togalite-heavy.otf");
+}
+
+@font-face {
+  font-family: "HannariMincho";
+  src: url("../graphics/fonts/ja/Hannari.otf");
+}
+
+@font-face {
+  font-family: "TogoshiMincho";
+  src: url("../graphics/fonts/ja/togoshi-mincho.ttf");
+}
+
+@font-face {
+  font-family: "NagurigakiCrayon";
+  src: url("../graphics/fonts/ja/Nagurigaki_Crayon.ttf");
+}
+
+@font-face {
+  font-family: "TegakiKakutto";
+  src: url("../graphics/fonts/ja/851_Tegaki_Kakutto.ttf");
+}
+
+@font-face {
+  font-family: "ArmedLemon";
+  src: url("../graphics/fonts/ja/ArmedLemon.ttf");
+}
+
+@font-face {
+  font-family: "AsobiMemogaki";
+  src: url("../graphics/fonts/ja/AsobiMemogaki-Regular-1-01.ttf");
+}
+
+@font-face {
+  font-family: "KohichiFeltPen";
+  src: url("../graphics/fonts/ja/KS-Kohichi-FeltPen.ttf");
+}
+
+@font-face {
+  font-family: "NicoMojiPlus";
+  src: url("../graphics/fonts/ja/nicomoji-plus_1.11.ttf");
+}
+
+@font-face {
+  font-family: "AppliMincho";
+  src: url("../graphics/fonts/ja/AppliMincho.otf");
+}
+
+@font-face {
+  font-family: "KaisoNextB";
+  src: url("../graphics/fonts/ja/Kaiso-Next-B.otf");
+}
+
+@font-face {
+  font-family: "MikaChan";
+  src: url("../graphics/fonts/ja/mikachan-P.ttf");
+}
+
+@font-face {
+  font-family: "Pigmo01";
+  src: url("../graphics/fonts/ja/Pigmo-01.otf");
+}
+
+@font-face {
+  font-family: "ZinHenaBokuryu";
+  src: url("../graphics/fonts/ja/ZinHenaBokuryu-RCF.otf");
+}
+
+@font-face {
+  font-family: "MinaMoji";
+  src: url("../graphics/fonts/ja/minamoji.ttf");
+}
+
+@font-face {
+  font-family: "Nikukyu-カタカナ";
+  src: url("../graphics/fonts/ja/FontopoNIKUKYU.otf");
+}
+
+@font-face {
+  font-family: "Oriental-カタカナ";
+  src: url("../graphics/fonts/ja/FontopoORIENTAL.otf");
+}
+
+@font-face {
+  font-family: "NotoSansKRBold";
+  src: url("../graphics/fonts/ko/NotoSansKR-Bold.otf");
+}
+
+@font-face {
+  font-family: "BMDohyeon";
+  src: url("../graphics/fonts/ko/BMDOHYEON.ttf");
+}
+
+@font-face {
+  font-family: "BMYeonSung";
+  src: url("../graphics/fonts/ko/BMYEONSUNG.ttf");
+}
+
+@font-face {
+  font-family: "BMHannaPro";
+  src: url("../graphics/fonts/ko/BMHANNAPro.ttf");
+}
+
+@font-face {
+  font-family: "Sunflower";
+  src: url("../graphics/fonts/ko/Sunflower-Bold.ttf");
+}
+
+@font-face {
+  font-family: "JejuHallasan";
+  src: url("../graphics/fonts/ko/JejuHallasan-Regular.ttf");
+}
+
+@font-face {
+  font-family: "BlackHanSans";
+  src: url("../graphics/fonts/ko/BlackHanSans-Regular.ttf");
+}
+
+@font-face {
+  font-family: "KirangHaerang";
+  src: url("../graphics/fonts/ko/KirangHaerang-Regular.ttf");
+}
+
+@font-face {
+  font-family: "HiMelody";
+  src: url("../graphics/fonts/ko/HiMelody-Regular.ttf");
+}
+
+@font-face {
+  font-family: "UhBeeSeHyun";
+  src: url("../graphics/fonts/ko/UhBee_Se_hyun_Bold.ttf");
+}
+
+@font-face {
+  font-family: "UhBeeJisyuk";
+  src: url("../graphics/fonts/ko/UhBee_Jisyuk_jisyuk_BOLD.ttf");
+}
+
+@font-face {
+  font-family: "Daraehand";
+  src: url("../graphics/fonts/ko/drfont_daraehand_Basic.ttf");
+}
+
+@font-face {
+  font-family: "GabiaSolmee";
+  src: url("../graphics/fonts/ko/gabia_solmee.ttf");
+}
+
+@font-face {
+  font-family: "NanumBrush";
+  src: url("../graphics/fonts/ko/NanumBrush.ttf");
+}
+
+@font-face {
+  font-family: "SSShinRegular";
+  src: url("../graphics/fonts/ko/SSShinRegular.ttf");
+}
+
+@font-face {
+  font-family: "SSShinB7Regular";
+  src: url("../graphics/fonts/ko/SSShinb7Regular.ttf");
+}
+
+@font-face {
+  font-family: "TvNEnjoyStories";
+  src: url("../graphics/fonts/ko/tvN_즐거운이야기_Bold.ttf");
+}
+
+@font-face {
+  font-family: "K2DBold";
+  src: url("../graphics/fonts/th/K2D-Bold.ttf");
+}
+
+@font-face {
+  font-family: "NotoSansThaiBold";
+  src: url("../graphics/fonts/th/NotoSansThai-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Athiti";
+  src: url("../graphics/fonts/th/Athiti-Medium.ttf");
+}
+
+@font-face {
+  font-family: "BaiJamjuree";
+  src: url("../graphics/fonts/th/BaiJamjuree-Medium.ttf");
+}
+
+@font-face {
+  font-family: "ChakraPetch";
+  src: url("../graphics/fonts/th/ChakraPetch-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Charm";
+  src: url("../graphics/fonts/th/Charm-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Charmonman";
+  src: url("../graphics/fonts/th/Charmonman-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Chonburi";
+  src: url("../graphics/fonts/th/Chonburi-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Fahkwang";
+  src: url("../graphics/fonts/th/Fahkwang-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Itim";
+  src: url("../graphics/fonts/th/Itim-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Kanit";
+  src: url("../graphics/fonts/th/Kanit-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Kodchasan";
+  src: url("../graphics/fonts/th/Kodchasan-Medium.ttf");
+}
+
+@font-face {
+  font-family: "KoHo";
+  src: url("../graphics/fonts/th/KoHo-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Srisakdi";
+  src: url("../graphics/fonts/th/Srisakdi-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Krub";
+  src: url("../graphics/fonts/th/Krub-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Maitree";
+  src: url("../graphics/fonts/th/Maitree-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Mali";
+  src: url("../graphics/fonts/th/Mali-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Mitr";
+  src: url("../graphics/fonts/th/Mitr-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Niramit";
+  src: url("../graphics/fonts/th/Niramit-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Pattaya";
+  src: url("../graphics/fonts/th/Pattaya-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Pridi";
+  src: url("../graphics/fonts/th/Pridi-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Prompt";
+  src: url("../graphics/fonts/th/Prompt-Bold.ttf");
+}
+
+@font-face {
+  font-family: "Sarabun";
+  src: url("../graphics/fonts/th/Sarabun-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Sriracha";
+  src: url("../graphics/fonts/th/Sriracha-Regular.ttf");
+}
+
+@font-face {
+  font-family: "Taviraj";
+  src: url("../graphics/fonts/th/Taviraj-Medium.ttf");
+}
+
+@font-face {
+  font-family: "Thasadith";
+  src: url("../graphics/fonts/th/Thasadith-Bold.ttf");
+}
+
+@font-face {
+  font-family: "BianHeiti";
+  src: url("../graphics/fonts/cn/BianHeiti.ttf");
+}
+
+@font-face {
+  font-family: "SourceHanSerifSC-Medium";
+  src: url("../graphics/fonts/cn/SourceHanSerifSC-Medium.otf");
+}
+
+.no-scrollbar {
+  overflow-y: scroll;
+  overflow-x: scroll;
+  overflow-y: -moz-scrollbars-none;
+  overflow-x: -moz-scrollbars-none;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+@keyframes speakingas-item-pulse {
+  0% {
+    border: 1px solid red;
+  }
+  100% {
+    border: 1px solid white;
+  }
+}
+
+@keyframes speakingas-name-pulse {
+  0% {
+    color: white;
+  }
+  100% {
+    color: #ff6400;
+  }
+}
+
+@keyframes typing-wiggle {
+  0% {
+    transform: rotate(-20deg);
+  }
+  100% {
+    transform: rotate(20deg);
+  }
+}
+
+.theatre-group {
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.theatre-bar {
+  display: block;
+  position: absolute;
+  width: calc(100% - 302px);
+  height: 160px;
+  top: calc(100% - 160px - 0.5vh);
+  left: 0px;
+  z-index: 1;
+  transition: opacity 0.5s ease;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.theatre-bar-left {
+  display: flex;
+  position: absolute;
+  top: 0px;
+  left: -100%;
+  width: 750px;
+  border-radius: 0px 5px 5px 0px;
+  margin: 0px;
+  padding: 0px;
+  height: 160px;
+  z-index: 1;
+  background: url("../graphics/denim95.png");
+  box-shadow: 0 0 20px #000;
+  transition: width 0.5s ease, left 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
+}
+
+.theatre-bar-right {
+  display: flex;
+  position: absolute;
+  top: 0px;
+  left: 200%;
+  width: 750px;
+  border-radius: 5px 0px 0px 5px;
+  margin: 0px;
+  padding: 0px;
+  height: 160px;
+  z-index: 1;
+  background: url("../graphics/denim95.png");
+  box-shadow: 0 0 20px #000;
+  transition: width 0.5s ease, left 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
+}
+
+.theatre-bar-lightleft {
+  display: flex;
+  position: absolute;
+  top: 0px;
+  left: -100%;
+  width: 750px;
+  margin: 0px;
+  padding: 0px;
+  height: 170px;
+  z-index: 1;
+  transition: width 0.5s ease, left 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
+}
+
+.theatre-bar-lightright {
+  display: flex;
+  position: absolute;
+  top: 0px;
+  left: 200%;
+  width: 750px;
+  margin: 0px;
+  padding: 0px;
+  height: 160px;
+  z-index: 1;
+  transition: width 0.5s ease, left 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
+}
+
+.theatre-bar-clearleft {
+  display: flex;
+  position: absolute;
+  top: 0px;
+  left: -100%;
+  width: 750px;
+  margin: 0px;
+  padding: 0px;
+  height: 170px;
+  z-index: 1;
+  transition: width 0.5s ease, left 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
+}
+
+.theatre-bar-clearright {
+  display: flex;
+  position: absolute;
+  top: 0px;
+  left: 200%;
+  width: 750px;
+  margin: 0px;
+  padding: 0px;
+  height: 170px;
+  z-index: 1;
+  transition: width 0.5s ease, left 0.5s ease, opacity 0.5s ease;
+  opacity: 0;
+}
+
+.theatre-dock {
+  display: flex;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 99.5vh;
+  z-index: 30;
+  overflow-y: hidden;
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+.theatre-dock-left-top {
+  display: flex;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: calc(99vh - 158px);
+  pointer-events: none;
+}
+
+.theatre-dock-left {
+  display: flex;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 99.5vh;
+  pointer-events: none;
+}
+
+.theatre-dock-right-top {
+  display: flex;
+  position: absolute;
+  top: 0px;
+  left: calc(100% - 300px - 950px);
+  width: 100%;
+  height: calc(99vh - 158px);
+  pointer-events: none;
+}
+
+.theatre-dock-right {
+  display: flex;
+  position: absolute;
+  top: 0px;
+  left: calc(100% - 300px - 950px);
+  width: 100%;
+  height: 99.5vh;
+  pointer-events: none;
+}
+
+.theatre-portrait-dock {
+  display: block;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  transition: left 1s ease, opacity 1s ease;
+}
+
+.theatre-portrait-left,
+.theatre-portrait-right {
+  position: absolute;
+  border: none;
+  top: 0px;
+  left: 0px;
+  transition: top 0.5s ease, left 0.5s ease, transform 0.5s ease;
+}
+
+.theatre-portrait-load {
+  display: none;
+}
+
+.theatre-mirror {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+
+.theatre-portrait-name-right,
+.theatre-portrait-name-left,
+.theatre-portrait-name {
+  display: block;
+  position: absolute;
+  top: calc(100% - 215px);
+  width: 750px;
+  height: 55px;
+  font-size: 44px;
+  font-weight: bold;
+  font-family: "Riffic", "Signika", "LinLibertine", serif;
+  color: white;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black;
+  text-shadow: 2px 2px #000;
+  pointer-events: none;
+  transition: left 0.5s ease;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.theatre-portrait-name-left {
+  text-indent: 0.5em;
+  left: 0;
+}
+
+.theatre-portrait-name-right {
+  direction: rtl;
+  text-align: right;
+  text-indent: 0.5em;
+  left: 0;
+}
+
+.theatre-portrait-name-align-top {
+  top: calc(100% - 55px);
+}
+
+.theatre-portrait-name-speakingas {
+  animation: speakingas-name-pulse 1s linear 0.2s infinite alternate;
+}
+
+.theatre-portrait-namespan {
+  vertical-align: top;
+}
+
+.theatre-portrait-namebubble {
+  flex: 0 0 55px;
+  position: relative;
+  height: 55px;
+  border: none;
+  padding: 0px;
+  margin: 0px;
+  opacity: 0px;
+  top: 100%;
+  animation: typing-wiggle 0.5s linear 0.2s infinite alternate;
+  transition: opacity 0.5s ease-in-out, top 0.5s ease-in-out;
+}
+
+.theatre-container-row {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+}
+
+.theatre-container-tiles {
+  flex-wrap: wrap;
+  align-content: flex-start;
+  align-items: center;
+  justify-content: center;
+}
+
+.theatre-container-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.theatre-command-group {
+  flex: 0 0 50px;
+  height: 100%;
+}
+
+.theatre-content-box {
+  display: flex;
+  flex: 1;
+}
+
+.theatre-text-box {
+  flex: 1;
+  position: relative;
+  display: flex;
+  font-size: 32px;
+  text-shadow: 2px 2px #000;
+  margin: 10px 0px 10px 0px;
+  padding-left: 10px;
+  align-content: flex-start;
+  font-family: "Signika", "Palatino Linotype", serif;
+  border-left: 4px double #333;
+  transition: opacity 1s ease-in-out;
+  flex-wrap: wrap;
+}
+
+.theatre-text-box-light {
+  flex: 1;
+  position: relative;
+  display: flex;
+  font-size: 32px;
+  text-shadow: 2px 2px #000;
+  margin: 10px 0px 10px 0px;
+  padding-left: 10px;
+  align-content: flex-start;
+  font-family: "Signika", "Palatino Linotype", serif;
+  border-left: 1px dashed rgba(255, 255, 255, 0.1);
+  border-right: 1px dashed rgba(255, 255, 255, 0.1);
+  transition: opacity 1s ease-in-out;
+  flex-wrap: wrap;
+}
+
+.theatre-text-box-clear {
+  flex: 1;
+  position: relative;
+  display: flex;
+  font-size: 32px;
+  text-shadow: 1px 1px 3px #000;
+  margin: 10px 0px 10px 0px;
+  padding-left: 10px;
+  border-radius: 5px;
+  align-content: flex-start;
+  font-family: "Signika", "Palatino Linotype", serif;
+  transition: opacity 1s ease-in-out, box-shadow 0.5s ease-in-out;
+  flex-wrap: wrap;
+}
+
+.theatre-text-box-clear:hover {
+  box-shadow: inset 0px 0px 20px 2px white;
+}
+
+.theatre-narrator-content div,
+.theatre-text-box-light div,
+.theatre-text-box-clear div,
+.theatre-text-box div {
+  display: flex;
+  align-content: flex-start;
+}
+
+.theatre-narrator-content hr,
+.theatre-text-box-light hr,
+.theatre-text-box-clear hr,
+.theatre-text-box hr {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.darkapp {
+  background: url("../graphics/denim95.png");
+}
+
+.theatre-narrator {
+  position: absolute;
+  top: calc(25% - 50px);
+  left: 0px;
+  display: flex;
+  width: calc(100% - 300px);
+  height: 200px;
+  pointer-events: none;
+  z-index: 1;
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s ease-in-out;
+}
+
+.theatre-narrator-backdrop {
+  position: relative;
+  display: flex;
+  width: 0%;
+  height: 100%;
+  align-content: center;
+  justify-content: center;
+  overflow: hidden;
+  transition: width 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  background: linear-gradient(transparent 0%, rgba(0, 0, 0, 0.7) 40%, rgba(0, 0, 0, 0.7) 60%, transparent 100%);
+}
+
+.theatre-narrator-content {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: calc(100% - 5em);
+  height: 100%;
+  display: flex;
+  margin: 0px 1em 0px 4em;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  font-family: "Signika", "Palatino Linotype", serif;
+  font-size: 28px;
+  font-weight: bold;
+  text-shadow: 3px 3px 2px black;
+  flex-wrap: wrap;
+  align-content: center;
+  color: white;
+  overflow-y: scroll;
+}
+
+.theatre-control-group {
+  flex: 0 0 40px;
+  height: 40px;
+  display: flex;
+  margin: 2px 8px;
+}
+
+.theatre-control-nav-bar {
+  flex: 1;
+  display: flex;
+  margin-right: 2px;
+  background: url("../../../../ui/denim065.png");
+  border-radius: 5px;
+  border: 1px solid #212121;
+  overflow-y: hidden;
+}
+
+.theatre-control-nav-bar-item {
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  object-fit: cover;
+  object-position: 50% 0;
+  box-sizing: content-box;
+  box-shadow: 0 0 10px #000;
+  border: 1px solid #000;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.theatre-control-nav-bar-item:hover {
+  background: radial-gradient(closest-side at 50%, red 1%, transparent 99%);
+}
+
+.theatre-control-nav-bar-item-active {
+  border: 1px solid red;
+  box-shadow: 0 0 6px inset #ff6400;
+  background: radial-gradient(closest-side at 50%, red 1%, transparent 99%);
+}
+
+.theatre-control-nav-bar-item-active:hover,
+.theatre-control-nav-bar-item:hover {
+  transform: scale(1.2, 1.2);
+}
+
+.theatre-control-nav-bar-item-speakingas {
+  animation: speakingas-item-pulse 1s linear 0.2s infinite alternate;
+  background: radial-gradient(closest-side at 50%, #ff6400 1%, transparent 99%);
+}
+
+.theatre-control-btn {
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  border-radius: 3px;
+}
+
+.theatre-control-btn-down {
+  border: 1px solid red;
+  box-shadow: 0 0 6px inset #ff6400;
+  background: radial-gradient(closest-side at 50%, red 1%, transparent 99%);
+}
+
+.theatre-control-small-btn-down {
+  border-left: 1px solid red;
+  border-right: 1px solid red;
+  box-shadow: 0 0 6px inset #ff6400;
+  background: radial-gradient(closest-side at 50%, red 1%, transparent 99%);
+}
+
+.theatre-icon-suppress {
+  width: 100%;
+  height: 100%;
+  background-image: url("../graphics/btn_suppress.png");
+}
+
+.theatre-icon-emote {
+  width: 100%;
+  height: 100%;
+  background-image: url("../graphics/btn_emote.png");
+}
+
+.theatre-icon-fontsize-small {
+  width: 100%;
+  height: 100%;
+  background-image: url("../graphics/btn_font_size_small.png");
+}
+
+.theatre-icon-fontsize-medium {
+  width: 100%;
+  height: 100%;
+  background-image: url("../graphics/btn_font_size_medium.png");
+}
+
+.theatre-icon-fontsize-large {
+  width: 100%;
+  height: 100%;
+  background-image: url("../graphics/btn_font_size_large.png");
+}
+
+.theatre-icon-cinema {
+  width: 100%;
+  height: 100%;
+  background-image: url("../graphics/btn_cinema.png");
+}
+
+.theatre-icon-narrator {
+  width: 100%;
+  height: 100%;
+  background-image: url("../graphics/btn_narrator.png");
+}
+
+.theatre-icon-live {
+  width: 100%;
+  height: 100%;
+  background-image: url("../graphics/btn_live.png");
+}
+
+.theatre-control-btn:hover {
+  background: radial-gradient(closest-side at 50%, red 1%, transparent 99%);
+}
+
+.theatre-control-chat-cover {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  width: 100%;
+  pointer-events: none;
+}
+
+.theatre-control-chat-cover img {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  height: 100%;
+  border: 0px;
+  margin: 0px;
+  padding: 0px;
+  object-fit: cover;
+  object-position: 50% 0;
+  opacity: 0.25;
+}
+
+.theatre-control-chat-cover-ooc {
+  background-image: url("../graphics/ooc.png");
+  box-shadow: inset 0px 0px 10px 2px blue;
+}
+
+.theatre-emote-menu {
+  display: none;
+  position: absolute;
+  top: 0px;
+  width: 300px;
+  height: 400px;
+}
+
+.theatre-emote-menu .emote-box {
+  padding: 2px;
+  border-top: 4px double #222;
+  overflow: hidden;
+}
+
+.theatre-emote-menu .textanims-box {
+  overflow: hidden;
+}
+
+.theatre-emote-menu .textflyin-box {
+  padding: 2px;
+  margin-right: 1px;
+  border-right: 1px solid #222;
+  overflow: hidden;
+}
+
+.theatre-emote-menu .textstanding-box {
+  padding: 2px;
+  margin-left: 1px;
+  border-left: 1px solid #222;
+  overflow: hidden;
+}
+
+.theatre-emote-menu h2 {
+  color: #ffbb8e;
+  font-size: 26px;
+  font-family: "Riffic", "Signika", "Palatino Linotype", serif;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: black;
+  text-shadow: 2px 2px #000;
+  border-bottom: 2px dashed #888;
+}
+
+.theatre-emote-menu .emote {
+  flex: 0 0 30px;
+  display: flex;
+  height: 30px;
+  width: 30px;
+  border-radius: 5px;
+  padding: 2px;
+  margin: 1px;
+  font-size: 26px;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: default;
+  font-family: "Signika";
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+}
+
+.theatre-emote-menu .emote-imgavail {
+  background: radial-gradient(closest-side at 50%, rgba(255, 100, 0, 0.75) 1%, transparent 99%);
+}
+
+.theatre-emote-menu .textflyin-active,
+.theatre-emote-menu .textstanding-active,
+.theatre-emote-menu .emote-active {
+  border: 1px solid red;
+  box-shadow: 0 0 6px inset #ff6400;
+  background: radial-gradient(closest-side at 50%, red 1%, transparent 99%);
+}
+
+.theatre-emote-menu .textanim:hover,
+.theatre-emote-menu .emote:hover {
+  background: radial-gradient(closest-side at 50%, red 1%, transparent 99%);
+}
+
+.theatre-emote-menu img {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.theatre-emote-menu .textanim {
+  flex: 0 0 40px;
+  display: flex;
+  margin: 2px;
+  padding-left: 0;
+  border-left: 0;
+  font-family: "Signika", "Palatino Linotype", serif;
+  font-size: 18px;
+  text-shadow: 2px 2px #000;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+}
+
+.theatre-emote-menu .textanim div,
+.theatre-emote-menu .textanim span {
+  pointer-events: none;
+}
+
+.emote-box .emotebar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 2px dashed #888;
+}
+
+.emote-box h2 {
+  flex: 1;
+  border-bottom: none;
+  margin: 0;
+}
+
+.emote-box .emotebar .fontselect {
+  flex: 2;
+  max-width: 120px;
+  color: white;
+  font-weight: bold;
+  padding: 0;
+  margin-left: 2px;
+  border: 1px solid #333;
+  background: url("../../../../ui/denim-light.png");
+}
+
+.emote-box .emotebar .fontselect option {
+  font-size: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.emote-box .emotebar .sizeselect {
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  margin: 0;
+  padding: 0;
+}
+
+.emote-box .emotebar .colorselect {
+  flex: 0 0 34px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  font-size: 22px;
+  background: none;
+  text-shadow: none;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #222;
+}
+
+.theatre-tooltip {
+  display: flex;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 150px;
+  height: 150px;
+  opacity: 0;
+  margin: 0;
+  padding: 0;
+  box-shadow: 0 0 20px #ff6400;
+  pointer-events: none;
+  transition: opacity 0.3s ease-in-out;
+  align-items: center;
+  justify-content: center;
+}
+
+.theatre-tooltip canvas {
+  flex: 0 0 140px;
+  width: 140px;
+  height: 140px;
+  border-radius: 3px;
+}
+
+.theatre-config-form-group {
+  position: relative;
+  height: 30px;
+  clear: both;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 3px 0;
+  transition: all 0.5s ease-in-out;
+}
+
+.theatre-config-form-group > * {
+  flex: 3;
+}
+
+.theatre-config-form-group > label {
+  flex: 2;
+  display: flex;
+  line-height: 24px;
+  align-items: center;
+}
+
+.theatre-form-group .notes {
+  flex: 0 0 100%;
+  margin-top: 0;
+}
+
+.theatre-config-tab-pane {
+  flex: 1;
+  height: 220px;
+  display: flex;
+  flex-direction: column;
+}
+
+.theatre-emote-icon {
+  flex: 0 0 30px;
+  display: flex;
+  height: 30px;
+  width: 30px;
+  padding: 2px;
+  margin: 1px;
+  font-size: 26px;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  text-align: center;
+  cursor: default;
+  font-family: "Signika";
+  color: white;
+  background: url("../graphics/denim95.png");
+  border-radius: 3px;
+}
+
+.theatre-config-form-group img {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.theatre-config-emote-label {
+  position: relative;
+}
+
+.theatre-config-emote-label-dock {
+  display: none;
+  position: absolute;
+  height: 30px;
+  width: 30px;
+  top: 0px;
+  left: calc(100% - 35px);
+  color: black;
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  padding: 1px 6px;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.theatre-config-form-group[todelete="true"] {
+  border-radius: 3px;
+  margin: 2px;
+  background: rgba(255, 0, 0, 0.75);
+}
+
+.theatre-config-form-group[todelete="true"] * {
+  pointer-events: none;
+}
+
+.theatre-config-btn-add-emote {
+  width: 50%;
+  height: 30px;
+  margin: 2px 2px;
+  background: rgba(255, 255, 255, 0.75);
+  box-sizing: border-box;
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  padding: 1px 6px;
+  align-items: flex-start;
+  text-align: center;
+  cursor: default;
+  font-size: 14px;
+  line-height: 28px;
+  font-family: "Signika";
+}
+
+.theatre-config-btn-add-emote:hover {
+  box-shadow: 0 0 5px red;
+}
+
+.theatre-config-btn-edit-emote {
+  order: 100;
+  flex: 0;
+  width: 30px;
+  height: 30px;
+}
+
+.theatre-config-tabs {
+  border-bottom: 1px solid #aaa;
+  height: 30px;
+}
+
+.theatre-config-tab {
+  max-height: 650px;
+}
+
+#chat-log {
+  height: calc(100% - 130px - 40px);
+}
+
+#chat-form {
+  position: relative;
+}
+/* BUG https://gitlab.com/foundrynet/foundryvtt/-/issues/3200#note_374466454*/
+/* #notifications {
+  pointer-events: none; } */
+
+#pause {
+  transition: bottom 500ms ease 0ms;
+}
+
+#pause.theatre-centered {
+  bottom: calc(50% - 50px);
+}
+
+#players {
+  z-index: 1;
+}
+
+#players,
+#hotbar {
+  transition: opacity 500ms ease 0ms;
+}
+
+/* id.class is utilized to gain priority over styling rules of the "Minimal UI" module */
+#players.theatre-invisible,
+#hotbar.theatre-invisible {
+  opacity: 0;
+  pointer-events: none;
+}
+
+#hotbar.theatre-invisible #hotbar-directory-controls,
+#hotbar.theatre-invisible #action-bar,
+#hotbar.theatre-invisible #hotbar-page-controls {
+  pointer-events: none;
+}
+
+@-moz-document url-prefix() {
+  .emote-box .emotebar .colorselect {
+    padding: 3px;
+  }
+  .emote-box .emotebar .fontselect option {
+    font-size: 16px;
+  }
+}
