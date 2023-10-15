@@ -19,6 +19,7 @@
  */
 
 import { KHelpers } from "./KHelpers.js";
+import { Theatre } from "./Theatre.js";
 
 /**
  * ============================================================
