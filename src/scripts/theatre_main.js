@@ -349,11 +349,6 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
         break;
     }
     if (Theatre.DEBUG) console.log("font size is (%s): ", insertFontSize, fontSize);
-    Theatre.instance._applyFontFamily(textBox, insertFontType || Theatre.instance.textFont);
-    //textBox.style["font-family"] = insertFontType || Theatre.instance.textFont;
-    textBox.style.color = insertFontColor || "white";
-    textBox.style["font-size"] = `${fontSize}px`;
-    textBox.scrollTop = 0;
     // If polyglot is active, and message contains its flag (e.g. not an emote), begin processing
     if (typeof polyglot !== "undefined" && typeof chatData.flags.polyglot !== "undefined") {
       // Get current language being processed
@@ -369,6 +364,11 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
         textContent = game.polyglot.scrambleString(textContent, chatData._id, lang);
       }
     }
+    Theatre.instance._applyFontFamily(textBox, insertFontType || Theatre.instance.textFont);
+    //textBox.style["font-family"] = insertFontType || Theatre.instance.textFont;
+    textBox.style.color = insertFontColor || "white";
+    textBox.style["font-size"] = `${fontSize}px`;
+    textBox.scrollTop = 0;
 
     charSpans = Theatre.splitTextBoxToChars(textContent, textBox);
 
