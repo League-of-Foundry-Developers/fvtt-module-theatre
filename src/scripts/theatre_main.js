@@ -359,20 +359,8 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
       // Get current language being processed
       const lang = chatData.flags.polyglot.language;
       // Fetch the languages known by current user
-      let langs = game.polyglot.getUserLanguages();
-      let understood = false;
-      for (lang_set of langs.values()) {
-        for (item of lang_set.values()) {
-          // If the user has a matching language in their list, we understand it
-          if (lang == item) {
-            understood = true;
-            break;
-          }
-        }
-      }
-      if (game.user.isGM || game.user.name == "Stream" || game.user.name == "stream") {
-        understood = true;
-      }
+      const langs = game.polyglot.knownLanguages;
+      const understood = langs.has(lang) || game.user.isGM || game.view === "stream";
       if (!understood) {
         // If not understood, scramble the text
         const fontStyle = game.polyglot._getFontStyle(lang);
