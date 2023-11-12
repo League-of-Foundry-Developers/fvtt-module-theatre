@@ -73,7 +73,7 @@
         "autoHideBottom": "Auto Hide Bottom",
         "autoHideBottomHint": "Hide bottom UI(player&hotbar) when actor shows on stage.",
         "suppressMacroHotbar": "Show Player List and Macro Hotbar When Stage is Suppressed",
-        "removeLabelSheetHeader": "Remove Text Labels From Actor Sheets",
+        "removeLabelSheetHeader": "Remove Text Labels From Actor Sheet Header",
         "removeLabelSheetHeaderHint": "Removes text labels from actor sheet header buttons, useful for small screens and mobile devices. Button will still be displayed with icon.",
         "ignoreMessagesToChat": "Ignore Theatre Messages From Chat",
         "ignoreMessagesToChatHint": "Ignores messages sent during Theatre Mode from chat. Disabling this message will make them appear again.",
