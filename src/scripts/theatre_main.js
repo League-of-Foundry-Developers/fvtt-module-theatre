@@ -23,24 +23,27 @@ Handlebars.registerHelper("resprop", function (propPath, hash) {
  */
 Hooks.on("getActorSheetHeaderButtons", (app, buttons) => {
   if (!game.user.isGM && game.settings.get("theatre", "gmOnly")) return;
+  const removeLabelSheetHeader = game.settings.get(Theatre.SETTINGS, "removeLabelSheetHeader");
 
   let theatreButtons = [];
   if (app.object.isOwner) {
     // only prototype actors
     if (!app.object.token) {
       theatreButtons.push({
-        label: "Theatre.UI.Config.Theatre",
+        label: removeLabelSheetHeader ? "" : "Theatre.UI.Config.Theatre",
         class: "configure-theatre",
         icon: "fas fa-user-edit",
         onclick: (ev) => Theatre.onConfigureInsert(ev, app.object.sheet),
       });
     }
     theatreButtons.push({
-      label: Theatre.isActorStaged(app.object) ? "Theatre.UI.Config.RemoveFromStage" : "Theatre.UI.Config.AddToStage",
+      label: removeLabelSheetHeader
+        ? ""
+        : (Theatre.isActorStaged(app.object) ? "Theatre.UI.Config.RemoveFromStage" : "Theatre.UI.Config.AddToStage"),
       class: "add-to-theatre-navbar",
-      icon: "fas fa-theater-masks",
+      icon: Theatre.isActorStaged(app.object) ? "fas fa-mask" : "fas fa-theater-masks",
       onclick: (ev) => {
-        Theatre.onAddToNavBar(ev, app.object.sheet);
+        Theatre.onAddToNavBar(ev, app.object.sheet, removeLabelSheetHeader);
       },
     });
   }
