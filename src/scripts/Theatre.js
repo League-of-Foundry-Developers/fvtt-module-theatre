@@ -8402,8 +8402,8 @@ export class Theatre {
       newText = removeLabel;
     }
     ev.currentTarget.innerHTML = Theatre.isActorStaged(actor)
-      ? `<i class="fas fa-theater-masks"></i>${newText}`
-      : `<i class="fas fa-mask"></i>${newText}`;
+      ? `<i class="fas fa-mask"></i>${newText}`
+      : `<i class="fas fa-theater-masks"></i>${newText}`;
   }
 
   static _getTheatreId(actor) {
