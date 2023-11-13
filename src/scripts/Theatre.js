@@ -2107,6 +2107,7 @@ export class Theatre {
       backgroundAlpha: 0,
       antialias: true,
       width: document.body.offsetWidth,
+      resolution: game.settings.get("core", "pixelRatioResolutionScaling") ? window.devicePixelRatio : 1
     });
 
     let canvas = app.view;
