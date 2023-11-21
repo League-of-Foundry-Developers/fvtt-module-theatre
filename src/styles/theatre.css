@@ -1680,10 +1680,6 @@
   bottom: calc(50% - 50px);
 }
 
-#players {
-  z-index: 1;
-}
-
 #players,
 #hotbar {
   transition: opacity 500ms ease 0ms;
@@ -1700,6 +1696,10 @@
 #hotbar.theatre-invisible #action-bar,
 #hotbar.theatre-invisible #hotbar-page-controls {
   pointer-events: none;
+}
+
+#ui-left.z-higher, #ui-middle.z-higher {
+  z-index: calc(var(--z-index-app) + 1);
 }
 
 @-moz-document url-prefix() {

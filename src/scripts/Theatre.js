@@ -196,7 +196,13 @@ export class Theatre {
     // set narrator height
     this.settings.narrHeight = game.settings.get(Theatre.SETTINGS, "theatreNarratorHeight");
     this.theatreNarrator.style.top = `calc(${this.settings.narrHeight} - 50px)`;
-
+    // set z-index class for other UI elements
+    const uiAbove = game.settings.get(Theatre.SETTINGS, "showUIAboveStage");
+    const leftAbove = uiAbove == "left" || uiAbove == "both";
+    if (leftAbove) document.getElementById("ui-left").classList.add("z-higher");
+    const middleAbove = uiAbove == "middle" || uiAbove == "both";
+    if (middleAbove) document.getElementById("ui-middle").classList.add("z-higher");
+    
     // set dock canvas hard dimensions after CSS has caclulated it
 
     /**
@@ -497,11 +503,27 @@ export class Theatre {
 
     game.settings.register(Theatre.SETTINGS, "suppressMacroHotbar", {
       name: "Theatre.UI.Settings.suppressMacroHotbar",
-      hint: "",
+      hint: "Theatre.UI.Settings.suppressMacroHotbarHint",
       scope: "world",
       config: true,
       type: Boolean,
       default: true,
+    });
+
+    game.settings.register(Theatre.SETTINGS, "showUIAboveStage", {
+      name: "Theatre.UI.Settings.showUIAboveStage",
+      hint: "Theatre.UI.Settings.showUIAboveStageHint",
+      scope: "world",
+      config: true,
+      default: "none",
+      requiresReload: true,
+      type: String,
+      choices: {
+        none: "Theatre.UI.Settings.showUIAboveStageNone",
+        left: "Theatre.UI.Settings.showUIAboveStageLeft",
+        middle: "Theatre.UI.Settings.showUIAboveStageMiddle",
+        both: "Theatre.UI.Settings.showUIAboveStageBoth",
+      }
     });
 
     game.settings.register(Theatre.SETTINGS, "removeLabelSheetHeader", {
