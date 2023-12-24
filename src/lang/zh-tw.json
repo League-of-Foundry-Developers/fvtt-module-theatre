@@ -1,10 +1,10 @@
 {
   "I18N.MAINTAINERS": ["Chivell"],
 
-  "Header.Override.Token": "指示物",
-  "Header.Override.Sheet": "人物卡",
-  "Header.Override.Import": "導入",
-  "Header.Override.Close": "關閉",
+  "Theatre.Header.Override.Token": "指示物",
+  "Theatre.Header.Override.Sheet": "人物卡",
+  "Theatre.Header.Override.Import": "導入",
+  "Theatre.Header.Override.Close": "關閉",
 
   "Theatre.UI.Chat.Narrator": "旁白",
 

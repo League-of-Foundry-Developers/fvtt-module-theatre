@@ -2,10 +2,10 @@
   "I18N.LANGUAGE": "Français",
   "I18N.MAINTAINERS": ["KaKaRoTo", "Naoki"],
 
-  "Header.Override.Token": "Token",
-  "Header.Override.Sheet": "Fiche",
-  "Header.Override.Import": "Importer",
-  "Header.Override.Close": "Fermer",
+  "Theatre.Header.Override.Token": "Token",
+  "Theatre.Header.Override.Sheet": "Fiche",
+  "Theatre.Header.Override.Import": "Importer",
+  "Theatre.Header.Override.Close": "Fermer",
 
   "Theatre.UI.Chat.Narrator": "Narrateur",
 

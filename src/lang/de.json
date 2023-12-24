@@ -1,10 +1,10 @@
 {
   "I18N.MAINTAINERS": ["CarnVanBeck"],
 
-  "Header.Override.Token": "Figur",
-  "Header.Override.Sheet": "Bogen",
-  "Header.Override.Import": "Importieren",
-  "Header.Override.Close": "Schließen",
+  "Theatre.Header.Override.Token": "Figur",
+  "Theatre.Header.Override.Sheet": "Bogen",
+  "Theatre.Header.Override.Import": "Importieren",
+  "Theatre.Header.Override.Close": "Schließen",
 
   "Theatre.UI.Chat.Narrator": "Erzähler",
 
