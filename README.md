@@ -22,6 +22,10 @@ To install this module manually:
 
 This module uses the [libWrapper](https://github.com/ruipin/fvtt-lib-wrapper) library for wrapping core methods. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
 
+### socketlib
+
+This module uses the [socketlib](https://github.com/manuelVo/foundryvtt-socketlib) library for wrapping core methods. It is a optional dependency and it is recommended for the best experience and compatibility with other modules.
+
 ### Key Binds
 Theatre inserts now supports keybinds through the keybind API. The default keybinds are as follows (on windows):
 
