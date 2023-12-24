@@ -2312,7 +2312,7 @@ export class TheatreHelpers {
     // from the bar
     // add click handler logic to remove it from the stage
     let theatreId = Theatre._getTheatreId(actor);
-    let portrait = actor.img ? actor.img : "icons/mystery-man.png";
+    let portrait = actor.img ? actor.img : CONSTANTS.DEFAULT_PORTRAIT;
     let optAlign = "top";
     let name = actor.name;
 
@@ -2371,7 +2371,9 @@ export class TheatreHelpers {
    * @params actor (Actor) : The actor to remove from the NavBar staging area.
    */
   static removeFromNavBar(actor) {
-    if (!actor) return;
+    if (!actor) {
+        return;
+    }
     const theatreId = Theatre._getTheatreId(actor);
     Theatre.instance._removeFromStage(theatreId);
   }
@@ -2397,7 +2399,9 @@ export class TheatreHelpers {
    * @params actor (Actor) : The actor.
    */
   static isActorStaged(actor) {
-    if (!actor) return false;
+    if (!actor) {
+        return false;
+    }
     return !!Theatre.instance.stage[Theatre._getTheatreId(actor)];
   }
 

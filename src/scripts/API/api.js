@@ -23,7 +23,7 @@ const API = {
   setDebug(state) {
     return TheatreHelpers.setDebug(state);
   },
-  
+
   /**
    * Verify the TweenMax ease from the animation syntax shorthand.
    *

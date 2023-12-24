@@ -1,7 +1,7 @@
 import { KHelpers } from "./KHelpers.js";
 import { Theatre } from "./Theatre.js";
 import CONSTANTS from "./constants/constants.js";
-import { debug } from "./lib/lib.js";
+import { debug, log } from "./lib/lib.js";
 
 /**
  * Concat helper
@@ -140,8 +140,12 @@ Hooks.on("preCreateChatMessage", function (chatMessage) {
   };
   debug("preCreateChatMessage", chatMessage);
   // If theatre isn't even ready, then just no
-  if (!Theatre.instance) return;
-  if (chatMessage.rolls.length) return;
+  if (!Theatre.instance) {
+    return;
+  }
+  if (chatMessage.rolls.length) {
+    return;
+  }
 
   // make the message OOC if needed
   if ($(theatre.theatreChatCover).hasClass("theatre-control-chat-cover-ooc")) {
@@ -156,7 +160,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage) {
   if (Theatre.instance.speakingAs && Theatre.instance.usersTyping[chatMessage.user.id]) {
     let theatreId = Theatre.instance.usersTyping[chatMessage.user.id].theatreId;
     let insert = Theatre.instance.getInsertById(theatreId);
-    let actorId = theatreId.replace("theatre-", "");
+    let actorId = theatreId.replace(CONSTANTS.PREFIX_ACTOR_ID, "");
     let actor = game.actors.get(actorId) || null;
     debug("speakingAs %s", theatreId);
 
@@ -189,7 +193,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage) {
         Theatre.instance.setUserEmote(game.user._id, theatreId, "emote", insert.emote, false);
         Theatre.instance.delayedSentState = 0;
       }
-    } else if (Theatre.instance.speakingAs == Theatre.NARRATOR) {
+    } else if (Theatre.instance.speakingAs == CONSTANTS.NARRATOR) {
       chatData.speaker.alias = game.i18n.localize("Theatre.UI.Chat.Narrator");
       chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
     }
@@ -338,7 +342,7 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
       insertFontType = insert.textFont;
       insertFontSize = Number(insert.textSize);
       insertFontColor = insert.textColor;
-    } else if (theatreId == Theatre.NARRATOR) {
+    } else if (theatreId == CONSTANTS.NARRATOR) {
       insertFlyinMode = Theatre.instance.theatreNarrator.getAttribute("textflyin");
       insertStandingMode = Theatre.instance.theatreNarrator.getAttribute("textstanding");
       insertFontType = Theatre.instance.theatreNarrator.getAttribute("textfont");
@@ -346,7 +350,7 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
       insertFontColor = Theatre.instance.theatreNarrator.getAttribute("textcolor");
     }
     let fontSize = Number(textBox.getAttribute("osize") || 28);
-    //console.log("font PRE(%s): ",insertFontSize,fontSize)
+    //debug("font PRE(%s): ",insertFontSize,fontSize)
     switch (insertFontSize) {
       case 3:
         fontSize *= 1.5;
@@ -421,9 +425,9 @@ Hooks.on("renderChatLog", function (app, html, data) {
   }
 
   // window may not be ready?
-  console.log("%cTheatre Inserts", "font-weight: bold; font-size: 30px; font-style: italic; color: black;");
+  // log("%cTheatre Inserts", "font-weight: bold; font-size: 30px; font-style: italic; color: black;");
   // NOTE: Closed alpha/beta is currently all rights reserved!
-  console.log("%c-- Theatre is Powered by Free Open Source GPLv3 Software --", "font-weight: bold; font-size: 12");
+  // log("%c-- Theatre is Powered by Free Open Source GPLv3 Software --", "font-weight: bold; font-size: 12");
 });
 
 /**
