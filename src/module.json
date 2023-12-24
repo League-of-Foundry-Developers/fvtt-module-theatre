@@ -2,7 +2,7 @@
   "id": "theatre",
   "title": "Theatre Inserts",
   "description": "Theater Inserts with a visual novel style made for heavy roleplay scenes",
-  "version": "2.7.4",
+  "version": "2.8.0",
   "authors": [
     {
       "name": "Ken L"
@@ -133,9 +133,9 @@
     "greensock/dist/PixiPlugin.min.js",
     "greensock/dist/ScrollToPlugin.min.js",
     "greensock/dist/SplitText.min.js",
-    "scripts/lib/ffontsloader/fontsloader.js"
+    "scripts/lib/ffontsloader/fontsloader.min.js"
   ],
-  "esmodules": ["scripts/theatre_main.js"],
+  "esmodules": ["module.js"],
   "styles": ["styles/theatre.css"],
   "compatibility": {
     "minimum": 11,
@@ -144,8 +144,8 @@
   },
   "manifestPlusVersion": "1.2.1",
   "url": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre",
-  "manifest": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/v2.7.4/module.json",
-  "download": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/v2.7.4/module.zip",
+  "manifest": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/v2.8.0/module.json",
+  "download": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/v2.8.0/module.zip",
   "readme": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/blob/master/README.md",
   "changelog": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/blob/master/CHANGELOG.md",
   "bugs": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/issues",

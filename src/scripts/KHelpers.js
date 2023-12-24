@@ -5,37 +5,39 @@
  * Encapsulates a few handy helpers
  * ============================================================
  */
-export const KHelpers = (function () {
-  function hasClass(el, className) {
+const KHelpers = {
+  hasClass(el, className) {
     return el.classList ? el.classList.contains(className) : new RegExp("\\b" + className + "\\b").test(el.className);
-  }
+  },
 
-  function addClass(el, className) {
+  addClass(el, className) {
     if (el.classList) el.classList.add(className);
     else if (!KHelpers.hasClass(el, className)) el.className += " " + className;
-  }
+  },
 
-  function removeClass(el, className) {
+  removeClass(el, className) {
     if (el.classList) el.classList.remove(className);
     else el.className = el.className.replace(new RegExp("\\b" + className + "\\b", "g"), "");
-  }
+  },
 
-  function offset(el) {
+  offset(el) {
     var rect = el.getBoundingClientRect(),
       scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
       scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     return { top: rect.top + scrollTop, left: rect.left + scrollLeft };
-  }
+  },
 
-  function style(el) {
+  style(el) {
     return el.currentStyle || window.getComputedStyle(el);
-  }
-  function insertAfter(el, referenceNode) {
+  },
+
+  insertAfter(el, referenceNode) {
     referenceNode.parentNode.insertBefore(el, referenceNode.nextSibling);
-  }
-  function insertBefore(el, referenceNode) {
+  },
+
+  insertBefore(el, referenceNode) {
     referenceNode.parentNode.insertBefore(el, referenceNode);
-  }
+  },
 
   /**
    * Helper to grab a parent class via CSS ClassName
@@ -47,8 +49,7 @@ export const KHelpers = (function () {
    *                          no such parent exists within the specified
    *                          depth.
    */
-
-  function seekParentClass(elem, cls, depth) {
+  seekParentClass(elem, cls, depth) {
     depth = depth || 5;
     let el = elem;
     let targ = null;
@@ -60,16 +61,19 @@ export const KHelpers = (function () {
       } else el = el.parentNode;
     }
     return targ;
-  }
+  },
 
-  return {
-    hasClass: hasClass,
-    addClass: addClass,
-    removeClass: removeClass,
-    offset: offset,
-    style: style,
-    insertAfter: insertAfter,
-    insertBefore: insertBefore,
-    seekParentClass: seekParentClass,
-  };
-})();
+//   return {
+//     hasClass: hasClass,
+//     addClass: addClass,
+//     removeClass: removeClass,
+//     offset: offset,
+//     style: style,
+//     insertAfter: insertAfter,
+//     insertBefore: insertBefore,
+//     seekParentClass: seekParentClass,
+//   };
+// })();
+}
+
+export default KHelpers;

@@ -1,9 +1,9 @@
-import API from "./API/api.js";
-import { KHelpers } from "./KHelpers.js";
-import { Theatre } from "./Theatre.js";
-import CONSTANTS from "./constants/constants.js";
-import { debug, log, warn } from "./lib/lib.js";
-import { registerKeybindings } from "./settings.js";
+import API from "./scripts/API/api.js";
+import KHelpers from "./scripts/KHelpers.js";
+import { Theatre } from "./scripts/Theatre.js";
+import CONSTANTS from "./scripts/constants/constants.js";
+import { debug, log, warn } from "./scripts/lib/lib.js";
+import { registerKeybindings } from "./scripts/settings.js";
 
 /**
  * Concat helper

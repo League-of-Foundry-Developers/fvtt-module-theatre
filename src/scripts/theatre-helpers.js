@@ -1,4 +1,4 @@
-import { KHelpers } from "./KHelpers.js";
+import KHelpers from "./KHelpers.js";
 import { Theatre } from "./Theatre.js";
 import { TheatreActor } from "./TheatreActor.js";
 import { TheatreActorConfig } from "./TheatreActorConfig.js";

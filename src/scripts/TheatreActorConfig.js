@@ -18,7 +18,7 @@
  *
  */
 
-import { KHelpers } from "./KHelpers.js";
+import KHelpers from "./KHelpers.js";
 import { Theatre } from "./Theatre.js";
 import CONSTANTS from "./constants/constants.js";
 import { debug, error, info } from "./lib/lib.js";

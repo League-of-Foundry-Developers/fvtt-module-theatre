@@ -19,7 +19,7 @@
  */
 
 import API from "./API/api.js";
-import { KHelpers } from "./KHelpers.js";
+import KHelpers from "./KHelpers.js";
 import { TheatreActor } from "./TheatreActor.js";
 import { TheatreActorConfig } from "./TheatreActorConfig.js";
 import CONSTANTS from "./constants/constants.js";
