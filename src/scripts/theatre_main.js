@@ -1,5 +1,7 @@
 import { KHelpers } from "./KHelpers.js";
 import { Theatre } from "./Theatre.js";
+import CONSTANTS from "./constants/constants.js";
+import { debug } from "./lib/lib.js";
 
 /**
  * Concat helper
@@ -23,7 +25,7 @@ Handlebars.registerHelper("resprop", function (propPath, hash) {
  */
 Hooks.on("getActorSheetHeaderButtons", (app, buttons) => {
   if (!game.user.isGM && game.settings.get("theatre", "gmOnly")) return;
-  const removeLabelSheetHeader = game.settings.get(Theatre.SETTINGS, "removeLabelSheetHeader");
+  const removeLabelSheetHeader = game.settings.get(CONSTANTS.MODULE_ID, "removeLabelSheetHeader");
 
   let theatreButtons = [];
   if (app.object.isOwner) {
@@ -39,7 +41,9 @@ Hooks.on("getActorSheetHeaderButtons", (app, buttons) => {
     theatreButtons.push({
       label: removeLabelSheetHeader
         ? ""
-        : (Theatre.isActorStaged(app.object) ? "Theatre.UI.Config.RemoveFromStage" : "Theatre.UI.Config.AddToStage"),
+        : Theatre.isActorStaged(app.object)
+        ? "Theatre.UI.Config.RemoveFromStage"
+        : "Theatre.UI.Config.AddToStage",
       class: "add-to-theatre-navbar",
       icon: Theatre.isActorStaged(app.object) ? "fas fa-mask" : "fas fa-theater-masks",
       onclick: (ev) => {
@@ -57,7 +61,7 @@ Hooks.on("sidebarCollapse", function (a, collapsed) {
   // If theatre isn't even ready, then just no
   if (!Theatre.instance) return;
 
-  if (Theatre.DEBUG) console.log("collapse? : ", a, collapsed);
+  debug("collapse? : ", a, collapsed);
   let sideBar = document.getElementById("sidebar");
   let primeBar = document.getElementById("theatre-prime-bar");
   let secondBar = document.getElementById("theatre-second-bar");
@@ -95,7 +99,7 @@ Hooks.on("createCombat", function () {
   if (!Theatre.instance) return;
 
   if (!!game.combats.active && game.combats.active.round == 0 && Theatre.instance.isSuppressed) {
-    if (Theatre.DEBUG) console.log("COMBAT CREATED");
+    debug("COMBAT CREATED");
     // if suppressed, change opacity to 0.05
     //Theatre.instance.theatreGroup.style.opacity = "0.05";
     Theatre.instance.theatreDock.style.opacity = "1";
@@ -112,7 +116,7 @@ Hooks.on("deleteCombat", function () {
   if (!Theatre.instance) return;
 
   if (!game.combats.active && Theatre.instance.isSuppressed) {
-    if (Theatre.DEBUG) console.log("COMBAT DELETED");
+    debug("COMBAT DELETED");
     // if suppressed, change opacity to 0.25
     //Theatre.instance.theatreGroup.style.opacity = "0.25";
     Theatre.instance.theatreDock.style.opacity = "0.20";
@@ -134,7 +138,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage) {
       flags: {},
     },
   };
-  if (Theatre.DEBUG) console.log("preCreateChatMessage", chatMessage);
+  debug("preCreateChatMessage", chatMessage);
   // If theatre isn't even ready, then just no
   if (!Theatre.instance) return;
   if (chatMessage.rolls.length) return;
@@ -154,19 +158,19 @@ Hooks.on("preCreateChatMessage", function (chatMessage) {
     let insert = Theatre.instance.getInsertById(theatreId);
     let actorId = theatreId.replace("theatre-", "");
     let actor = game.actors.get(actorId) || null;
-    if (Theatre.DEBUG) console.log("speakingAs %s", theatreId);
+    debug("speakingAs %s", theatreId);
 
     if (insert && chatMessage.speaker) {
       let label = Theatre.instance._getLabelFromInsert(insert);
       let name = label.text;
       let theatreColor = Theatre.instance.getPlayerFlashColor(chatMessage.user.id, insert.textColor);
-      if (Theatre.DEBUG) console.log("name is %s", name);
+      debug("name is %s", name);
       chatData.speaker.alias = name;
       //chatData.flags.theatreColor = theatreColor;
       chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
       // if delay emote is active
       if (Theatre.instance.isDelayEmote && Theatre.instance.delayedSentState == 1) {
-        if (Theatre.DEBUG) console.log("setting emote now! as %s", insert.emote);
+        debug("setting emote now! as %s", insert.emote);
         Theatre.instance.delayedSentState = 2;
         Theatre.instance.setUserEmote(game.user._id, theatreId, "emote", insert.emote, false);
         Theatre.instance.delayedSentState = 0;
@@ -180,7 +184,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage) {
       chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
       // if delay emote is active
       if (Theatre.instance.isDelayEmote && Theatre.instance.delayedSentState == 1) {
-        if (Theatre.DEBUG) console.log("setting emote now! as %s", insert.emote);
+        debug("setting emote now! as %s", insert.emote);
         Theatre.instance.delayedSentState = 2;
         Theatre.instance.setUserEmote(game.user._id, theatreId, "emote", insert.emote, false);
         Theatre.instance.delayedSentState = 0;
@@ -190,12 +194,14 @@ Hooks.on("preCreateChatMessage", function (chatMessage) {
       chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
     }
 
-    if (!chatData.flags) chatData.flags = {};
-    chatData.flags[Theatre.SETTINGS] = { theatreMessage: true };
+    if (!chatData.flags) {
+      chatData.flags = {};
+    }
+    chatData.flags[CONSTANTS.MODULE_ID] = { theatreMessage: true };
   }
   // alter message data
   // append chat emote braces
-  if (Theatre.DEBUG) console.log("speaker? ", chatMessage.speaker);
+  debug("speaker? ", chatMessage.speaker);
   if (
     Theatre.instance.isQuoteAuto &&
     chatMessage.speaker &&
@@ -214,7 +220,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage) {
  * Chat message Binding
  */
 Hooks.on("createChatMessage", function (chatEntity, _, userId) {
-  if (Theatre.DEBUG) console.log("createChatMessage");
+  debug("createChatMessage");
   let theatreId = null;
 
   // If theatre isn't even ready, then just no
@@ -261,7 +267,7 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
     textBox.style["overflow-y"] = "scroll";
     textBox.style["overflow-x"] = "hidden";
 
-    if (Theatre.DEBUG) console.log("all tweens", TweenMax.getAllTweens());
+    // debug("all tweens", TweenMax.getAllTweens());
     textBox.textContent = "";
 
     if (insert) {
@@ -351,7 +357,7 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
       default:
         break;
     }
-    if (Theatre.DEBUG) console.log("font size is (%s): ", insertFontSize, fontSize);
+    debug("font size is (%s): ", insertFontSize, fontSize);
     // If polyglot is active, and message contains its flag (e.g. not an emote), begin processing
     if (typeof polyglot !== "undefined" && typeof chatData.flags.polyglot !== "undefined") {
       // Get current language being processed
@@ -375,7 +381,7 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
 
     charSpans = Theatre.splitTextBoxToChars(textContent, textBox);
 
-    if (Theatre.DEBUG) console.log("animating text: " + textContent);
+    debug("animating text: " + textContent);
 
     Theatre.textFlyinAnimation(insertFlyinMode || "typewriter").call(
       this,
@@ -401,7 +407,7 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
 });
 
 Hooks.on("renderChatMessage", function (ChatMessage, html, data) {
-  if (Theatre.instance.settings.ignoreMessagesToChat && ChatMessage.flags?.[Theatre.SETTINGS]?.theatreMessage)
+  if (Theatre.instance.settings.ignoreMessagesToChat && ChatMessage.flags?.[CONSTANTS.MODULE_ID]?.theatreMessage)
     html[0].style.display = "none";
   return true;
 });
@@ -410,8 +416,8 @@ Hooks.on("renderChatLog", function (app, html, data) {
   if (data.cssId === "chat-popout") return;
   theatre.initialize();
   if (!window.Theatre) {
-	window.Theatre = Theatre;
-	window.theatre = theatre;
+    window.Theatre = Theatre;
+    window.theatre = theatre;
   }
 
   // window may not be ready?
@@ -750,7 +756,7 @@ Hooks.on("theatreDockActive", (insertCount) => {
   // The "MyTab" module inserts another element with id "pause". Use querySelectorAll to make sure we catch both
   document.querySelectorAll("#pause").forEach((ele) => KHelpers.addClass(ele, "theatre-centered"));
 
-  if (!game.settings.get(Theatre.SETTINGS, "autoHideBottom")) return;
+  if (!game.settings.get(CONSTANTS.MODULE_ID, "autoHideBottom")) return;
 
   if (!theatre.isSuppressed) {
     $("#players").addClass("theatre-invisible");
@@ -762,11 +768,11 @@ Hooks.on("theatreDockActive", (insertCount) => {
  * If Argon is active, wrap CombatHudCanvasElement#toggleMacroPlayers to prevent playesr list and macro hotbar from being shown
  */
 Hooks.once("ready", () => {
-  if (!game.settings.get(Theatre.SETTINGS, "autoHideBottom")) return;
+  if (!game.settings.get(CONSTANTS.MODULE_ID, "autoHideBottom")) return;
   if (!game.modules.get("enhancedcombathud")?.active) return;
 
   libWrapper.register(
-    Theatre.SETTINGS,
+    CONSTANTS.MODULE_ID,
     "CombatHudCanvasElement.prototype.toggleMacroPlayers",
     (wrapped, togg) => {
       if (togg && theatre?.dockActive) return;
@@ -780,8 +786,8 @@ Hooks.once("ready", () => {
  * Hide/show macro hotbar when stage is suppressed
  */
 Hooks.on("theatreSuppression", (suppressed) => {
-  if (!game.settings.get(Theatre.SETTINGS, "autoHideBottom")) return;
-  if (!game.settings.get(Theatre.SETTINGS, "suppressMacroHotbar")) return;
+  if (!game.settings.get(CONSTANTS.MODULE_ID, "autoHideBottom")) return;
+  if (!game.settings.get(CONSTANTS.MODULE_ID, "suppressMacroHotbar")) return;
   if (!theatre.dockActive) return;
 
   if (suppressed) {
@@ -811,7 +817,7 @@ Hooks.on("updateActor", (actor, data) => {
 });
 
 Hooks.on("getSceneControlButtons", (controls) => {
-  // Use "theatre", since Theatre.SETTINGS may not be available yet
+  // Use "theatre", since CONSTANTS.MODULE_ID may not be available yet
   if (!game.user.isGM && game.settings.get("theatre", "gmOnly")) {
     const suppressTheatreTool = {
       name: "suppressTheatre",

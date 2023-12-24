@@ -2,11 +2,14 @@ const CONSTANTS = {
   MODULE_ID: "theatre",
   PATH: `modules/theatre/`,
   PREFIX_I18N: `Theatre`,
-  FLAGS: {
-
-  },
+  FLAGS: {},
   API: {
-    
+    EVENT_TYPE: {
+      sceneevent: "sceneevent",
+      typingevent: "typingevent",
+      resyncevent: "resyncevent",
+      reqresync: "reqresync",
+    },
   },
 };
 

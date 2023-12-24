@@ -12,7 +12,8 @@ export function registerSocket() {
 
   theatreSocket = socketlib.registerModule(CONSTANTS.MODULE_ID);
 
-  theatreSocket.register("theatre", (...args) => API.theatreArr(...args));
+  // ON Theatre.js class
+  // theatreSocket.register("processEvent", (...args) => API.processEventArr(...args));
 
   game.modules.get(CONSTANTS.MODULE_ID).socket = theatreSocket;
   return theatreSocket;

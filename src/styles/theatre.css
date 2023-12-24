@@ -1698,7 +1698,8 @@
   pointer-events: none;
 }
 
-#ui-left.z-higher, #ui-middle.z-higher {
+#ui-left.z-higher,
+#ui-middle.z-higher {
   z-index: calc(var(--z-index-app) + 1);
 }
 
