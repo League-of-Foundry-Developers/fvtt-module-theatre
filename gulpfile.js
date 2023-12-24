@@ -6,29 +6,29 @@ const path = require(`path`);
 const archiver = require(`archiver`);
 const stringify = require(`json-stringify-pretty-compact`);
 const sourcemaps = require(`gulp-sourcemaps`);
-const typescript = require(`typescript`);
+// const typescript = require(`typescript`);
 // const createLiteral = typescript.createLiteral;
-const createLiteral = typescript.factory.createStringLiteral;
-const factory = typescript.factory;
-const isExportDeclaration = typescript.isExportDeclaration;
-const isImportDeclaration = typescript.isImportDeclaration;
-const isStringLiteral = typescript.isStringLiteral;
-const LiteralExpression = typescript.LiteralExpression;
-const Node = typescript.Node;
-const TransformationContext = typescript.TransformationContext;
-const TSTransformer = typescript.Transformer;
-const TransformerFactory = typescript.TransformerFactory;
-const visitEachChild = typescript.visitEachChild;
-const visitNode = typescript.visitNode;
+// const createLiteral = typescript.factory.createStringLiteral;
+// const factory = typescript.factory;
+// const isExportDeclaration = typescript.isExportDeclaration;
+// const isImportDeclaration = typescript.isImportDeclaration;
+// const isStringLiteral = typescript.isStringLiteral;
+// const LiteralExpression = typescript.LiteralExpression;
+// const Node = typescript.Node;
+// const TransformationContext = typescript.TransformationContext;
+// const TSTransformer = typescript.Transformer;
+// const TransformerFactory = typescript.TransformerFactory;
+// const visitEachChild = typescript.visitEachChild;
+// const visitNode = typescript.visitNode;
 const less = require(`gulp-less`);
 const sass = require(`gulp-sass`)(require(`sass`));
-const ts = require(`gulp-typescript`);
+// const ts = require(`gulp-typescript`);
 const git = require(`gulp-git`);
 const argv = require(`yargs`).argv;
 const minifyJs = require('gulp-uglify');
 const concat = require('gulp-concat');
 // const filter = require('gulp-filter');
-
+const moduleId = 'theatre'; // <= ID OF THE MODULE
 const loadJson = (path) => {
 	console.log(path)
 	try {
@@ -61,7 +61,7 @@ const getManifest = () => {
 	if (fs.existsSync(`src`)) {
 		json.root = `src`;
 	} else {
-		json.root = `dist`;
+		json.root = `dist/${moduleId}`;
 	}
 
 	const modulePath = path.join(json.root, `module.json`);
@@ -85,64 +85,64 @@ const getManifest = () => {
 }
 
 
-const createTransformer = () => {
-	/**
-	 * @param {typescript.Node} node
-	 */
-	const shouldMutateModuleSpecifier = (node) => {
-		if (!isImportDeclaration(node) && !isExportDeclaration(node))
-			return false;
-		if (node.moduleSpecifier === undefined)
-			return false;
-		if (!isStringLiteral(node.moduleSpecifier))
-			return false;
-		if (!node.moduleSpecifier.text.startsWith(`./`) && !node.moduleSpecifier.text.startsWith(`../`))
-			return false;
+// const createTransformer = () => {
+// 	/**
+// 	 * @param {typescript.Node} node
+// 	 */
+// 	const shouldMutateModuleSpecifier = (node) => {
+// 		if (!isImportDeclaration(node) && !isExportDeclaration(node))
+// 			return false;
+// 		if (node.moduleSpecifier === undefined)
+// 			return false;
+// 		if (!isStringLiteral(node.moduleSpecifier))
+// 			return false;
+// 		if (!node.moduleSpecifier.text.startsWith(`./`) && !node.moduleSpecifier.text.startsWith(`../`))
+// 			return false;
 
-		return path.extname(node.moduleSpecifier.text) === ``;
-	}
+// 		return path.extname(node.moduleSpecifier.text) === ``;
+// 	}
 
-	return (context) => {
-		return (node) => {
-			function visitor(node) {
-				if (shouldMutateModuleSpecifier(node)) {
-					if (isImportDeclaration(node)) {
-						const newModuleSpecifier = createLiteral(`${(node.moduleSpecifier).text}.js`);
-						return factory.updateImportDeclaration(node, node.decorators, node.modifiers, node.importClause, newModuleSpecifier, undefined);
-					} else if (isExportDeclaration(node)) {
-						const newModuleSpecifier = createLiteral(`${(node.moduleSpecifier).text}.js`);
-						return factory.updateExportDeclaration(node, node.decorators, node.modifiers, false, node.exportClause, newModuleSpecifier, undefined);
-					}
-				}
-				return visitEachChild(node, visitor, context);
-			}
-			return visitNode(node, visitor);
-		};
-	};
-}
+// 	return (context) => {
+// 		return (node) => {
+// 			function visitor(node) {
+// 				if (shouldMutateModuleSpecifier(node)) {
+// 					if (isImportDeclaration(node)) {
+// 						const newModuleSpecifier = createLiteral(`${(node.moduleSpecifier).text}.js`);
+// 						return factory.updateImportDeclaration(node, node.decorators, node.modifiers, node.importClause, newModuleSpecifier, undefined);
+// 					} else if (isExportDeclaration(node)) {
+// 						const newModuleSpecifier = createLiteral(`${(node.moduleSpecifier).text}.js`);
+// 						return factory.updateExportDeclaration(node, node.decorators, node.modifiers, false, node.exportClause, newModuleSpecifier, undefined);
+// 					}
+// 				}
+// 				return visitEachChild(node, visitor, context);
+// 			}
+// 			return visitNode(node, visitor);
+// 		};
+// 	};
+// }
 
-const tsConfig = ts.createProject(`tsconfig.json`, {
-	getCustomTransformers: (_program) => ({
-		after: [createTransformer()],
-	}),
-});
+// const tsConfig = ts.createProject(`tsconfig.json`, {
+// 	getCustomTransformers: (_program) => ({
+// 		after: [createTransformer()],
+// 	}),
+// });
 
 /********************/
 /*		BUILD		*/
 /********************/
 
-/**
- * Build TypeScript
- */
-function buildTS() {
+// /**
+//  * Build TypeScript
+//  */
+// function buildTS() {
 
-	return (
-		gulp
-		.src(`src/**/*.ts`)
-		.pipe(tsConfig())
-		.pipe(gulp.dest(`dist`))
-	);
-}
+// 	return (
+// 		gulp
+// 		.src(`src/**/*.ts`)
+// 		.pipe(tsConfig())
+// 		.pipe(gulp.dest(`dist/${moduleId}`))
+// 	);
+// }
 
 /**
  * Build JavaScript
@@ -151,7 +151,7 @@ function buildJS() {
 	return (
 		gulp
 		.src(`src/**/*.js`)
-		.pipe(gulp.dest(`dist`))
+		.pipe(gulp.dest(`dist/${moduleId}`))
 	);
 }
 
@@ -162,7 +162,7 @@ function buildJSMap() {
 	return (
 		gulp
 		.src(`src/**/*.js.map`)
-		.pipe(gulp.dest(`dist`))
+		.pipe(gulp.dest(`dist/${moduleId}`))
 	);
 }
 
@@ -173,7 +173,7 @@ function buildMJS() {
 	return (
 		gulp
 		.src(`src/**/*.mjs`)
-		.pipe(gulp.dest(`dist`))
+		.pipe(gulp.dest(`dist/${moduleId}`))
 	);
 }
 
@@ -181,28 +181,28 @@ function buildMJS() {
  * Build Css
  */
 function buildCSS() {
-	return gulp.src(`src/**/*.css`).pipe(gulp.dest(`dist`));
+	return gulp.src(`src/**/*.css`).pipe(gulp.dest(`dist/${moduleId}`));
 }
 
 /**
  * Build Css
  */
 function buildCSSMap() {
-	return gulp.src(`src/**/*.css.map`).pipe(gulp.dest(`dist`));
+	return gulp.src(`src/**/*.css.map`).pipe(gulp.dest(`dist/${moduleId}`));
 }
 
 /**
  * Build Less
  */
 function buildLess() {
-	return gulp.src(`src/**/*.less`).pipe(less()).pipe(gulp.dest(`dist`));
+	return gulp.src(`src/**/*.less`).pipe(less()).pipe(gulp.dest(`dist/${moduleId}`));
 }
 
 /**
  * Build SASS
  */
 function buildSASS() {
-	return gulp.src(`src/**/*.scss`).pipe(sass().on(`error`, sass.logError)).pipe(gulp.dest(`dist`));
+	return gulp.src(`src/**/*.scss`).pipe(sass().on(`error`, sass.logError)).pipe(gulp.dest(`dist/${moduleId}`));
 }
 
 const bundleModule = async () => {
@@ -220,9 +220,9 @@ const bundleModule = async () => {
 		.pipe(minifyJs())
 		.pipe(concat(`module.js`))
 		.pipe(sourcemaps.write(`./`))
-		.pipe(gulp.dest(`./dist`))
+		.pipe(gulp.dest(`./dist/${moduleId}`))
 		.on('end', function() {
-			recursiveFileSearch(`./dist`, (err, res) => {
+			recursiveFileSearch(`./dist/${moduleId}`, (err, res) => {
 				if (err) {
 					throw err;
 				}
@@ -237,7 +237,7 @@ const bundleModule = async () => {
 						});
 					}
 				}
-				cleanEmptyFoldersRecursively(`./dist`);
+				cleanEmptyFoldersRecursively(`./dist/${moduleId}`);
 			})
 		});
 }
@@ -300,7 +300,7 @@ const recursiveFileSearch = (dir, callback) => {
 };
 
 const copyFiles = async () => {
-	const statics = [`lang`, `languages`, `fonts`, `assets`, `graphics`, `icons`, `templates`, `packs`, `module.json`, `system.json`, `template.json`];
+	const statics = [`lang`, `languages`, `fonts`, `assets`, `icons`, `templates`, `packs`, `module.json`, `system.json`, `template.json`];
 
 
 	console.log(`files:` + statics);
@@ -315,7 +315,7 @@ const copyFiles = async () => {
 							throw err;
 
 						for (const file of res) {
-							const newFile = path.join(`dist`, path.relative(process.cwd(), file.replace(/.*src[\/\\]/g, ``)));
+							const newFile = path.join(`dist/${moduleId}`, path.relative(process.cwd(), file.replace(/.*src[\/\\]/g, ``)));
 							console.log(`Copying file: ` + newFile);
 							const folder = path.parse(newFile).dir;
 							if (!fs.existsSync(folder)) {
@@ -327,8 +327,8 @@ const copyFiles = async () => {
 						}
 					})
 				else {
-					console.log(`Copying file: ` + p + ` to ` + path.join(`dist`, entity));
-					fs.copyFileSync(p, path.join(`dist`, entity));
+					console.log(`Copying file: ` + p + ` to ` + path.join(`dist/${moduleId}`, entity));
+					fs.copyFileSync(p, path.join(`dist/${moduleId}`, entity));
 				}
 			}
 		}
@@ -403,6 +403,9 @@ const clean = async () => {
 	if (!fs.existsSync(`dist`)) {
 		fs.mkdirSync(`dist`);
 	}
+	if (!fs.existsSync(`dist/${moduleId}`)) {
+		fs.mkdirSync(`dist/${moduleId}`);
+	}
 
 	const name = path.basename(path.resolve(`.`));
 	const files = [];
@@ -415,7 +418,6 @@ const clean = async () => {
 		`packs`,
 		`templates`,
 		`assets`,
-		`graphics`,
 		`module`,
 		`index.js`,
 		`module.json`,
@@ -446,7 +448,7 @@ const linkUserData = async () => {
 
 	let destDir;
 	try {
-		if (fs.existsSync(path.resolve(`.`, `dist`, `module.json`)) || fs.existsSync(path.resolve(`.`, `src`, `module.json`))) {
+		if (fs.existsSync(path.resolve(`.`, `dist/${moduleId}`, `module.json`)) || fs.existsSync(path.resolve(`.`, `src`, `module.json`))) {
 			destDir = `modules`;
 		} else {
 			throw Error(`Could not find module.json or system.json`);
@@ -468,7 +470,7 @@ const linkUserData = async () => {
 			fs.unlinkSync(linkDir);
 		} else if (!fs.existsSync(linkDir)) {
 			console.log(`Copying build to ${linkDir}`);
-			fs.symlinkSync(path.resolve(`./dist`), linkDir);
+			fs.symlinkSync(path.resolve(`./dist/${moduleId}`), linkDir);
 		}
 		return Promise.resolve();
 	} catch (err) {
@@ -540,7 +542,7 @@ async function packageBuild() {
 			zip.pipe(zipFile);
 
 			// Add the directory with the final code
-			zip.directory(`dist/`, moduleJson.id);
+			zip.directory(`dist/${moduleId}`, moduleJson.id);
 			console.log(`Zip files`);
 
 			zip.finalize();
@@ -670,7 +672,8 @@ function gitTag() {
 }
 
 const execGit = gulp.series(gitAdd, gitCommit, gitTag);
-const execBuild = gulp.parallel(buildTS, buildJS, buildJSMap, buildMJS, buildCSS, buildCSSMap, buildLess, buildSASS, copyFiles);
+// const execBuild = gulp.parallel(buildTS, buildJS, buildJSMap, buildMJS, buildCSS, buildCSSMap, buildLess, buildSASS, copyFiles);
+const execBuild = gulp.parallel(buildJS, buildJSMap, buildMJS, buildCSS, buildCSSMap, buildLess, buildSASS, copyFiles);
 
 exports.build = gulp.series(clean, execBuild);
 exports.bundle = gulp.series(clean, execBuild, bundleModule, cleanDist);
