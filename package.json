@@ -2,7 +2,7 @@
     "id": "theatre",
     "title": "Theatre Inserts",
     "description": "Theater Inserts with a visual novel style made for heavy roleplay scenes",
-    "version": "2.3.1",
+    "version": "2.9.0",
     "scripts": {
         "package": "gulp package",
         "build": "gulp build --dbg",
