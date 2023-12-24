@@ -5549,7 +5549,9 @@ export class Theatre {
     const context = KeyboardManager.getKeyboardEventContext(ev);
     const actions = KeyboardManager._getMatchingActions(context);
     for (const action of actions) {
-      if (!action.action.includes("theatre")) continue;
+      if (!action.action.includes(CONSTANTS.MODULE_ID)) {
+        continue;
+      }
       action.onDown.call(context);
     }
 

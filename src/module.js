@@ -26,7 +26,7 @@ Handlebars.registerHelper("resprop", function (propPath, hash) {
  * Hook in on Actorsheet's Header buttons + context menus
  */
 Hooks.on("getActorSheetHeaderButtons", (app, buttons) => {
-  if (!game.user.isGM && game.settings.get("theatre", "gmOnly")) {
+  if (!game.user.isGM && game.settings.get(CONSTANTS.MODULE_ID, "gmOnly")) {
     return;
   }
   const removeLabelSheetHeader = game.settings.get(CONSTANTS.MODULE_ID, "removeLabelSheetHeader");
@@ -448,7 +448,7 @@ Hooks.on("renderChatLog", function (app, html, data) {
  * Add to stage button on ActorDirectory Sidebar
  */
 Hooks.on("getActorDirectoryEntryContext", async (html, options) => {
-  if (!game.user.isGM && game.settings.get("theatre", "gmOnly")) {
+  if (!game.user.isGM && game.settings.get(CONSTANTS.MODULE_ID, "gmOnly")) {
     return;
   }
   const getActorData = (target) => {
@@ -578,8 +578,8 @@ Hooks.on("updateActor", (actor, data) => {
 });
 
 Hooks.on("getSceneControlButtons", (controls) => {
-  // Use "theatre", since CONSTANTS.MODULE_ID may not be available yet
-  if (!game.user.isGM && game.settings.get("theatre", "gmOnly")) {
+  // Use CONSTANTS.MODULE_ID, since CONSTANTS.MODULE_ID may not be available yet
+  if (!game.user.isGM && game.settings.get(CONSTANTS.MODULE_ID, "gmOnly")) {
     const suppressTheatreTool = {
       name: "suppressTheatre",
       title: "Theatre.UI.Title.SuppressTheatre",

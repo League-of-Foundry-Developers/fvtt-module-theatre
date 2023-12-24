@@ -292,7 +292,7 @@ class ResetSettingsDialog extends FormApplication {
 }
 
 export const registerKeybindings = function () {
-  game.keybindings.register("theatre", "unfocusTextArea", {
+  game.keybindings.register(CONSTANTS.MODULE_ID, "unfocusTextArea", {
     name: "Theatre.UI.Keybinds.unfocusTextArea",
     hint: "",
     editable: [
@@ -310,7 +310,7 @@ export const registerKeybindings = function () {
     restricted: false,
   });
 
-  game.keybindings.register("theatre", "addOwnedToStage", {
+  game.keybindings.register(CONSTANTS.MODULE_ID, "addOwnedToStage", {
     name: "Theatre.UI.Keybinds.addOwnedToStage",
     hint: "",
     editable: [
@@ -327,7 +327,7 @@ export const registerKeybindings = function () {
     restricted: false,
   });
 
-  game.keybindings.register("theatre", "addSelectedToStage", {
+  game.keybindings.register(CONSTANTS.MODULE_ID, "addSelectedToStage", {
     name: "Theatre.UI.Keybinds.addSelectedToStage",
     hint: "",
     editable: [
@@ -342,7 +342,7 @@ export const registerKeybindings = function () {
     restricted: true,
   });
 
-  game.keybindings.register("theatre", `removeSelectedFromStage`, {
+  game.keybindings.register(CONSTANTS.MODULE_ID, `removeSelectedFromStage`, {
     name: "Theatre.UI.Keybinds.removeSelectedFromStage",
     hint: "",
     editable: [],
@@ -352,7 +352,7 @@ export const registerKeybindings = function () {
     restricted: true,
   });
 
-  game.keybindings.register("theatre", "narratorMode", {
+  game.keybindings.register(CONSTANTS.MODULE_ID, "narratorMode", {
     name: "Theatre.UI.Keybinds.narratorMode",
     hint: "",
     editable: [
@@ -372,7 +372,7 @@ export const registerKeybindings = function () {
     restricted: true,
   });
 
-  game.keybindings.register("theatre", "flipPortrait", {
+  game.keybindings.register(CONSTANTS.MODULE_ID, "flipPortrait", {
     name: "Theatre.UI.Keybinds.flipPortrait",
     hint: "",
     editable: [
@@ -387,7 +387,7 @@ export const registerKeybindings = function () {
     restricted: false,
   });
 
-  game.keybindings.register("theatre", "nudgePortraitLeft", {
+  game.keybindings.register(CONSTANTS.MODULE_ID, "nudgePortraitLeft", {
     name: "Theatre.UI.Keybinds.nudgePortraitLeft",
     hint: "",
     editable: [
@@ -425,7 +425,7 @@ export const registerKeybindings = function () {
     restricted: false,
   });
 
-  game.keybindings.register("theatre", "nudgePortraitRight", {
+  game.keybindings.register(CONSTANTS.MODULE_ID, "nudgePortraitRight", {
     name: "Theatre.UI.Keybinds.nudgePortraitRight",
     hint: "",
     editable: [
@@ -463,7 +463,7 @@ export const registerKeybindings = function () {
     restricted: false,
   });
 
-  game.keybindings.register("theatre", "nudgePortraitUp", {
+  game.keybindings.register(CONSTANTS.MODULE_ID, "nudgePortraitUp", {
     name: "Theatre.UI.Keybinds.nudgePortraitUp",
     hint: "",
     editable: [
@@ -501,7 +501,7 @@ export const registerKeybindings = function () {
     restricted: false,
   });
 
-  game.keybindings.register("theatre", "nudgePortraitDown", {
+  game.keybindings.register(CONSTANTS.MODULE_ID, "nudgePortraitDown", {
     name: "Theatre.UI.Keybinds.nudgePortraitDown",
     hint: "",
     editable: [
@@ -540,7 +540,7 @@ export const registerKeybindings = function () {
   });
 
   for (let i = 1; i < 11; i++) {
-    game.keybindings.register("theatre", `activateStaged${i}`, {
+    game.keybindings.register(CONSTANTS.MODULE_ID, `activateStaged${i}`, {
       name: game.i18n.format(`Theatre.UI.Keybinds.activateStaged`, { number: i }),
       hint: "",
       editable: [
@@ -560,7 +560,7 @@ export const registerKeybindings = function () {
       reservedModifiers: ["Shift"],
     });
 
-    game.keybindings.register("theatre", `removeStaged${i}`, {
+    game.keybindings.register(CONSTANTS.MODULE_ID, `removeStaged${i}`, {
       name: game.i18n.format(`Theatre.UI.Keybinds.removeStaged`, { number: i }),
       hint: "",
       editable: [

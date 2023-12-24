@@ -61,19 +61,7 @@ const KHelpers = {
       } else el = el.parentNode;
     }
     return targ;
-  },
-
-//   return {
-//     hasClass: hasClass,
-//     addClass: addClass,
-//     removeClass: removeClass,
-//     offset: offset,
-//     style: style,
-//     insertAfter: insertAfter,
-//     insertBefore: insertBefore,
-//     seekParentClass: seekParentClass,
-//   };
-// })();
+  }
 }
 
 export default KHelpers;
