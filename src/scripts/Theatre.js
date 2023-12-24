@@ -24,6 +24,7 @@ import { TheatreActor } from "./TheatreActor.js";
 import { TheatreActorConfig } from "./TheatreActorConfig.js";
 import CONSTANTS from "./constants/constants.js";
 import { debug, error, info, log, warn } from "./lib/lib.js";
+import { registerSettings } from "./settings.js";
 import { registerSocket, theatreSocket } from "./socket.js";
 import { TheatreHelpers } from "./theatre-helpers.js";
 
@@ -358,236 +359,7 @@ export class Theatre {
    */
   _initModuleSettings() {
     // module settings
-
-    game.settings.register(CONSTANTS.MODULE_ID, "gmOnly", {
-      name: "Theatre.UI.Settings.gmOnly",
-      hint: "Theatre.UI.Settings.gmOnlyHint",
-      scope: "world",
-      config: true,
-      default: false,
-      type: Boolean,
-      onChange: () => {
-        if (!game.user.isGM) location.reload();
-      },
-    });
-
-    game.settings.register(CONSTANTS.MODULE_ID, "theatreStyle", {
-      name: "Theatre.UI.Settings.displayMode",
-      hint: "Theatre.UI.Settings.displayModeHint",
-      scope: "world",
-      config: true,
-      default: "textbox",
-      type: String,
-      choices: {
-        textbox: "Theatre.UI.Settings.displayModeTextBox",
-        lightbox: "Theatre.UI.Settings.displayModeLightBox",
-        clearbox: "Theatre.UI.Settings.displayModeClearBox",
-      },
-      onChange: (theatreStyle) => Theatre.instance.configTheatreStyle(theatreStyle),
-    });
-
-    game.settings.register(CONSTANTS.MODULE_ID, "theatreImageSize", {
-      name: "Maximum image height",
-      scope: "client",
-      config: true,
-      default: 400,
-      type: Number,
-    });
-
-    game.settings.register(CONSTANTS.MODULE_ID, "theatreNarratorHeight", {
-      name: "Theatre.UI.Settings.narrHeight",
-      hint: "Theatre.UI.Settings.narrHeightHint",
-      scope: "world",
-      config: true,
-      default: "50%",
-      type: String,
-      choices: {
-        "15%": "15%",
-        "25%": "25%",
-        "30%": "30%",
-        "50%": "50%",
-        "70%": "75%",
-      },
-      onChange: (narrHeight) => {
-        this.settings.narrHeight = narrHeight;
-        if (this.theatreNarrator) this.theatreNarrator.style.top = `calc(${narrHeight} - 50px)`;
-      },
-    });
-
-    game.settings.register(CONSTANTS.MODULE_ID, "nameFont", {
-      name: "Theatre.UI.Settings.nameFont",
-      hint: "Theatre.UI.Settings.nameFontHint",
-      scope: "world",
-      config: true,
-      default: Theatre.instance.titleFont,
-      type: String,
-      choices: Theatre.FONTS.reduce((a, font) => {
-        a[font] = font;
-        return a;
-      }, {}),
-    });
-
-    game.settings.register(CONSTANTS.MODULE_ID, "nameFontSize", {
-      name: "Theatre.UI.Settings.nameFontSize",
-      hint: "Theatre.UI.Settings.nameFontSizeHint",
-      scope: "world",
-      config: true,
-      default: 44,
-      type: Number,
-    });
-
-    game.settings.register(CONSTANTS.MODULE_ID, "textDecayMin", {
-      name: "Theatre.UI.Settings.textDecayMin",
-      hint: "Theatre.UI.Settings.textDecayMinHint",
-      scope: "world",
-      config: true,
-      default: 30,
-      type: Number,
-      onChange: (textDecayMin) => {
-        debug("Text decay minimum set to %s", textDecayMin);
-        textDecayMin = Number(textDecayMin);
-        if (isNaN(textDecayMin) || textDecayMin <= 0) {
-          info(game.i18n.localize("Theatre.UI.Notification.InvalidDecayMin"), true);
-          game.settings.set(CONSTANTS.MODULE_ID, "textDecayMin", 30);
-          return;
-        }
-        if (textDecayMin > 600) {
-          info(game.i18n.localize("Theatre.UI.Notification.TooLongDecayMin"), true);
-          game.settings.set(CONSTANTS.MODULE_ID, "textDecayMin", 600);
-          return;
-        }
-
-        this.settings.decayMin = textDecayMin * 1000;
-      },
-    });
-
-    game.settings.register(CONSTANTS.MODULE_ID, "textDecayRate", {
-      name: "Theatre.UI.Settings.textDecayRate",
-      hint: "Theatre.UI.Settings.textDecayRateHint",
-      scope: "world",
-      config: true,
-      default: 1,
-      type: Number,
-      onChange: (textDecayRate) => {
-        debug("Text decay rate set to %s", textDecayRate);
-        textDecayRate = Number(textDecayRate);
-        if (isNaN(textDecayRate) || textDecayRate <= 0) {
-          textDecayRate = 1;
-          info(game.i18n.localize("Theatre.UI.Notification.InvalidDecayRate"), true);
-          game.settings.set(CONSTANTS.MODULE_ID, "textDecayRate", 1);
-          return;
-        }
-        if (textDecayRate > 10) {
-          textDecayRate = 10;
-          info(game.i18n.localize("Theatre.UI.Notification.TooLongDecayRate"), true);
-          game.settings.set(CONSTANTS.MODULE_ID, "textDecayRate", 10);
-          return;
-        }
-        this.settings.decayRate = textDecayRate * 1000;
-      },
-    });
-
-    game.settings.register(CONSTANTS.MODULE_ID, "motdNewInfo", {
-      name: "MOTD New Info",
-      scope: "client",
-      default: 0,
-      type: Number,
-      onChange: (newInfo) => {
-        // NOOP
-      },
-    });
-
-    game.settings.register(CONSTANTS.MODULE_ID, "autoHideBottom", {
-      name: "Theatre.UI.Settings.autoHideBottom",
-      hint: "Theatre.UI.Settings.autoHideBottomHint",
-      scope: "world",
-      config: true,
-      type: Boolean,
-      default: true,
-    });
-
-    game.settings.register(CONSTANTS.MODULE_ID, "suppressMacroHotbar", {
-      name: "Theatre.UI.Settings.suppressMacroHotbar",
-      hint: "Theatre.UI.Settings.suppressMacroHotbarHint",
-      scope: "world",
-      config: true,
-      type: Boolean,
-      default: true,
-    });
-
-    game.settings.register(CONSTANTS.MODULE_ID, "showUIAboveStage", {
-      name: "Theatre.UI.Settings.showUIAboveStage",
-      hint: "Theatre.UI.Settings.showUIAboveStageHint",
-      scope: "world",
-      config: true,
-      default: "none",
-      requiresReload: true,
-      type: String,
-      choices: {
-        none: "Theatre.UI.Settings.showUIAboveStageNone",
-        left: "Theatre.UI.Settings.showUIAboveStageLeft",
-        middle: "Theatre.UI.Settings.showUIAboveStageMiddle",
-        both: "Theatre.UI.Settings.showUIAboveStageBoth",
-      },
-    });
-
-    game.settings.register(CONSTANTS.MODULE_ID, "removeLabelSheetHeader", {
-      name: "Theatre.UI.Settings.removeLabelSheetHeader",
-      hint: "Theatre.UI.Settings.removeLabelSheetHeaderHint",
-      scope: "world",
-      config: true,
-      type: Boolean,
-      default: false,
-    });
-
-    game.settings.register(CONSTANTS.MODULE_ID, "ignoreMessagesToChat", {
-      name: "Theatre.UI.Settings.ignoreMessagesToChat",
-      hint: "Theatre.UI.Settings.ignoreMessagesToChatHint",
-      scope: "world",
-      config: true,
-      type: Boolean,
-      default: false,
-      onChange: (value) => {
-        this.settings.ignoreMessagesToChat = value;
-      },
-    });
-
-    game.settings.register(CONSTANTS.MODULE_ID, "quoteType", {
-      name: "Theatre.UI.Settings.quoteType",
-      hint: game.i18n.format("Theatre.UI.Settings.quoteTypeHint", {
-        setting: game.i18n.localize("Theatre.UI.Title.QuoteToggle"),
-      }),
-      scope: "world",
-      config: true,
-      type: Number,
-      default: 1,
-      choices: {
-        0: game.i18n.localize("Theatre.UI.Settings.quoteTypeChoices.0"),
-        1: game.i18n.localize("Theatre.UI.Settings.quoteTypeChoices.1"),
-        2: game.i18n.localize("Theatre.UI.Settings.quoteTypeChoices.2"),
-        3: game.i18n.localize("Theatre.UI.Settings.quoteTypeChoices.3"),
-        4: game.i18n.localize("Theatre.UI.Settings.quoteTypeChoices.4"),
-      },
-      onChange: (value) => {
-        this.settings.quoteType = value;
-      },
-    });
-
-    game.settings.register(CONSTANTS.MODULE_ID, "debug", {
-      name: `Theatre.UI.debug.title`,
-      hint: `Theatre.UI.debug.hint`,
-      scope: "client",
-      config: true,
-      default: false,
-      type: Boolean,
-    });
-
-    // Load in default settings (theatreStyle is loaded on HTML Injection)
-    this.settings.decayMin = (game.settings.get(CONSTANTS.MODULE_ID, "textDecayMin") || 30) * 1000;
-    this.settings.decayRate = (game.settings.get(CONSTANTS.MODULE_ID, "textDecayRate") || 1) * 1000;
-    this.settings.motdNewInfo = game.settings.get(CONSTANTS.MODULE_ID, "motdNewInfo") || 1;
-    this.settings.ignoreMessagesToChat = game.settings.get(CONSTANTS.MODULE_ID, "ignoreMessagesToChat");
-    this.settings.quoteType = game.settings.get(CONSTANTS.MODULE_ID, "quoteType");
+    registerSettings();
   }
 
   /**
@@ -705,6 +477,7 @@ export class Theatre {
   _initSocket() {
     // module socket
     if (game.modules.get("socketlib")?.active) {
+      Hooks.once("socketlib.ready", registerSocket);
       registerSocket();
       theatreSocket.register("processEvent", (payload) => {
         debug("Received packet", payload);
@@ -4668,7 +4441,7 @@ export class Theatre {
     let texture = await PIXI.Assets.load(resTarget.path);
 
     debug("Adding tweens for animation '%s' from syntax: %s with params: ", animName, animSyntax, tweenParams);
-    debug("Resource path is %s, resource: ", resTarget.path, resource);
+    // debug("Resource path is %s, resource: ", resTarget.path, resource);
     if (!texture) {
       error(
         'ERROR: resource name : "%s" with path "%s" does not exist!',

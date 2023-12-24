@@ -118,7 +118,14 @@
       "label": "Theatre Inserts Macros",
       "path": "packs/theatre-inserts-macros.db",
       "type": "Macro",
-      "private": false
+      "private": false,
+      "ownership": {
+        "PLAYER": "NONE",
+        "TRUSTED": "NONE",
+        "ASSISTANT": "OWNER"
+      },
+      "module": "theatre",
+      "flags": {}
     }
   ],
   "scripts": [
@@ -150,6 +157,14 @@
         "id": "lib-wrapper",
         "type": "module",
         "manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/latest/download/module.json",
+        "compatibility": {}
+      }
+    ],
+    "recommends": [
+      {
+        "id": "socketlib",
+        "type": "module",
+        "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/master/module.json",
         "compatibility": {}
       }
     ],

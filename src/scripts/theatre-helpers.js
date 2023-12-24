@@ -1,6 +1,7 @@
 import { KHelpers } from "./KHelpers.js";
 import { Theatre } from "./Theatre.js";
 import { TheatreActor } from "./TheatreActor.js";
+import { TheatreActorConfig } from "./TheatreActorConfig.js";
 import CONSTANTS from "./constants/constants.js";
 import { debug, error, info, log, warn } from "./lib/lib.js";
 
@@ -2372,7 +2373,7 @@ export class TheatreHelpers {
    */
   static removeFromNavBar(actor) {
     if (!actor) {
-        return;
+      return;
     }
     const theatreId = Theatre._getTheatreId(actor);
     Theatre.instance._removeFromStage(theatreId);
@@ -2400,7 +2401,7 @@ export class TheatreHelpers {
    */
   static isActorStaged(actor) {
     if (!actor) {
-        return false;
+      return false;
     }
     return !!Theatre.instance.stage[Theatre._getTheatreId(actor)];
   }

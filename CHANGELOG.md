@@ -7,3 +7,4 @@
 - Add constanst file for constants (better parctices)
 - Separate static methods on the theatre class on a separate file for better readibility => TheatreHelpers
 - Separate settings game methods on the theatre class on a separate file for better readibility => Settings
+- Update workflow github action
