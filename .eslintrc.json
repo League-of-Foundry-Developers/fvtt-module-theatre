@@ -6,7 +6,8 @@
     "jquery": true
   },
   "parserOptions": {
-    "requireConfigFile": false
+    "requireConfigFile": false,
+    "sourceType": "module"
   },
   "plugins": [
     "jsdoc"
