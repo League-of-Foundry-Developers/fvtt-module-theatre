@@ -2,767 +2,767 @@
 
 @font-face {
   font-family: "Caslon";
-  src: url("../graphics/fonts/en/ACaslonPro-Bold.otf");
+  src: url("../assets/graphics/fonts/en/ACaslonPro-Bold.otf");
 }
 
 @font-face {
   font-family: "CaslonAntique";
-  src: url("../graphics/fonts/en/CaslonAntique-Bold.ttf");
+  src: url("../assets/graphics/fonts/en/CaslonAntique-Bold.ttf");
 }
 
 @font-face {
   font-family: "SignikaBold";
-  src: url("../graphics/fonts/en/Signika-Bold.ttf");
+  src: url("../assets/graphics/fonts/en/Signika-Bold.ttf");
 }
 
 @font-face {
   font-family: "Riffic";
-  src: url("../graphics/fonts/en/RifficFree-Bold.ttf");
+  src: url("../assets/graphics/fonts/en/RifficFree-Bold.ttf");
 }
 
 @font-face {
   font-family: "LinLibertine";
-  src: url("../graphics/fonts/en/LinLibertine_RB.ttf");
+  src: url("../assets/graphics/fonts/en/LinLibertine_RB.ttf");
 }
 
 @font-face {
   font-family: "GODOFWAR";
-  src: url("../graphics/fonts/en/GODOFWAR.ttf");
+  src: url("../assets/graphics/fonts/en/GODOFWAR.ttf");
 }
 
 @font-face {
   font-family: "OldLondon";
-  src: url("../graphics/fonts/en/OldLondon.ttf");
+  src: url("../assets/graphics/fonts/en/OldLondon.ttf");
 }
 
 @font-face {
   font-family: "Ethnocentric";
-  src: url("../graphics/fonts/en/ethnocentric-rg.ttf");
+  src: url("../assets/graphics/fonts/en/ethnocentric-rg.ttf");
 }
 
 @font-face {
   font-family: "Cardinal";
-  src: url("../graphics/fonts/en/Cardinal.ttf");
+  src: url("../assets/graphics/fonts/en/Cardinal.ttf");
 }
 
 @font-face {
   font-family: "Western";
-  src: url("../graphics/fonts/en/WEST.ttf");
+  src: url("../assets/graphics/fonts/en/WEST.ttf");
 }
 
 @font-face {
   font-family: "Luna";
-  src: url("../graphics/fonts/en/Luna.ttf");
+  src: url("../assets/graphics/fonts/en/Luna.ttf");
 }
 
 @font-face {
   font-family: "FastInMyCar";
-  src: url("../graphics/fonts/en/Fast-In-My-Car.ttf");
+  src: url("../assets/graphics/fonts/en/Fast-In-My-Car.ttf");
 }
 
 @font-face {
   font-family: "StoneHenge";
-  src: url("../graphics/fonts/en/stonehen.ttf");
+  src: url("../assets/graphics/fonts/en/stonehen.ttf");
 }
 
 @font-face {
   font-family: "Dungeon";
-  src: url("../graphics/fonts/en/DUNGRG.ttf");
+  src: url("../assets/graphics/fonts/en/DUNGRG.ttf");
 }
 
 @font-face {
   font-family: "LemonTuesday";
-  src: url("../graphics/fonts/en/Lemon-Tuesday.otf");
+  src: url("../assets/graphics/fonts/en/Lemon-Tuesday.otf");
 }
 
 @font-face {
   font-family: "ChildWriting";
-  src: url("../graphics/fonts/en/ChildWriting-Regular.ttf");
+  src: url("../assets/graphics/fonts/en/ChildWriting-Regular.ttf");
 }
 
 @font-face {
   font-family: "Subscriber";
-  src: url("../graphics/fonts/en/SUBSCRIBER-Regular.otf");
+  src: url("../assets/graphics/fonts/en/SUBSCRIBER-Regular.otf");
 }
 
 @font-face {
   font-family: "PaulSignature";
-  src: url("../graphics/fonts/en/Paul-Signature.ttf");
+  src: url("../assets/graphics/fonts/en/Paul-Signature.ttf");
 }
 
 @font-face {
   font-family: "TrashHand";
-  src: url("../graphics/fonts/en/TrashHand.ttf");
+  src: url("../assets/graphics/fonts/en/TrashHand.ttf");
 }
 
 @font-face {
   font-family: "Kindergarten";
-  src: url("../graphics/fonts/en/kindergarten.ttf");
+  src: url("../assets/graphics/fonts/en/kindergarten.ttf");
 }
 
 @font-face {
   font-family: "HoneyScript";
-  src: url("../graphics/fonts/en/HoneyScript-SemiBold.ttf");
+  src: url("../assets/graphics/fonts/en/HoneyScript-SemiBold.ttf");
 }
 
 @font-face {
   font-family: "GhostTheory2";
-  src: url("../graphics/fonts/en/Ghost-theory-2.ttf");
+  src: url("../assets/graphics/fonts/en/Ghost-theory-2.ttf");
 }
 
 @font-face {
   font-family: "GhostChase";
-  src: url("../graphics/fonts/en/GhostChase.ttf");
+  src: url("../assets/graphics/fonts/en/GhostChase.ttf");
 }
 
 @font-face {
   font-family: "Alamain";
-  src: url("../graphics/fonts/en/alamain1.ttf");
+  src: url("../assets/graphics/fonts/en/alamain1.ttf");
 }
 
 @font-face {
   font-family: "SunnyDay";
-  src: url("../graphics/fonts/en/fontopoSunnyDay-Regular.otf");
+  src: url("../assets/graphics/fonts/en/fontopoSunnyDay-Regular.otf");
 }
 
 @font-face {
   font-family: "Subway";
-  src: url("../graphics/fonts/en/fontopoSUBWAY-Regular.otf");
+  src: url("../assets/graphics/fonts/en/fontopoSUBWAY-Regular.otf");
 }
 
 @font-face {
   font-family: "MagieraScript";
-  src: url("../graphics/fonts/en/Magiera_Script.ttf");
+  src: url("../assets/graphics/fonts/en/Magiera_Script.ttf");
 }
 
 @font-face {
   font-family: "Cathallina";
-  src: url("../graphics/fonts/en/Cathallina.ttf");
+  src: url("../assets/graphics/fonts/en/Cathallina.ttf");
 }
 
 @font-face {
   font-family: "BalletHarmony";
-  src: url("../graphics/fonts/en/BalletHarmony.ttf");
+  src: url("../assets/graphics/fonts/en/BalletHarmony.ttf");
 }
 
 @font-face {
   font-family: "FairProsper";
-  src: url("../graphics/fonts/en/FairProsper.ttf");
+  src: url("../assets/graphics/fonts/en/FairProsper.ttf");
 }
 
 @font-face {
   font-family: "Megadeth";
-  src: url("../graphics/fonts/en/Megadeth.ttf");
+  src: url("../assets/graphics/fonts/en/Megadeth.ttf");
 }
 
 @font-face {
   font-family: "Rooters";
-  src: url("../graphics/fonts/en/Rooters.otf");
+  src: url("../assets/graphics/fonts/en/Rooters.otf");
 }
 
 @font-face {
   font-family: "BadManners";
-  src: url("../graphics/fonts/en/MCF_bad_manners_ww.ttf");
+  src: url("../assets/graphics/fonts/en/MCF_bad_manners_ww.ttf");
 }
 
 @font-face {
   font-family: "BaksoSapi";
-  src: url("../graphics/fonts/en/BaksoSapi.otf");
+  src: url("../assets/graphics/fonts/en/BaksoSapi.otf");
 }
 
 @font-face {
   font-family: "Yikes";
-  src: url("../graphics/fonts/en/YIKES!.ttf");
+  src: url("../assets/graphics/fonts/en/YIKES!.ttf");
 }
 
 @font-face {
   font-family: "FuturaHandwritten";
-  src: url("../graphics/fonts/en/FuturaHandwritten.ttf");
+  src: url("../assets/graphics/fonts/en/FuturaHandwritten.ttf");
 }
 
 @font-face {
   font-family: "SuplexmentaryComic";
-  src: url("../graphics/fonts/en/Suplexmentary_Comic_NC.ttf");
+  src: url("../assets/graphics/fonts/en/Suplexmentary_Comic_NC.ttf");
 }
 
 @font-face {
   font-family: "ComicInk";
-  src: url("../graphics/fonts/en/Comic-ink.otf");
+  src: url("../assets/graphics/fonts/en/Comic-ink.otf");
 }
 
 @font-face {
   font-family: "VarsityTeam";
-  src: url("../graphics/fonts/en/VarsityTeam-Bold.otf");
+  src: url("../assets/graphics/fonts/en/VarsityTeam-Bold.otf");
 }
 
 @font-face {
   font-family: "Tiza";
-  src: url("../graphics/fonts/en/tiza.ttf");
+  src: url("../assets/graphics/fonts/en/tiza.ttf");
 }
 
 @font-face {
   font-family: "TimesNewYorker";
-  src: url("../graphics/fonts/en/times_new_yorker.ttf");
+  src: url("../assets/graphics/fonts/en/times_new_yorker.ttf");
 }
 
 @font-face {
   font-family: "RomanNewTimes";
-  src: url("../graphics/fonts/en/Roman_New_Times.otf");
+  src: url("../assets/graphics/fonts/en/Roman_New_Times.otf");
 }
 
 @font-face {
   font-family: "GangOfThree";
-  src: url("../graphics/fonts/en/go3v2.ttf");
+  src: url("../assets/graphics/fonts/en/go3v2.ttf");
 }
 
 @font-face {
   font-family: "Yozakura";
-  src: url("../graphics/fonts/en/YOZAKURA-Regular.otf");
+  src: url("../assets/graphics/fonts/en/YOZAKURA-Regular.otf");
 }
 
 @font-face {
   font-family: "ArabDances";
-  src: url("../graphics/fonts/en/ArabDances.ttf");
+  src: url("../assets/graphics/fonts/en/ArabDances.ttf");
 }
 
 @font-face {
   font-family: "BreakAway";
-  src: url("../graphics/fonts/en/breakaway.ttf");
+  src: url("../assets/graphics/fonts/en/breakaway.ttf");
 }
 
 @font-face {
   font-family: "BrentonScrawlType";
-  src: url("../graphics/fonts/en/bwptype.ttf");
+  src: url("../assets/graphics/fonts/en/bwptype.ttf");
 }
 
 @font-face {
   font-family: "DancingVampyrish";
-  src: url("../graphics/fonts/en/DancingVampyrish.ttf");
+  src: url("../assets/graphics/fonts/en/DancingVampyrish.ttf");
 }
 
 @font-face {
   font-family: "Codex";
-  src: url("../graphics/fonts/en/codex.ttf");
+  src: url("../assets/graphics/fonts/en/codex.ttf");
 }
 
 @font-face {
   font-family: "DSNetStamped";
-  src: url("../graphics/fonts/en/DSnet_Stamped.ttf");
+  src: url("../assets/graphics/fonts/en/DSnet_Stamped.ttf");
 }
 
 @font-face {
   font-family: "GlassHouses";
-  src: url("../graphics/fonts/en/glashou.ttf");
+  src: url("../assets/graphics/fonts/en/glashou.ttf");
 }
 
 @font-face {
   font-family: "MilTown";
-  src: url("../graphics/fonts/en/MLTWNII_.ttf");
+  src: url("../assets/graphics/fonts/en/MLTWNII_.ttf");
 }
 
 @font-face {
   font-family: "Shoplifter";
-  src: url("../graphics/fonts/en/shoplift.ttf");
+  src: url("../assets/graphics/fonts/en/shoplift.ttf");
 }
 
 @font-face {
   font-family: "Lumos";
-  src: url("../graphics/fonts/en/LUMOS.ttf");
+  src: url("../assets/graphics/fonts/en/LUMOS.ttf");
 }
 
 @font-face {
   font-family: "IronSans";
-  src: url("../graphics/fonts/en/IronSans.ttf");
+  src: url("../assets/graphics/fonts/en/IronSans.ttf");
 }
 
 @font-face {
   font-family: "StampAct";
-  src: url("../graphics/fonts/en/STAMPACT.ttf");
+  src: url("../assets/graphics/fonts/en/STAMPACT.ttf");
 }
 
 @font-face {
   font-family: "TimesNewRomance";
-  src: url("../graphics/fonts/en/Times-New-Romance.ttf");
+  src: url("../assets/graphics/fonts/en/Times-New-Romance.ttf");
 }
 
 @font-face {
   font-family: "DreamersBrush";
-  src: url("../graphics/fonts/en/DREAMERS-BRUSH.ttf");
+  src: url("../assets/graphics/fonts/en/DREAMERS-BRUSH.ttf");
 }
 
 @font-face {
   font-family: "Hamish";
-  src: url("../graphics/fonts/en/Hamish.otf");
+  src: url("../assets/graphics/fonts/en/Hamish.otf");
 }
 
 @font-face {
   font-family: "Syemox";
-  src: url("../graphics/fonts/en/Syemox-italic.ttf");
+  src: url("../assets/graphics/fonts/en/Syemox-italic.ttf");
 }
 
 @font-face {
   font-family: "Himagsikan";
-  src: url("../graphics/fonts/en/himagsikan.otf");
+  src: url("../assets/graphics/fonts/en/himagsikan.otf");
 }
 
 @font-face {
   font-family: "GoodBrush";
-  src: url("../graphics/fonts/en/Good-Brush.ttf");
+  src: url("../assets/graphics/fonts/en/Good-Brush.ttf");
 }
 
 @font-face {
   font-family: "Fewriter";
-  src: url("../graphics/fonts/en/fewriter_memesbruh03.ttf");
+  src: url("../assets/graphics/fonts/en/fewriter_memesbruh03.ttf");
 }
 
 @font-face {
   font-family: "DreamyLand";
-  src: url("../graphics/fonts/en/Dreamy-Land-Medium.ttf");
+  src: url("../assets/graphics/fonts/en/Dreamy-Land-Medium.ttf");
 }
 
 @font-face {
   font-family: "JianGkrik";
-  src: url("../graphics/fonts/en/JIANGKRIK.otf");
+  src: url("../assets/graphics/fonts/en/JIANGKRIK.otf");
 }
 
 @font-face {
   font-family: "Valentino";
-  src: url("../graphics/fonts/en/Valentino.ttf");
+  src: url("../assets/graphics/fonts/en/Valentino.ttf");
 }
 
 @font-face {
   font-family: "Galactico";
-  src: url("../graphics/fonts/en/Galactico-Basic.otf");
+  src: url("../assets/graphics/fonts/en/Galactico-Basic.otf");
 }
 
 @font-face {
   font-family: "Hiroshio";
-  src: url("../graphics/fonts/en/Hiroshio.otf");
+  src: url("../assets/graphics/fonts/en/Hiroshio.otf");
 }
 
 @font-face {
   font-family: "Makayla";
-  src: url("../graphics/fonts/en/makayla.ttf");
+  src: url("../assets/graphics/fonts/en/makayla.ttf");
 }
 
 @font-face {
   font-family: "HappyFrushZero";
-  src: url("../graphics/fonts/en/happyfrushzero.ttf");
+  src: url("../assets/graphics/fonts/en/happyfrushzero.ttf");
 }
 
 @font-face {
   font-family: "Oko";
-  src: url("../graphics/fonts/en/oko.ttf");
+  src: url("../assets/graphics/fonts/en/oko.ttf");
 }
 
 @font-face {
   font-family: "Stereofidelic";
-  src: url("../graphics/fonts/en/stereofidelic.ttf");
+  src: url("../assets/graphics/fonts/en/stereofidelic.ttf");
 }
 
 @font-face {
   font-family: "Headache";
-  src: url("../graphics/fonts/en/Headache.ttf");
+  src: url("../assets/graphics/fonts/en/Headache.ttf");
 }
 
 @font-face {
   font-family: "YoungerThanMe";
-  src: url("../graphics/fonts/en/Younger-than-me.ttf");
+  src: url("../assets/graphics/fonts/en/Younger-than-me.ttf");
 }
 
 @font-face {
   font-family: "LPEducational";
-  src: url("../graphics/fonts/en/LPEducational.ttf");
+  src: url("../assets/graphics/fonts/en/LPEducational.ttf");
 }
 
 @font-face {
   font-family: "Kirsty";
-  src: url("../graphics/fonts/en/kirsty-rg.ttf");
+  src: url("../assets/graphics/fonts/en/kirsty-rg.ttf");
 }
 
 @font-face {
   font-family: "VenusRising";
-  src: url("../graphics/fonts/en/venus-rising-rg.ttf");
+  src: url("../assets/graphics/fonts/en/venus-rising-rg.ttf");
 }
 
 @font-face {
   font-family: "NotoSansJPBold";
-  src: url("../graphics/fonts/ja/NotoSansJP-Bold.otf");
+  src: url("../assets/graphics/fonts/ja/NotoSansJP-Bold.otf");
 }
 
 @font-face {
   font-family: "CorporateLogoBold";
-  src: url("../graphics/fonts/ja/logotypejp.ttf");
+  src: url("../assets/graphics/fonts/ja/logotypejp.ttf");
 }
 
 @font-face {
   font-family: "RiiPopkk";
-  src: url("../graphics/fonts/ja/RiiPopkkR.otf");
+  src: url("../assets/graphics/fonts/ja/RiiPopkkR.otf");
 }
 
 @font-face {
   font-family: "PopRumCute";
-  src: url("../graphics/fonts/ja/PopRumCute.otf");
+  src: url("../assets/graphics/fonts/ja/PopRumCute.otf");
 }
 
 @font-face {
   font-family: "ChikaraYowaku";
-  src: url("../graphics/fonts/ja/851CHIKARA-YOWAKU.ttf");
+  src: url("../assets/graphics/fonts/ja/851CHIKARA-YOWAKU.ttf");
 }
 
 @font-face {
   font-family: "Otsutome";
-  src: url("../graphics/fonts/ja/OtsutomeFont_Ver3.ttf");
+  src: url("../assets/graphics/fonts/ja/OtsutomeFont_Ver3.ttf");
 }
 
 @font-face {
   font-family: "MaleCharacters";
-  src: url("../graphics/fonts/ja/male-characters.ttf");
+  src: url("../assets/graphics/fonts/ja/male-characters.ttf");
 }
 
 @font-face {
   font-family: "TanukiPermanentMarker";
-  src: url("../graphics/fonts/ja/TanukiMagic.ttf");
+  src: url("../assets/graphics/fonts/ja/TanukiMagic.ttf");
 }
 
 @font-face {
   font-family: "CineCaption";
-  src: url("../graphics/fonts/ja/cinecaption.ttf");
+  src: url("../assets/graphics/fonts/ja/cinecaption.ttf");
 }
 
 @font-face {
   font-family: "GenEiLateMin_v2";
-  src: url("../graphics/fonts/ja/GenEiLateMin_v2.ttc");
+  src: url("../assets/graphics/fonts/ja/GenEiLateMin_v2.ttc");
 }
 
 @font-face {
   font-family: "ReallyScaryMinchotai";
-  src: url("../graphics/fonts/ja/ReallyScaryMinchotai.otf");
+  src: url("../assets/graphics/fonts/ja/ReallyScaryMinchotai.otf");
 }
 
 @font-face {
   font-family: "Zomzi";
-  src: url("../graphics/fonts/ja/Zomzi.ttf");
+  src: url("../assets/graphics/fonts/ja/Zomzi.ttf");
 }
 
 @font-face {
   font-family: "ComicHorror";
-  src: url("../graphics/fonts/ja/ComicHorror.ttf");
+  src: url("../assets/graphics/fonts/ja/ComicHorror.ttf");
 }
 
 @font-face {
   font-family: "GenkaiMincho";
-  src: url("../graphics/fonts/ja/genkai-mincho.ttf");
+  src: url("../assets/graphics/fonts/ja/genkai-mincho.ttf");
 }
 
 @font-face {
   font-family: "Togalite";
-  src: url("../graphics/fonts/ja/togalite-heavy.otf");
+  src: url("../assets/graphics/fonts/ja/togalite-heavy.otf");
 }
 
 @font-face {
   font-family: "HannariMincho";
-  src: url("../graphics/fonts/ja/Hannari.otf");
+  src: url("../assets/graphics/fonts/ja/Hannari.otf");
 }
 
 @font-face {
   font-family: "TogoshiMincho";
-  src: url("../graphics/fonts/ja/togoshi-mincho.ttf");
+  src: url("../assets/graphics/fonts/ja/togoshi-mincho.ttf");
 }
 
 @font-face {
   font-family: "NagurigakiCrayon";
-  src: url("../graphics/fonts/ja/Nagurigaki_Crayon.ttf");
+  src: url("../assets/graphics/fonts/ja/Nagurigaki_Crayon.ttf");
 }
 
 @font-face {
   font-family: "TegakiKakutto";
-  src: url("../graphics/fonts/ja/851_Tegaki_Kakutto.ttf");
+  src: url("../assets/graphics/fonts/ja/851_Tegaki_Kakutto.ttf");
 }
 
 @font-face {
   font-family: "ArmedLemon";
-  src: url("../graphics/fonts/ja/ArmedLemon.ttf");
+  src: url("../assets/graphics/fonts/ja/ArmedLemon.ttf");
 }
 
 @font-face {
   font-family: "AsobiMemogaki";
-  src: url("../graphics/fonts/ja/AsobiMemogaki-Regular-1-01.ttf");
+  src: url("../assets/graphics/fonts/ja/AsobiMemogaki-Regular-1-01.ttf");
 }
 
 @font-face {
   font-family: "KohichiFeltPen";
-  src: url("../graphics/fonts/ja/KS-Kohichi-FeltPen.ttf");
+  src: url("../assets/graphics/fonts/ja/KS-Kohichi-FeltPen.ttf");
 }
 
 @font-face {
   font-family: "NicoMojiPlus";
-  src: url("../graphics/fonts/ja/nicomoji-plus_1.11.ttf");
+  src: url("../assets/graphics/fonts/ja/nicomoji-plus_1.11.ttf");
 }
 
 @font-face {
   font-family: "AppliMincho";
-  src: url("../graphics/fonts/ja/AppliMincho.otf");
+  src: url("../assets/graphics/fonts/ja/AppliMincho.otf");
 }
 
 @font-face {
   font-family: "KaisoNextB";
-  src: url("../graphics/fonts/ja/Kaiso-Next-B.otf");
+  src: url("../assets/graphics/fonts/ja/Kaiso-Next-B.otf");
 }
 
 @font-face {
   font-family: "MikaChan";
-  src: url("../graphics/fonts/ja/mikachan-P.ttf");
+  src: url("../assets/graphics/fonts/ja/mikachan-P.ttf");
 }
 
 @font-face {
   font-family: "Pigmo01";
-  src: url("../graphics/fonts/ja/Pigmo-01.otf");
+  src: url("../assets/graphics/fonts/ja/Pigmo-01.otf");
 }
 
 @font-face {
   font-family: "ZinHenaBokuryu";
-  src: url("../graphics/fonts/ja/ZinHenaBokuryu-RCF.otf");
+  src: url("../assets/graphics/fonts/ja/ZinHenaBokuryu-RCF.otf");
 }
 
 @font-face {
   font-family: "MinaMoji";
-  src: url("../graphics/fonts/ja/minamoji.ttf");
+  src: url("../assets/graphics/fonts/ja/minamoji.ttf");
 }
 
 @font-face {
   font-family: "Nikukyu-カタカナ";
-  src: url("../graphics/fonts/ja/FontopoNIKUKYU.otf");
+  src: url("../assets/graphics/fonts/ja/FontopoNIKUKYU.otf");
 }
 
 @font-face {
   font-family: "Oriental-カタカナ";
-  src: url("../graphics/fonts/ja/FontopoORIENTAL.otf");
+  src: url("../assets/graphics/fonts/ja/FontopoORIENTAL.otf");
 }
 
 @font-face {
   font-family: "NotoSansKRBold";
-  src: url("../graphics/fonts/ko/NotoSansKR-Bold.otf");
+  src: url("../assets/graphics/fonts/ko/NotoSansKR-Bold.otf");
 }
 
 @font-face {
   font-family: "BMDohyeon";
-  src: url("../graphics/fonts/ko/BMDOHYEON.ttf");
+  src: url("../assets/graphics/fonts/ko/BMDOHYEON.ttf");
 }
 
 @font-face {
   font-family: "BMYeonSung";
-  src: url("../graphics/fonts/ko/BMYEONSUNG.ttf");
+  src: url("../assets/graphics/fonts/ko/BMYEONSUNG.ttf");
 }
 
 @font-face {
   font-family: "BMHannaPro";
-  src: url("../graphics/fonts/ko/BMHANNAPro.ttf");
+  src: url("../assets/graphics/fonts/ko/BMHANNAPro.ttf");
 }
 
 @font-face {
   font-family: "Sunflower";
-  src: url("../graphics/fonts/ko/Sunflower-Bold.ttf");
+  src: url("../assets/graphics/fonts/ko/Sunflower-Bold.ttf");
 }
 
 @font-face {
   font-family: "JejuHallasan";
-  src: url("../graphics/fonts/ko/JejuHallasan-Regular.ttf");
+  src: url("../assets/graphics/fonts/ko/JejuHallasan-Regular.ttf");
 }
 
 @font-face {
   font-family: "BlackHanSans";
-  src: url("../graphics/fonts/ko/BlackHanSans-Regular.ttf");
+  src: url("../assets/graphics/fonts/ko/BlackHanSans-Regular.ttf");
 }
 
 @font-face {
   font-family: "KirangHaerang";
-  src: url("../graphics/fonts/ko/KirangHaerang-Regular.ttf");
+  src: url("../assets/graphics/fonts/ko/KirangHaerang-Regular.ttf");
 }
 
 @font-face {
   font-family: "HiMelody";
-  src: url("../graphics/fonts/ko/HiMelody-Regular.ttf");
+  src: url("../assets/graphics/fonts/ko/HiMelody-Regular.ttf");
 }
 
 @font-face {
   font-family: "UhBeeSeHyun";
-  src: url("../graphics/fonts/ko/UhBee_Se_hyun_Bold.ttf");
+  src: url("../assets/graphics/fonts/ko/UhBee_Se_hyun_Bold.ttf");
 }
 
 @font-face {
   font-family: "UhBeeJisyuk";
-  src: url("../graphics/fonts/ko/UhBee_Jisyuk_jisyuk_BOLD.ttf");
+  src: url("../assets/graphics/fonts/ko/UhBee_Jisyuk_jisyuk_BOLD.ttf");
 }
 
 @font-face {
   font-family: "Daraehand";
-  src: url("../graphics/fonts/ko/drfont_daraehand_Basic.ttf");
+  src: url("../assets/graphics/fonts/ko/drfont_daraehand_Basic.ttf");
 }
 
 @font-face {
   font-family: "GabiaSolmee";
-  src: url("../graphics/fonts/ko/gabia_solmee.ttf");
+  src: url("../assets/graphics/fonts/ko/gabia_solmee.ttf");
 }
 
 @font-face {
   font-family: "NanumBrush";
-  src: url("../graphics/fonts/ko/NanumBrush.ttf");
+  src: url("../assets/graphics/fonts/ko/NanumBrush.ttf");
 }
 
 @font-face {
   font-family: "SSShinRegular";
-  src: url("../graphics/fonts/ko/SSShinRegular.ttf");
+  src: url("../assets/graphics/fonts/ko/SSShinRegular.ttf");
 }
 
 @font-face {
   font-family: "SSShinB7Regular";
-  src: url("../graphics/fonts/ko/SSShinb7Regular.ttf");
+  src: url("../assets/graphics/fonts/ko/SSShinb7Regular.ttf");
 }
 
 @font-face {
   font-family: "TvNEnjoyStories";
-  src: url("../graphics/fonts/ko/tvN_즐거운이야기_Bold.ttf");
+  src: url("../assets/graphics/fonts/ko/tvN_즐거운이야기_Bold.ttf");
 }
 
 @font-face {
   font-family: "K2DBold";
-  src: url("../graphics/fonts/th/K2D-Bold.ttf");
+  src: url("../assets/graphics/fonts/th/K2D-Bold.ttf");
 }
 
 @font-face {
   font-family: "NotoSansThaiBold";
-  src: url("../graphics/fonts/th/NotoSansThai-Bold.ttf");
+  src: url("../assets/graphics/fonts/th/NotoSansThai-Bold.ttf");
 }
 
 @font-face {
   font-family: "Athiti";
-  src: url("../graphics/fonts/th/Athiti-Medium.ttf");
+  src: url("../assets/graphics/fonts/th/Athiti-Medium.ttf");
 }
 
 @font-face {
   font-family: "BaiJamjuree";
-  src: url("../graphics/fonts/th/BaiJamjuree-Medium.ttf");
+  src: url("../assets/graphics/fonts/th/BaiJamjuree-Medium.ttf");
 }
 
 @font-face {
   font-family: "ChakraPetch";
-  src: url("../graphics/fonts/th/ChakraPetch-Medium.ttf");
+  src: url("../assets/graphics/fonts/th/ChakraPetch-Medium.ttf");
 }
 
 @font-face {
   font-family: "Charm";
-  src: url("../graphics/fonts/th/Charm-Bold.ttf");
+  src: url("../assets/graphics/fonts/th/Charm-Bold.ttf");
 }
 
 @font-face {
   font-family: "Charmonman";
-  src: url("../graphics/fonts/th/Charmonman-Bold.ttf");
+  src: url("../assets/graphics/fonts/th/Charmonman-Bold.ttf");
 }
 
 @font-face {
   font-family: "Chonburi";
-  src: url("../graphics/fonts/th/Chonburi-Regular.ttf");
+  src: url("../assets/graphics/fonts/th/Chonburi-Regular.ttf");
 }
 
 @font-face {
   font-family: "Fahkwang";
-  src: url("../graphics/fonts/th/Fahkwang-Medium.ttf");
+  src: url("../assets/graphics/fonts/th/Fahkwang-Medium.ttf");
 }
 
 @font-face {
   font-family: "Itim";
-  src: url("../graphics/fonts/th/Itim-Regular.ttf");
+  src: url("../assets/graphics/fonts/th/Itim-Regular.ttf");
 }
 
 @font-face {
   font-family: "Kanit";
-  src: url("../graphics/fonts/th/Kanit-Medium.ttf");
+  src: url("../assets/graphics/fonts/th/Kanit-Medium.ttf");
 }
 
 @font-face {
   font-family: "Kodchasan";
-  src: url("../graphics/fonts/th/Kodchasan-Medium.ttf");
+  src: url("../assets/graphics/fonts/th/Kodchasan-Medium.ttf");
 }
 
 @font-face {
   font-family: "KoHo";
-  src: url("../graphics/fonts/th/KoHo-Medium.ttf");
+  src: url("../assets/graphics/fonts/th/KoHo-Medium.ttf");
 }
 
 @font-face {
   font-family: "Srisakdi";
-  src: url("../graphics/fonts/th/Srisakdi-Bold.ttf");
+  src: url("../assets/graphics/fonts/th/Srisakdi-Bold.ttf");
 }
 
 @font-face {
   font-family: "Krub";
-  src: url("../graphics/fonts/th/Krub-Medium.ttf");
+  src: url("../assets/graphics/fonts/th/Krub-Medium.ttf");
 }
 
 @font-face {
   font-family: "Maitree";
-  src: url("../graphics/fonts/th/Maitree-Medium.ttf");
+  src: url("../assets/graphics/fonts/th/Maitree-Medium.ttf");
 }
 
 @font-face {
   font-family: "Mali";
-  src: url("../graphics/fonts/th/Mali-Medium.ttf");
+  src: url("../assets/graphics/fonts/th/Mali-Medium.ttf");
 }
 
 @font-face {
   font-family: "Mitr";
-  src: url("../graphics/fonts/th/Mitr-Medium.ttf");
+  src: url("../assets/graphics/fonts/th/Mitr-Medium.ttf");
 }
 
 @font-face {
   font-family: "Niramit";
-  src: url("../graphics/fonts/th/Niramit-Medium.ttf");
+  src: url("../assets/graphics/fonts/th/Niramit-Medium.ttf");
 }
 
 @font-face {
   font-family: "Pattaya";
-  src: url("../graphics/fonts/th/Pattaya-Regular.ttf");
+  src: url("../assets/graphics/fonts/th/Pattaya-Regular.ttf");
 }
 
 @font-face {
   font-family: "Pridi";
-  src: url("../graphics/fonts/th/Pridi-Medium.ttf");
+  src: url("../assets/graphics/fonts/th/Pridi-Medium.ttf");
 }
 
 @font-face {
   font-family: "Prompt";
-  src: url("../graphics/fonts/th/Prompt-Bold.ttf");
+  src: url("../assets/graphics/fonts/th/Prompt-Bold.ttf");
 }
 
 @font-face {
   font-family: "Sarabun";
-  src: url("../graphics/fonts/th/Sarabun-Medium.ttf");
+  src: url("../assets/graphics/fonts/th/Sarabun-Medium.ttf");
 }
 
 @font-face {
   font-family: "Sriracha";
-  src: url("../graphics/fonts/th/Sriracha-Regular.ttf");
+  src: url("../assets/graphics/fonts/th/Sriracha-Regular.ttf");
 }
 
 @font-face {
   font-family: "Taviraj";
-  src: url("../graphics/fonts/th/Taviraj-Medium.ttf");
+  src: url("../assets/graphics/fonts/th/Taviraj-Medium.ttf");
 }
 
 @font-face {
   font-family: "Thasadith";
-  src: url("../graphics/fonts/th/Thasadith-Bold.ttf");
+  src: url("../assets/graphics/fonts/th/Thasadith-Bold.ttf");
 }
 
 @font-face {
   font-family: "BianHeiti";
-  src: url("../graphics/fonts/cn/BianHeiti.ttf");
+  src: url("../assets/graphics/fonts/cn/BianHeiti.ttf");
 }
 
 @font-face {
   font-family: "SourceHanSerifSC-Medium";
-  src: url("../graphics/fonts/cn/SourceHanSerifSC-Medium.otf");
+  src: url("../assets/graphics/fonts/cn/SourceHanSerifSC-Medium.otf");
 }
 
 .no-scrollbar {
@@ -834,7 +834,7 @@
   padding: 0px;
   height: 160px;
   z-index: 1;
-  background: url("../graphics/denim95.png");
+  background: url("../assets/graphics/denim95.png");
   box-shadow: 0 0 20px #000;
   transition: width 0.5s ease, left 0.5s ease, opacity 0.5s ease;
   opacity: 0;
@@ -851,7 +851,7 @@
   padding: 0px;
   height: 160px;
   z-index: 1;
-  background: url("../graphics/denim95.png");
+  background: url("../assets/graphics/denim95.png");
   box-shadow: 0 0 20px #000;
   transition: width 0.5s ease, left 0.5s ease, opacity 0.5s ease;
   opacity: 0;
@@ -1150,7 +1150,7 @@
 }
 
 .darkapp {
-  background: url("../graphics/denim95.png");
+  background: url("../assets/graphics/denim95.png");
 }
 
 .theatre-narrator {
@@ -1275,49 +1275,49 @@
 .theatre-icon-suppress {
   width: 100%;
   height: 100%;
-  background-image: url("../graphics/btn_suppress.png");
+  background-image: url("../assets/graphics/btn_suppress.png");
 }
 
 .theatre-icon-emote {
   width: 100%;
   height: 100%;
-  background-image: url("../graphics/btn_emote.png");
+  background-image: url("../assets/graphics/btn_emote.png");
 }
 
 .theatre-icon-fontsize-small {
   width: 100%;
   height: 100%;
-  background-image: url("../graphics/btn_font_size_small.png");
+  background-image: url("../assets/graphics/btn_font_size_small.png");
 }
 
 .theatre-icon-fontsize-medium {
   width: 100%;
   height: 100%;
-  background-image: url("../graphics/btn_font_size_medium.png");
+  background-image: url("../assets/graphics/btn_font_size_medium.png");
 }
 
 .theatre-icon-fontsize-large {
   width: 100%;
   height: 100%;
-  background-image: url("../graphics/btn_font_size_large.png");
+  background-image: url("../assets/graphics/btn_font_size_large.png");
 }
 
 .theatre-icon-cinema {
   width: 100%;
   height: 100%;
-  background-image: url("../graphics/btn_cinema.png");
+  background-image: url("../assets/graphics/btn_cinema.png");
 }
 
 .theatre-icon-narrator {
   width: 100%;
   height: 100%;
-  background-image: url("../graphics/btn_narrator.png");
+  background-image: url("../assets/graphics/btn_narrator.png");
 }
 
 .theatre-icon-live {
   width: 100%;
   height: 100%;
-  background-image: url("../graphics/btn_live.png");
+  background-image: url("../assets/graphics/btn_live.png");
 }
 
 .theatre-control-btn:hover {
@@ -1347,7 +1347,7 @@
 }
 
 .theatre-control-chat-cover-ooc {
-  background-image: url("../graphics/ooc.png");
+  background-image: url("../assets/graphics/ooc.png");
   box-shadow: inset 0px 0px 10px 2px blue;
 }
 
@@ -1582,7 +1582,7 @@
   cursor: default;
   font-family: "Signika";
   color: white;
-  background: url("../graphics/denim95.png");
+  background: url("../assets/graphics/denim95.png");
   border-radius: 3px;
 }
 

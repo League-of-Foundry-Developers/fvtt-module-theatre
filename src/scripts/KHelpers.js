@@ -61,7 +61,7 @@ const KHelpers = {
       } else el = el.parentNode;
     }
     return targ;
-  }
-}
+  },
+};
 
 export default KHelpers;

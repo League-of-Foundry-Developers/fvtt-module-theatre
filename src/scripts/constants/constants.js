@@ -13,7 +13,7 @@ const CONSTANTS = {
   },
   SOCKET: "module.theatre",
   NARRATOR: "Narrator",
-  ICONLIB: "modules/theatre/graphics/emotes",
+  ICONLIB: "modules/theatre/assets/graphics/emotes",
   DEFAULT_PORTRAIT: "icons/mystery-man.png",
   PREFIX_ACTOR_ID: "theatre-",
 };

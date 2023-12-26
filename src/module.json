@@ -133,7 +133,7 @@
     "greensock/dist/PixiPlugin.min.js",
     "greensock/dist/ScrollToPlugin.min.js",
     "greensock/dist/SplitText.min.js",
-    "scripts/lib/ffontsloader/fontsloader.min.js"
+    "scripts/libs/ffontsloader/fontsloader.min.js"
   ],
   "esmodules": ["module.js"],
   "styles": ["styles/theatre.css"],

@@ -43,7 +43,7 @@ export class Theatre {
   // static SOCKET = "module.theatre";
   // static SETTINGS = "theatre";
   // static NARRATOR = "Narrator";
-  // static ICONLIB = "modules/theatre/graphics/emotes";
+  // static ICONLIB = "modules/theatre/assets/graphics/emotes";
 
   // static DEBUG = false;
 
@@ -2239,8 +2239,8 @@ export class Theatre {
     let imgSrcs = [];
 
     imgSrcs.push({
-      imgpath: "modules/theatre/graphics/typing.png",
-      resname: "modules/theatre/graphics/typing.png",
+      imgpath: "modules/theatre/assets/graphics/typing.png",
+      resname: "modules/theatre/assets/graphics/typing.png",
     });
     imgSrcs.push({ imgpath: imgPath, resname: imgPath });
     debug("Adding %s with src %s", portName, imgPath);
@@ -2409,7 +2409,7 @@ export class Theatre {
     // setup typing bubble
     if (!insert.typingBubble) {
       let typingBubble = new PIXI.Sprite();
-      typingBubble.texture = resources["modules/theatre/graphics/typing.png"];
+      typingBubble.texture = resources["modules/theatre/assets/graphics/typing.png"];
       typingBubble.width = 55;
       typingBubble.height = 55;
       typingBubble.theatreComponentName = "typingBubble";
