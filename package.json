@@ -51,6 +51,10 @@
 	],
 	"scripts": {
 		"build": "vite build",
+		"build:watch": "vite build --watch",
+        "build:clean": "node ./utils/packs.mjs package clean",
+        "build:db": "node ./utils/packs.mjs package pack",
+        "build:json": "node ./utils/packs.mjs package unpack",
 		"dev": "vite",
 		"eslint": "eslint .",
 		"prepare": "husky install",
