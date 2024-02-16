@@ -1,10 +1,10 @@
 {
   "I18N.MAINTAINERS": ["jbblily(Crownel#4367)"],
 
-  "Header.Override.Token": "토큰",
-  "Header.Override.Sheet": "시트",
-  "Header.Override.Import": "입력",
-  "Header.Override.Close": "닫기",
+  "Theatre.Header.Override.Token": "토큰",
+  "Theatre.Header.Override.Sheet": "시트",
+  "Theatre.Header.Override.Import": "입력",
+  "Theatre.Header.Override.Close": "닫기",
 
   "Theatre.UI.Chat.Narrator": "나레이터",
 

@@ -1,10 +1,10 @@
 {
   "I18N.MAINTAINERS": ["Rafael Masoni"],
 
-  "Header.Override.Token": "Token",
-  "Header.Override.Sheet": "Ficha",
-  "Header.Override.Import": "Importar",
-  "Header.Override.Close": "Fechar",
+  "Theatre.Header.Override.Token": "Token",
+  "Theatre.Header.Override.Sheet": "Ficha",
+  "Theatre.Header.Override.Import": "Importar",
+  "Theatre.Header.Override.Close": "Fechar",
 
   "Theatre.UI.Chat.Narrator": "Narrador",
 

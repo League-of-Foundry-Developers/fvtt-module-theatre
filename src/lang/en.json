@@ -1,16 +1,15 @@
 {
   "I18N.MAINTAINERS": ["PakkiSukibe"],
 
-  "Header": {
-    "Override": {
-      "Token": "Token",
-      "Sheet": "Sheet",
-      "Import": "Import",
-      "Close": "Close"
-    }
-  },
-
   "Theatre": {
+    "Header": {
+      "Override": {
+        "Token": "Token",
+        "Sheet": "Sheet",
+        "Import": "Import",
+        "Close": "Close"
+      }
+    },
     "UI": {
       "Chat": { "Narrator": "Narrator" },
       "Title": {

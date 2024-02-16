@@ -18,8 +18,10 @@
  *
  */
 
-import { KHelpers } from "./KHelpers.js";
+import KHelpers from "./KHelpers.js";
 import { Theatre } from "./Theatre.js";
+import CONSTANTS from "./constants/constants.js";
+import { debug, error, info } from "./lib/lib.js";
 
 /**
  * ============================================================
@@ -140,15 +142,15 @@ export class TheatreActorConfig extends FormApplication {
         let labelPath = mch + ".label";
         let cflagPath = mch + ".custom";
         let namePath = mch + ".name";
-        if (Theatre.DEBUG) console.log("found %s", k, mch, cflagPath, namePath);
+        debug("found %s", k, mch, cflagPath, namePath);
         // if label is both the formData as well as the object, reject the submission
         let emoteProp = getProperty(this.object, mch);
         let labelProp = null;
         if (emoteProp) labelProp = getProperty(this.object, labelPath);
 
         if ((!labelProp || labelProp == "") && (!formData[labelPath] || formData[labelPath] == "")) {
-          console.log("ERROR: No label for custom emote defined!");
-          ui.notifications.info(game.i18n.localize("Theatre.UI.Notification.BadCustomEmote"));
+          error("ERROR: No label for custom emote defined!", true);
+          error(game.i18n.localize("Theatre.UI.Notification.BadCustomEmote"), true);
           return false;
         }
 
@@ -218,13 +220,13 @@ export class TheatreActorConfig extends FormApplication {
     formData["_id"] = this.object._id;
 
     // if our baseinsert value was updated..
-    if (Theatre.DEBUG) console.log(formData);
+    debug(formData);
     let insertDirty = false;
     let baseInsert = formData["flags.theatre.baseinsert"];
     let optAlign = formData["flags.theatre.optalign"];
     let name = formData["flags.theatre.name"];
     let newBaseInsert =
-      this.object.flags.theatre.baseinsert || (this.object.img ? this.object.img : "icons/mystery-man.png");
+      this.object.flags.theatre.baseinsert || (this.object.img ? this.object.img : CONSTANTS.DEFAULT_PORTRAIT);
     let newName = this.object.flags.theatre.name || this.object.name;
     let newAlign = this.object.flags.theatre.optalign || "top";
 
@@ -234,22 +236,22 @@ export class TheatreActorConfig extends FormApplication {
     let cImg = Theatre.instance.getTheatreCoverPortrait();
 
     if (baseInsert != this.object.flags.theatre.baseinsert) {
-      if (Theatre.DEBUG) console.log("baseinsert changed!");
+      debug("baseinsert changed!");
       insertDirty = true;
-      newBaseInsert = baseInsert == "" ? (this.object.img ? this.object.img : "icons/mystery-man.png") : baseInsert;
+      newBaseInsert = baseInsert == "" ? (this.object.img ? this.object.img : CONSTANTS.DEFAULT_PORTRAIT) : baseInsert;
       if (navItem) {
         navItem.setAttribute("src", newBaseInsert);
         cImg.setAttribute("src", newBaseInsert);
       }
     }
     if (optAlign != this.object.flags.theatre.optalign) {
-      if (Theatre.DEBUG) console.log("optalign changed!");
+      debug("optalign changed!");
       insertDirty = true;
       newAlign = optAlign == "" ? "top" : optAlign;
       if (navItem) navItem.setAttribute("optalign", newAlign);
     }
     if (name != this.object.flags.theatre.name) {
-      if (Theatre.DEBUG) console.log("name changed!");
+      debug("name changed!");
       insertDirty = true;
       newName = name == "" ? this.object.name : name;
       if (navItem) {
@@ -261,8 +263,10 @@ export class TheatreActorConfig extends FormApplication {
     formData = this._processUpdateLabels(formData);
     // Verify custom emotes if we have any
     let resForms = this._verifyCustomEmotes(formData);
-    if (!resForms) return;
-    if (Theatre.DEBUG) console.log("Form data AFTER verification: ", resForms);
+    if (!resForms) {
+      return;
+    }
+    debug("Form data AFTER verification: ", resForms);
     let revisedFormData = resForms.revisedFormData;
     let emoteFormData = resForms.emoteFormData;
 
@@ -290,17 +294,22 @@ export class TheatreActorConfig extends FormApplication {
             // try to restore baseinsert
             let formBaseInsert = formData["flags.theatre.baseinsert"];
             if (k.endsWith("insert") && !k.endsWith("baseinsert")) {
-              if (formBaseInsert && formBaseInsert != "") resName = formBaseInsert;
-              else if (this.object.flags.theatre.baseinsert && this.object.flags.theatre.baseinsert != "")
+              if (formBaseInsert && formBaseInsert != "") {
+                resName = formBaseInsert;
+              } else if (this.object.flags.theatre.baseinsert && this.object.flags.theatre.baseinsert != "") {
                 resName = this.object.flags.theatre.baseinsert;
-              else resName = this.object.img ? this.object.img : "icons/mystery-man.png";
-            } else resName = this.object.img ? this.object.img : "icons/mystery-man.png";
+              } else {
+                resName = this.object.img ? this.object.img : CONSTANTS.DEFAULT_PORTRAIT;
+              }
+            } else {
+              resName = this.object.img ? this.object.img : CONSTANTS.DEFAULT_PORTRAIT;
+            }
           }
 
           // ensure resource exists
           if (!(await srcExists(resName))) {
-            console.log("ERROR: Path %s does not exist!", resName);
-            ui.notifications.info(game.i18n.localize("Theatre.UI.Notification.BadFilepath") + `"${resName}"`);
+            error("ERROR: Path %s does not exist!", true, resName);
+            error(game.i18n.localize("Theatre.UI.Notification.BadFilepath") + `"${resName}"`, true);
             return;
           }
 
@@ -320,13 +329,13 @@ export class TheatreActorConfig extends FormApplication {
     }
     // send the emote parent in bulk to get rid of unwanted children
     revisedFormData["flags.theatre.emotes"] = nEmotes;
-    if (Theatre.DEBUG) console.log("Final Push Config update:", revisedFormData);
+    debug("Final Push Config update:", revisedFormData);
 
     this.object.update(revisedFormData).then((response) => {
       // perform texture updates if needed
       if (imgSrcs.length > 0) {
         // we know the active emote, thus all we need is the new source image
-        if (Theatre.DEBUG) console.log("sending imgSrcs for replaceAllTextures", imgSrcs);
+        debug("sending imgSrcs for replaceAllTextures", imgSrcs);
         Theatre.instance._AddAllTextureResources(
           imgSrcs,
           theatreId,
@@ -334,12 +343,12 @@ export class TheatreActorConfig extends FormApplication {
           newSrcImg,
           (loader, resources) => {
             // if our emote is active and we're replacing the emote texture, or base is active, and we're replacing the base texture
-            if (Theatre.DEBUG) console.log("texture additions complete! ", newSrcImg, insertEmote);
+            debug("texture additions complete! ", newSrcImg, insertEmote);
 
             if (app && container && newSrcImg) {
-              if (Theatre.DEBUG) console.log("RE-RENDERING with NEW texture resource %s ", newSrcImg);
+              debug("RE-RENDERING with NEW texture resource %s ", newSrcImg);
 
-              let resName = "icons/myster-man.png";
+              let resName = CONSTANTS.DEFAULT_PORTRAIT;
               if (
                 insert.emote &&
                 this.object.flags.theatre.emotes[insert.emote].insert &&
@@ -377,8 +386,8 @@ export class TheatreActorConfig extends FormApplication {
 
       // if the insert is dirty, clear and setup
       if (insertDirty && insert) {
-        if (Theatre.DEBUG) console.log("Insert is dirty, re-render it!");
-        let resName = "icons/myster-man.png";
+        debug("Insert is dirty, re-render it!");
+        let resName = CONSTANTS.DEFAULT_PORTRAIT;
         if (
           insert.emote &&
           this.object.flags.theatre.emotes[insert.emote].insert &&
@@ -428,8 +437,8 @@ export class TheatreActorConfig extends FormApplication {
    * @private
    */
   _onAddEmoteLine(ev) {
-    if (Theatre.DEBUG) console.log("Add Emote Pressed!");
-    //ui.notifications.info(game.i18n.localize("Theatre.NotYet"));
+    debug("Add Emote Pressed!");
+    //info(game.i18n.localize("Theatre.NotYet"), true);
 
     // We need to get a custom emote name for storage purposes, this is a running index from
     // 1-> MAXINT oh which the upper bound we don't account for, to get the correct custom
@@ -507,7 +516,7 @@ export class TheatreActorConfig extends FormApplication {
     fileButton.setAttribute("tabindex", "-1");
 
     emoteIcon.setAttribute("data-edit", `flags.theatre.emotes.${customName}.image`);
-    emoteIcon.setAttribute("src", Theatre.ICONLIB + "/blank.png");
+    emoteIcon.setAttribute("src", CONSTANTS.ICONLIB + "/blank.png");
     emoteIcon.setAttribute("title", game.i18n.localize("Theatre.UI.Title.ChooseEmoteIcon"));
 
     //emoteIcon.setAttribute("src",`flags.theatre.emotes.${customName}.image`);
@@ -669,7 +678,7 @@ export class TheatreActorConfig extends FormApplication {
    * @private
    */
   _onUndoDockDelete(ev) {
-    if (Theatre.DEBUG) console.log("undo delete!");
+    debug("undo delete!");
     ev.stopPropagation();
     ev.currentTarget.removeAttribute("todelete");
     ev.currentTarget.style.left = "0";
@@ -700,7 +709,7 @@ export class TheatreActorConfig extends FormApplication {
    * @private
    */
   _onEditEmoteLine(ev) {
-    if (Theatre.DEBUG) console.log("Emote config pressed for %s!", ev.currentTarget.getAttribute("name"));
-    ui.notifications.info(game.i18n.localize("Theatre.NotYet"));
+    debug("Emote config pressed for %s!", ev.currentTarget.getAttribute("name"));
+    info(game.i18n.localize("Theatre.NotYet"), true);
   }
 }

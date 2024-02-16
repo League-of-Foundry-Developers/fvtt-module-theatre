@@ -2,10 +2,10 @@
   "I18N.LANGUAGE": "Español",
   "I18N.MAINTAINERS": "@Viriato139ac#0342",
 
-  "Header.Override.Token": "Icono",
-  "Header.Override.Sheet": "Hoja",
-  "Header.Override.Import": "Importar",
-  "Header.Override.Close": "Cerrar",
+  "Theatre.Header.Override.Token": "Icono",
+  "Theatre.Header.Override.Sheet": "Hoja",
+  "Theatre.Header.Override.Import": "Importar",
+  "Theatre.Header.Override.Close": "Cerrar",
 
   "Theatre.UI.Chat.Narrator": "Narrador",
 

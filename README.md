@@ -22,6 +22,10 @@ To install this module manually:
 
 This module uses the [libWrapper](https://github.com/ruipin/fvtt-lib-wrapper) library for wrapping core methods. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
 
+### socketlib
+
+This module uses the [socketlib](https://github.com/manuelVo/foundryvtt-socketlib) library for wrapping core methods. It is a optional dependency and it is recommended for the best experience and compatibility with other modules.
+
 ### Key Binds
 Theatre inserts now supports keybinds through the keybind API. The default keybinds are as follows (on windows):
 
@@ -134,7 +138,9 @@ Any issues, bugs, or feature requests are always welcome to be reported directly
 ### License
 
 - **[Theatre](https://gitlab.com/Ayanzo/theatre/)**: [GPLv3](https://gitlab.com/Ayanzo/theatre/-/blob/master/LICENSE.txt)
-
+- **[ffontsloader](https://github.com/MurDaD/ffontsloader/)**: [GPLv3](https://github.com/MurDaD/ffontsloader/blob/master/LICENSE)
+- **[webfontloader](https://github.com/typekit/webfontloader)**: [GPLv3](https://github.com/typekit/webfontloader/blob/master/LICENSE)
+- **[face-api.js](https://github.com/justadudewhohacks/face-api.js)**: [MIT](https://github.com/justadudewhohacks/face-api.js/blob/master/LICENSE)
 
 This package is under an [GPLv3](LICENSE) and the [Foundry Virtual Tabletop Limited License Agreement for module development](https://foundryvtt.com/article/license/).
 
@@ -147,3 +153,5 @@ The Japanese community will be placing bounties for maintaining theatre inserts 
 Contributions are most welcome, please do one Pull Request per feature.
 
 - [Ken L](https://gitlab.com/Ayanzo) for the module [Theatre](https://gitlab.com/Ayanzo/theatre/)
+- [MurDaD](https://github.com/MurDaD) for the project [ffontsloader](https://github.com/MurDaD/ffontsloader/)
+- [justadudewhohacks](https://github.com/justadudewhohacks) for the project [face-api.js](https://github.com/justadudewhohacks/face-api.js)

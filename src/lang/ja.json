@@ -1,10 +1,10 @@
 {
   "I18N.MAINTAINERS": ["Sharp"],
 
-  "Header.Override.Token": "コマ",
-  "Header.Override.Sheet": "シート",
-  "Header.Override.Import": "インポート",
-  "Header.Override.Close": "閉じる",
+  "Theatre.Header.Override.Token": "コマ",
+  "Theatre.Header.Override.Sheet": "シート",
+  "Theatre.Header.Override.Import": "インポート",
+  "Theatre.Header.Override.Close": "閉じる",
 
   "Theatre.UI.Chat.Narrator": "ナレーター",
 

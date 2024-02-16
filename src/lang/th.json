@@ -1,10 +1,10 @@
 {
   "I18N.MAINTAINERS": ["Tabletop Universe Thailand"],
 
-  "Header.Override.Token": "โทเคน",
-  "Header.Override.Sheet": "ชีท",
-  "Header.Override.Import": "นำเข้า",
-  "Header.Override.Close": "ปิด",
+  "Theatre.Header.Override.Token": "โทเคน",
+  "Theatre.Header.Override.Sheet": "ชีท",
+  "Theatre.Header.Override.Import": "นำเข้า",
+  "Theatre.Header.Override.Close": "ปิด",
 
   "Theatre.UI.Chat.Narrator": "ผู้บรรยาย",
 

@@ -1,16 +1,14 @@
 {
   "I18N.MAINTAINERS": ["Kuroni"],
-
-  "Header": {
-    "Override": {
-      "Token": "指示物",
-      "Sheet": "人物卡",
-      "Import": "导入",
-      "Close": "关闭"
-    }
-  },
-
   "Theatre": {
+    "Header": {
+      "Override": {
+        "Token": "指示物",
+        "Sheet": "人物卡",
+        "Import": "导入",
+        "Close": "关闭"
+      }
+    },
     "UI": {
       "Chat": { "Narrator": "旁白" },
       "Title": {
