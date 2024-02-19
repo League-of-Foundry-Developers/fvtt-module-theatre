@@ -137,12 +137,12 @@ Hooks.on("deleteCombat", function () {
  * Pre-process chat message to set 'speaking as' to correspond
  * to our 'speaking as'
  */
-Hooks.on("preCreateChatMessage", function (chatMessage) {
+Hooks.on("preCreateChatMessage", function (chatMessage, data) {
   let chatData = {
     speaker: {
       //actor: null,
       //The above line is causing issues with chat buttons in v11 in certain systems. Will revert if it causes unforseen issues in other systems.
-      scene: null,
+      scene: data.speaker?.scene,
       flags: {},
     },
   };
