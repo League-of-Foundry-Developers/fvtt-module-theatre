@@ -507,10 +507,16 @@ Hooks.on("theatreDockActive", (insertCount) => {
  * If Argon is active, wrap CombatHudCanvasElement#toggleMacroPlayers to prevent playesr list and macro hotbar from being shown
  */
 Hooks.once("ready", () => {
+  // Do anything once the module is ready
+  if (!game.modules.get("lib-wrapper")?.active && game.user?.isGM) {
+    let word = "install and activate";
+    if (game.modules.get("lib-wrapper")) word = "activate";
+    throw Logger.error(`Requires the 'libWrapper' module. Please ${word} it.`);
+  }
   if (!game.modules.get("socketlib")?.active && game.user?.isGM) {
     let word = "install and activate";
     if (game.modules.get("socketlib")) word = "activate";
-    Logger.warn(`It is recommended to intall the 'socketlib' module. Please ${word} it.`);
+    throw Logger.error(`Requires the 'socketlib' module. Please ${word} it.`);
   }
   if (!game.settings.get(CONSTANTS.MODULE_ID, "autoHideBottom")) {
     return;
