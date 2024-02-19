@@ -91,7 +91,9 @@
           "2": "【Fāngtóu Kuòhào】",
           "3": "｢Kagikakko｣",
           "4": "『Nijū Kagiyamakakko』"
-        }
+        },
+        "debug": "Enable debugging",
+        "debugHint": "Prints debug messages to the console"
       },
       "Keybinds": {
         "unfocusTextArea": "Unfocus Text Area",

@@ -24,7 +24,7 @@ This module uses the [libWrapper](https://github.com/ruipin/fvtt-lib-wrapper) li
 
 ### socketlib
 
-This module uses the [socketlib](https://github.com/manuelVo/foundryvtt-socketlib) library for wrapping core methods. It is a optional dependency and it is recommended for the best experience and compatibility with other modules.
+This module uses the [socketlib](https://github.com/manuelVo/foundryvtt-socketlib) library for wrapping core methods. It is a hard dependency and it is recommended for the best experience and compatibility with other modules.
 
 ### Key Binds
 Theatre inserts now supports keybinds through the keybind API. The default keybinds are as follows (on windows):
@@ -53,19 +53,6 @@ While the actor is selected in the small box, anything that is typed into Chat w
 Another button next to chat, the Megaphone, causes a black box to appear in the middle of the screen. Anything that the GM types to chat will appear in this box. This is good for describing a scene.
 
 ## For a detailed list of instructions, checkout the [WIKI](/wiki/instructions/home.md)
-
-# Build fast note
-
-### Prepare a release
-
-In the 99% of the case for prepare a release you must:
-
-- Launch `npm run build` this will generate all the code under the `dist` folder.
-- Launch `npm package` for zip all the contents on the `dist` folder, and build the zip file with the correct name under the  `package` folder.
-
-### Developing a release
-
-- Use `npm run build:watch` and `npm run build:link` and check some tutorial online
 
 # Build
 
