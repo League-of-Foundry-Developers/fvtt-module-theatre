@@ -1,7 +1,6 @@
 import KHelpers from "../KHelpers.js";
 import { Theatre } from "../Theatre.js";
 import CONSTANTS from "../constants/constants.js";
-import { debug, error, info, log, warn } from "../lib/lib.js";
 import { TheatreHelpers } from "../theatre-helpers.js";
 
 const API = {
