@@ -2985,13 +2985,17 @@ export class Theatre {
       return;
     }
     let baseInsert = actor.img ? actor.img : CONSTANTS.DEFAULT_PORTRAIT;
-    if (actor.flags.theatre) baseInsert = actor.flags.theatre.baseinsert ? actor.flags.theatre.baseinsert : baseInsert;
+    if (actor.flags.theatre) {
+      baseInsert = actor.flags.theatre.baseinsert ? actor.flags.theatre.baseinsert : baseInsert;
+    }
     let emotes = Theatre.getActorEmotes(actorId);
 
     // emote already active
     //if ((this.speakingAs != insert.imgId && !this.isDelayEmote) || this.delayedSentState > 2)
-    if (remote || !this.isDelayEmote) if (aEmote == ename || (ename == null && aEmote == null)) return;
-
+    if (remote || !this.isDelayEmote)
+      if (aEmote == ename || (ename == null && aEmote == null)) {
+        return;
+      }
     // if emote insert exists
     let app = this.pixiCTX;
     if (!!ename && emotes[ename] && emotes[ename].insert && emotes[ename].insert != "") {
@@ -5010,8 +5014,9 @@ export class Theatre {
       : null;
     let insert = Theatre.instance.getInsertById(Theatre.instance.speakingAs);
     let actor;
-    if (actorId) actor = game.actors.get(actorId);
-
+    if (actorId) {
+      actor = game.actors.get(actorId);
+    }
     let emotes = Theatre.getActorEmotes(actorId);
     let fonts = Theatre.FONTS;
     let textFlyin = Theatre.FLYIN_ANIMS;

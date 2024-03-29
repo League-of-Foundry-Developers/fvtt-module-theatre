@@ -235,25 +235,25 @@ export class TheatreActorConfig extends FormApplication {
     let navItem = Theatre.instance.getNavItemById(theatreId);
     let cImg = Theatre.instance.getTheatreCoverPortrait();
 
-    if (baseInsert != this.object.flags.theatre.baseinsert) {
+    if (baseInsert !== this.object.flags.theatre.baseinsert) {
       Logger.debug("baseinsert changed!");
       insertDirty = true;
-      newBaseInsert = baseInsert == "" ? (this.object.img ? this.object.img : CONSTANTS.DEFAULT_PORTRAIT) : baseInsert;
+      newBaseInsert = baseInsert === "" ? (this.object.img ? this.object.img : CONSTANTS.DEFAULT_PORTRAIT) : baseInsert;
       if (navItem) {
         navItem.setAttribute("src", newBaseInsert);
         cImg.setAttribute("src", newBaseInsert);
       }
     }
-    if (optAlign != this.object.flags.theatre.optalign) {
+    if (optAlign !== this.object.flags.theatre.optalign) {
       Logger.debug("optalign changed!");
       insertDirty = true;
-      newAlign = optAlign == "" ? "top" : optAlign;
+      newAlign = optAlign === "" ? "top" : optAlign;
       if (navItem) navItem.setAttribute("optalign", newAlign);
     }
-    if (name != this.object.flags.theatre.name) {
+    if (name !== this.object.flags.theatre.name) {
       Logger.debug("name changed!");
       insertDirty = true;
-      newName = name == "" ? this.object.name : name;
+      newName = name === "" ? this.object.name : name;
       if (navItem) {
         navItem.setAttribute("name", newName);
         navItem.setAttribute("title", newName + (newName == this.object.name ? "" : ` (${this.object.name})`));
@@ -271,7 +271,7 @@ export class TheatreActorConfig extends FormApplication {
     let emoteFormData = resForms.emoteFormData;
 
     // check all image resources, if they differ the actor's, we need to replace the texture, and then tell all other clients to do so as well!
-    //let inserts = formData.filter((e,k) => {return k.endsWith("insert") || k.endsWith("baseinsert")});
+    // let inserts = formData.filter((e,k) => {return k.endsWith("insert") || k.endsWith("baseinsert")});
     let insert = Theatre.instance.getInsertById(theatreId);
     let container = insert ? insert.dockContainer : null;
     let app = Theatre.instance.pixiCTX;
@@ -279,22 +279,22 @@ export class TheatreActorConfig extends FormApplication {
     let newSrcImg = null;
     let imgSrcs = [];
 
-    for (let k in formData)
+    for (let k in formData) {
       if (k.endsWith("insert") || k.endsWith("baseinsert")) {
         let oldValue = getProperty(this.object, k);
         // if the old value does not exist, we will continue
-        if (formData[k] != oldValue) {
+        if (formData[k] !== oldValue) {
           let emote = k.match(/emotes\.[a-z0-9\-]+/);
           if (emote) emote = emote[0].replace(/emotes\./, "");
           let resName = formData[k];
           // A special case exists where the baseportrait is removed, and replaced with either
           // null or an empty string, we can set this value, but we need to change the re-render
           // behavior to take the sheet portrait or 'mystery man' image
-          if (!resName || resName == "") {
+          if (!resName || resName === "") {
             // try to restore baseinsert
             let formBaseInsert = formData["flags.theatre.baseinsert"];
             if (k.endsWith("insert") && !k.endsWith("baseinsert")) {
-              if (formBaseInsert && formBaseInsert != "") {
+              if (formBaseInsert && formBaseInsert !== "") {
                 resName = formBaseInsert;
               } else if (this.object.flags.theatre.baseinsert && this.object.flags.theatre.baseinsert != "") {
                 resName = this.object.flags.theatre.baseinsert;
@@ -315,16 +315,21 @@ export class TheatreActorConfig extends FormApplication {
 
           // to prevent firing off X number of packets on a save submit
           imgSrcs.push({ imgpath: resName, resname: resName });
-          if (insertEmote == emote || !emote) newSrcImg = resName;
+          if (insertEmote == emote || !emote) {
+            newSrcImg = resName;
+          }
         }
       }
+    }
 
     // check for null'd emotes, push the objects up a level if one exists
     const newData = mergeObject(this.object, emoteFormData, { inplace: false });
     let emMerge = newData.flags.theatre.emotes;
     let nEmotes = {};
     for (let emProp in emMerge) {
-      if (emMerge[emProp] == null) continue;
+      if (emMerge[emProp] == null) {
+        continue;
+      }
       nEmotes[emProp] = emMerge[emProp];
     }
     // send the emote parent in bulk to get rid of unwanted children
@@ -352,13 +357,14 @@ export class TheatreActorConfig extends FormApplication {
               if (
                 insert.emote &&
                 this.object.flags.theatre.emotes[insert.emote].insert &&
-                this.object.flags.theatre.emotes[insert.emote].insert != ""
-              )
+                this.object.flags.theatre.emotes[insert.emote].insert !== ""
+              ) {
                 resName = this.object.flags.theatre.emotes[insert.emote].insert;
-              else if (this.object.flags.theatre.baseinsert && this.object.flags.theatre.baseinsert != "")
+              } else if (this.object.flags.theatre.baseinsert && this.object.flags.theatre.baseinsert !== "") {
                 resName = this.object.flags.theatre.baseinsert;
-              else if (this.object.img && this.object.img != "") resName = this.object.img;
-
+              } else if (this.object.img && this.object.img !== "") {
+                resName = this.object.img;
+              }
               // bubble up dataum from the update
               insert.optAlign = newAlign;
               insert.name = newName;
@@ -372,7 +378,9 @@ export class TheatreActorConfig extends FormApplication {
 
               Theatre.instance._repositionInsertElements(insert);
 
-              if (!Theatre.instance.rendering) Theatre.instance._renderTheatre(performance.now());
+              if (!Theatre.instance.rendering) {
+                Theatre.instance._renderTheatre(performance.now());
+              }
             }
           },
           false
@@ -391,13 +399,14 @@ export class TheatreActorConfig extends FormApplication {
         if (
           insert.emote &&
           this.object.flags.theatre.emotes[insert.emote].insert &&
-          this.object.flags.theatre.emotes[insert.emote].insert != ""
-        )
+          this.object.flags.theatre.emotes[insert.emote].insert !== ""
+        ) {
           resName = this.object.flags.theatre.emotes[insert.emote].insert;
-        else if (this.object.flags.theatre.baseinsert && this.object.flags.theatre.baseinsert != "")
+        } else if (this.object.flags.theatre.baseinsert && this.object.flags.theatre.baseinsert !== "") {
           resName = this.object.flags.theatre.baseinsert;
-        else if (this.object.img && this.object.img != "") resName = this.object.img;
-
+        } else if (this.object.img && this.object.img !== "") {
+          resName = this.object.img;
+        }
         // bubble up dataum from the update
         insert.optAlign = newAlign;
         insert.name = newName;
@@ -420,12 +429,18 @@ export class TheatreActorConfig extends FormApplication {
 
         Theatre.instance._repositionInsertElements(insert);
 
-        if (!Theatre.instance.rendering) Theatre.instance._renderTheatre(performance.now());
+        if (!Theatre.instance.rendering) {
+          Theatre.instance._renderTheatre(performance.now());
+        }
       }
 
-      if (theatreId == Theatre.instance.speakingAs);
+      if (theatreId === Theatre.instance.speakingAs) {
+        return;
+      }
       Theatre.instance.renderEmoteMenu();
-      if (insertDirty) Theatre.instance._sendSceneEvent("renderinsert", { insertid: theatreId });
+      if (insertDirty) {
+        Theatre.instance._sendSceneEvent("renderinsert", { insertid: theatreId });
+      }
     });
   }
 
