@@ -120,4 +120,3 @@ foundry.js
 /package
 /.vite-cache
 /package-lock.json
-/dist

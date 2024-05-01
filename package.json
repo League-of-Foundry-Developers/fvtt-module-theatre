@@ -61,7 +61,11 @@
 	"scripts": {
 		"build": "node ./utils/clean.mjs && vite build",
 		"build:watch": "node ./utils/clean.mjs && vite build --watch --mode development",
+		"build:watchWithDb": "node ./utils/clean.mjs && npm run build:db && vite build --watch --mode development",
 		"dev": "vite serve",
+		"build:clean": "node ./utils/packs.mjs package clean",
+		"build:db": "node ./utils/packs.mjs package pack",
+		"build:json": "node ./utils/packs.mjs package unpack",
 		"eslint": "eslint .",
 		"prepare": "husky install",
 		"prettier-format": "prettier --config .prettierrc.json --write \"./src/**/*.{js,mjs,json,scss,css}\"",

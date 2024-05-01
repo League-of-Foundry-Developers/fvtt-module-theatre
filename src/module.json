@@ -116,7 +116,7 @@
     {
       "name": "theatre-inserts-macros",
       "label": "Theatre Inserts Macros",
-      "path": "packs/theatre-inserts-macros.db",
+      "path": "packs/theatre-inserts-macros",
       "type": "Macro",
       "private": false,
       "ownership": {
