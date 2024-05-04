@@ -1,5 +1,6 @@
 import { Theatre } from "./Theatre.js";
 import CONSTANTS from "./constants/constants.js";
+import Logger from "./lib/Logger.js";
 
 export const registerSettings = function () {
   let settingsCustom = {};
@@ -103,15 +104,15 @@ export const registerSettings = function () {
     default: 30,
     type: Number,
     onChange: (textDecayMin) => {
-      debug("Text decay minimum set to %s", textDecayMin);
+      Logger.debug("Text decay minimum set to %s", textDecayMin);
       textDecayMin = Number(textDecayMin);
       if (isNaN(textDecayMin) || textDecayMin <= 0) {
-        info(game.i18n.localize("Theatre.UI.Notification.InvalidDecayMin"), true);
+        Logger.info(game.i18n.localize("Theatre.UI.Notification.InvalidDecayMin"), true);
         game.settings.set(CONSTANTS.MODULE_ID, "textDecayMin", 30);
         return;
       }
       if (textDecayMin > 600) {
-        info(game.i18n.localize("Theatre.UI.Notification.TooLongDecayMin"), true);
+        Logger.info(game.i18n.localize("Theatre.UI.Notification.TooLongDecayMin"), true);
         game.settings.set(CONSTANTS.MODULE_ID, "textDecayMin", 600);
         return;
       }
@@ -128,17 +129,17 @@ export const registerSettings = function () {
     default: 1,
     type: Number,
     onChange: (textDecayRate) => {
-      debug("Text decay rate set to %s", textDecayRate);
+      Logger.debug("Text decay rate set to %s", textDecayRate);
       textDecayRate = Number(textDecayRate);
       if (isNaN(textDecayRate) || textDecayRate <= 0) {
         textDecayRate = 1;
-        info(game.i18n.localize("Theatre.UI.Notification.InvalidDecayRate"), true);
+        Logger.info(game.i18n.localize("Theatre.UI.Notification.InvalidDecayRate"), true);
         game.settings.set(CONSTANTS.MODULE_ID, "textDecayRate", 1);
         return;
       }
       if (textDecayRate > 10) {
         textDecayRate = 10;
-        info(game.i18n.localize("Theatre.UI.Notification.TooLongDecayRate"), true);
+        Logger.info(game.i18n.localize("Theatre.UI.Notification.TooLongDecayRate"), true);
         game.settings.set(CONSTANTS.MODULE_ID, "textDecayRate", 10);
         return;
       }
@@ -233,8 +234,8 @@ export const registerSettings = function () {
   });
 
   game.settings.register(CONSTANTS.MODULE_ID, "debug", {
-    name: `Theatre.UI.debug.title`,
-    hint: `Theatre.UI.debug.hint`,
+    name: `Theatre.UI.Settings.debug`,
+    hint: `Theatre.UI.Settings.debugHint`,
     scope: "client",
     config: true,
     default: false,

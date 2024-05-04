@@ -3,7 +3,7 @@ import { Theatre } from "./Theatre.js";
 import { TheatreActor } from "./TheatreActor.js";
 import { TheatreActorConfig } from "./TheatreActorConfig.js";
 import CONSTANTS from "./constants/constants.js";
-import { debug, error, info, log, warn } from "./lib/lib.js";
+import Logger from "./lib/Logger.js";
 
 export class TheatreHelpers {
   /**
@@ -20,7 +20,7 @@ export class TheatreHelpers {
     let containerWidth = Theatre.instance.theatreDock.offsetWidth;
     // Min 22px, max 32px, scale for all values inbetween
     let fontSize = Math.floor(Math.max((Math.min(containerWidth / boxes.length, 500) / 500) * 28, 18));
-    debug("Reorder CALCUALTED FONT SIZE: ", fontSize);
+    Logger.debug("Reorder CALCUALTED FONT SIZE: ", fontSize);
 
     for (let textBox of boxes) {
       let theatreId = textBox.getAttribute("imgid");
@@ -33,13 +33,13 @@ export class TheatreHelpers {
       // if somehow the containers are not setup, skip and hope the next re-order has them ready
 
       if (!insert.portrait || !insert.label) {
-        warn("WARN: %s : %s was not ready!", false, insert.name, insert.imgId);
+        Logger.warn("WARN: %s : %s was not ready!", false, insert.name, insert.imgId);
         continue;
       }
       // if the insert/textBox pair is in the process of being removed.
       if (textBox.getAttribute("deleting")) continue;
 
-      debug("repositioning %s :", theatreId, insert);
+      Logger.debug("repositioning %s :", theatreId, insert);
       let offset = KHelpers.offset(textBox);
       //left calc
       let leftPos = Math.round(
@@ -51,7 +51,7 @@ export class TheatreHelpers {
       //insert.dockContainer.width = textBox.offsetWidth;
 
       if (insert.exitOrientation == "left") {
-        debug(
+        Logger.debug(
           "LEFT (name: %s): ",
           insert.nameOrientation,
           leftPos,
@@ -59,11 +59,11 @@ export class TheatreHelpers {
           Theatre.instance.theatreBar.offsetWidth / 2
         );
         if (leftPos + insert.dockContainer.width / 2 > Theatre.instance.theatreBar.offsetWidth / 2) {
-          log("swapping " + insert.name + " to right alignment from left");
+          Logger.log("swapping " + insert.name + " to right alignment from left");
           insert.exitOrientation = "right";
         }
       } else {
-        debug(
+        Logger.debug(
           "RIGHT (name: %s): ",
           insert.nameOrientation,
           leftPos,
@@ -72,7 +72,7 @@ export class TheatreHelpers {
         );
         //right
         if (leftPos + insert.dockContainer.width / 2 <= Theatre.instance.theatreBar.offsetWidth / 2) {
-          debug("swapping " + insert.name + " to left alignment from right");
+          Logger.debug("swapping " + insert.name + " to left alignment from right");
           insert.exitOrientation = "left";
         }
       }
@@ -392,7 +392,7 @@ export class TheatreHelpers {
     if (!str || typeof str != "string") {
       return null;
     }
-    debug("verifying syntax %s", str);
+    Logger.debug("verifying syntax %s", str);
     let tweenParams = [];
 
     try {
@@ -420,7 +420,9 @@ export class TheatreHelpers {
           advOptions = {};
           for (let advPart of advParts) {
             let components = advPart.split(":");
-            if (components.length != 2) throw "component properties definition : " + advPart + " is incorrect";
+            if (components.length !== 2) {
+              throw Logger.error("component properties definition : " + advPart + " is incorrect");
+            }
             let advPropName = components[0].trim();
             let advPropValue = components[1].trim();
             advOptions[advPropName] = advPropValue;
@@ -429,31 +431,38 @@ export class TheatreHelpers {
 
         targets = [];
         propDefs = [];
-        for (idx; idx < parts.length; ++idx) targets.push(parts[idx]);
-
+        for (idx; idx < parts.length; ++idx) {
+          targets.push(parts[idx]);
+        }
         for (let target of targets) {
           let components = target.split(":");
-          if (components.length != 2) throw "component properties definition : " + target + " is incorrect";
+          if (components.length !== 2) {
+            throw Logger.error("component properties definition : " + target + " is incorrect");
+          }
           let propName = components[0];
           let scomps = components[1].split(",");
-          if (scomps.length != 2) throw "component properties definition : " + target + " is incorrect";
+          if (scomps.length !== 2) {
+            throw Logger.error("component properties definition : " + target + " is incorrect");
+          }
           let init = scomps[0];
           let fin = scomps[1];
           if (verifyTarget(propName, init, fin)) {
             let propDef = { name: propName, initial: init, final: fin };
             propDefs.push(propDef);
-          } else throw "component properties definition : " + target + " is incorrect";
+          } else {
+            throw Logger.error("component properties definition : " + target + " is incorrect");
+          }
         }
 
-        debug("Animation Syntax breakdown of %s : ", sections[sdx], duration, advOptions, propDefs);
+        Logger.debug("Animation Syntax breakdown of %s : ", sections[sdx], duration, advOptions, propDefs);
         tweenParams.push({ resName: resName, duration: duration, advOptions: advOptions, props: propDefs });
       }
     } catch (e) {
-      error("BAD ANIMATION SYNTAX: %s", true, e);
+      Logger.error("BAD ANIMATION SYNTAX: %s", true, e);
       return tweenParams;
     }
 
-    debug("tween params are valid with: ", tweenParams);
+    Logger.debug("tween params are valid with: ", tweenParams);
 
     return tweenParams;
   }
@@ -2254,7 +2263,7 @@ export class TheatreHelpers {
   static onConfigureInsert(ev, actorSheet) {
     ev.preventDefault();
 
-    debug("Click Event on Configure Theatre!!!", actorSheet, actorSheet.actor, actorSheet.position);
+    Logger.debug("Click Event on Configure Theatre!!!", actorSheet, actorSheet.actor, actorSheet.position);
 
     if (!actorSheet.actor.flags.theatre) {
       actorSheet.actor.flags.theatre = { baseinsert: "", name: "" };
@@ -2273,7 +2282,7 @@ export class TheatreHelpers {
    * @params ev (Event) : The event that triggered adding to the NavBar staging area.
    */
   static onAddToNavBar(ev, actorSheet, removeLabelSheetHeader) {
-    debug("Click Event on Add to NavBar!!", actorSheet, actorSheet.actor, actorSheet.position);
+    Logger.debug("Click Event on Add to NavBar!!", actorSheet, actorSheet.actor, actorSheet.position);
     const actor = actorSheet.object;
     const addLabel = removeLabelSheetHeader ? "" : game.i18n.localize("Theatre.UI.Config.AddToStage");
     const removeLabel = removeLabelSheetHeader ? "" : game.i18n.localize("Theatre.UI.Config.RemoveFromStage");
@@ -2303,7 +2312,7 @@ export class TheatreHelpers {
     if (!actor) {
       return;
     }
-    debug("actor is valid!");
+    Logger.debug("actor is valid!");
     // if already on stage, dont add it again
     // create nav-list-item
     // set picture as actor.img
@@ -2318,7 +2327,7 @@ export class TheatreHelpers {
     let name = actor.name;
 
     if (!Theatre.instance.isActorOwner(game.user.id, theatreId)) {
-      info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"), true);
+      Logger.info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"), true);
       return;
     }
 
@@ -2336,11 +2345,11 @@ export class TheatreHelpers {
     }
 
     if (Theatre.instance.stage[theatreId]) {
-      info(actor.name + game.i18n.localize("Theatre.UI.Notification.AlreadyStaged"), true);
+      Logger.info(actor.name + game.i18n.localize("Theatre.UI.Notification.AlreadyStaged"), true);
       return;
     }
 
-    debug("new theatre id: " + theatreId);
+    Logger.debug("new theatre id: " + theatreId);
 
     let navItem = document.createElement("img");
     KHelpers.addClass(navItem, "theatre-control-nav-bar-item");
@@ -2732,7 +2741,7 @@ export class TheatreHelpers {
               top: -100,
               ease: Power4.easeOut,
               onComplete: () => {
-                debug("completeAll");
+                Logger.debug("completeAll");
                 if (textBox) {
                   textBox.style["overflow-y"] = "scroll";
                   textBox.style["overflow-x"] = "hidden";
@@ -2801,7 +2810,7 @@ export class TheatreHelpers {
               left: 150,
               ease: Power4.easeOut,
               onComplete: () => {
-                debug("completeAll");
+                Logger.debug("completeAll");
                 if (textBox) {
                   textBox.style["overflow-y"] = "scroll";
                   textBox.style["overflow-x"] = "hidden";
@@ -2852,7 +2861,7 @@ export class TheatreHelpers {
               rotation: -1080,
               ease: Power4.easeOut,
               onComplete: () => {
-                debug("completeAll");
+                Logger.debug("completeAll");
                 if (textBox) {
                   textBox.style["overflow-y"] = "scroll";
                   textBox.style["overflow-x"] = "hidden";
@@ -2906,12 +2915,12 @@ export class TheatreHelpers {
               });
             }
             if (textBox) {
-              debug("vortext all start");
+              Logger.debug("vortext all start");
               TweenMax.from(textBox, 0.1, {
                 delay: speed * charSpans.length + animTime,
                 //opacity: 1,
                 onComplete: function () {
-                  debug("vortex all complete");
+                  Logger.debug("vortex all complete");
                   if (this.targets().length) {
                     this.targets()[0].style["overflow-y"] = "scroll";
                     this.targets()[0].style["overflow-x"] = "visible";

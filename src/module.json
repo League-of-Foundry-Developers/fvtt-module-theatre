@@ -116,7 +116,7 @@
     {
       "name": "theatre-inserts-macros",
       "label": "Theatre Inserts Macros",
-      "path": "packs/theatre-inserts-macros.db",
+      "path": "packs/theatre-inserts-macros",
       "type": "Macro",
       "private": false,
       "ownership": {
@@ -158,9 +158,7 @@
         "type": "module",
         "manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/latest/download/module.json",
         "compatibility": {}
-      }
-    ],
-    "recommends": [
+      },
       {
         "id": "socketlib",
         "type": "module",
@@ -168,6 +166,7 @@
         "compatibility": {}
       }
     ],
+    "recommends": [],
     "conflicts": []
   }
 }

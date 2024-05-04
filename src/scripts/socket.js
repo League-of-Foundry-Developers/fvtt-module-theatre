@@ -1,11 +1,11 @@
 import API from "./API/api.js";
 import CONSTANTS from "./constants/constants.js";
-import { debug } from "./lib/lib.js";
+import Logger from "./lib/Logger.js";
 
 export let theatreSocket;
 
 export function registerSocket() {
-  debug("Registered theatreSocket");
+  Logger.debug("Registered theatreSocket");
   if (theatreSocket) {
     return theatreSocket;
   }

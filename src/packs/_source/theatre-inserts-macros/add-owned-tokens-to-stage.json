@@ -1,0 +1,17 @@
+{
+  "name": "Add Owned Tokens to Stage",
+  "type": "script",
+  "author": "2eCcEi9HdTwCxqFx",
+  "img": "icons/svg/dice-target.svg",
+  "scope": "global",
+  "command": "const ownedActors = game.actors.filter(a => a.permission === 3);\nconst ownedTokens = ownedActors.map(a => a.getActiveTokens());\n\nfor (const tokenArray of ownedTokens) {\n    tokenArray.forEach(t => Theatre.addToNavBar(t.actor));\n}",
+  "folder": null,
+  "sort": 0,
+  "permission": {
+    "default": 0,
+    "2eCcEi9HdTwCxqFx": 3
+  },
+  "flags": {},
+  "_id": "O4bIjZLeC6KYwdj2",
+  "_key": "!macros!O4bIjZLeC6KYwdj2"
+}

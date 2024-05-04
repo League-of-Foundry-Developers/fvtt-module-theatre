@@ -2,8 +2,8 @@ import API from "./scripts/API/api.js";
 import KHelpers from "./scripts/KHelpers.js";
 import { Theatre } from "./scripts/Theatre.js";
 import CONSTANTS from "./scripts/constants/constants.js";
-import { debug, log, warn } from "./scripts/lib/lib.js";
 import { registerKeybindings } from "./scripts/settings.js";
+import Logger from "./scripts/lib/Logger.js";
 
 /**
  * Concat helper
@@ -66,7 +66,7 @@ Hooks.on("sidebarCollapse", function (a, collapsed) {
   if (!Theatre.instance) {
     return;
   }
-  debug("collapse? : ", a, collapsed);
+  Logger.debug("collapse? : ", a, collapsed);
   let sideBar = document.getElementById("sidebar");
   let primeBar = document.getElementById("theatre-prime-bar");
   let secondBar = document.getElementById("theatre-second-bar");
@@ -106,7 +106,7 @@ Hooks.on("createCombat", function () {
     return;
   }
   if (!!game.combats.active && game.combats.active.round == 0 && Theatre.instance.isSuppressed) {
-    debug("COMBAT CREATED");
+    Logger.debug("COMBAT CREATED");
     // if suppressed, change opacity to 0.05
     //Theatre.instance.theatreGroup.style.opacity = "0.05";
     Theatre.instance.theatreDock.style.opacity = "1";
@@ -124,7 +124,7 @@ Hooks.on("deleteCombat", function () {
     return;
   }
   if (!game.combats.active && Theatre.instance.isSuppressed) {
-    debug("COMBAT DELETED");
+    Logger.debug("COMBAT DELETED");
     // if suppressed, change opacity to 0.25
     //Theatre.instance.theatreGroup.style.opacity = "0.25";
     Theatre.instance.theatreDock.style.opacity = "0.20";
@@ -146,7 +146,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage, data) {
       flags: {},
     },
   };
-  debug("preCreateChatMessage", chatMessage);
+  Logger.debug("preCreateChatMessage", chatMessage);
   // If theatre isn't even ready, then just no
   if (!Theatre.instance) {
     return;
@@ -170,19 +170,19 @@ Hooks.on("preCreateChatMessage", function (chatMessage, data) {
     let insert = Theatre.instance.getInsertById(theatreId);
     let actorId = theatreId.replace(CONSTANTS.PREFIX_ACTOR_ID, "");
     let actor = game.actors.get(actorId) || null;
-    debug("speakingAs %s", theatreId);
+    Logger.debug("speakingAs %s", theatreId);
 
     if (insert && chatMessage.speaker) {
       let label = Theatre.instance._getLabelFromInsert(insert);
       let name = label.text;
       let theatreColor = Theatre.instance.getPlayerFlashColor(chatMessage.user.id, insert.textColor);
-      debug("name is %s", name);
+      Logger.debug("name is %s", name);
       chatData.speaker.alias = name;
       //chatData.flags.theatreColor = theatreColor;
       chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
       // if delay emote is active
       if (Theatre.instance.isDelayEmote && Theatre.instance.delayedSentState == 1) {
-        debug("setting emote now! as %s", insert.emote);
+        Logger.debug("setting emote now! as %s", insert.emote);
         Theatre.instance.delayedSentState = 2;
         Theatre.instance.setUserEmote(game.user._id, theatreId, "emote", insert.emote, false);
         Theatre.instance.delayedSentState = 0;
@@ -196,7 +196,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage, data) {
       chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
       // if delay emote is active
       if (Theatre.instance.isDelayEmote && Theatre.instance.delayedSentState == 1) {
-        debug("setting emote now! as %s", insert.emote);
+        Logger.debug("setting emote now! as %s", insert.emote);
         Theatre.instance.delayedSentState = 2;
         Theatre.instance.setUserEmote(game.user._id, theatreId, "emote", insert.emote, false);
         Theatre.instance.delayedSentState = 0;
@@ -213,7 +213,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage, data) {
   }
   // alter message data
   // append chat emote braces
-  debug("speaker? ", chatMessage.speaker);
+  Logger.debug("speaker? ", chatMessage.speaker);
   if (
     Theatre.instance.isQuoteAuto &&
     chatMessage.speaker &&
@@ -232,7 +232,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage, data) {
  * Chat message Binding
  */
 Hooks.on("createChatMessage", function (chatEntity, _, userId) {
-  debug("createChatMessage");
+  Logger.debug("createChatMessage");
   let theatreId = null;
 
   // If theatre isn't even ready, then just no
@@ -280,7 +280,7 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
     textBox.style["overflow-y"] = "scroll";
     textBox.style["overflow-x"] = "hidden";
 
-    // debug("all tweens", TweenMax.getAllTweens());
+    // Logger.debug("all tweens", TweenMax.getAllTweens());
     textBox.textContent = "";
 
     if (insert) {
@@ -359,7 +359,7 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
       insertFontColor = Theatre.instance.theatreNarrator.getAttribute("textcolor");
     }
     let fontSize = Number(textBox.getAttribute("osize") || 28);
-    //debug("font PRE(%s): ",insertFontSize,fontSize)
+    // Logger.debug("font PRE(%s): ",insertFontSize,fontSize)
     switch (insertFontSize) {
       case 3:
         fontSize *= 1.5;
@@ -370,7 +370,7 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
       default:
         break;
     }
-    debug("font size is (%s): ", insertFontSize, fontSize);
+    Logger.debug("font size is (%s): ", insertFontSize, fontSize);
     // If polyglot is active, and message contains its flag (e.g. not an emote), begin processing
     if (typeof polyglot !== "undefined" && typeof chatData.flags.polyglot !== "undefined") {
       // Get current language being processed
@@ -394,7 +394,7 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
 
     charSpans = Theatre.splitTextBoxToChars(textContent, textBox);
 
-    debug("animating text: " + textContent);
+    Logger.debug("animating text: " + textContent);
 
     Theatre.textFlyinAnimation(insertFlyinMode || "typewriter").call(
       this,
@@ -439,9 +439,9 @@ Hooks.on("renderChatLog", function (app, html, data) {
   }
 
   // window may not be ready?
-  // log("%cTheatre Inserts", "font-weight: bold; font-size: 30px; font-style: italic; color: black;");
+  // Logger.log("%cTheatre Inserts", "font-weight: bold; font-size: 30px; font-style: italic; color: black;");
   // NOTE: Closed alpha/beta is currently all rights reserved!
-  // log("%c-- Theatre is Powered by Free Open Source GPLv3 Software --", "font-weight: bold; font-size: 12");
+  // Logger.log("%c-- Theatre is Powered by Free Open Source GPLv3 Software --", "font-weight: bold; font-size: 12");
 });
 
 /**
@@ -507,10 +507,16 @@ Hooks.on("theatreDockActive", (insertCount) => {
  * If Argon is active, wrap CombatHudCanvasElement#toggleMacroPlayers to prevent playesr list and macro hotbar from being shown
  */
 Hooks.once("ready", () => {
+  // Do anything once the module is ready
+  if (!game.modules.get("lib-wrapper")?.active && game.user?.isGM) {
+    let word = "install and activate";
+    if (game.modules.get("lib-wrapper")) word = "activate";
+    throw Logger.error(`Requires the 'libWrapper' module. Please ${word} it.`);
+  }
   if (!game.modules.get("socketlib")?.active && game.user?.isGM) {
     let word = "install and activate";
     if (game.modules.get("socketlib")) word = "activate";
-    warn(`It is recommended to intall the 'socketlib' module. Please ${word} it.`);
+    throw Logger.error(`Requires the 'socketlib' module. Please ${word} it.`);
   }
   if (!game.settings.get(CONSTANTS.MODULE_ID, "autoHideBottom")) {
     return;

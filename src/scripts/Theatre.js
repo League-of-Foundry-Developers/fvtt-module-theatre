@@ -1,29 +1,9 @@
-/**
- * Theatre.js
- *
- * Copyright (c) 2019 Ken L.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <https://www.gnu.org/licenses/>.
- *
- */
-
 import API from "./API/api.js";
 import KHelpers from "./KHelpers.js";
 import { TheatreActor } from "./TheatreActor.js";
 import { TheatreActorConfig } from "./TheatreActorConfig.js";
 import CONSTANTS from "./constants/constants.js";
-import { debug, error, info, log, warn } from "./lib/lib.js";
+import Logger from "./lib/Logger.js";
 import { registerSettings } from "./settings.js";
 import { registerSocket, theatreSocket } from "./socket.js";
 import { TheatreHelpers } from "./theatre-helpers.js";
@@ -150,8 +130,8 @@ export class Theatre {
     this.theatreDock = this._initTheatreDockCanvas();
     this.theatreToolTip = this._initTheatreToolTip();
     if (!this.theatreDock || !this.theatreToolTip) {
-      error("Theatre encountered a FATAL error during initialization", true);
-      error(game.i18n.localize("Theatre.UI.Notification.Fatal"), true);
+      Logger.error("Theatre encountered a FATAL error during initialization", true);
+      Logger.error(game.i18n.localize("Theatre.UI.Notification.Fatal"), true);
       return;
     }
 
@@ -368,7 +348,7 @@ export class Theatre {
    * @param theatreStyle (String) : The theatre Style to apply
    */
   configTheatreStyle(theatreStyle) {
-    debug("SWITCHING THEATRE BAR MODE : %s from %s", theatreStyle, this.settings.theatreStyle);
+    Logger.debug("SWITCHING THEATRE BAR MODE : %s from %s", theatreStyle, this.settings.theatreStyle);
     let oldStyle = this.settings.theatreStyle;
     let primeBar = document.getElementById("theatre-prime-bar");
     let secondBar = document.getElementById("theatre-second-bar");
@@ -476,51 +456,33 @@ export class Theatre {
    */
   _initSocket() {
     // module socket
-    if (game.modules.get("socketlib")?.active) {
-      Hooks.once("socketlib.ready", registerSocket);
-      registerSocket();
-      theatreSocket.register("processEvent", (payload) => {
-        debug("Received packet", payload);
-        switch (payload.type) {
-          case "sceneevent":
-            this._processSceneEvent(payload.senderId, payload.subtype, payload.data);
-            break;
-          case "typingevent":
-            this._processTypingEvent(payload.senderId, payload.data);
-            break;
-          case "resyncevent":
-            this._processResyncEvent(payload.subtype, payload.senderId, payload.data);
-            break;
-          case "reqresync":
-            this._processResyncRequest(payload.subtype, payload.senderId, payload.data);
-            break;
-          default:
-            log("UNKNOWN THEATRE EVENT TYPE %s", payload.type, payload);
-            break;
+    Hooks.once("socketlib.ready", registerSocket);
+    registerSocket();
+    theatreSocket.register("processEvent", (payload) => {
+      Logger.debug("Received packet", payload);
+      switch (payload.type) {
+        case "sceneevent": {
+          this._processSceneEvent(payload.senderId, payload.subtype, payload.data);
+          break;
         }
-      });
-    } else {
-      game.socket.on(CONSTANTS.SOCKET, (payload) => {
-        debug("Received packet", payload);
-        switch (payload.type) {
-          case "sceneevent":
-            this._processSceneEvent(payload.senderId, payload.subtype, payload.data);
-            break;
-          case "typingevent":
-            this._processTypingEvent(payload.senderId, payload.data);
-            break;
-          case "resyncevent":
-            this._processResyncEvent(payload.subtype, payload.senderId, payload.data);
-            break;
-          case "reqresync":
-            this._processResyncRequest(payload.subtype, payload.senderId, payload.data);
-            break;
-          default:
-            error("UNKNOWN THEATRE EVENT TYPE %s", false, payload.type, payload);
-            break;
+        case "typingevent": {
+          this._processTypingEvent(payload.senderId, payload.data);
+          break;
         }
-      });
-    }
+        case "resyncevent": {
+          this._processResyncEvent(payload.subtype, payload.senderId, payload.data);
+          break;
+        }
+        case "reqresync": {
+          this._processResyncRequest(payload.subtype, payload.senderId, payload.data);
+          break;
+        }
+        default: {
+          Logger.log("UNKNOWN THEATRE EVENT TYPE %s", payload.type, payload);
+          break;
+        }
+      }
+    });
   }
 
   /**
@@ -551,25 +513,16 @@ export class Theatre {
 	 * @private
 	 */
   _sendSceneEvent(eventType, eventData) {
-    debug("Sending Scene state %s with payload: ", eventType, eventData);
+    Logger.debug("Sending Scene state %s with payload: ", eventType, eventData);
 
     // Do we even need verification? There's no User Input outside of
     // cookie cutter responses
-    if (game.modules.get("socketlib")?.active) {
-      theatreSocket.executeForEveryone("processEvent", {
-        senderId: game.user.id,
-        type: "sceneevent",
-        subtype: eventType,
-        data: eventData,
-      });
-    } else {
-      game.socket.emit(CONSTANTS.SOCKET, {
-        senderId: game.user.id,
-        type: "sceneevent",
-        subtype: eventType,
-        data: eventData,
-      });
-    }
+    theatreSocket.executeForEveryone("processEvent", {
+      senderId: game.user.id,
+      type: "sceneevent",
+      subtype: eventType,
+      data: eventData,
+    });
   }
 
   /**
@@ -582,7 +535,7 @@ export class Theatre {
    * @private
    */
   _sendTypingEvent() {
-    debug("Sending Typing Event");
+    Logger.debug("Sending Typing Event");
 
     let insert = this.getInsertById(this.speakingAs);
     let insertEmote = this._getEmoteFromInsert(insert);
@@ -621,25 +574,14 @@ export class Theatre {
       textcolor: insertTextColor,
     };
 
-    if (game.modules.get("socketlib")?.active) {
-      theatreSocket.executeForEveryone("processEvent", {
-        senderId: game.user.id,
-        type: "typingevent",
-        data: {
-          insertid: this.speakingAs,
-          emotions: emotedata,
-        },
-      });
-    } else {
-      game.socket.emit(CONSTANTS.SOCKET, {
-        senderId: game.user.id,
-        type: "typingevent",
-        data: {
-          insertid: this.speakingAs,
-          emotions: emotedata,
-        },
-      });
-    }
+    theatreSocket.executeForEveryone("processEvent", {
+      senderId: game.user.id,
+      type: "typingevent",
+      data: {
+        insertid: this.speakingAs,
+        emotions: emotedata,
+      },
+    });
   }
 
   /**
@@ -652,31 +594,18 @@ export class Theatre {
    */
   _sendResyncEvent(targetId) {
     let insertData = this._buildResyncData();
-    debug("Sending RESYNC Event (isGM)%s (to)%s: ", game.user.isGM, targetId, insertData);
+    Logger.debug("Sending RESYNC Event (isGM)%s (to)%s: ", game.user.isGM, targetId, insertData);
 
-    if (game.modules.get("socketlib")?.active) {
-      theatreSocket.executeForEveryone("processEvent", {
-        senderId: game.user.id,
-        type: "resyncevent",
-        subtype: game.user.isGM ? "gm" : "player",
-        data: {
-          targetid: targetId,
-          insertdata: insertData,
-          narrator: this.isNarratorActive,
-        },
-      });
-    } else {
-      game.socket.emit(CONSTANTS.SOCKET, {
-        senderId: game.user.id,
-        type: "resyncevent",
-        subtype: game.user.isGM ? "gm" : "player",
-        data: {
-          targetid: targetId,
-          insertdata: insertData,
-          narrator: this.isNarratorActive,
-        },
-      });
-    }
+    theatreSocket.executeForEveryone("processEvent", {
+      senderId: game.user.id,
+      type: "resyncevent",
+      subtype: game.user.isGM ? "gm" : "player",
+      data: {
+        targetid: targetId,
+        insertdata: insertData,
+        narrator: this.isNarratorActive,
+      },
+    });
   }
 
   /**
@@ -736,7 +665,7 @@ export class Theatre {
    * @private
    */
   _sendResyncRequest(type) {
-    debug("Sending RESYNC Request ", type);
+    Logger.debug("Sending RESYNC Request ", type);
 
     // If there's a GM, request to resync from them
     let data = {};
@@ -745,26 +674,17 @@ export class Theatre {
       data.narrator = this.isNarratorActive;
     }
 
-    if (game.modules.get("socketlib")?.active) {
-      theatreSocket.executeForEveryone("processEvent", {
-        senderId: game.user.id,
-        type: "reqresync",
-        subtype: type || "any",
-        data: data,
-      });
-    } else {
-      game.socket.emit(CONSTANTS.SOCKET, {
-        senderId: game.user.id,
-        type: "reqresync",
-        subtype: type || "any",
-        data: data,
-      });
-    }
+    theatreSocket.executeForEveryone("processEvent", {
+      senderId: game.user.id,
+      type: "reqresync",
+      subtype: type || "any",
+      data: data,
+    });
 
     if (type != "players") {
       this.resync.type = type;
       this.resync.timeoutId = window.setTimeout(() => {
-        log("RESYNC REQUEST TIMEOUT");
+        Logger.log("RESYNC REQUEST TIMEOUT");
         this.resync.timeoutId = null;
       }, 5000);
     }
@@ -786,10 +706,10 @@ export class Theatre {
    * @private
    */
   _processResyncRequest(type, senderId, data) {
-    debug("Processing resync request");
+    Logger.debug("Processing resync request");
     // If the dock is not active, no need to send anything
     if (type == "any" && this.dockActive <= 0 && !this.isNarratorActive) {
-      warn("OUR DOCK IS NOT ACTIVE, Not responding to reqresync");
+      Logger.warn("OUR DOCK IS NOT ACTIVE, Not responding to reqresync");
       return;
     } else if (type == "gm" && !game.user.isGM) {
       return;
@@ -820,7 +740,7 @@ export class Theatre {
    * @private
    */
   _processResyncEvent(type, senderId, data) {
-    debug("Processing resync event %s :", type, data, game.users.get(senderId));
+    Logger.debug("Processing resync event %s :", type, data, game.users.get(senderId));
     // if we're resyncing and it's us that's the target
     if (this.resync.timeoutId && (data.targetid == game.user.id || ("gm" == this.resync.type) == type)) {
       // drop all other resync responses, first come, first process
@@ -831,9 +751,9 @@ export class Theatre {
       for (let insert of this.portraitDocks) this.removeInsertById(insert.imgId, true);
 
       if (type == "gm") {
-        info(game.i18n.localize("Theatre.UI.Notification.ResyncGM"), true);
+        Logger.info(game.i18n.localize("Theatre.UI.Notification.ResyncGM"), true);
       } else {
-        info(game.i18n.localize("Theatre.UI.Notification.ResyncPlayer") + game.users.get(senderId).name, true);
+        Logger.info(game.i18n.localize("Theatre.UI.Notification.ResyncPlayer") + game.users.get(senderId).name, true);
       }
       let theatreId, insert, port, actorId, actor, params;
       let toInject = [];
@@ -843,7 +763,7 @@ export class Theatre {
         params = this._getInsertParamsFromActorId(actorId);
         if (!params) continue;
 
-        debug("params + emotions: ", params, dat.emotions);
+        Logger.debug("params + emotions: ", params, dat.emotions);
         toInject.push({ params: params, emotions: dat.emotions });
       }
       // let the clearing animation complete
@@ -922,17 +842,17 @@ export class Theatre {
         window.setTimeout(() => {
           for (let dat of data.insertdata) {
             insert = this.getInsertById(dat.insertid);
-            //debug("attempting to apply position to ",insert,dat.insertid,dat);
+            //Logger.debug("attempting to apply position to ",insert,dat.insertid,dat);
             if (insert) {
-              debug("insert active post resync add, appying position");
+              Logger.debug("insert active post resync add, appying position");
               // apply mirror state
               /*
 							if (Boolean(dat.position.mirror) != insert.mirrored)
 								this._mirrorInsert(port,true);
 							*/
-              debug("Mirror ? %s : %s", dat.position.mirror, insert.mirrored);
+              Logger.debug("Mirror ? %s : %s", dat.position.mirror, insert.mirrored);
               if (Boolean(dat.position.mirror) != insert.mirrored) {
-                debug("no match!");
+                Logger.debug("no match!");
                 insert.mirrored = Boolean(dat.position.mirror);
               }
               // apply positioning data
@@ -982,12 +902,12 @@ export class Theatre {
    * @private
    */
   async _processSceneEvent(senderId, type, data) {
-    debug("Processing scene event %s", type, data);
+    Logger.debug("Processing scene event %s", type, data);
     let insert, actorId, params, emote, port, emotions, resName, app, insertEmote, render;
 
     switch (type) {
       case "enterscene": {
-        debug("enterscene: aid:%s", actorId);
+        Logger.debug("enterscene: aid:%s", actorId);
         actorId = data.insertid.replace(CONSTANTS.PREFIX_ACTOR_ID, "");
         params = this._getInsertParamsFromActorId(actorId);
         emotions = data.emotions
@@ -1000,25 +920,29 @@ export class Theatre {
               textSize: null,
               textColor: null,
             };
-        if (!params) return;
-        debug("params: ", params);
-        if (data.isleft)
+        if (!params) {
+          return;
+        }
+        Logger.debug("params: ", params);
+        if (data.isleft) {
           await this.injectLeftPortrait(params.src, params.name, params.imgId, params.optalign, emotions, true);
-        else await this.injectRightPortrait(params.src, params.name, params.imgId, params.optalign, emotions, true);
+        } else {
+          await this.injectRightPortrait(params.src, params.name, params.imgId, params.optalign, emotions, true);
+        }
 
         break;
       }
       case "exitscene": {
-        debug("exitscene: tid:%s", data.insertid);
+        Logger.debug("exitscene: tid:%s", data.insertid);
         this.removeInsertById(data.insertid, true);
         break;
       }
       case "positionupdate": {
-        debug("positionupdate: tid:%s", data.insertid);
+        Logger.debug("positionupdate: tid:%s", data.insertid);
         insert = this.getInsertById(data.insertid);
         if (insert) {
           // apply mirror state
-          debug("mirroring desired: %s , current mirror %s", data.position.mirror, insert.mirrored);
+          Logger.debug("mirroring desired: %s , current mirror %s", data.position.mirror, insert.mirrored);
           if (Boolean(data.position.mirror) != insert.mirrored) {
             insert.mirrored = data.position.mirror;
           }
@@ -1041,22 +965,22 @@ export class Theatre {
         break;
       }
       case "push": {
-        debug("insertpush: tid:%s", data.insertid);
+        Logger.debug("insertpush: tid:%s", data.insertid);
         this.pushInsertById(data.insertid, data.tofront, true);
         break;
       }
       case "swap": {
-        debug("insertswap: tid1:%s tid2:%s", data.insertid1, data.insertid2);
+        Logger.debug("insertswap: tid1:%s tid2:%s", data.insertid1, data.insertid2);
         this.swapInsertsById(data.insertid1, data.insertid2, true);
         break;
       }
       case "move": {
-        debug("insertmove: tid1:%s tid2:%s", data.insertid1, data.insertid2);
+        Logger.debug("insertmove: tid1:%s tid2:%s", data.insertid1, data.insertid2);
         this.moveInsertById(data.insertid1, data.insertid2, true);
         break;
       }
       case "emote": {
-        debug("emote:", data);
+        Logger.debug("emote:", data);
         emote = data.emotions.emote;
         let textFlyin = data.emotions.textflyin;
         let textStanding = data.emotions.textstanding;
@@ -1075,7 +999,7 @@ export class Theatre {
         break;
       }
       case "addtexture": {
-        debug("texturereplace:", data);
+        Logger.debug("texturereplace:", data);
         insert = this.getInsertById(data.insertid);
         actorId = data.insertid.replace(CONSTANTS.PREFIX_ACTOR_ID, "");
         params = this._getInsertParamsFromActorId(actorId);
@@ -1090,9 +1014,9 @@ export class Theatre {
 
         const resources = await this._AddTextureResource(data.imgsrc, data.resname, data.insertid, data.emote, true);
         // if oure emote is active and we're replacing the emote texture, or base is active, and we're replacing the base texture
-        debug("add replacement complete! ", resources[data.resname], insertEmote, data.emote, render);
+        Logger.debug("add replacement complete! ", resources[data.resname], insertEmote, data.emote, render);
         if (render && app && insert && insert.dockContainer) {
-          debug("RE-RENDERING with NEW texture resource %s : %s", data.resname, data.imgsrc);
+          Logger.debug("RE-RENDERING with NEW texture resource %s : %s", data.resname, data.imgsrc);
 
           // bubble up dataum from the update
           insert.optAlign = params.optalign;
@@ -1114,7 +1038,7 @@ export class Theatre {
         break;
       }
       case "addalltextures": {
-        debug("textureallreplace:", data);
+        Logger.debug("textureallreplace:", data);
         insert = this.getInsertById(data.insertid);
         actorId = data.insertid.replace(CONSTANTS.PREFIX_ACTOR_ID, "");
         params = this._getInsertParamsFromActorId(actorId);
@@ -1136,9 +1060,9 @@ export class Theatre {
         );
         // if oure emote is active and we're replacing the emote texture, or base is active, and we're replacing the base texture
 
-        debug("add all textures complete! ", data.emote, data.eresname, params.emotes[data.emote]);
+        Logger.debug("add all textures complete! ", data.emote, data.eresname, params.emotes[data.emote]);
         if (render && app && insert && insert.dockContainer && data.eresname) {
-          debug("RE-RENDERING with NEW texture resource %s", data.eresname);
+          Logger.debug("RE-RENDERING with NEW texture resource %s", data.eresname);
 
           // bubble up dataum from the update
           insert.optAlign = params.optalign;
@@ -1161,17 +1085,17 @@ export class Theatre {
         break;
       }
       case "stage": {
-        debug("staging insert", data.insertid);
+        Logger.debug("staging insert", data.insertid);
         this.stageInsertById(data.insertid, true);
         break;
       }
       case "narrator": {
-        debug("toggle narrator bar", data.active);
+        Logger.debug("toggle narrator bar", data.active);
         this.toggleNarratorBar(data.active, true);
         break;
       }
       case "decaytext": {
-        debug("decay textbox", data.insertid);
+        Logger.debug("decay textbox", data.insertid);
         this.decayTextBoxById(data.insertid, true);
         break;
       }
@@ -1181,7 +1105,7 @@ export class Theatre {
         break;
       }
       default: {
-        warn("UNKNOWN SCENE EVENT: %s with data: ", false, type, data);
+        Logger.warn("UNKNOWN SCENE EVENT: %s with data: ", false, type, data);
       }
     }
   }
@@ -1408,7 +1332,7 @@ export class Theatre {
               insert.delayedOldEmote = insert.emote;
               this.delayedSentState = 1;
             }
-            debug("DELAYING EMOTE %s, 'showing' %s", value, insert.delayedOldEmote);
+            Logger.debug("DELAYING EMOTE %s, 'showing' %s", value, insert.delayedOldEmote);
           } else {
             insert.delayedOldEmote = insert.emote;
             this.setEmoteForInsertById(value, theatreId, remote);
@@ -1421,9 +1345,9 @@ export class Theatre {
         break;
     }
     // Send to socket
-    debug("SEND EMOTE PACKET %s,%s ??", this.isDelayEmote, this.delayedSentState);
+    Logger.debug("SEND EMOTE PACKET %s,%s ??", this.isDelayEmote, this.delayedSentState);
     if (!remote && (!this.isDelayEmote || this.delayedSentState == 2) && (insert || theatreId == CONSTANTS.NARRATOR)) {
-      debug("SENDING EMOTE PACKET %s,%s", this.isDelayEmote, this.delayedSentState);
+      Logger.debug("SENDING EMOTE PACKET %s,%s", this.isDelayEmote, this.delayedSentState);
       this._sendSceneEvent("emote", {
         insertid: insert ? insert.imgId : CONSTANTS.NARRATOR,
         emotions: {
@@ -1585,7 +1509,7 @@ export class Theatre {
     }
 
     userTyping.timeoutId = window.setTimeout(() => {
-      debug("%s typing timeout", userId);
+      Logger.debug("%s typing timeout", userId);
       this.removeUserTyping(userId);
     }, 6000);
   }
@@ -1596,7 +1520,7 @@ export class Theatre {
    * @param userId (String) : The userId to remove as 'typing'.
    */
   removeUserTyping(userId) {
-    debug("removeUserTyping: ", this.usersTyping[userId]);
+    Logger.debug("removeUserTyping: ", this.usersTyping[userId]);
     if (!this.usersTyping[userId]) {
       this.usersTyping[userId] = {};
       return;
@@ -1648,7 +1572,7 @@ export class Theatre {
       }
     }
 
-    debug("%s is no longer typing (removed)", userId);
+    Logger.debug("%s is no longer typing (removed)", userId);
     window.clearTimeout(this.usersTyping[userId].timeoutId);
     this.usersTyping[userId].timeoutId = null;
   }
@@ -1665,10 +1589,10 @@ export class Theatre {
   _getInsertParamsFromActorId(actorId) {
     let actor = game.actors.get(actorId);
     if (!!!actor) {
-      error("ERROR, ACTOR %s DOES NOT EXIST!", true, actorId);
+      Logger.error("ERROR, ACTOR %s DOES NOT EXIST!", true, actorId);
       return null;
     }
-    //debug("getting params from actor: ",actor);
+    //Logger.debug("getting params from actor: ",actor);
 
     let theatreId = `theatre-${actor._id}`;
     let portrait = actor.img ? actor.img : CONSTANTS.DEFAULT_PORTRAIT;
@@ -1711,13 +1635,15 @@ export class Theatre {
     let actor = game.actors.get(actorId);
 
     if (!!!actor) {
-      error("ERROR, ACTOR %s DOES NOT EXIST!", true, actorId);
+      Logger.error("ERROR, ACTOR %s DOES NOT EXIST!", true, actorId);
       return null;
     }
 
-    debug("isDefaultDisabled ", actor);
+    Logger.debug("isDefaultDisabled ", actor);
 
-    if (actor.flags.theatre && actor.flags.theatre.disabledefault) return true;
+    if (actor.flags.theatre && actor.flags.theatre.disabledefault) {
+      return true;
+    }
     return false;
   }
 
@@ -1737,14 +1663,15 @@ export class Theatre {
     let actor = game.actors.get(actorId);
 
     if (!!!actor) {
-      error("ERROR, ACTOR %s DOES NOT EXIST!", true, actorId);
+      Logger.error("ERROR, ACTOR %s DOES NOT EXIST!", true, actorId);
       return false;
     }
     if (
       (actor.ownership[userId] && actor.ownership[userId] >= 3) ||
       (actor.ownership["default"] && actor.ownership["default"] >= 3)
-    )
+    ) {
       return true;
+    }
     return false;
   }
 
@@ -1762,7 +1689,7 @@ export class Theatre {
     let user;
 
     if (!!!actor) {
-      error("ERROR, ACTOR %s DOES NOT EXIST!", true, actorId);
+      Logger.error("ERROR, ACTOR %s DOES NOT EXIST!", true, actorId);
       return;
     }
     for (let perm in actor.ownership) {
@@ -1821,7 +1748,7 @@ export class Theatre {
     let canvas = app.view;
 
     if (!canvas) {
-      error("FAILED TO INITILIZE TOOLTIP CANVAS!", true);
+      Logger.error("FAILED TO INITILIZE TOOLTIP CANVAS!", true);
       return null;
     }
 
@@ -1859,7 +1786,7 @@ export class Theatre {
     let params = this._getInsertParamsFromActorId(actorId);
 
     if (!params) {
-      error("ERROR actor no longer exists for %s", true, theatreId);
+      Logger.error("ERROR actor no longer exists for %s", true, theatreId);
       return;
     }
 
@@ -1869,7 +1796,7 @@ export class Theatre {
     const texture = await PIXI.Assets.load(resName);
 
     if (!texture) {
-      error("ERROR could not load texture (for tooltip) %s", true, resName);
+      Logger.error("ERROR could not load texture (for tooltip) %s", true, resName);
       return;
     }
 
@@ -1922,7 +1849,7 @@ export class Theatre {
     sprite.x = 0;
     sprite.y = 0;
 
-    //debug("Tooltip Portrait loaded with w:%s h:%s scale:%s",portWidth,portHeight,ratio,sprite);
+    //Logger.debug("Tooltip Portrait loaded with w:%s h:%s scale:%s",portWidth,portHeight,ratio,sprite);
 
     // render and show the tooltip
     app.render();
@@ -1930,10 +1857,10 @@ export class Theatre {
     // face detect
     /*
 		faceapi.detectSingleFace(app.view,new faceapi.TinyFaceDetectorOptions()).then((detection)=>{
-			debug("face detected: ", detection);
+			Logger."face detected: ", detection);
 			if (detection) {
 				let box = detection.box;
-				debug("successful preview face detection: ", box);
+				Logger.debug("successful preview face detection: ", box);
 				let graphics = new PIXI.Graphics();
 				graphics.lineStyle (2,0xFFFFFF,1);
 
@@ -1953,7 +1880,7 @@ export class Theatre {
 				app.stage.addChild(graphics);
 				app.render();
 			} else {
-				error("FAILED TO FIND PREVIEW FACE", false);
+				Logger.error("FAILED TO FIND PREVIEW FACE", false);
 			}
 			this.theatreToolTip.style.opacity = 1;
 		});
@@ -1999,7 +1926,7 @@ export class Theatre {
     let canvas = app.view;
 
     if (!canvas) {
-      error("FAILED TO INITILIZE DOCK CANVAS!", true);
+      Logger.error("FAILED TO INITILIZE DOCK CANVAS!", true);
       return null;
     }
 
@@ -2038,14 +1965,14 @@ export class Theatre {
         // PIXI.v6 The renderer should not clear the canvas on rendering
         this.pixiCTX.renderer.render(insert.dockContainer, { clear: false });
       } else {
-        error("INSERT HAS NO CONTAINER! _renderTheatre : HOT-EJECTING it! ", true, insert);
+        Logger.error("INSERT HAS NO CONTAINER! _renderTheatre : HOT-EJECTING it! ", true, insert);
         this._destroyPortraitDock(insert.imgId);
       }
     }
     if (this.renderAnims > 0) {
       requestAnimationFrame(this._renderTheatre.bind(this));
     } else {
-      debug("RENDERING LOOP STOPPED");
+      Logger.debug("RENDERING LOOP STOPPED");
       this.rendering = false;
     }
   }
@@ -2064,7 +1991,7 @@ export class Theatre {
     let insert = this.getInsertById(imgId);
     if (!insert || !insert.dockContainer) {
       // if dockContainer is destroyed, destroy the tween we were trying to add
-      error("Invalid Tween for %s", false, imgId);
+      Logger.error("Invalid Tween for %s", false, imgId);
       if (tween) tween.kill();
       return;
     }
@@ -2085,7 +2012,7 @@ export class Theatre {
 
       // Kick renderer if we need to
       if (!this.rendering) {
-        debug("RENDERING LOOP STARTED");
+        Logger.debug("RENDERING LOOP STARTED");
         this.rendering = true;
         this._renderTheatre(performance.now());
       }
@@ -2123,8 +2050,8 @@ export class Theatre {
 
     //sanit check
     if (this.renderAnims < 0) {
-      error("ERROR RENDER ANIM < 0 from %s of %s", true, tweenId, insert ? insert.name : imgId);
-      error("ERROR RENDER ANIM < 0 ", true);
+      Logger.error("ERROR RENDER ANIM < 0 from %s of %s", true, tweenId, insert ? insert.name : imgId);
+      Logger.error("ERROR RENDER ANIM < 0 ", true);
     }
   }
 
@@ -2196,11 +2123,11 @@ export class Theatre {
     // track the dockContainer
     if (!!this.getInsertById(imgId)) {
       // this dockContainer should be destroyed
-      debug("PRE-EXISTING PIXI CONTAINER FOR %s ", imgId);
+      Logger.debug("PRE-EXISTING PIXI CONTAINER FOR %s ", imgId);
       this._destroyPortraitDock(imgId);
     }
 
-    //debug("Creating PortraintPIXIContainer with emotions: ",emotions);
+    //Logger.debug("Creating PortraintPIXIContainer with emotions: ",emotions);
 
     let ename, textFlyin, textStanding, textFont, textSize, textColor;
     if (emotions) {
@@ -2243,20 +2170,20 @@ export class Theatre {
       resname: "modules/theatre/assets/graphics/typing.png",
     });
     imgSrcs.push({ imgpath: imgPath, resname: imgPath });
-    debug("Adding %s with src %s", portName, imgPath);
+    Logger.debug("Adding %s with src %s", portName, imgPath);
     // get actor, load all emote images
     let actorId = imgId.replace(CONSTANTS.PREFIX_ACTOR_ID, "");
     let params = this._getInsertParamsFromActorId(actorId);
 
     if (!params) {
-      error("ERROR: Actor does not exist for %s", false, actorId);
+      Logger.error("ERROR: Actor does not exist for %s", false, actorId);
       this._destroyPortraitDock(imgId);
       return null;
     }
     // load all rigging assets
     let rigResources = Theatre.getActorRiggingResources(actorId);
 
-    debug("RigResources for %s :", portName, rigResources);
+    Logger.debug("RigResources for %s :", portName, rigResources);
 
     for (let rigResource of rigResources) imgSrcs.push({ imgpath: rigResource.path, resname: rigResource.path });
 
@@ -2269,7 +2196,7 @@ export class Theatre {
     const resources = await this._addSpritesToPixi(imgSrcs);
     // PIXI Container is ready!
     // Setup the dockContainer to display the base insert
-    debug("Sprites added to PIXI _createPortraitPIXIContainer", resources);
+    Logger.debug("Sprites added to PIXI _createPortraitPIXIContainer", resources);
     let portWidth =
       ename && params.emotes[ename] && params.emotes[ename].insert
         ? resources[params.emotes[ename].insert].width
@@ -2307,8 +2234,8 @@ export class Theatre {
     let insert = this.getInsertById(imgId);
 
     if (!insert || !insert.dockContainer) {
-      error("ERROR PIXI Container was destroyed before setup could execute for %s", true, imgId);
-      error(
+      Logger.error("ERROR PIXI Container was destroyed before setup could execute for %s", true, imgId);
+      Logger.error(
         `${game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P1")} ${imgId} ${game.i18n.localize(
           "Theatre.UI.Notification.ImageLoadFail_P2"
         )} ${resName}`,
@@ -2319,8 +2246,8 @@ export class Theatre {
     }
 
     if (!resources[resName]) {
-      error("ERROR could not load texture %s", true, resName, resources);
-      error(
+      Logger.error("ERROR could not load texture %s", true, resName, resources);
+      Logger.error(
         `${game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P1")} ${imgId} ${game.i18n.localize(
           "Theatre.UI.Notification.ImageLoadFail_P2"
         )} ${resName}`,
@@ -2444,13 +2371,13 @@ export class Theatre {
         break;
     }
 
-    debug("Portrait loaded with w:%s h:%s", portWidth, portHeight, sprite);
+    Logger.debug("Portrait loaded with w:%s h:%s", portWidth, portHeight, sprite);
 
     // run rigging animations if we have have any
     if (insert.emote) {
       let actorId = insert.imgId.replace(CONSTANTS.PREFIX_ACTOR_ID, "");
       let defaultDisabled = this.isDefaultDisabled(insert.imgId);
-      debug("is default disabled? : %s", defaultDisabled);
+      Logger.debug("is default disabled? : %s", defaultDisabled);
       let emotes = Theatre.getActorEmotes(actorId, defaultDisabled);
       let rigResMap = Theatre.getActorRiggingResources(actorId);
       if (emotes[insert.emote] && emotes[insert.emote].rigging) {
@@ -2602,7 +2529,7 @@ export class Theatre {
    */
   _repositionInsertElements(insert) {
     if (!insert || !insert.portrait) {
-      error("ERROR: No insert, or portrait available ", false, insert);
+      Logger.error("ERROR: No insert, or portrait available ", false, insert);
       return;
     }
     // re-align the dockContainer to the textBox and its nameOrientation
@@ -2741,7 +2668,7 @@ export class Theatre {
 
     // src check, not fine at all!
     if (!(await srcExists(imgSrc))) {
-      error("ERROR (_AddTextureResource) : Replacement texture does not exist %s ", false, imgSrc);
+      Logger.error("ERROR (_AddTextureResource) : Replacement texture does not exist %s ", false, imgSrc);
       return;
     }
 
@@ -2751,7 +2678,7 @@ export class Theatre {
     }
 
     let imgSrcs = [{ resname: resName, imgpath: imgSrc }];
-    debug("replace textures", imgSrcs);
+    Logger.debug("replace textures", imgSrcs);
 
     // Send to socket
     if (!remote) {
@@ -2803,7 +2730,7 @@ export class Theatre {
     // src check, not fine at all!
     for (let src of imgSrcs)
       if (!(await srcExists(src.imgpath))) {
-        error("ERROR (_AddAllTextureResources) : Replacement texture does not exist %s ", false, src);
+        Logger.error("ERROR (_AddAllTextureResources) : Replacement texture does not exist %s ", false, src);
         return;
       }
 
@@ -2812,7 +2739,7 @@ export class Theatre {
       return {};
     }
 
-    debug("replace textures", imgSrcs);
+    Logger.debug("replace textures", imgSrcs);
 
     // Send to socket
     if (!remote) {
@@ -2896,7 +2823,7 @@ export class Theatre {
     // assignment
     insert.dockContainer = dockContainer;
     insert.portraitContainer = portraitContainer;
-    debug("saving ox: %s, oy: %s", ox, oy);
+    Logger.debug("saving ox: %s, oy: %s", ox, oy);
     // label is NOT re-attached, must be done by the clearer
     // typingBubble is NOT re-attached, must be done by the clearer
     // mirror-state is NOT restored, must be done by the clearer
@@ -2912,7 +2839,7 @@ export class Theatre {
    * @private
    */
   async _addSpritesToPixi(imgSrcs) {
-    debug("adding sprite to dockContainer");
+    Logger.debug("adding sprite to dockContainer");
 
     const resources = {};
     await Promise.all(
@@ -2920,7 +2847,7 @@ export class Theatre {
         resources[resname] = resources[imgpath] = await PIXI.Assets.load(imgpath);
       })
     );
-    debug("resources", resources);
+    Logger.debug("resources", resources);
     return resources;
   }
 
@@ -2944,7 +2871,7 @@ export class Theatre {
       // load all rigging assets
       let rigResources = Theatre.getActorRiggingResources(actorId);
 
-      debug("RigResources for %s :", params.name, rigResources);
+      Logger.debug("RigResources for %s :", params.name, rigResources);
 
       for (let rigResource of rigResources) imgSrcs.push({ imgpath: rigResource.path, resname: rigResource.path });
 
@@ -2971,14 +2898,14 @@ export class Theatre {
     if (!params) {
       return;
     }
-    //debug("params: ",params);
+    //Logger.debug("params: ",params);
     // kick asset loader to cache the portrait + emotes
     let imgSrcs = [];
 
     //imgSrcs.push({imgpath: params.src, resname: `portrait-${theatreId}`});
     // get actor, load all emote images
     if (!params) {
-      error("ERROR: Actor does not exist for %s", false, actorId);
+      Logger.error("ERROR: Actor does not exist for %s", false, actorId);
       return null;
     }
 
@@ -2987,7 +2914,7 @@ export class Theatre {
     // load all rigging assets
     let rigResources = Theatre.getActorRiggingResources(actorId);
 
-    debug("RigResources for %s :", params.name, rigResources);
+    Logger.debug("RigResources for %s :", params.name, rigResources);
 
     for (let rigResource of rigResources) imgSrcs.push({ imgpath: rigResource.path, resname: rigResource.path });
 
@@ -2999,7 +2926,7 @@ export class Theatre {
 
     // load in the sprites
     await this._addSpritesToPixi(imgSrcs);
-    debug("staging complete for %s", theatreId);
+    Logger.debug("staging complete for %s", theatreId);
 
     // Send socket event
     if (!remote) Theatre.instance._sendSceneEvent("stage", { insertid: theatreId });
@@ -3058,13 +2985,17 @@ export class Theatre {
       return;
     }
     let baseInsert = actor.img ? actor.img : CONSTANTS.DEFAULT_PORTRAIT;
-    if (actor.flags.theatre) baseInsert = actor.flags.theatre.baseinsert ? actor.flags.theatre.baseinsert : baseInsert;
+    if (actor.flags.theatre) {
+      baseInsert = actor.flags.theatre.baseinsert ? actor.flags.theatre.baseinsert : baseInsert;
+    }
     let emotes = Theatre.getActorEmotes(actorId);
 
     // emote already active
     //if ((this.speakingAs != insert.imgId && !this.isDelayEmote) || this.delayedSentState > 2)
-    if (remote || !this.isDelayEmote) if (aEmote == ename || (ename == null && aEmote == null)) return;
-
+    if (remote || !this.isDelayEmote)
+      if (aEmote == ename || (ename == null && aEmote == null)) {
+        return;
+      }
     // if emote insert exists
     let app = this.pixiCTX;
     if (!!ename && emotes[ename] && emotes[ename].insert && emotes[ename].insert != "") {
@@ -3077,11 +3008,11 @@ export class Theatre {
       imgSrcs.push({ imgpath: emotes[ename].insert, resname: emoteResName });
       // add sprites
       const resources = await this._addSpritesToPixi(imgSrcs);
-      debug("emote insert loaded", resources);
+      Logger.debug("emote insert loaded", resources);
       // Error loading the sprite
       if (!resources[emoteResName] || resources[emoteResName].error) {
-        error("ERROR loading resource %s : %s : %s", true, insert.imgId, emoteResName, emotes[ename].insert);
-        error(
+        Logger.error("ERROR loading resource %s : %s : %s", true, insert.imgId, emoteResName, emotes[ename].insert);
+        Logger.error(
           game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P1") +
             +emoteResName +
             game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P2") +
@@ -3116,11 +3047,11 @@ export class Theatre {
       imgSrcs.push({ imgpath: baseInsert, resname: baseInsert });
       const resources = await this._addSpritesToPixi(imgSrcs);
 
-      debug("base insert loaded", resources);
+      Logger.debug("base insert loaded", resources);
       // Error loading the sprite
       if (!resources[baseInsert] || resources[baseInsert].error) {
-        error("ERROR loading resource %s : %s : %s", true, insert.imgId, baseInsert, baseInsert);
-        error(
+        Logger.error("ERROR loading resource %s : %s : %s", true, insert.imgId, baseInsert, baseInsert);
+        Logger.error(
           game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P1") +
             +baseInsert +
             game.i18n.localize("Theatre.UI.Notification.ImageLoadFail_P2") +
@@ -3278,7 +3209,7 @@ export class Theatre {
     if (textBoxes.length == 0) {
       // no dock
       // Should be impossible
-      debug("REMOVE TEXTBOX ERROR, NO TEXTBOXES", textBox, this.theatreBar);
+      Logger.debug("REMOVE TEXTBOX ERROR, NO TEXTBOXES", textBox, this.theatreBar);
     } else if (textBoxes.length == 1) {
       // single dock
       // 1. Remove the text Box, and close the primary bar
@@ -3354,7 +3285,7 @@ export class Theatre {
    */
   async injectLeftPortrait(imgPath, portName, imgId, optAlign, emotions, remote) {
     if (!!this.getInsertById(imgId)) {
-      warn('ID "%s" already exists! Refusing to inject %s', false, imgId, portName);
+      Logger.warn('ID "%s" already exists! Refusing to inject %s', false, imgId, portName);
       return;
     }
     if (this.portraitDocks.length == 1) {
@@ -3416,7 +3347,7 @@ export class Theatre {
    */
   async injectRightPortrait(imgPath, portName, imgId, optAlign, emotions, remote) {
     if (!!this.getInsertById(imgId)) {
-      warn('ID "%s" already exists! Refusing to inject %s', false, imgId, portName);
+      Logger.warn('ID "%s" already exists! Refusing to inject %s', false, imgId, portName);
       return;
     }
     if (this.portraitDocks.length == 0) {
@@ -3550,7 +3481,7 @@ export class Theatre {
     let isOwner = this.isActorOwner(game.user.id, toRemoveInsert.imgId);
     // permission check
     if (!remote && !isOwner) {
-      info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"), true);
+      Logger.info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"), true);
       return null;
     }
 
@@ -3573,7 +3504,7 @@ export class Theatre {
         skel["flags.theatre.settings.textsize"] = toRemoveInsert.textSize;
         skel["flags.theatre.settings.textcolor"] = toRemoveInsert.textColor;
         actor.update(skel).then((response) => {
-          debug("updated with resp: ", response);
+          Logger.debug("updated with resp: ", response);
         });
       }
     }
@@ -3934,19 +3865,19 @@ export class Theatre {
       tsib1p = textBox1.previousSibling,
       tsib2n = textBox2.nextSibling,
       tsib2p = textBox2.previousSibling;
-    //debug("SWAP",textBox1,textBox2);
+    //Logger.debug("SWAP",textBox1,textBox2);
     let adjSwap = false;
 
     // permission check
     if (!remote && (!this.isPlayerOwned(insert1.imgId) || !this.isPlayerOwned(insert2.imgId))) {
-      info(game.i18n.localize("Theatre.UI.Notification.CannotSwapControlled"), true);
+      Logger.info(game.i18n.localize("Theatre.UI.Notification.CannotSwapControlled"), true);
       return;
     } else if (
       !remote &&
       !this.isActorOwner(game.user.id, insert1.imgId) &&
       !this.isActorOwner(game.user.id, insert2.imgId)
     ) {
-      info(game.i18n.localize("Theatre.UI.Notification.CannotSwapOwner"), true);
+      Logger.info(game.i18n.localize("Theatre.UI.Notification.CannotSwapOwner"), true);
       return;
     }
 
@@ -3973,25 +3904,31 @@ export class Theatre {
       secondBar.appendChild(textBox2);
     } else {
       // full bar case
-      if (tsib1n) KHelpers.insertBefore(textBox2, tsib1n);
-      else if (tsib1p && tsib1p != textBox2) KHelpers.insertAfter(textBox2, tsib1p);
-      else {
-        debug("NO TSIB1 and PRIOR");
+      if (tsib1n) {
+        KHelpers.insertBefore(textBox2, tsib1n);
+      } else if (tsib1p && tsib1p != textBox2) {
+        KHelpers.insertAfter(textBox2, tsib1p);
+      } else {
+        Logger.debug("NO TSIB1 and PRIOR");
         KHelpers.insertAfter(textBox2, textBox1);
         adjSwap = true;
       }
 
       if (!adjSwap) {
-        if (tsib2n) KHelpers.insertBefore(textBox1, tsib2n);
-        else if (tsib2p && tsib2p != textBox1) KHelpers.insertAfter(textBox1, tsib2p);
-        else {
-          debug("NO TSIB2 and PRIOR");
+        if (tsib2n) {
+          KHelpers.insertBefore(textBox1, tsib2n);
+        } else if (tsib2p && tsib2p != textBox1) {
+          KHelpers.insertAfter(textBox1, tsib2p);
+        } else {
+          Logger.debug("NO TSIB2 and PRIOR");
           KHelpers.insertAfter(textBox1, textBox2);
         }
       }
     }
 
-    if (this.reorderTOId) window.clearTimeout(this.reorderTOId);
+    if (this.reorderTOId) {
+      window.clearTimeout(this.reorderTOId);
+    }
 
     this.reorderTOId = window.setTimeout(() => {
       Theatre.reorderInserts();
@@ -4052,15 +3989,15 @@ export class Theatre {
       tsib1p = textBox1.previousSibling,
       tsib2n = textBox2.nextSibling,
       tsib2p = textBox2.previousSibling;
-    //debug("SWAP",textBox1,textBox2);
+    //Logger.debug("SWAP",textBox1,textBox2);
     let adjSwap = false;
 
     // permission check
     if (!remote && !this.isActorOwner(game.user.id, insert2.imgId)) {
-      info(game.i18n.localize("Theatre.UI.Notification.CannotMoveOwner"), true);
+      Logger.info(game.i18n.localize("Theatre.UI.Notification.CannotMoveOwner"), true);
       return;
     } else if (!remote && (!this.isPlayerOwned(insert1.imgId) || !this.isPlayerOwned(insert2.imgId))) {
-      info(game.i18n.localize("Theatre.UI.Notification.CannotMoveControlled"), true);
+      Logger.info(game.i18n.localize("Theatre.UI.Notification.CannotMoveControlled"), true);
       return;
     }
 
@@ -4222,13 +4159,13 @@ export class Theatre {
 
     // permission check
     if (!remote && !this.isActorOwner(game.user.id, insert.imgId)) {
-      info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"), true);
+      Logger.info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"), true);
       return;
     } else if (!remote && (isLeft ? !this.isPlayerOwned(firstInsert.imgId) : !this.isPlayerOwned(lastInsert.imgId))) {
       if (isLeft) {
-        info(game.i18n.localize("Theatre.UI.Notification.CannotPushFront"), true);
+        Logger.info(game.i18n.localize("Theatre.UI.Notification.CannotPushFront"), true);
       } else {
-        info(game.i18n.localize("Theatre.UI.Notification.CannotPushBack"), true);
+        Logger.info(game.i18n.localize("Theatre.UI.Notification.CannotPushBack"), true);
       }
       return;
     }
@@ -4307,7 +4244,7 @@ export class Theatre {
   _mirrorInsert(insert, remote) {
     // permission check
     if (!remote && !this.isActorOwner(game.user.id, insert.imgId)) {
-      info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"), true);
+      Logger.info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"), true);
       return;
     }
 
@@ -4388,7 +4325,7 @@ export class Theatre {
   _resetPortraitPosition(insert, remote) {
     // permission check
     if (!remote && !this.isActorOwner(game.user.id, insert.imgId)) {
-      info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"), true);
+      Logger.info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"), true);
       return;
     }
 
@@ -4402,7 +4339,7 @@ export class Theatre {
       ease: Power3.easeOut,
       onComplete: function (ctx, imgId, tweenId) {
         // decrement the rendering accumulator
-        debug("portrait move onComplete %s", tweenId);
+        Logger.debug("portrait move onComplete %s", tweenId);
         ctx._removeDockTween(imgId, this, tweenId);
       },
       onCompleteParams: [this, insert.imgId, tweenId],
@@ -4440,10 +4377,10 @@ export class Theatre {
     let resTarget = resMap.find((e) => e.name == tweenParams[0].resName);
     let texture = await PIXI.Assets.load(resTarget.path);
 
-    debug("Adding tweens for animation '%s' from syntax: %s with params: ", animName, animSyntax, tweenParams);
-    // debug("Resource path is %s, resource: ", resTarget.path, resource);
+    Logger.debug("Adding tweens for animation '%s' from syntax: %s with params: ", animName, animSyntax, tweenParams);
+    // Logger.debug("Resource path is %s, resource: ", resTarget.path, resource);
     if (!texture) {
-      error(
+      Logger.error(
         'ERROR: resource name : "%s" with path "%s" does not exist!',
         false,
         tweenParams[idx].resName,
@@ -4469,7 +4406,7 @@ export class Theatre {
       let yoyoEase = null;
       let noMirror = false; // Not Implemented
       if (advOptions) {
-        debug("adv options arg: ", advOptions);
+        Logger.debug("adv options arg: ", advOptions);
         yoyo = advOptions.yoyo ? true : false;
         noMirror = advOptions.noMirror ? true : false;
         delay = advOptions.delay ? Number(advOptions.delay) : delay;
@@ -4501,7 +4438,7 @@ export class Theatre {
             prop.final = Number(prop.final.match(/-*\d+\.*\d*/)[0] || 0);
           }
 
-          debug(
+          Logger.debug(
             "new %s : %s,%s : w:%s,h:%s",
             prop.name,
             prop.initial,
@@ -4539,10 +4476,10 @@ export class Theatre {
         yoyo: yoyo,
         yoyoEase: yoyoEase,
         /*onRepeat: function() {
-					debug("ANIMATION tween is repeating!",this);
+					Logger.debug("ANIMATION tween is repeating!",this);
 				}, */
         onComplete: function (ctx, imgId, tweenId) {
-          debug("ANIMATION tween complete!");
+          Logger.debug("ANIMATION tween complete!");
           // decrement the rendering accumulator
           ctx._removeDockTween(imgId, this, tweenId);
           // remove our own reference from the dockContainer tweens
@@ -4572,7 +4509,7 @@ export class Theatre {
    * @private
    */
   _getInitialEmotionSetFromInsertParams(params, useDefault) {
-    debug("use default? %s", !useDefault);
+    Logger.debug("use default? %s", !useDefault);
     let emotions = {
       emote:
         (!useDefault && params.settings.emote ? params.settings.emote : null) ||
@@ -4644,7 +4581,7 @@ export class Theatre {
 
     let params = this._getInsertParamsFromActorId(actorId);
 
-    debug(" set as active");
+    Logger.debug(" set as active");
     // set as user active
     // If the insert does not exist in the dock, add it,
     // If it does, then simply toggle it as active if it isn't already
@@ -4725,16 +4662,22 @@ export class Theatre {
       let emotions;
 
       // determine if to launch with actor saves or default settings
-      if (ev && ev.altKey) emotions = Theatre.instance._getInitialEmotionSetFromInsertParams(params, true);
-      else emotions = Theatre.instance._getInitialEmotionSetFromInsertParams(params);
-
-      debug("ACTIVATING AND INJECTING with Emotions: ", emotions);
+      if (ev && ev.altKey) {
+        emotions = Theatre.instance._getInitialEmotionSetFromInsertParams(params, true);
+      } else {
+        emotions = Theatre.instance._getInitialEmotionSetFromInsertParams(params);
+      }
+      Logger.debug("ACTIVATING AND INJECTING with Emotions: ", emotions);
 
       if (ev && !ev.shiftKey) {
-        if (game.user.isGM) await this.injectLeftPortrait(src, name, id, optAlign, emotions);
-        else await this.injectRightPortrait(src, name, id, optAlign, emotions);
-      } else await this.injectRightPortrait(src, name, id, optAlign, emotions);
-
+        if (game.user.isGM) {
+          await this.injectLeftPortrait(src, name, id, optAlign, emotions);
+        } else {
+          await this.injectRightPortrait(src, name, id, optAlign, emotions);
+        }
+      } else {
+        await this.injectRightPortrait(src, name, id, optAlign, emotions);
+      }
       this.speakingAs = id;
       KHelpers.addClass(navItem, "theatre-control-nav-bar-item-speakingas");
       TweenMax.to(Theatre.instance.theatreNavBar, 0.4, {
@@ -4794,7 +4737,7 @@ export class Theatre {
     if (!textBox || !insert) return;
 
     if (!remote && !this.isActorOwner(game.user.id, theatreId)) {
-      info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"), true);
+      Logger.info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"), true);
       return;
     }
     // clear last speaking if present
@@ -4856,19 +4799,30 @@ export class Theatre {
     green = Math.min(green + 75, 255);
     blue = Math.min(blue + 75, 255);
 
-    debug("color %s : red: %s:%s, green %s:%s, blue %s:%s", color, red, darkred, green, darkgreen, blue, darkblue);
+    Logger.debug(
+      "color %s : red: %s:%s, green %s:%s, blue %s:%s",
+      color,
+      red,
+      darkred,
+      green,
+      darkgreen,
+      blue,
+      darkblue
+    );
 
     // style specific settings
     switch (this.settings.theatreStyle) {
-      case "clearbox":
+      case "clearbox": {
         textBox.style.cssText += `background: linear-gradient(transparent 0%, rgba(${red},${green},${blue},0.30) 40%, rgba(${red},${green},${blue},0.30) 60%, transparent 100%); box-shadow: 0px 5px 2px 1px rgba(${darkred}, ${darkgreen}, ${darkblue}, 0.30)`;
         break;
+      }
       case "mangabubble":
       case "lightbox":
       case "textbox":
-      default:
+      default: {
         textBox.style.cssText += `background: linear-gradient(transparent 0%, rgba(${red},${green},${blue},0.10) 40%, rgba(${red},${green},${blue},0.10) 60%, transparent 100%); box-shadow: 0px 5px 2px 1px rgba(${darkred}, ${darkgreen}, ${darkblue}, .2)`;
         break;
+      }
     }
   }
 
@@ -4899,7 +4853,7 @@ export class Theatre {
     green = green.toString(16);
     blue = blue.toString(16);
 
-    debug(`#${red}${green}${blue}`);
+    Logger.debug(`#${red}${green}${blue}`);
     return `#${red}${green}${blue}`;
   }
 
@@ -4926,7 +4880,7 @@ export class Theatre {
     if (active) {
       // spawn it
       let narratorBackdrop = Theatre.instance.theatreNarrator.getElementsByClassName("theatre-narrator-backdrop")[0];
-      debug("NarratorBackdrop ", narratorBackdrop, Theatre.instance.theatreNarrator);
+      Logger.debug("NarratorBackdrop ", narratorBackdrop, Theatre.instance.theatreNarrator);
       narratorBackdrop.style.width = "100%";
       Theatre.instance.theatreNarrator.style.opacity = "1";
       Theatre.instance.isNarratorActive = true;
@@ -5016,7 +4970,7 @@ export class Theatre {
       // remove it
       let narratorBackdrop = Theatre.instance.theatreNarrator.getElementsByClassName("theatre-narrator-backdrop")[0];
       let narratorContent = Theatre.instance.theatreNarrator.getElementsByClassName("theatre-narrator-content")[0];
-      debug("NarratorBackdrop ", narratorBackdrop, Theatre.instance.theatreNarrator);
+      Logger.debug("NarratorBackdrop ", narratorBackdrop, Theatre.instance.theatreNarrator);
       narratorBackdrop.style.width = "0%";
       Theatre.instance.theatreNarrator.style.opacity = "0";
       Theatre.instance.isNarratorActive = false;
@@ -5030,7 +4984,7 @@ export class Theatre {
       narratorContent.style["overflow-y"] = "scroll";
       narratorContent.style["overflow-x"] = "hidden";
 
-      // debug("all tweens", TweenMax.getAllTweens());
+      // Logger.debug("all tweens", TweenMax.getAllTweens());
       narratorContent.textContent = "";
 
       if (game.user.isGM) {
@@ -5060,8 +5014,9 @@ export class Theatre {
       : null;
     let insert = Theatre.instance.getInsertById(Theatre.instance.speakingAs);
     let actor;
-    if (actorId) actor = game.actors.get(actorId);
-
+    if (actorId) {
+      actor = game.actors.get(actorId);
+    }
     let emotes = Theatre.getActorEmotes(actorId);
     let fonts = Theatre.FONTS;
     let textFlyin = Theatre.FLYIN_ANIMS;
@@ -5073,19 +5028,19 @@ export class Theatre {
       textStanding,
       fonts,
     }).then((template) => {
-      debug("emote window template rendered");
+      Logger.debug("emote window template rendered");
       Theatre.instance.theatreEmoteMenu.style.top = `${Theatre.instance.theatreControls.offsetTop - 410}px`;
       Theatre.instance.theatreEmoteMenu.innerHTML = template;
 
       let wheelFunc = function (ev) {
-        //debug("wheel on text-box",ev.currentTarget.scrollTop,ev.deltaY,ev.deltaMode);
+        //Logger.debug("wheel on text-box",ev.currentTarget.scrollTop,ev.deltaY,ev.deltaMode);
         let pos = ev.deltaY > 0;
         ev.currentTarget.scrollTop += pos ? 10 : -10;
         ev.preventDefault();
         ev.stopPropagation();
       };
       let wheelFunc2 = function (ev) {
-        //debug("wheel on text-anim",ev.currentTarget.parentNode.scrollTop,ev.deltaY,ev.deltaMode);
+        //Logger.debug("wheel on text-anim",ev.currentTarget.parentNode.scrollTop,ev.deltaY,ev.deltaMode);
         let pos = ev.deltaY > 0;
         ev.currentTarget.parentNode.scrollTop += pos ? 10 : -10;
         ev.preventDefault();
@@ -5096,7 +5051,7 @@ export class Theatre {
       let sizeSelect = Theatre.instance.theatreEmoteMenu.getElementsByClassName("sizeselect")[0];
       let colorSelect = Theatre.instance.theatreEmoteMenu.getElementsByClassName("colorselect")[0];
       let fontSelect = Theatre.instance.theatreEmoteMenu.getElementsByClassName("fontselect")[0];
-      //debug("Selectors found: ",sizeSelect,colorSelect,fontSelect);
+      //Logger.debug("Selectors found: ",sizeSelect,colorSelect,fontSelect);
 
       // assign font from insert
       if (insert && insert.textFont) {
@@ -5201,7 +5156,7 @@ export class Theatre {
         child.addEventListener("mouseover", (ev) => {
           let text = ev.currentTarget.getAttribute("otext");
           let anim = ev.currentTarget.getAttribute("name");
-          //debug("child text: ",text,ev.currentTarget);
+          //Logger.debug("child text: ",text,ev.currentTarget);
           ev.currentTarget.textContent = "";
           let charSpans = Theatre.splitTextBoxToChars(text, ev.currentTarget);
           textFlyin[anim].func.call(this, charSpans, 0.5, 0.05, null);
@@ -5215,7 +5170,7 @@ export class Theatre {
           TweenMax.killTweensOf(child);
           child.style["overflow-y"] = "scroll";
           child.style["overflow-x"] = "hidden";
-          //debug("all tweens",TweenMax.getAllTweens());
+          //Logger.debug("all tweens",TweenMax.getAllTweens());
           ev.currentTarget.textContent = ev.currentTarget.getAttribute("otext");
         });
         // bind text anim type
@@ -5278,7 +5233,7 @@ export class Theatre {
         child.addEventListener("mouseover", (ev) => {
           let text = ev.currentTarget.getAttribute("otext");
           let anim = ev.currentTarget.getAttribute("name");
-          //debug("child text: ",text,ev.currentTarget);
+          //Logger.debug("child text: ",text,ev.currentTarget);
           ev.currentTarget.textContent = "";
           let charSpans = Theatre.splitTextBoxToChars(text, ev.currentTarget);
           textFlyin["typewriter"].func.call(
@@ -5298,7 +5253,7 @@ export class Theatre {
           TweenMax.killTweensOf(child);
           child.style["overflow-y"] = "scroll";
           child.style["overflow-x"] = "hidden";
-          //debug("all tweens",TweenMax.getAllTweens());
+          //Logger.debug("all tweens",TweenMax.getAllTweens());
           ev.currentTarget.textContent = ev.currentTarget.getAttribute("otext");
         });
         // bind text anim type
@@ -5370,7 +5325,7 @@ export class Theatre {
           child.addEventListener("mouseup", (ev) => {
             if (ev.button == 0) {
               let emName = ev.currentTarget.getAttribute("name");
-              debug("em name: %s was clicked", emName);
+              Logger.debug("em name: %s was clicked", emName);
               if (KHelpers.hasClass(ev.currentTarget, "emote-active")) {
                 KHelpers.removeClass(ev.currentTarget, "emote-active");
                 // if speaking set to base
@@ -5504,7 +5459,7 @@ export class Theatre {
    * @param ev (Event) : The Event that triggered this handler
    */
   handleBtnEmoteClick(ev) {
-    debug("emote click");
+    Logger.debug("emote click");
 
     if (KHelpers.hasClass(ev.currentTarget, "theatre-control-btn-down")) {
       Theatre.instance.theatreEmoteMenu.style.display = "none";
@@ -5561,12 +5516,16 @@ export class Theatre {
       !ev.repeat &&
       //&& Theatre.instance.speakingAs
       ev.key == "Control"
-    )
+    ) {
       KHelpers.addClass(Theatre.instance.theatreChatCover, "theatre-control-chat-cover-ooc");
-
-    if (now - Theatre.instance.lastTyping < 3000) return;
-    if (ev.key == "Enter" || ev.key == "Alt" || ev.key == "Shift" || ev.key == "Control") return;
-    debug("keydown in chat-message");
+    }
+    if (now - Theatre.instance.lastTyping < 3000) {
+      return;
+    }
+    if (ev.key == "Enter" || ev.key == "Alt" || ev.key == "Shift" || ev.key == "Control") {
+      return;
+    }
+    Logger.debug("keydown in chat-message");
     Theatre.instance.lastTyping = now;
     Theatre.instance.setUserTyping(game.user.id, Theatre.instance.speakingAs);
     Theatre.instance._sendTypingEvent();
@@ -5584,7 +5543,7 @@ export class Theatre {
    * @param ev (Event) : The Event that triggered this handler
    */
   handleBtnNarratorClick(ev) {
-    debug("narrator click");
+    Logger.debug("narrator click");
 
     if (KHelpers.hasClass(ev.currentTarget, "theatre-control-nav-bar-item-speakingas")) {
       Theatre.instance.toggleNarratorBar(false);
@@ -5599,14 +5558,14 @@ export class Theatre {
    * @param ev (Event) : The Event that triggered this handler
    */
   handleBtnCinemaClick(ev) {
-    debug("cinema click");
-    info(game.i18n.localize("Theatre.NotYet"), true);
+    Logger.debug("cinema click");
+    Logger.info(game.i18n.localize("Theatre.NotYet"), true);
     /*
 		if (KHelpers.hasClass(ev.currentTarget,"theatre-control-small-btn-down")) {
 			KHelpers.removeClass(ev.currentTarget,"theatre-control-small-btn-down");
 		} else {
 			KHelpers.addClass(ev.currentTarget,"theatre-control-small-btn-down");
-			info(game.i18n.localize("Theatre.NotYet"), true);
+			Logger.info(game.i18n.localize("Theatre.NotYet"), true);
 		}
 		*/
   }
@@ -5617,15 +5576,17 @@ export class Theatre {
    * @param ev (Event) : The Event that triggered this handler
    */
   handleBtnDelayEmoteClick(ev) {
-    debug("delay emote click");
+    Logger.debug("delay emote click");
 
     if (Theatre.instance.isDelayEmote) {
-      if (KHelpers.hasClass(ev.currentTarget, "theatre-control-small-btn-down"))
+      if (KHelpers.hasClass(ev.currentTarget, "theatre-control-small-btn-down")) {
         KHelpers.removeClass(ev.currentTarget, "theatre-control-small-btn-down");
+      }
       Theatre.instance.isDelayEmote = false;
     } else {
-      if (!KHelpers.hasClass(ev.currentTarget, "theatre-control-small-btn-down"))
+      if (!KHelpers.hasClass(ev.currentTarget, "theatre-control-small-btn-down")) {
         KHelpers.addClass(ev.currentTarget, "theatre-control-small-btn-down");
+      }
       Theatre.instance.isDelayEmote = true;
     }
     // push focus to chat-message
@@ -5639,7 +5600,7 @@ export class Theatre {
    * @param ev (Event) : The Event that triggered this handler
    */
   handleBtnQuoteClick(ev) {
-    debug("quote click");
+    Logger.debug("quote click");
 
     if (Theatre.instance.isQuoteAuto) {
       if (KHelpers.hasClass(ev.currentTarget, "theatre-control-small-btn-down"))
@@ -5661,10 +5622,10 @@ export class Theatre {
    * @param ev (Event) : The Event that triggered this handler
    */
   handleBtnResyncClick(ev) {
-    debug("resync click");
+    Logger.debug("resync click");
     if (game.user.isGM) {
       Theatre.instance._sendResyncRequest("players");
-      info(game.i18n.localize("Theatre.UI.Notification.ResyncGM"), true);
+      Logger.info(game.i18n.localize("Theatre.UI.Notification.ResyncGM"), true);
     } else {
       Theatre.instance._sendResyncRequest("gm");
     }
@@ -5676,7 +5637,7 @@ export class Theatre {
    * @param ev (Event) : The Event that triggered this handler
    */
   handleBtnSuppressClick(ev) {
-    debug("suppression click");
+    Logger.debug("suppression click");
     if (Theatre.instance.isSuppressed) {
       if (KHelpers.hasClass(ev.currentTarget, "theatre-control-btn-down")) {
         KHelpers.removeClass(ev.currentTarget, "theatre-control-btn-down");
@@ -5734,7 +5695,7 @@ export class Theatre {
    * @param ev (Event) : The Event that triggered this handler
    */
   handleTextBoxMouseDoubleClick(ev) {
-    debug("MOUSE DOUBLE CLICK");
+    Logger.debug("MOUSE DOUBLE CLICK");
     let id = ev.currentTarget.getAttribute("imgId");
     Theatre.instance.resetInsertById(id);
   }
@@ -5746,7 +5707,7 @@ export class Theatre {
    */
   handleWindowMouseUp(ev) {
     // finish moving insert
-    debug("WINDOW MOUSE UP");
+    Logger.debug("WINDOW MOUSE UP");
 
     let x = ev.clientX || ev.pageX;
     let y = ev.clientY || ev.pageY;
@@ -5766,7 +5727,7 @@ export class Theatre {
     if (dy > box.maxtop) dy = box.maxtop;
     if (dy < box.mintop) dy = box.mintop;
 
-    debug(
+    Logger.debug(
       "WINDOW MOUSE UP FINAL x: " +
         x +
         " y: " +
@@ -5789,7 +5750,7 @@ export class Theatre {
     //insert.portraitContainer.x = dx;
     //insert.portraitContainer.y = dy;
     if (!insert.dockContainer || !insert.portraitContainer) {
-      error("ERROR: insert dockContainer or portrait is INVALID");
+      Logger.error("ERROR: insert dockContainer or portrait is INVALID");
       window.removeEventListener("mouseup", Theatre.instance.handleWindowMouseUp);
       return;
     }
@@ -5826,14 +5787,14 @@ export class Theatre {
    * @param ev (Event) : The Event that triggered this handler
    */
   handleTextBoxMouseDown(ev) {
-    debug("MOUSE DOWN ", ev.buttons, ev.button);
+    Logger.debug("MOUSE DOWN ", ev.buttons, ev.button);
     let id = ev.currentTarget.getAttribute("imgId");
 
     if (ev.button == 0) {
       if (!ev.ctrlKey && !ev.shiftKey && !ev.altKey) {
         // if old dragPoint exists reset the style, and clear any interval that may exist
         if (!!Theatre.instance.dragPoint && !!Theatre.instance.dragPoint.insert) {
-          warn("PREXISTING DRAGPOINT!", false);
+          Logger.warn("PREXISTING DRAGPOINT!", false);
           //Theatre.instance.dragPoint.port.style.transition = "top 0.5s ease, left 0.5s ease, transform 0.5s ease";
         }
         // calculate bouding box
@@ -5842,7 +5803,7 @@ export class Theatre {
 
         // permission check
         if (!Theatre.instance.isActorOwner(game.user.id, insert.imgId)) {
-          info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"), true);
+          Logger.info(game.i18n.localize("Theatre.UI.Notification.DoNotControl"), true);
           return;
         }
 
@@ -5860,7 +5821,7 @@ export class Theatre {
         let origX = insert.portraitContainer.x;
         let origY = insert.portraitContainer.y;
 
-        debug("STORING DRAG POINT", ev.clientX || ev.pageX, ev.clientY || ev.PageY, boundingBox, origX, origY);
+        Logger.debug("STORING DRAG POINT", ev.clientX || ev.pageX, ev.clientY || ev.PageY, boundingBox, origX, origY);
 
         // change the transition style while we're dragging
         //port.style.transition = "top 0.5s ease, left 0.5s ease, transform 0.5s ease";
@@ -5891,7 +5852,7 @@ export class Theatre {
    * @param ev (Event) : The Event that triggered this handler
    */
   handleTextBoxMouseUp(ev) {
-    debug("MOUSE UP ", ev.buttons, ev.button);
+    Logger.debug("MOUSE UP ", ev.buttons, ev.button);
     let id = ev.currentTarget.getAttribute("imgId");
     let chatMessage = document.getElementById("chat-message");
     if (ev.button == 0) {
@@ -5994,13 +5955,13 @@ export class Theatre {
     let actorId = id.replace(CONSTANTS.PREFIX_ACTOR_ID, "");
     let params = Theatre.instance._getInsertParamsFromActorId(actorId);
     if (!params) {
-      error("ERROR, actorId %s does not exist!", true, actorId);
+      Logger.error("ERROR, actorId %s does not exist!", true, actorId);
       // remove the nav Item
       ev.currentTarget.parentNode.removeChild(ev.currentTarget);
       return;
     }
 
-    debug("Button UP on nav add?", ev.button);
+    Logger.debug("Button UP on nav add?", ev.button);
 
     switch (ev.button) {
       case 0:
