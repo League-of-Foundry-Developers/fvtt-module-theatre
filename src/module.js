@@ -263,12 +263,12 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
   let charSpans = [];
   let textContent = chatData.content;
 
-  // replace entities
-  textContent = textContent.replace(/&gt;/g, ">");
-  textContent = textContent.replace(/&lt;/g, "<");
-  textContent = textContent.replace(/&amp;/g, "&");
-  textContent = textContent.replace(/<br>/g, "\n");
-
+  // replace newlines
+  textContent = textContent.replace(/<br(| \/)>/g, "\n");
+  // convert all html specials to plaintext
+  let txtTemp = document.createElement("hiddentext");
+  txtTemp.innerHTML = textContent;
+  textContent = txtTemp.textContent;
   if (textBox) {
     // kill all tweens
     for (let c of textBox.children) {
