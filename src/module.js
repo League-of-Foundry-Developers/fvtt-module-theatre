@@ -236,10 +236,11 @@ Hooks.on("preCreateChatMessage", function (chatMessage, data) {
         (chatData.speaker.actor || chatData.speaker.token || chatData.speaker.alias) &&
         !chatMessage.content.match(/\<div.*\>[\s\S]*\<\/div\>/)
     ) {
-        chatData.content =
-            game.i18n.localize(`Theatre.Text.OpenBracket.${Theatre.instance.settings.quoteType}`) +
-            chatMessage.content +
-            game.i18n.localize(`Theatre.Text.CloseBracket.${Theatre.instance.settings.quoteType}`);
+        const { quoteType } = Theatre.instance.settings;
+        const openBracket = game.i18n.localize(`Theatre.Text.OpenBracket.${quoteType}`);
+        const closeBracket = game.i18n.localize(`Theatre.Text.CloseBracket.${quoteType}`);
+
+        chatData.content = `${openBracket}${chatMessage.content}${closeBracket}`;
     }
     chatMessage.updateSource(chatData);
 });
