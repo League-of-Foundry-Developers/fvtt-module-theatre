@@ -184,7 +184,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage, data) {
             chatData.speaker.alias = name;
             //chatData.flags.theatreColor = theatreColor;
             if (foundry.utils.isNewerVersion(game.version, 12)) {
-                chatData.style.CONST.CHAT_MESSAGE_STYLES.IC;
+                chatData.style = CONST.CHAT_MESSAGE_STYLES.IC;
             } else {
                 chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
             }
@@ -202,7 +202,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage, data) {
             chatData.speaker.alias = name;
             //chatData.flags.theatreColor = theatreColor;
             if (foundry.utils.isNewerVersion(game.version, 12)) {
-                chatData.style.CONST.CHAT_MESSAGE_STYLES.IC;
+                chatData.style = CONST.CHAT_MESSAGE_STYLES.IC;
             } else {
                 chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
             }
@@ -216,7 +216,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage, data) {
         } else if (Theatre.instance.speakingAs == CONSTANTS.NARRATOR) {
             chatData.speaker.alias = game.i18n.localize("Theatre.UI.Chat.Narrator");
             if (foundry.utils.isNewerVersion(game.version, 12)) {
-                chatData.style.CONST.CHAT_MESSAGE_STYLES.IC;
+                chatData.style = CONST.CHAT_MESSAGE_STYLES.IC;
             } else {
                 chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
             }
