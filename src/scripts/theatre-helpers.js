@@ -2226,9 +2226,14 @@ export class TheatreHelpers {
             Theatre.addToNavBar(actor);
             newText = removeLabel;
         }
-        ev.currentTarget.innerHTML = Theatre.isActorStaged(actor)
-            ? `<i class="fas fa-mask"></i>${newText}`
-            : `<i class="fas fa-theater-masks"></i>${newText}`;
+        // Toggle iconElement class
+        const iconElement = ev.currentTarget.querySelector("i");
+        iconElement.className = Theatre.isActorStaged(actor) ? "fas fa-mask" : "fas fa-theater-masks";
+        //Set the new text content
+        const textNode = ev.currentTarget.childNodes[1];
+        if (textNode.nodeType === Node.TEXT_NODE) {
+            textNode.textContent = newText;
+        }
     }
 
     static _getTheatreId(actor) {
