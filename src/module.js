@@ -18,7 +18,7 @@ Handlebars.registerHelper("cat", function (arg1, arg2, hash) {
  * this is meant to be used in subexpressions rather than a final target
  */
 Handlebars.registerHelper("resprop", function (propPath, hash) {
-    let prop = getProperty(hash.data.root, propPath);
+    let prop = foundry.utils.getProperty(hash.data.root, propPath);
     return prop;
 });
 
