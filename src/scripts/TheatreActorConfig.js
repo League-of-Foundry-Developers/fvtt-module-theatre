@@ -80,7 +80,7 @@ export class TheatreActorConfig extends FormApplication {
         return {
             entityName: entityName,
             isGM: game.user.isGM,
-            object: duplicate(this.object),
+            object: foundry.utils.duplicate(this.object),
             emote: Theatre.getActorEmotes(this.object._id),
             options: this.options,
         };
