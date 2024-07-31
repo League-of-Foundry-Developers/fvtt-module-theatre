@@ -139,7 +139,7 @@
   "styles": ["styles/theatre.css"],
   "compatibility": {
     "minimum": 11,
-    "verified": 11,
+    "verified": 12,
     "maximum": 13
   },
   "manifestPlusVersion": "1.2.1",
