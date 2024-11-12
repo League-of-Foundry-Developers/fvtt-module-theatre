@@ -2300,8 +2300,15 @@ export class Theatre {
         let sprite = new PIXI.Sprite(resources[resName]);
         let portWidth = resources[resName].width;
         let portHeight = resources[resName].height;
-        let maxHeight = game.settings.get(CONSTANTS.MODULE_ID, "theatreImageSize");
-        if (portHeight > maxHeight) {
+
+        let usePercent = game.settings.get(CONSTANTS.MODULE_ID, "theatreImageUsePercent");
+        let maxHeightPixel = game.settings.get(CONSTANTS.MODULE_ID, "theatreImageSize");
+        let maxHeightPercent = window.innerHeight * game.settings.get(CONSTANTS.MODULE_ID, "theatreImageSizePercent");
+        let useUniform = game.settings.get(CONSTANTS.MODULE_ID, "theatreImageSizeUniform");
+
+        let maxHeight = usePercent ? maxHeightPercent : maxHeightPixel;
+
+        if (portHeight > maxHeight || useUniform) {
             portWidth *= maxHeight / portHeight;
             portHeight = maxHeight;
         }
