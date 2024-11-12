@@ -63,7 +63,7 @@ export const registerSettings = function () {
 
     game.settings.register(CONSTANTS.MODULE_ID, "theatreImageSizePercent", {
         name: "Maximum image height (percent)",
-        hint: "Uniform image height as a percentage of the device screen height",
+        hint: "Set max image height as a percentage of the device screen height. Used only if the 'Use screen height as maximum image height' is enabled",
         scope: "client",
         config: true,
         default: 0.7,
