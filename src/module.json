@@ -2,7 +2,7 @@
   "id": "theatre",
   "title": "Theatre Inserts",
   "description": "Theater Inserts with a visual novel style made for heavy roleplay scenes",
-  "version": "2.9.1",
+  "version": "2.9.2",
   "authors": [
     {
       "name": "Ken L"
@@ -143,12 +143,12 @@
     "maximum": 13
   },
   "manifestPlusVersion": "1.2.1",
-  "url": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre",
-  "manifest": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/2.9.1/module.json",
-  "download": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/2.9.1/module.zip",
-  "readme": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/blob/master/README.md",
-  "changelog": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/blob/master/CHANGELOG.md",
-  "bugs": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/issues",
+  "url": "https://github.com/Oxy949/fvtt-module-theatre",
+  "manifest": "https://github.com/Oxy949/fvtt-module-theatre/releases/download/2.9.2/module.json",
+  "download": "https://github.com/Oxy949/fvtt-module-theatre/releases/download/2.9.2/module.zip",
+  "readme": "https://github.com/Oxy949/fvtt-module-theatre/blob/master/README.md",
+  "changelog": "https://github.com/Oxy949/fvtt-module-theatre/blob/master/CHANGELOG.md",
+  "bugs": "https://github.com/Oxy949/fvtt-module-theatre/issues",
   "allowBugReporter": true,
   "relationships": {
     "systems": [],
