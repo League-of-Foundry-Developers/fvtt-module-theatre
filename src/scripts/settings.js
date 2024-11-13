@@ -52,6 +52,33 @@ export const registerSettings = function () {
         type: Number,
     });
 
+    
+    game.settings.register(CONSTANTS.MODULE_ID, "theatreImageUsePercent", {
+        name: "Use screen height as maximum image height",
+        scope: "world",
+        config: true,
+        default: false,
+        type: Boolean,
+    });
+
+    game.settings.register(CONSTANTS.MODULE_ID, "theatreImageSizePercent", {
+        name: "Maximum image height (percent)",
+        hint: "Set max image height as a percentage of the device screen height. Used only if the 'Use screen height as maximum image height' is enabled",
+        scope: "client",
+        config: true,
+        default: 0.7,
+        type: Number
+      });
+
+    game.settings.register(CONSTANTS.MODULE_ID, "theatreImageSizeUniform", {
+        name: "Uniform image height",
+        hint: "Set all images size to the maximum height",
+        scope: "world",
+        config: true,
+        default: false,
+        type: Boolean,
+    });
+
     game.settings.register(CONSTANTS.MODULE_ID, "theatreNarratorHeight", {
         name: "Theatre.UI.Settings.narrHeight",
         hint: "Theatre.UI.Settings.narrHeightHint",
