@@ -204,6 +204,15 @@ export const registerSettings = function () {
         default: true,
     });
 
+    game.settings.register(CONSTANTS.MODULE_ID, "suppressCustomCss", {
+        name: "Hide By CSS Selectors",
+        hint: "Hides elements specified by CSS selectors. Multiple selectors should be delimited by a semi-colon (;)",
+        scope: "world",
+        config: true,
+        default: "",
+        type: String
+    });
+
     game.settings.register(CONSTANTS.MODULE_ID, "showUIAboveStage", {
         name: "Theatre.UI.Settings.showUIAboveStage",
         hint: "Theatre.UI.Settings.showUIAboveStageHint",

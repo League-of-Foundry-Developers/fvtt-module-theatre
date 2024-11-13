@@ -514,12 +514,22 @@ Hooks.on("theatreDockActive", (insertCount) => {
     // The "MyTab" module inserts another element with id "pause". Use querySelectorAll to make sure we catch both
     document.querySelectorAll("#pause").forEach((ele) => KHelpers.addClass(ele, "theatre-centered"));
 
+
+
     if (!game.settings.get(CONSTANTS.MODULE_ID, "autoHideBottom")) {
         return;
     }
     if (!theatre.isSuppressed) {
         $("#players").addClass("theatre-invisible");
         $("#hotbar").addClass("theatre-invisible");
+
+        const customSelectors = game.settings.get(CONSTANTS.MODULE_ID, "suppressCustomCss");
+        if (customSelectors) {
+            const selectors = customSelectors.split(";").map(selector => selector.trim());
+            selectors.forEach(selector => {
+                document.querySelectorAll(selector).forEach(ele => ele.classList.add("theatre-invisible"));
+            });
+        }
     }
 });
 
@@ -577,9 +587,25 @@ Hooks.on("theatreSuppression", (suppressed) => {
     if (suppressed) {
         $("#players").removeClass("theatre-invisible");
         $("#hotbar").removeClass("theatre-invisible");
+
+        const customSelectors = game.settings.get(CONSTANTS.MODULE_ID, "suppressCustomCss");
+        if (customSelectors) {
+            const selectors = customSelectors.split(";").map(selector => selector.trim());
+            selectors.forEach(selector => {
+                document.querySelectorAll(selector).forEach(ele => ele.classList.remove("theatre-invisible"));
+            });
+        }
     } else {
         $("#players").addClass("theatre-invisible");
         $("#hotbar").addClass("theatre-invisible");
+
+        const customSelectors = game.settings.get(CONSTANTS.MODULE_ID, "suppressCustomCss");
+        if (customSelectors) {
+            const selectors = customSelectors.split(";").map(selector => selector.trim());
+            selectors.forEach(selector => {
+                document.querySelectorAll(selector).forEach(ele => ele.classList.add("theatre-invisible"));
+            });
+        }
     }
 });
 
