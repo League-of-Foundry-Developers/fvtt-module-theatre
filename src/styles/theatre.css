@@ -1686,6 +1686,12 @@
 }
 
 /* id.class is utilized to gain priority over styling rules of the "Minimal UI" module */
+.theatre-invisible {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* id.class is utilized to gain priority over styling rules of the "Minimal UI" module */
 #players.theatre-invisible,
 #hotbar.theatre-invisible {
   opacity: 0;
