@@ -1687,8 +1687,8 @@
 
 /* id.class is utilized to gain priority over styling rules of the "Minimal UI" module */
 .theatre-invisible {
-  opacity: 0;
-  pointer-events: none;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 /* id.class is utilized to gain priority over styling rules of the "Minimal UI" module */
