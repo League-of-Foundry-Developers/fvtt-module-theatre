@@ -527,7 +527,7 @@ Hooks.on("theatreDockActive", (insertCount) => {
         if (customSelectors) {
             const selectors = customSelectors.split(";").map(selector => selector.trim());
             selectors.forEach(selector => {
-                $(selector).addClass("theatre-invisible");
+                document.querySelectorAll(selector).forEach(ele => ele.classList.add("theatre-invisible"));
             });
         }
     }
@@ -592,7 +592,7 @@ Hooks.on("theatreSuppression", (suppressed) => {
         if (customSelectors) {
             const selectors = customSelectors.split(";").map(selector => selector.trim());
             selectors.forEach(selector => {
-                $(selector).removeClass("theatre-invisible");
+                document.querySelectorAll(selector).forEach(ele => ele.classList.remove("theatre-invisible"));
             });
         }
     } else {
@@ -603,7 +603,7 @@ Hooks.on("theatreSuppression", (suppressed) => {
         if (customSelectors) {
             const selectors = customSelectors.split(";").map(selector => selector.trim());
             selectors.forEach(selector => {
-                $(selector).addClass("theatre-invisible");
+                document.querySelectorAll(selector).forEach(ele => ele.classList.add("theatre-invisible"));
             });
         }
     }
