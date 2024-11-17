@@ -2121,6 +2121,13 @@ export class Theatre {
             document.querySelectorAll("#pause").forEach((ele) => KHelpers.removeClass(ele, "theatre-centered"));
             $("#players").removeClass("theatre-invisible");
             $("#hotbar").removeClass("theatre-invisible");
+            const customSelectors = game.settings.get(CONSTANTS.MODULE_ID, "suppressCustomCss");
+            if (customSelectors) {
+                const selectors = customSelectors.split(";").map(selector => selector.trim());
+                selectors.forEach(selector => {
+                    $(selector).removeClass("theatre-invisible");
+                });
+            }
         }
         // force a render update
         //app.render();
