@@ -228,6 +228,13 @@
       "None": "None"
     },
     "Other": "Other",
-    "NotYet": "Not yet implemented"
+    "NotYet": "Not yet implemented",
+
+    "Omnisearch": {
+      "ShowOnStage": "Show on Stage",
+      "RemoveFromStage": "Remove from Stage",
+      "AddToBar": "Add to Bar",
+      "RemoveFromBar": "Remove from bar"
+    }
   }
 }
