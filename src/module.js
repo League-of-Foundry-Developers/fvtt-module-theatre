@@ -555,7 +555,7 @@ Hooks.once("ready", () => {
     }
     libWrapper.register(
         CONSTANTS.MODULE_ID,
-        "CombatHudCanvasElement.prototype.toggleMacroPlayers",
+        "ui.ARGON.toggle",
         (wrapped, togg) => {
             if (togg && theatre?.dockActive) {
                 return;
