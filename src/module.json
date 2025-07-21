@@ -1,172 +1,176 @@
 {
-  "id": "theatre",
-  "title": "Theatre Inserts",
-  "description": "Theater Inserts with a visual novel style made for heavy roleplay scenes",
-  "version": "2.9.1",
-  "authors": [
-    {
-      "name": "Ken L"
-    },
-    {
-      "name": "Noah Zorbaugh"
-    },
-    {
-      "name": "U~man"
-    },
-    {
-      "name": "KaKaRoTo"
-    },
-    {
-      "name": "elizeuangelo"
-    },
-    {
-      "name": "p4535992",
-      "url": "https://github.com/p4535992",
-      "discord": "",
-      "twitter": "",
-      "patreon": "",
-      "github": "p4535992",
-      "ko-fi": "",
-      "reddit": "",
-      "email": ""
-    }
-  ],
-  "type": "module",
-  "socket": true,
-  "includes": [
-    "./assets/**",
-    "./graphics/**",
-    "./lang/**",
-    "./languages/**",
-    "./scripts/**",
-    "./styles/**",
-    "./templates/**",
-    "./module.json",
-    "./README.md",
-    "./icons/**",
-    "./packs/**"
-  ],
-  "media": [
-    {
-      "type": "icon",
-      "location": ""
-    },
-    {
-      "type": "cover",
-      "location": ""
-    },
-    {
-      "type": "screenshot",
-      "location": ""
-    }
-  ],
-  "languages": [
-    {
-      "lang": "en",
-      "name": "English",
-      "path": "lang/en.json"
-    },
-    {
-      "lang": "ja",
-      "name": "日本語 (Japanese)",
-      "path": "lang/ja.json"
-    },
-    {
-      "lang": "ko",
-      "name": "한국어 (Korean)",
-      "path": "lang/ko.json"
-    },
-    {
-      "lang": "pt-BR",
-      "name": "Português (Portuguese [Brasil])",
-      "path": "lang/pt-BR.json"
-    },
-    {
-      "lang": "fr",
-      "name": "Français (French)",
-      "path": "lang/fr.json"
-    },
-    {
-      "lang": "th",
-      "name": "ภาษาไทย (Thai)",
-      "path": "lang/th.json"
-    },
-    {
-      "lang": "cn",
-      "name": "简体中文",
-      "path": "lang/cn.json"
-    },
-    {
-      "lang": "zh-tw",
-      "name": "正體中文",
-      "path": "lang/zh-tw.json"
-    },
-    {
-      "lang": "es",
-      "name": "Español",
-      "path": "lang/es.json"
-    },
-    {
-      "lang": "de",
-      "name": "Deutsch (German)",
-      "path": "lang/de.json"
-    }
-  ],
-  "packs": [
-    {
-      "name": "theatre-inserts-macros",
-      "label": "Theatre Inserts Macros",
-      "path": "packs/theatre-inserts-macros",
-      "type": "Macro",
-      "private": false,
-      "ownership": {
-        "PLAYER": "NONE",
-        "TRUSTED": "NONE",
-        "ASSISTANT": "OWNER"
-      },
-      "module": "theatre",
-      "flags": {}
-    }
-  ],
-  "scripts": [
-    "greensock/dist/gsap.min.js",
-    "greensock/dist/PixiPlugin.min.js",
-    "greensock/dist/ScrollToPlugin.min.js",
-    "greensock/dist/SplitText.min.js",
-    "scripts/libs/ffontsloader/fontsloader.min.js"
-  ],
-  "esmodules": ["module.js"],
-  "styles": ["styles/theatre.css"],
-  "compatibility": {
-    "minimum": 11,
-    "verified": 12,
-    "maximum": 13
-  },
-  "manifestPlusVersion": "1.2.1",
-  "url": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre",
-  "manifest": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/2.9.1/module.json",
-  "download": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/download/2.9.1/module.zip",
-  "readme": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/blob/master/README.md",
-  "changelog": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/blob/master/CHANGELOG.md",
-  "bugs": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/issues",
-  "allowBugReporter": true,
-  "relationships": {
-    "systems": [],
-    "requires": [
-      {
-        "id": "lib-wrapper",
-        "type": "module",
-        "manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/latest/download/module.json",
-        "compatibility": {}
-      },
-      {
-        "id": "socketlib",
-        "type": "module",
-        "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/master/module.json",
-        "compatibility": {}
-      }
+    "id": "theatre",
+    "title": "Theatre Inserts",
+    "description": "Theater Inserts with a visual novel style made for heavy roleplay scenes",
+    "version": "3.0.0",
+    "authors": [
+        {
+            "name": "Ken L"
+        },
+        {
+            "name": "Noah Zorbaugh"
+        },
+        {
+            "name": "U~man"
+        },
+        {
+            "name": "KaKaRoTo"
+        },
+        {
+            "name": "elizeuangelo"
+        },
+        {
+            "name": "p4535992",
+            "url": "https://github.com/p4535992",
+            "discord": "",
+            "twitter": "",
+            "patreon": "",
+            "github": "p4535992",
+            "ko-fi": "",
+            "reddit": "",
+            "email": ""
+        },
+        {
+            "name": "samulopez",
+            "url": "https://github.com/samulopez"
+        }
     ],
-    "recommends": [],
-    "conflicts": []
-  }
+    "type": "module",
+    "socket": true,
+    "includes": [
+        "./assets/**",
+        "./graphics/**",
+        "./lang/**",
+        "./languages/**",
+        "./scripts/**",
+        "./styles/**",
+        "./templates/**",
+        "./module.json",
+        "./README.md",
+        "./icons/**",
+        "./packs/**"
+    ],
+    "media": [
+        {
+            "type": "icon",
+            "location": ""
+        },
+        {
+            "type": "cover",
+            "location": ""
+        },
+        {
+            "type": "screenshot",
+            "location": ""
+        }
+    ],
+    "languages": [
+        {
+            "lang": "en",
+            "name": "English",
+            "path": "lang/en.json"
+        },
+        {
+            "lang": "ja",
+            "name": "日本語 (Japanese)",
+            "path": "lang/ja.json"
+        },
+        {
+            "lang": "ko",
+            "name": "한국어 (Korean)",
+            "path": "lang/ko.json"
+        },
+        {
+            "lang": "pt-BR",
+            "name": "Português (Portuguese [Brasil])",
+            "path": "lang/pt-BR.json"
+        },
+        {
+            "lang": "fr",
+            "name": "Français (French)",
+            "path": "lang/fr.json"
+        },
+        {
+            "lang": "th",
+            "name": "ภาษาไทย (Thai)",
+            "path": "lang/th.json"
+        },
+        {
+            "lang": "cn",
+            "name": "简体中文",
+            "path": "lang/cn.json"
+        },
+        {
+            "lang": "zh-tw",
+            "name": "正體中文",
+            "path": "lang/zh-tw.json"
+        },
+        {
+            "lang": "es",
+            "name": "Español",
+            "path": "lang/es.json"
+        },
+        {
+            "lang": "de",
+            "name": "Deutsch (German)",
+            "path": "lang/de.json"
+        }
+    ],
+    "packs": [
+        {
+            "name": "theatre-inserts-macros",
+            "label": "Theatre Inserts Macros",
+            "path": "packs/theatre-inserts-macros",
+            "type": "Macro",
+            "private": false,
+            "ownership": {
+                "PLAYER": "NONE",
+                "TRUSTED": "NONE",
+                "ASSISTANT": "OWNER"
+            },
+            "module": "theatre",
+            "flags": {}
+        }
+    ],
+    "scripts": [
+        "greensock/dist/gsap.min.js",
+        "greensock/dist/PixiPlugin.min.js",
+        "greensock/dist/ScrollToPlugin.min.js",
+        "greensock/dist/SplitText.min.js",
+        "scripts/libs/ffontsloader/fontsloader.min.js"
+    ],
+    "esmodules": ["module.js"],
+    "styles": ["styles/theatre.css"],
+    "compatibility": {
+        "minimum": 13,
+        "verified": 13,
+        "maximum": 13
+    },
+    "manifestPlusVersion": "1.2.1",
+    "url": "https://github.com/samulopez/fvtt-module-theatre",
+    "manifest": "https://github.com/samulopez/fvtt-module-theatre/releases/latest/download/module.json",
+    "download": "https://github.com/samulopez/fvtt-module-theatre/releases/download/3.0.0/module.zip",
+    "readme": "https://github.com/samulopez/fvtt-module-theatre/blob/master/README.md",
+    "changelog": "https://github.com/samulopez/fvtt-module-theatre/blob/master/CHANGELOG.md",
+    "bugs": "https://github.com/samulopez/fvtt-module-theatre/issues",
+    "allowBugReporter": true,
+    "relationships": {
+        "systems": [],
+        "requires": [
+            {
+                "id": "lib-wrapper",
+                "type": "module",
+                "manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/latest/download/module.json",
+                "compatibility": {}
+            },
+            {
+                "id": "socketlib",
+                "type": "module",
+                "manifest": "https://raw.githubusercontent.com/manuelVo/foundryvtt-socketlib/master/module.json",
+                "compatibility": {}
+            }
+        ],
+        "recommends": [],
+        "conflicts": []
+    }
 }

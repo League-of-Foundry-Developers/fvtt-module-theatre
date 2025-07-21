@@ -2,7 +2,7 @@
     "name": "theatre",
     "title": "Theatre Inserts",
     "description": "Theater Inserts with a visual novel style made for heavy roleplay scenes",
-    "version": "2.9.0",
+    "version": "3.0.0",
     "main": "module.js",
     "license": "SEE LICENSE IN LICENSE",
     "private": true,
