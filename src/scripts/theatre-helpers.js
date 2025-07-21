@@ -2915,8 +2915,8 @@ export class TheatreHelpers {
         if (!Theatre.instance) {
             return;
         }
-        let chatMessage = document.getElementById("chat-message");
-        const isShowingChat = chatMessage.parentElement.id === "chat-notifications";
+        const chatMessage = document.getElementById("chat-message");
+        const isChatOutsideChatLog = chatMessage.parentElement.id === "chat-notifications";
 
         // Give time to sidebar to finish collapsing
         window.setTimeout(() => {
@@ -2925,7 +2925,7 @@ export class TheatreHelpers {
             let primeBar = document.getElementById("theatre-prime-bar");
             let secondBar = document.getElementById("theatre-second-bar");
             let calculatedWidth = mainRightColumn.offsetWidth + 5;
-            if (!collapsed && !isShowingChat) {
+            if (!collapsed && !isChatOutsideChatLog) {
                 calculatedWidth = sideBar.offsetWidth + 2;
             }
             Theatre.instance.theatreBar.style.width = `calc(100% - ${calculatedWidth}px)`;

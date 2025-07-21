@@ -1207,6 +1207,10 @@
   display: flex;
 }
 
+.theatre-control-button-bar {
+  display: flex;
+}
+
 .theatre-control-nav-bar {
   flex: 1;
   display: flex;
@@ -1229,6 +1233,7 @@
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  pointer-events: all;
 }
 
 .theatre-control-nav-bar-item:hover {
@@ -1256,6 +1261,7 @@
   width: 36px;
   height: 36px;
   border-radius: 3px;
+  pointer-events: all;
 }
 
 .theatre-control-btn-down {
@@ -1323,9 +1329,13 @@
   background: radial-gradient(closest-side at 50%, red 1%, transparent 99%);
 }
 
+.theatre-control-chat-cover-wrapper {
+    position: relative;
+}
+
 .theatre-control-chat-cover {
   position: absolute;
-  bottom: 0px;
+  top: 0px;
   left: 0px;
   height: var(--chat-input-height);
   width: 100%;

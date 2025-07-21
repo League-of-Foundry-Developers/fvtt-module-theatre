@@ -241,6 +241,7 @@ export class Theatre {
         KHelpers.addClasses(btnDelayEmote, "button ui-control icon");
         KHelpers.addClass(iconDelayEmote, "fas");
         KHelpers.addClass(iconDelayEmote, "fa-comment-alt");
+        KHelpers.addClass(buttons, "theatre-control-button-bar");
 
         btnEmote.setAttribute("title", game.i18n.localize("Theatre.UI.Title.EmoteSelector"));
         btnSuppress.setAttribute("title", game.i18n.localize("Theatre.UI.Title.SuppressTheatre"));
@@ -282,16 +283,20 @@ export class Theatre {
         this.theatreControls.appendChild(btnEmote);
         this.theatreControls.appendChild(btnSuppress);
 
+        KHelpers.insertBefore(this.theatreControls, chatMessage);
+
+        const imgWrapper = document.createElement("div");
+        KHelpers.addClass(imgWrapper, "theatre-control-chat-cover-wrapper");
+        imgWrapper.appendChild(this.theatreChatCover);
+
         if (game.user.isGM || !game.settings.get(CONSTANTS.MODULE_ID, "gmOnly")) {
             buttons.appendChild(btnDelayEmote);
             buttons.appendChild(btnQuote);
             buttons.appendChild(btnResync);
-            KHelpers.insertAfter(buttons, chatControls);
-            buttons.style.display = "flex";
+            KHelpers.insertBefore(buttons, chatMessage);
         }
 
-        KHelpers.insertBefore(this.theatreControls, chatControls);
-        KHelpers.insertAfter(this.theatreChatCover, chatControls);
+        KHelpers.insertBefore(imgWrapper, chatMessage);
 
         // bind listener to chat message
         chatMessage.addEventListener("keydown", this.handleChatMessageKeyDown);

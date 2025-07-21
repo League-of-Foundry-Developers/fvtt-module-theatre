@@ -111,7 +111,22 @@ Hooks.on("collapseSidebar", function (a, collapsed) {
 /**
  * A hook event that fires when the chat input element is adopted by a different DOM element
  */
-Hooks.on("renderChatInput", (app, elements, context) => {
+Hooks.on("renderChatInput", () => {
+    const chatMessage = document.getElementById("chat-message");
+    const isChatOutsideChatLog = chatMessage.parentElement.id === "chat-notifications";
+    // The chat can change position depending on the sidebar state
+    if (!isChatOutsideChatLog) {
+        $(".theatre-control-group").insertBefore(".chat-controls");
+        $(".theatre-control-button-bar").insertAfter(".chat-controls");
+        $(".theatre-control-chat-cover").css("top", "8px");
+    } else {
+        $(".theatre-control-group").insertBefore("#chat-message");
+        $(".theatre-control-button-bar").insertBefore("#chat-message");
+        $(".theatre-control-chat-cover").css("top", "0px");
+    }
+    $(".theatre-control-chat-cover-wrapper").insertBefore("#chat-message");
+    $(".theatre-emote-menu").insertBefore(".theatre-control-group");
+
     Theatre.resizeBars(ui.sidebar._collapsed);
 });
 
@@ -205,7 +220,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage, data) {
                 chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
             }
             // If delay emote is active
-            if (Theatre.instance.isDelayEmote && Theatre.instance.delayedSentState == 1) {
+            if (Theatre.instance.isDelayEmote && Theatre.instance.delayedSentState === 1) {
                 Logger.debug("setting emote now! as %s", insert.emote);
                 Theatre.instance.delayedSentState = 2;
                 Theatre.instance.setUserEmote(game.user._id, theatreId, "emote", insert.emote, false);
@@ -223,13 +238,13 @@ Hooks.on("preCreateChatMessage", function (chatMessage, data) {
                 chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
             }
             // If delay emote is active
-            if (Theatre.instance.isDelayEmote && Theatre.instance.delayedSentState == 1) {
+            if (Theatre.instance.isDelayEmote && Theatre.instance.delayedSentState === 1) {
                 Logger.debug("setting emote now! as %s", insert.emote);
                 Theatre.instance.delayedSentState = 2;
                 Theatre.instance.setUserEmote(game.user._id, theatreId, "emote", insert.emote, false);
                 Theatre.instance.delayedSentState = 0;
             }
-        } else if (Theatre.instance.speakingAs == CONSTANTS.NARRATOR) {
+        } else if (Theatre.instance.speakingAs === CONSTANTS.NARRATOR) {
             chatData.speaker.alias = game.i18n.localize("Theatre.UI.Chat.Narrator");
             if (foundry.utils.isNewerVersion(game.version, 12)) {
                 chatData.style = CONST.CHAT_MESSAGE_STYLES.IC;
