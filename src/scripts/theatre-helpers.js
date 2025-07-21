@@ -2215,7 +2215,7 @@ export class TheatreHelpers {
      */
     static onAddToNavBar(ev, actorSheet, removeLabelSheetHeader) {
         Logger.debug("Click Event on Add to NavBar!!", actorSheet, actorSheet.actor, actorSheet.position);
-        const actor = actorSheet.object;
+        const actor = actorSheet.document;
         const addLabel = removeLabelSheetHeader ? "" : game.i18n.localize("Theatre.UI.Config.AddToStage");
         const removeLabel = removeLabelSheetHeader ? "" : game.i18n.localize("Theatre.UI.Config.RemoveFromStage");
         let newText;
@@ -2904,5 +2904,46 @@ export class TheatreHelpers {
         } else {
             return Theatre.FLYIN_ANIMS["typewriter"].func;
         }
+    }
+
+    /**
+     * Resize the UI Bars elements when the sidebar is collapsed or expanded
+     *
+     * @param collapsed (Boolean) : Whether the sidebar is collapsed or not
+     */
+    static resizeBars(collapsed) {
+        if (!Theatre.instance) {
+            return;
+        }
+        let chatMessage = document.getElementById("chat-message");
+        const isShowingChat = chatMessage.parentElement.id === "chat-notifications";
+
+        // Give time to sidebar to finish collapsing
+        window.setTimeout(() => {
+            let sideBar = document.getElementById("sidebar");
+            let mainRightColumn = document.getElementById("ui-right");
+            let primeBar = document.getElementById("theatre-prime-bar");
+            let secondBar = document.getElementById("theatre-second-bar");
+            let calculatedWidth = mainRightColumn.offsetWidth + 5;
+            if (!collapsed && !isShowingChat) {
+                calculatedWidth = sideBar.offsetWidth + 2;
+            }
+            Theatre.instance.theatreBar.style.width = `calc(100% - ${calculatedWidth}px)`;
+            Theatre.instance.theatreNarrator.style.width = `calc(100% - ${calculatedWidth}px)`;
+            if (!collapsed && Theatre.instance._getTextBoxes().length === 2) {
+                let dualWidth = Math.min(Math.floor(Theatre.instance.theatreBar.offsetWidth / 2), 650);
+                primeBar.style.width = `${dualWidth}px`;
+                secondBar.style.width = `${dualWidth}px`;
+                secondBar.style.left = `calc(100% - ${dualWidth}px)`;
+            }
+            Theatre.instance.theatreEmoteMenu.style.top = `${Theatre.instance.theatreControls.offsetTop - 410}px`;
+            if (Theatre.instance.reorderTOId) {
+                window.clearTimeout(Theatre.instance.reorderTOId);
+            }
+            Theatre.instance.reorderTOId = window.setTimeout(() => {
+                Theatre.reorderInserts();
+                Theatre.instance.reorderTOId = null;
+            }, 250);
+        }, 250);
     }
 }

@@ -189,12 +189,12 @@ export class Theatre {
         const middleAbove = uiAbove == "middle" || uiAbove == "both";
         if (middleAbove) document.getElementById("ui-middle").classList.add("z-higher");
 
-        // set dock canvas hard dimensions after CSS has caclulated it
+        // set dock canvas hard dimensions after CSS has calculated it
 
         /**
          * Theatre Chat Controls
          */
-        let chatControls = document.getElementById("chat-controls");
+        let chatControls = document.getElementsByClassName("chat-controls")[0];
         let controlButtons = chatControls.getElementsByClassName("control-buttons")[0];
         let chatForm = document.getElementById("chat-form");
         let chatMessage = document.getElementById("chat-message");
@@ -207,13 +207,12 @@ export class Theatre {
             this.theatreControls.style.display = "none";
         }
 
+        const buttons = document.createElement("div");
         let imgCover = document.createElement("img");
         let btnSuppress = document.createElement("div");
         let iconSuppress = document.createElement("div");
         let btnEmote = document.createElement("div");
         let iconEmote = document.createElement("div");
-        //let btnCinema = document.createElement("div");
-        //let iconCinema = document.createElement("div");
         let btnNarrator;
         let iconNarrator;
 
@@ -232,16 +231,14 @@ export class Theatre {
         KHelpers.addClass(iconSuppress, "theatre-icon-suppress");
         KHelpers.addClass(btnEmote, "theatre-control-btn");
         KHelpers.addClass(iconEmote, "theatre-icon-emote");
-        //KHelpers.addClass(btnCinema,"theatre-control-btn");
-        //KHelpers.addClass(iconCinema,"theatre-icon-cinema");
-        KHelpers.addClass(btnResync, "button");
+        KHelpers.addClasses(btnResync, "button ui-control icon");
         KHelpers.addClass(btnResync, "resync-theatre");
         KHelpers.addClass(iconResync, "fas");
         KHelpers.addClass(iconResync, "fa-sync");
-        KHelpers.addClass(btnQuote, "button");
+        KHelpers.addClasses(btnQuote, "button ui-control icon");
         KHelpers.addClass(iconQuote, "fas");
         KHelpers.addClass(iconQuote, "fa-quote-right");
-        KHelpers.addClass(btnDelayEmote, "button");
+        KHelpers.addClasses(btnDelayEmote, "button ui-control icon");
         KHelpers.addClass(iconDelayEmote, "fas");
         KHelpers.addClass(iconDelayEmote, "fa-comment-alt");
 
@@ -255,13 +252,11 @@ export class Theatre {
         );
         btnQuote.setAttribute("title", game.i18n.localize("Theatre.UI.Title.QuoteToggle"));
         btnDelayEmote.setAttribute("title", game.i18n.localize("Theatre.UI.Title.DelayEmoteToggle"));
-        //btnCinema.setAttribute("title",game.i18n.localize("Theatre.UI.Title.CinemaSelector"));
         btnEmote.addEventListener("click", this.handleBtnEmoteClick);
         btnSuppress.addEventListener("click", this.handleBtnSuppressClick);
         btnResync.addEventListener("click", this.handleBtnResyncClick);
         btnQuote.addEventListener("click", this.handleBtnQuoteClick);
         btnDelayEmote.addEventListener("click", this.handleBtnDelayEmoteClick);
-        //btnCinema.addEventListener("click", this.handleBtnCinemaClick);
         this.theatreNavBar.addEventListener("wheel", this.handleNavBarWheel);
 
         btnEmote.appendChild(iconEmote);
@@ -269,7 +264,6 @@ export class Theatre {
         btnResync.appendChild(iconResync);
         btnQuote.appendChild(iconQuote);
         btnDelayEmote.appendChild(iconDelayEmote);
-        //btnCinema.appendChild(iconCinema);
         this.theatreChatCover.appendChild(imgCover);
 
         this.theatreControls.appendChild(this.theatreNavBar);
@@ -286,32 +280,18 @@ export class Theatre {
         }
 
         this.theatreControls.appendChild(btnEmote);
-        //this.theatreControls.appendChild(btnCinema);
         this.theatreControls.appendChild(btnSuppress);
 
-        btnDelayEmote.style["margin"] = "0 4px";
-        btnQuote.style["margin"] = "0 4px";
-        btnResync.style["margin"] = "0 4px";
-
         if (game.user.isGM || !game.settings.get(CONSTANTS.MODULE_ID, "gmOnly")) {
-            if (controlButtons) {
-                controlButtons.style["flex-basis"] = "150px";
-                KHelpers.insertBefore(btnResync, controlButtons.children[0]);
-                KHelpers.insertBefore(btnQuote, btnResync);
-                KHelpers.insertBefore(btnDelayEmote, btnQuote);
-            } else {
-                controlButtons = document.createElement("div");
-                KHelpers.addClass(controlButtons, "control-buttons");
-                controlButtons.style["flex-basis"] = "66px";
-                controlButtons.appendChild(btnDelayEmote);
-                controlButtons.appendChild(btnQuote);
-                controlButtons.appendChild(btnResync);
-                chatControls.appendChild(controlButtons);
-            }
+            buttons.appendChild(btnDelayEmote);
+            buttons.appendChild(btnQuote);
+            buttons.appendChild(btnResync);
+            KHelpers.insertAfter(buttons, chatControls);
+            buttons.style.display = "flex";
         }
 
         KHelpers.insertBefore(this.theatreControls, chatControls);
-        KHelpers.insertAfter(this.theatreChatCover, chatMessage);
+        KHelpers.insertAfter(this.theatreChatCover, chatControls);
 
         // bind listener to chat message
         chatMessage.addEventListener("keydown", this.handleChatMessageKeyDown);
@@ -2123,8 +2103,8 @@ export class Theatre {
             $("#hotbar").removeClass("theatre-invisible");
             const customSelectors = game.settings.get(CONSTANTS.MODULE_ID, "suppressCustomCss");
             if (customSelectors) {
-                const selectors = customSelectors.split(";").map(selector => selector.trim());
-                selectors.forEach(selector => {
+                const selectors = customSelectors.split(";").map((selector) => selector.trim());
+                selectors.forEach((selector) => {
                     $(selector).removeClass("theatre-invisible");
                 });
             }
@@ -5003,9 +4983,9 @@ export class Theatre {
                 Theatre.instance.theatreNarrator.setAttribute(
                     "textsize",
                     textSize
-                        ? textSize
+                        ? Number(textSize)
                         : Theatre.instance.userEmotes[game.user.id]
-                          ? Theatre.instance.userEmotes[game.user.id].textSize
+                          ? Number(Theatre.instance.userEmotes[game.user.id].textSize)
                           : null,
                 );
                 Theatre.instance.theatreNarrator.setAttribute(
@@ -5157,7 +5137,7 @@ export class Theatre {
             let sizeValue = 2;
             if (insert) sizeValue = insert.textSize;
             else if (Theatre.instance.userEmotes[game.user.id])
-                sizeValue = Theatre.instance.userEmotes[game.user.id].textSize;
+                sizeValue = Number(Theatre.instance.userEmotes[game.user.id].textSize);
 
             switch (sizeValue) {
                 case 3:
@@ -5178,7 +5158,7 @@ export class Theatre {
                 let value = 2;
                 if (insert) value = insert.textSize;
                 else if (Theatre.instance.userEmotes[game.user.id])
-                    value = Theatre.instance.userEmotes[game.user.id].textSize;
+                    value = Number(Theatre.instance.userEmotes[game.user.id].textSize);
 
                 switch (value) {
                     case 3:
@@ -5494,22 +5474,8 @@ export class Theatre {
      * @param ev (Event) : Event that triggered this handler
      */
     handleWindowResize(ev) {
-        //Theatre.instance.theatreDock.style.width = `calc(100% - ${document.getElementById("sidebar").offsetWidth+2}px)`;
-        let sideBar = document.getElementById("sidebar");
-        Theatre.instance.theatreBar.style.width = ui.sidebar._collapsed
-            ? "100%"
-            : `calc(100% - ${sideBar.offsetWidth + 2}px)`;
-        Theatre.instance.theatreNarrator.style.width = ui.sidebar._collapsed
-            ? "100%"
-            : `calc(100% - ${sideBar.offsetWidth + 2}px)`;
-        let primeBar = document.getElementById("theatre-prime-bar");
-        let secondBar = document.getElementById("theatre-second-bar");
-        if (Theatre.instance._getTextBoxes().length == 2) {
-            let dualWidth = Math.min(Math.floor(Theatre.instance.theatreBar.offsetWidth / 2), 650);
-            primeBar.style.width = dualWidth + "px";
-            secondBar.style.width = dualWidth + "px";
-            secondBar.style.left = `calc(100% - ${dualWidth}px)`;
-        }
+        TheatreHelpers.resizeBars(ui.sidebar._collapsed);
+
         // emote menu
         if (Theatre.instance.theatreEmoteMenu)
             Theatre.instance.theatreEmoteMenu.style.top = `${Theatre.instance.theatreControls.offsetTop - 410}px`;
@@ -5530,13 +5496,6 @@ export class Theatre {
         app.renderer.resize(dockWidth, dockHeight);
         //app.render();
         if (!Theatre.instance.rendering) Theatre.instance._renderTheatre(performance.now());
-
-        if (Theatre.instance.reorderTOId) window.clearTimeout(Theatre.instance.reorderTOId);
-
-        Theatre.instance.reorderTOId = window.setTimeout(() => {
-            Theatre.reorderInserts();
-            Theatre.instance.reorderTOId = null;
-        }, 250);
     }
 
     /**
@@ -6317,5 +6276,14 @@ export class Theatre {
      */
     static textFlyinAnimation(name) {
         return TheatreHelpers.textFlyinAnimation(name);
+    }
+
+    /**
+     * Resize the UI Bars elements when the sidebar is collapsed or expanded
+     *
+     * @param collapsed (Boolean) : Whether the sidebar is collapsed or not
+     */
+    static resizeBars(collapsed) {
+        TheatreHelpers.resizeBars(collapsed);
     }
 }

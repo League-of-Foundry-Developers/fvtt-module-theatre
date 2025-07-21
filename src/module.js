@@ -33,26 +33,68 @@ Hooks.on("getActorSheetHeaderButtons", (app, buttons) => {
     const removeLabelSheetHeader = game.settings.get(CONSTANTS.MODULE_ID, "removeLabelSheetHeader");
 
     let theatreButtons = [];
-    if (app.object.isOwner) {
-        // only prototype actors
-        if (!app.object.token) {
+    if (app.document.isOwner) {
+        // Only prototype actors
+        if (!app.document.token) {
             theatreButtons.push({
                 label: removeLabelSheetHeader ? "" : "Theatre.UI.Config.Theatre",
                 class: "configure-theatre",
                 icon: "fas fa-user-edit",
-                onclick: (ev) => Theatre.onConfigureInsert(ev, app.object.sheet),
+                onclick: (ev) => Theatre.onConfigureInsert(ev, app.document.sheet),
             });
         }
         theatreButtons.push({
             label: removeLabelSheetHeader
                 ? ""
-                : Theatre.isActorStaged(app.object)
+                : Theatre.isActorStaged(app.document)
                   ? "Theatre.UI.Config.RemoveFromStage"
                   : "Theatre.UI.Config.AddToStage",
             class: "add-to-theatre-navbar",
-            icon: Theatre.isActorStaged(app.object) ? "fas fa-mask" : "fas fa-theater-masks",
-            onclick: (ev) => {
-                Theatre.onAddToNavBar(ev, app.object.sheet, removeLabelSheetHeader);
+            icon: Theatre.isActorStaged(app.document) ? "fas fa-mask" : "fas fa-theater-masks",
+            onclick: async (ev) => {
+                Theatre.onAddToNavBar(ev, app.document.sheet, removeLabelSheetHeader);
+                await app.close();
+                app.render(true);
+            },
+        });
+    }
+    buttons.unshift(...theatreButtons);
+});
+
+/**
+ * Hook in on ActorsheetV2's Header buttons + context menus
+ */
+Hooks.on("getHeaderControlsActorSheetV2", (app, buttons) => {
+    if (!game.user.isGM && game.settings.get(CONSTANTS.MODULE_ID, "gmOnly")) {
+        return;
+    }
+    const removeLabelSheetHeader = game.settings.get(CONSTANTS.MODULE_ID, "removeLabelSheetHeader");
+
+    let theatreButtons = [];
+    if (app.document.isOwner) {
+        // Only prototype actors
+        if (!app.document.token) {
+            theatreButtons.push({
+                action: "configure-theatre",
+                label: removeLabelSheetHeader ? "" : "Theatre.UI.Config.Theatre",
+                class: "configure-theatre",
+                icon: "fas fa-user-edit",
+                onClick: (ev) => Theatre.onConfigureInsert(ev, app.document.sheet),
+            });
+        }
+        theatreButtons.push({
+            action: "add-to-theatre-navbar",
+            label: removeLabelSheetHeader
+                ? ""
+                : Theatre.isActorStaged(app.document)
+                  ? "Theatre.UI.Config.RemoveFromStage"
+                  : "Theatre.UI.Config.AddToStage",
+            class: "add-to-theatre-navbar",
+            icon: Theatre.isActorStaged(app.document) ? "fas fa-mask" : "fas fa-theater-masks",
+            onClick: async (ev) => {
+                Theatre.onAddToNavBar(ev, app.document.sheet, removeLabelSheetHeader);
+                await app.close();
+                app.render(true);
             },
         });
     }
@@ -62,40 +104,15 @@ Hooks.on("getActorSheetHeaderButtons", (app, buttons) => {
 /**
  * Sidebar collapse hook
  */
-Hooks.on("sidebarCollapse", function (a, collapsed) {
-    // If theatre isn't even ready, then just no
-    if (!Theatre.instance) {
-        return;
-    }
-    Logger.debug("collapse? : ", a, collapsed);
-    let sideBar = document.getElementById("sidebar");
-    let primeBar = document.getElementById("theatre-prime-bar");
-    let secondBar = document.getElementById("theatre-second-bar");
+Hooks.on("collapseSidebar", function (a, collapsed) {
+    Theatre.resizeBars(collapsed);
+});
 
-    if (collapsed) {
-        // set width to 100%
-        Theatre.instance.theatreBar.style.width = "100%";
-        Theatre.instance.theatreNarrator.style.width = "100%";
-    } else {
-        // set width to sidebar offset size
-        Theatre.instance.theatreBar.style.width = `calc(100% - ${sideBar.offsetWidth + 2}px)`;
-        Theatre.instance.theatreNarrator.style.width = `calc(100% - ${sideBar.offsetWidth + 2}px)`;
-        if (Theatre.instance._getTextBoxes().length == 2) {
-            let dualWidth = Math.min(Math.floor(Theatre.instance.theatreBar.offsetWidth / 2), 650);
-            primeBar.style.width = dualWidth + "px";
-            secondBar.style.width = dualWidth + "px";
-            secondBar.style.left = `calc(100% - ${dualWidth}px)`;
-        }
-    }
-    Theatre.instance.theatreEmoteMenu.style.top = `${Theatre.instance.theatreControls.offsetTop - 410}px`;
-
-    if (Theatre.instance.reorderTOId) {
-        window.clearTimeout(Theatre.instance.reorderTOId);
-    }
-    Theatre.instance.reorderTOId = window.setTimeout(() => {
-        Theatre.reorderInserts();
-        Theatre.instance.reorderTOId = null;
-    }, 250);
+/**
+ * A hook event that fires when the chat input element is adopted by a different DOM element
+ */
+Hooks.on("renderChatInput", (app, elements, context) => {
+    Theatre.resizeBars(ui.sidebar._collapsed);
 });
 
 /**
@@ -106,13 +123,12 @@ Hooks.on("createCombat", function () {
     if (!Theatre.instance) {
         return;
     }
-    if (!!game.combats.active && game.combats.active.round == 0 && Theatre.instance.isSuppressed) {
+    if (Theatre.instance.isSuppressed) {
         Logger.debug("COMBAT CREATED");
-        // if suppressed, change opacity to 0.05
-        //Theatre.instance.theatreGroup.style.opacity = "0.05";
-        Theatre.instance.theatreDock.style.opacity = "1";
-        Theatre.instance.theatreBar.style.opacity = "1";
-        Theatre.instance.theatreNarrator.style.opacity = "1";
+        // If suppressed, change opacity to 0.05
+        Theatre.instance.theatreDock.style.opacity = "0.05";
+        Theatre.instance.theatreBar.style.opacity = "0.05";
+        Theatre.instance.theatreNarrator.style.opacity = "0.05";
     }
 });
 
@@ -124,10 +140,9 @@ Hooks.on("deleteCombat", function () {
     if (!Theatre.instance) {
         return;
     }
-    if (!game.combats.active && Theatre.instance.isSuppressed) {
+    if (!game.combats.size && Theatre.instance.isSuppressed) {
         Logger.debug("COMBAT DELETED");
-        // if suppressed, change opacity to 0.25
-        //Theatre.instance.theatreGroup.style.opacity = "0.25";
+        // If suppressed, change opacity to 0.20
         Theatre.instance.theatreDock.style.opacity = "0.20";
         Theatre.instance.theatreBar.style.opacity = "0.20";
         Theatre.instance.theatreNarrator.style.opacity = "0.20";
@@ -141,8 +156,8 @@ Hooks.on("deleteCombat", function () {
 Hooks.on("preCreateChatMessage", function (chatMessage, data) {
     let chatData = {
         speaker: {
-            //actor: null,
-            //The above line is causing issues with chat buttons in v11 in certain systems. Will revert if it causes unforseen issues in other systems.
+            // Actor: null,
+            // The above line is causing issues with chat buttons in v11 in certain systems. Will revert if it causes unforseen issues in other systems.
             scene: data.speaker?.scene,
             flags: {},
         },
@@ -156,7 +171,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage, data) {
         return;
     }
 
-    // make the message OOC if needed
+    // Make the message OOC if needed
     if ($(theatre.theatreChatCover).hasClass("theatre-control-chat-cover-ooc")) {
         const user = game.users.get(chatMessage.user.id);
         chatData.speaker.alias = user.name;
@@ -183,13 +198,13 @@ Hooks.on("preCreateChatMessage", function (chatMessage, data) {
             let theatreColor = Theatre.instance.getPlayerFlashColor(chatMessage.user.id, insert.textColor);
             Logger.debug("name is %s", name);
             chatData.speaker.alias = name;
-            //chatData.flags.theatreColor = theatreColor;
+            // ChatData.flags.theatreColor = theatreColor;
             if (foundry.utils.isNewerVersion(game.version, 12)) {
                 chatData.style = CONST.CHAT_MESSAGE_STYLES.IC;
             } else {
                 chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
             }
-            // if delay emote is active
+            // If delay emote is active
             if (Theatre.instance.isDelayEmote && Theatre.instance.delayedSentState == 1) {
                 Logger.debug("setting emote now! as %s", insert.emote);
                 Theatre.instance.delayedSentState = 2;
@@ -201,13 +216,13 @@ Hooks.on("preCreateChatMessage", function (chatMessage, data) {
             let name = label.text;
             let theatreColor = Theatre.instance.getPlayerFlashColor(chatData.user, insert.textColor);
             chatData.speaker.alias = name;
-            //chatData.flags.theatreColor = theatreColor;
+            // ChatData.flags.theatreColor = theatreColor;
             if (foundry.utils.isNewerVersion(game.version, 12)) {
                 chatData.style = CONST.CHAT_MESSAGE_STYLES.IC;
             } else {
                 chatData.type = CONST.CHAT_MESSAGE_TYPES.IC;
             }
-            // if delay emote is active
+            // If delay emote is active
             if (Theatre.instance.isDelayEmote && Theatre.instance.delayedSentState == 1) {
                 Logger.debug("setting emote now! as %s", insert.emote);
                 Theatre.instance.delayedSentState = 2;
@@ -228,7 +243,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage, data) {
         }
         chatData.flags[CONSTANTS.MODULE_ID] = { theatreMessage: true };
     }
-    // alter message data
+    // Alter message data
     // append chat emote braces
     Logger.debug("speaker? ", chatMessage.speaker);
     if (
@@ -262,18 +277,18 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
         Theatre.instance.removeUserTyping(userId);
     }
 
-    // slash commands are pass through
+    // Slash commands are pass through
     let chatData = chatEntity;
     const isOCC = foundry.utils.isNewerVersion(game.version, 12)
         ? chatData.style === CONST.CHAT_MESSAGE_STYLES.OOC
         : chatData.type === CONST.CHAT_MESSAGE_TYPES.OOC;
     if (
-        chatData.content.startsWith("<") || //Bandaid fix so that texts that start with html formatting don't utterly break it
+        chatData.content.startsWith("<") || // Bandaid fix so that texts that start with html formatting don't utterly break it
         chatData.content.startsWith("/") ||
         chatData.rolls.length ||
         chatData.emote ||
         isOCC ||
-        //|| Object.keys(chatData.speaker).length == 0
+        // || Object.keys(chatData.speaker).length == 0
         chatData.content.match(/@[a-zA-Z0-9]+\[[a-zA-Z0-9]+\]/) ||
         chatData.content.match(/\<div.*\>[\s\S]*\<\/div\>/)
     ) {
@@ -284,14 +299,14 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
     let charSpans = [];
     let textContent = chatData.content;
 
-    // replace newlines
+    // Replace newlines
     textContent = textContent.replace(/<br(| \/)>/g, "\n");
-    // convert all html specials to plaintext
+    // Convert all html specials to plaintext
     let txtTemp = document.createElement("hiddentext");
     txtTemp.innerHTML = textContent;
     textContent = txtTemp.textContent;
     if (textBox) {
-        // kill all tweens
+        // Kill all tweens
         for (let c of textBox.children) {
             for (let sc of c.children) TweenMax.killTweensOf(sc);
             TweenMax.killTweensOf(c);
@@ -328,14 +343,14 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
                 repeat: 1,
                 yoyo: true,
                 onComplete: function (ctx, imgId, tweenId) {
-                    // decrement the rendering accumulator
+                    // Decrement the rendering accumulator
                     let insert = Theatre.instance.getInsertById(imgId);
                     if (insert) {
                         this.targets()[0].scale.x = insert.mirrored ? -1 : 1;
                         this.targets()[0].scale.y = 1;
                     }
                     ctx._removeDockTween(imgId, this, tweenId);
-                    // remove our own reference from the dockContainer tweens
+                    // Remove our own reference from the dockContainer tweens
                 },
                 onCompleteParams: [Theatre.instance, insert.imgId, tweenId],
             });
@@ -343,7 +358,7 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
             // Color flash
             tweenId = "portraitFlash";
             tween = TweenMax.to(insert.portrait, 0.25, {
-                //pixi:{tint: 0xAAEDFF},
+                // Pixi:{tint: 0xAAEDFF},
                 pixi: {
                     tint: Theatre.instance.getPlayerFlashColor(userId, insert.textColor),
                 },
@@ -351,10 +366,10 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
                 repeat: 1,
                 yoyo: true,
                 onComplete: function (ctx, imgId, tweenId) {
-                    // decrement the rendering accumulator
+                    // Decrement the rendering accumulator
                     this.targets()[0].tint = 0xffffff;
                     ctx._removeDockTween(imgId, this, tweenId);
-                    // remove our own reference from the dockContainer tweens
+                    // Remove our own reference from the dockContainer tweens
                 },
                 onCompleteParams: [Theatre.instance, insert.imgId, tweenId],
             });
@@ -372,7 +387,7 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
             insertFontType = insert.textFont;
             insertFontSize = Number(insert.textSize);
             insertFontColor = insert.textColor;
-        } else if (theatreId == CONSTANTS.NARRATOR) {
+        } else if (theatreId === CONSTANTS.NARRATOR) {
             insertFlyinMode = Theatre.instance.theatreNarrator.getAttribute("textflyin");
             insertStandingMode = Theatre.instance.theatreNarrator.getAttribute("textstanding");
             insertFontType = Theatre.instance.theatreNarrator.getAttribute("textfont");
@@ -408,14 +423,14 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
             }
         }
         Theatre.instance._applyFontFamily(textBox, insertFontType || Theatre.instance.textFont);
-        //textBox.style["font-family"] = insertFontType || Theatre.instance.textFont;
+        // TextBox.style["font-family"] = insertFontType || Theatre.instance.textFont;
         textBox.style.color = insertFontColor || "white";
         textBox.style["font-size"] = `${fontSize}px`;
         textBox.scrollTop = 0;
 
         charSpans = Theatre.splitTextBoxToChars(textContent, textBox);
 
-        Logger.debug("animating text: " + textContent);
+        Logger.debug(`animating text: ${textContent}`);
 
         Theatre.textFlyinAnimation(insertFlyinMode || "typewriter").call(
             this,
@@ -425,7 +440,7 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
             Theatre.textStandingAnimation(insertStandingMode),
         );
 
-        // auto decay?
+        // Auto decay?
         if (insert && insert.decayTOId) {
             window.clearTimeout(insert.decayTOId);
         }
@@ -443,7 +458,10 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
 });
 
 Hooks.on("renderChatMessage", function (ChatMessage, html, data) {
-    if (Theatre.instance.settings.ignoreMessagesToChat && ChatMessage.flags?.[CONSTANTS.MODULE_ID]?.theatreMessage) {
+    if (
+        game.settings.get(CONSTANTS.MODULE_ID, "ignoreMessagesToChat") &&
+        ChatMessage.flags?.[CONSTANTS.MODULE_ID]?.theatreMessage
+    ) {
         html[0].style.display = "none";
     }
     return true;
@@ -459,7 +477,7 @@ Hooks.on("renderChatLog", function (app, html, data) {
         window.theatre = theatre;
     }
 
-    // window may not be ready?
+    // Window may not be ready?
     // Logger.log("%cTheatre Inserts", "font-weight: bold; font-size: 30px; font-style: italic; color: black;");
     // NOTE: Closed alpha/beta is currently all rights reserved!
     // Logger.log("%c-- Theatre is Powered by Free Open Source GPLv3 Software --", "font-weight: bold; font-size: 12");
@@ -468,25 +486,25 @@ Hooks.on("renderChatLog", function (app, html, data) {
 /**
  * Add to stage button on ActorDirectory Sidebar
  */
-Hooks.on("getActorDirectoryEntryContext", async (html, options) => {
+Hooks.on("getActorContextOptions", async (app, menuItems) => {
     if (!game.user.isGM && game.settings.get(CONSTANTS.MODULE_ID, "gmOnly")) {
         return;
     }
     const getActorData = (target) => {
-        return game.actors.get(target.data("documentId"));
+        return game.actors.get($(target).data("entry-id"));
     };
 
-    options.splice(
+    menuItems.splice(
         3,
         0,
         {
-            name: "Add to Stage",
+            name: "Theatre.UI.Config.AddToStage",
             condition: (target) => !Theatre.isActorStaged(getActorData(target)),
             icon: '<i class="fas fa-theater-masks"></i>',
             callback: (target) => Theatre.addToNavBar(getActorData(target)),
         },
         {
-            name: "Remove from Stage",
+            name: "Theatre.UI.Config.RemoveFromStage",
             condition: (target) => Theatre.isActorStaged(getActorData(target)),
             icon: '<i class="fas fa-theater-masks"></i>',
             callback: (target) => Theatre.removeFromNavBar(getActorData(target)),
@@ -501,7 +519,7 @@ Hooks.once("setup", () => {
 
     game.modules.get(CONSTANTS.MODULE_ID).api = API;
 
-    // module keybinds
+    // Module keybinds
     registerKeybindings();
 });
 
@@ -512,8 +530,6 @@ Hooks.on("theatreDockActive", (insertCount) => {
     if (!insertCount) {
         return;
     }
-    // The "MyTab" module inserts another element with id "pause". Use querySelectorAll to make sure we catch both
-    document.querySelectorAll("#pause").forEach((ele) => KHelpers.addClass(ele, "theatre-centered"));
 
     if (!game.settings.get(CONSTANTS.MODULE_ID, "autoHideBottom")) {
         return;
@@ -606,14 +622,6 @@ Hooks.on("theatreSuppression", (suppressed) => {
             });
         }
     }
-});
-
-Hooks.on("renderPause", () => {
-    if (!theatre?.dockActive) {
-        return;
-    }
-    // The "MyTab" module inserts another element with id "pause". Use querySelectorAll to make sure we catch both
-    document.querySelectorAll("#pause").forEach((ele) => KHelpers.addClass(ele, "theatre-centered"));
 });
 
 /**

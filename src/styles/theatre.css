@@ -1205,7 +1205,6 @@
   flex: 0 0 40px;
   height: 40px;
   display: flex;
-  margin: 2px 8px;
 }
 
 .theatre-control-nav-bar {
@@ -1326,9 +1325,9 @@
 
 .theatre-control-chat-cover {
   position: absolute;
-  top: 0px;
+  bottom: 0px;
   left: 0px;
-  height: 100%;
+  height: var(--chat-input-height);
   width: 100%;
   pointer-events: none;
 }
@@ -1357,6 +1356,7 @@
   top: 0px;
   width: 300px;
   height: 400px;
+  max-height: unset;
 }
 
 .theatre-emote-menu .emote-box {
