@@ -116,8 +116,8 @@ Hooks.on("renderChatInput", () => {
     const isChatOutsideChatLog = chatMessage.parentElement.id === "chat-notifications";
     // The chat can change position depending on the sidebar state
     if (!isChatOutsideChatLog) {
-        $(".theatre-control-group").insertBefore(".chat-controls");
-        $(".theatre-control-button-bar").insertAfter(".chat-controls");
+        $(".theatre-control-group").insertBefore($(".chat-controls").last());
+        $(".theatre-control-button-bar").insertBefore("#chat-message");
         $(".theatre-control-chat-cover").css("top", "8px");
     } else {
         $(".theatre-control-group").insertBefore("#chat-message");
@@ -483,7 +483,8 @@ Hooks.on("renderChatMessage", function (ChatMessage, html, data) {
 });
 
 Hooks.on("renderChatLog", function (app, html, data) {
-    if (data.cssId === "chat-popout") {
+    // If the user pops out the chat input, we don't want to reinitialize the theatre
+    if (app.id === "chat-popout") {
         return;
     }
     theatre.initialize();
@@ -491,11 +492,6 @@ Hooks.on("renderChatLog", function (app, html, data) {
         window.Theatre = Theatre;
         window.theatre = theatre;
     }
-
-    // Window may not be ready?
-    // Logger.log("%cTheatre Inserts", "font-weight: bold; font-size: 30px; font-style: italic; color: black;");
-    // NOTE: Closed alpha/beta is currently all rights reserved!
-    // Logger.log("%c-- Theatre is Powered by Free Open Source GPLv3 Software --", "font-weight: bold; font-size: 12");
 });
 
 /**
