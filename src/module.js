@@ -116,13 +116,15 @@ Hooks.on("renderChatInput", () => {
     const isChatOutsideChatLog = chatMessage.parentElement.id === "chat-notifications";
     // The chat can change position depending on the sidebar state
     if (!isChatOutsideChatLog) {
-        $(".theatre-control-group").insertBefore($(".chat-controls").last());
+        $(".theatre-control-group").insertBefore($("#chat-message").parent().children(".chat-controls"));
         $(".theatre-control-button-bar").insertBefore("#chat-message");
-        $(".theatre-control-chat-cover").css("top", "8px");
+        $(".theatre-control-chat-cover").addClass("theatre-control-chat-cover-inside");
+        $(".theatre-control-chat-cover").addClass("theatre-control-chat-cover-focus");
     } else {
         $(".theatre-control-group").insertBefore("#chat-message");
         $(".theatre-control-button-bar").insertBefore("#chat-message");
-        $(".theatre-control-chat-cover").css("top", "0px");
+        $(".theatre-control-chat-cover").removeClass("theatre-control-chat-cover-inside");
+        $(".theatre-control-chat-cover").removeClass("theatre-control-chat-cover-focus");
     }
     $(".theatre-control-chat-cover-wrapper").insertBefore("#chat-message");
     $(".theatre-emote-menu").insertBefore(".theatre-control-group");

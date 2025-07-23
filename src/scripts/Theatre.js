@@ -302,6 +302,7 @@ export class Theatre {
         chatMessage.addEventListener("keydown", this.handleChatMessageKeyDown);
         chatMessage.addEventListener("keyup", this.handleChatMessageKeyUp);
         chatMessage.addEventListener("focusout", this.handleChatMessageFocusOut);
+        chatMessage.addEventListener("focusin", this.handleChatMessageFocusIn);
 
         /*
          * Emote Menu
@@ -4689,8 +4690,6 @@ export class Theatre {
 
                 // change cover
                 cimg.setAttribute("src", params.src);
-                //cimg.style.left = `calc(100% - ${this.theatreChatCover.offsetHeight}px)`
-                cimg.style.width = `${this.theatreChatCover.offsetHeight}px`;
                 cimg.style.opacity = "0.3";
                 // push focus to chat-message
                 let chatMessage = document.getElementById("chat-message");
@@ -4763,8 +4762,6 @@ export class Theatre {
 
             // change cover
             cimg.setAttribute("src", src);
-            //cimg.style.left = `calc(100% - ${this.theatreChatCover.offsetHeight}px)`
-            cimg.style.width = `${this.theatreChatCover.offsetHeight}px`;
             cimg.style.opacity = "0.3";
             // push focus to chat-message
             let chatMessage = document.getElementById("chat-message");
@@ -5542,7 +5539,23 @@ export class Theatre {
      * @param ev (Event) : The Event that triggered this handler
      */
     handleChatMessageFocusOut(ev) {
+        if (!$(".theatre-control-chat-cover").hasClass("theatre-control-chat-cover-inside")) {
+            // if the chat is not inside the chat-form, remove focus class to decrease the avatar size
+            $(".theatre-control-chat-cover").removeClass("theatre-control-chat-cover-focus");
+        }
         KHelpers.removeClass(Theatre.instance.theatreChatCover, "theatre-control-chat-cover-ooc");
+    }
+
+    /**
+     * Handle chat-message focusIn
+     *
+     * @param ev (Event) : The Event that triggered this handler
+     */
+    handleChatMessageFocusIn(ev) {
+        if (!$(".theatre-control-chat-cover").hasClass("theatre-control-chat-cover-inside")) {
+            // if the chat is not inside the chat-form, add focus class to increase the avatar size
+            $(".theatre-control-chat-cover").addClass("theatre-control-chat-cover-focus");
+        }
     }
 
     /**

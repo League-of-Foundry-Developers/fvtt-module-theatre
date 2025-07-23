@@ -1337,9 +1337,18 @@
   position: absolute;
   top: 0px;
   left: 0px;
-  height: var(--chat-input-height);
+  height: 60px;
   width: 100%;
   pointer-events: none;
+  transition: all var(--ui-fade-duration) ease, opacity var(--ui-fade-delay) var(--ui-fade-duration);
+}
+
+.theatre-control-chat-cover-inside {
+  top: 8px;
+}
+
+.theatre-control-chat-cover-focus {
+  height: var(--chat-input-height);
 }
 
 .theatre-control-chat-cover img {
