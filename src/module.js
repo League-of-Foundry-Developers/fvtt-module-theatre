@@ -658,13 +658,13 @@ Hooks.on("getSceneControlButtons", (controls) => {
             icon: "fas fa-theater-masks",
             toggle: true,
             active: false,
-            onClick: (toggle) => {
-                Theatre.instance.updateSuppression(toggle); // TODO Suppress theatre
+            onChange: (event, toggle) => {
+                Theatre.instance.updateSuppression(toggle);
             },
             visible: true,
         };
-        const tokenControls = controls.find((group) => group.name === "token").tools;
-        tokenControls.push(suppressTheatreTool);
+        const tokenControls = controls.tokens.tools;
+        tokenControls.suppressTheatre = suppressTheatreTool;
     }
 });
 
