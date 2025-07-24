@@ -116,15 +116,24 @@ Hooks.on("renderChatInput", () => {
     const isChatOutsideChatLog = chatMessage.parentElement.id === "chat-notifications";
     // The chat can change position depending on the sidebar state
     if (!isChatOutsideChatLog) {
-        $(".theatre-control-group").insertBefore($("#chat-message").parent().children(".chat-controls"));
+        const parentChatMessage = $("#chat-message").parent();
+        $(".theatre-control-group").insertBefore(parentChatMessage.children(".chat-controls"));
         $(".theatre-control-button-bar").insertBefore("#chat-message");
         $(".theatre-control-chat-cover").addClass("theatre-control-chat-cover-inside");
         $(".theatre-control-chat-cover").addClass("theatre-control-chat-cover-focus");
+        if (parentChatMessage.parent().attr("id") === "chat") {
+            $(".theatre-emote-menu").css("position", "absolute");
+        } else {
+            // Needed to show the emote menu in the chat popout when there are no messages
+            $(".theatre-emote-menu").css("position", "initial");
+        }
     } else {
         $(".theatre-control-group").insertBefore("#chat-message");
         $(".theatre-control-button-bar").insertBefore("#chat-message");
         $(".theatre-control-chat-cover").removeClass("theatre-control-chat-cover-inside");
         $(".theatre-control-chat-cover").removeClass("theatre-control-chat-cover-focus");
+        // Needed to move the emote menu when the textarea expands
+        $(".theatre-emote-menu").css("position", "initial");
     }
     $(".theatre-control-chat-cover-wrapper").insertBefore("#chat-message");
     $(".theatre-emote-menu").insertBefore(".theatre-control-group");

@@ -1069,6 +1069,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  pointer-events: all;
 }
 
 .theatre-command-group {
@@ -1371,11 +1372,11 @@
 
 .theatre-emote-menu {
   display: none;
-  position: absolute;
   top: 0px;
   width: 300px;
   height: 400px;
   max-height: unset;
+  margin-bottom: 5px;
 }
 
 .theatre-emote-menu .emote-box {
