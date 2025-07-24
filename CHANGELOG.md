@@ -1,3 +1,8 @@
+### 3.0.0
+- Migrate to Foundry VTT 13.X
+- Fix issue with Narrator Mode not changing font size
+
+
 ### 2.9.0
 
 - Add integration with socketlib (as optional)

@@ -1,20 +1,19 @@
 # Theatre
 
-![Latest Release Download Count](https://img.shields.io/github/downloads/League-of-Foundry-Developers/fvtt-module-theatre/latest/module.zip?color=2b82fc&label=DOWNLOADS&style=for-the-badge) [![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Ftheatre&colorB=006400&style=for-the-badge)](https://forge-vtt.com/bazaar#package=theatre) ![Foundry Core Compatible Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2FLeague-of-Foundry-Developers%2Ffvtt-module-theatre%2Fmaster%2Fmodule.json&label=Foundry%20Version&query=$.compatibility.verified&colorB=orange&style=for-the-badge) ![Latest Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2FLeague-of-Foundry-Developers%2Ffvtt-module-theatre%2Fmaster%2Fmodule.json&label=Latest%20Release&prefix=v&query=$.version&colorB=red&style=for-the-badge) [![Foundry Hub Endorsements](https://img.shields.io/endpoint?logoColor=white&url=https%3A%2F%2Fwww.foundryvtt-hub.com%2Fwp-json%2Fhubapi%2Fv1%2Fpackage%2Ftheatre%2Fshield%2Fendorsements&style=for-the-badge)](https://www.foundryvtt-hub.com/package/theatre/) ![GitHub all releases](https://img.shields.io/github/downloads/League-of-Foundry-Developers/fvtt-module-theatre/total?style=for-the-badge)
+![Latest Release Download Count](https://img.shields.io/github/downloads/League-of-Foundry-Developers/fvtt-module-theatre/latest/module.zip?color=2b82fc&label=DOWNLOADS&style=for-the-badge) [![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Ftheatre&colorB=006400&style=for-the-badge)](https://forge-vtt.com/bazaar#package=theatre) ![Foundry Core Compatible Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2FLeague-of-Foundry-Developers%2Ffvtt-module-theatre%2Fmaster%2Fsrc%2Fmodule.json&label=Foundry%20Version&query=$.compatibility.verified&colorB=orange&style=for-the-badge) ![Latest Version](https://img.shields.io/badge/dynamic/json.svg?url=https%3A%2F%2Fraw.githubusercontent.com%2FLeague-of-Foundry-Developers%2Ffvtt-module-theatre%2Fmaster%2Fsrc%2Fmodule.json&label=Latest%20Release&prefix=v&query=$.version&colorB=red&style=for-the-badge) [![Foundry Hub Endorsements](https://img.shields.io/endpoint?logoColor=white&url=https%3A%2F%2Fwww.foundryvtt-hub.com%2Fwp-json%2Fhubapi%2Fv1%2Fpackage%2Ftheatre%2Fshield%2Fendorsements&style=for-the-badge)](https://www.foundryvtt-hub.com/package/theatre/) ![GitHub all releases](https://img.shields.io/github/downloads/League-of-Foundry-Developers/fvtt-module-theatre/total?style=for-the-badge)
 
-[![Translation status](https://weblate.foundryvtt-hub.com/widgets/theatre/-/287x66-black.png)](https://weblate.foundryvtt-hub.com/engage/theatre/)
 
 Theatre is a mod for Foundry VTT that allows for a visual novel style RP experience for text, and text-voice hybrid games. The primary function of Theatre is to allow for graphical 'theatre-inserts' or 'standin-graphics' to appear on screen with an accompanying area for text beneath them. This follows the style of visual novels, and even provides a means to animate or decorate the text as it appears in the below box. It also provides an emote system to allow users to configure different graphics for the various emotive expressions. Most of the emotes additionally have a built in 'emote animation' that occurs when the emote is selected, which can be toggled off globally if undesired.
 
 # Installation For FVTT
 
-It's always better and easier to install modules through in in app browser. Just search for "Theater"
+It's always better and easier to install modules through in in app browser. Just search for "Theatre Inserts"
 
 To install this module manually:
 1. Inside the Foundry "Configuration and Setup" screen, click "Add-on Modules"
 2. Click "Install Module"
 3. In the "Manifest URL" field, paste the following url:
-`https://raw.githubusercontent.com/p4535992/fvtt-module-theatre/master/src/module.json`
+`https://github.com/League-of-Foundry-Developers/fvtt-module-theatre/releases/latest/download/module.json`
 4. Click 'Install' and wait for installation to complete
 5. Don't forget to enable the module in game using the "Manage Module" button
 

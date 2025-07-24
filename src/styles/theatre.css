@@ -1069,6 +1069,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  pointer-events: all;
 }
 
 .theatre-command-group {
@@ -1205,7 +1206,10 @@
   flex: 0 0 40px;
   height: 40px;
   display: flex;
-  margin: 2px 8px;
+}
+
+.theatre-control-button-bar {
+  display: flex;
 }
 
 .theatre-control-nav-bar {
@@ -1230,6 +1234,7 @@
   border-radius: 5px;
   cursor: pointer;
   transition: all 0.3s ease-in-out;
+  pointer-events: all;
 }
 
 .theatre-control-nav-bar-item:hover {
@@ -1257,6 +1262,7 @@
   width: 36px;
   height: 36px;
   border-radius: 3px;
+  pointer-events: all;
 }
 
 .theatre-control-btn-down {
@@ -1324,13 +1330,26 @@
   background: radial-gradient(closest-side at 50%, red 1%, transparent 99%);
 }
 
+.theatre-control-chat-cover-wrapper {
+    position: relative;
+}
+
 .theatre-control-chat-cover {
   position: absolute;
   top: 0px;
   left: 0px;
-  height: 100%;
+  height: 60px;
   width: 100%;
   pointer-events: none;
+  transition: all var(--ui-fade-duration) ease, opacity var(--ui-fade-delay) var(--ui-fade-duration);
+}
+
+.theatre-control-chat-cover-inside {
+  top: 8px;
+}
+
+.theatre-control-chat-cover-focus {
+  height: var(--chat-input-height);
 }
 
 .theatre-control-chat-cover img {
@@ -1353,10 +1372,11 @@
 
 .theatre-emote-menu {
   display: none;
-  position: absolute;
   top: 0px;
   width: 300px;
   height: 400px;
+  max-height: unset;
+  margin-bottom: 5px;
 }
 
 .theatre-emote-menu .emote-box {
