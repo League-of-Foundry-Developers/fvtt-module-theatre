@@ -66,6 +66,8 @@ export class Theatre {
             this.userSettings = {};
             this.pixiCTX = null;
             this.pixiToolTipCTX = null;
+            // used to show emotes on the tooltip
+            this.tooltipTweens = {};
             this.lastTyping = 0;
             this.resync = {
                 type: "any",
@@ -1832,85 +1834,239 @@ export class Theatre {
         for (let idx = app.stage.children.length - 1; idx >= 0; --idx) {
             let child = app.stage.children[idx];
             child.destroy();
-            //app.stage.removeChildAt(idx);
         }
+
+        for (const tooltipId in this.tooltipTweens) {
+            this.tooltipTweens[tooltipId].kill();
+        }
+
+        const dockContainer = new PIXI.Container();
+        const portraitContainer = new PIXI.Container();
+        // initial positioning
+        portraitContainer.x = 0;
+        portraitContainer.y = 0;
+        app.stage.addChild(portraitContainer);
+        app.stage.addChild(dockContainer);
 
         let sprite = new PIXI.Sprite(texture);
         let portWidth = texture.width;
         let portHeight = texture.height;
+
+        const maxHeight = 140;
+
         let maxSide = Math.max(portWidth, portHeight);
         let scaledWidth, scaledHeight, ratio;
         if (maxSide == portWidth) {
-            // scale portWidth to 200px, assign height as a fraction
-            scaledWidth = 140;
-            scaledHeight = (portHeight * 140) / portWidth;
+            // scale portWidth to maxHeight, assign height as a fraction
+            scaledWidth = maxHeight;
+            scaledHeight = (portHeight * maxHeight) / portWidth;
             ratio = scaledHeight / portHeight;
-            app.stage.width = scaledWidth;
-            app.stage.height = scaledHeight;
+            portraitContainer.width = scaledWidth;
+            portraitContainer.height = scaledHeight;
 
-            app.stage.addChild(sprite);
-            app.stage.scale.x = ratio;
-            app.stage.scale.y = ratio;
-            app.stage.x = 0;
-            app.stage.y = 70 - scaledHeight / 2;
+            portraitContainer.addChild(sprite);
+            portraitContainer.scale.x = ratio;
+            portraitContainer.scale.y = ratio;
+            portraitContainer.x = 0;
+            portraitContainer.y = maxHeight / 2 - scaledHeight / 2;
+
+            if (portWidth > maxHeight) {
+                portHeight *= maxHeight / portWidth;
+                portWidth = maxHeight;
+            }
         } else {
-            // scale portHeight to 200px, assign width as a fraction
-            scaledHeight = 140;
-            scaledWidth = (portWidth * 140) / portHeight;
+            // scale portHeight to maxHeight, assign width as a fraction
+            scaledHeight = maxHeight;
+            scaledWidth = (portWidth * maxHeight) / portHeight;
             ratio = scaledWidth / portWidth;
-            app.stage.width = scaledWidth;
-            app.stage.height = scaledHeight;
+            portraitContainer.width = scaledWidth;
+            portraitContainer.height = scaledHeight;
 
-            app.stage.addChild(sprite);
-            app.stage.scale.x = ratio;
-            app.stage.scale.y = ratio;
-            app.stage.x = 70 - scaledWidth / 2;
-            app.stage.y = 0;
+            portraitContainer.addChild(sprite);
+            portraitContainer.scale.x = ratio;
+            portraitContainer.scale.y = ratio;
+            portraitContainer.x = maxHeight / 2 - scaledWidth / 2;
+            portraitContainer.y = 0;
+
+            if (portHeight > maxHeight) {
+                portWidth *= maxHeight / portHeight;
+                portHeight = maxHeight;
+            }
         }
 
-        // adjust dockContainer + portraitContainer dimensions to fit the image
-        //app.stage.y = portHeight*ratio/2;
+        dockContainer.width = portWidth;
+        dockContainer.height = portHeight;
+        dockContainer.scale.x = 0.5;
+        dockContainer.scale.y = 0.5;
+        dockContainer.y = 10;
+        const portWidthEmote = maxHeight * 2;
+        const portHeightEmote = maxHeight * 1.9;
 
         // set sprite initial coordinates + state
         sprite.x = 0;
         sprite.y = 0;
 
-        //Logger.debug("Tooltip Portrait loaded with w:%s h:%s scale:%s",portWidth,portHeight,ratio,sprite);
+        // we don't want to show emotes if the actor uses a custom one
+        if (emote && (!params.emotes[emote] || !params.emotes[emote].insert)) {
+            await this.showTooltipEmote(app, dockContainer, actorId, emote, portWidthEmote, portHeightEmote);
+        }
 
         // render and show the tooltip
         app.render();
         this.theatreToolTip.style.opacity = 1;
-        // face detect
-        /*
-		faceapi.detectSingleFace(app.view,new faceapi.TinyFaceDetectorOptions()).then((detection)=>{
-			Logger."face detected: ", detection);
-			if (detection) {
-				let box = detection.box;
-				Logger.debug("successful preview face detection: ", box);
-				let graphics = new PIXI.Graphics();
-				graphics.lineStyle (2,0xFFFFFF,1);
+    }
 
-				if (maxSide == portWidth) {
-					graphics.moveTo(box.x/(ratio*2)+70,box.y/(ratio*2));
-					graphics.lineTo(box.x/(ratio*2) + box.width/(ratio*2)+70,box.y/(ratio*2));
-					graphics.lineTo(box.x/(ratio*2) + box.width/(ratio*2)+70,box.y/(ratio*2)+box.height/(ratio*2));
-					graphics.lineTo(box.x/(ratio*2)+70,box.y/(ratio*2)+box.height/(ratio*2));
-					graphics.lineTo(box.x/(ratio*2)+70,box.y/(ratio*2));
-				} else {
-					graphics.moveTo(box.x/(ratio*2),box.y/(ratio*2)+70);
-					graphics.lineTo(box.x/(ratio*2) + box.width/(ratio*2),box.y/(ratio*2)+70);
-					graphics.lineTo(box.x/(ratio*2) + box.width/(ratio*2),box.y/(ratio*2)+box.height/(ratio*2)+70);
-					graphics.lineTo(box.x/(ratio*2),box.y/(ratio*2)+box.height/(ratio*2)+70);
-					graphics.lineTo(box.x/(ratio*2),box.y/(ratio*2)+70);
-				}
-				app.stage.addChild(graphics);
-				app.render();
-			} else {
-				Logger.error("FAILED TO FIND PREVIEW FACE", false);
-			}
-			this.theatreToolTip.style.opacity = 1;
-		});
-		*/
+    async showTooltipEmote(app, dockContainer, actorId, emote, portWidthEmote, portHeightEmote) {
+        const defaultDisabled = this.isDefaultDisabled(actorId);
+        Logger.debug("is default disabled? : %s", defaultDisabled);
+        const emotes = Theatre.getActorEmotes(actorId, defaultDisabled);
+        const rigResMap = Theatre.getActorRiggingResources(actorId);
+        if (emotes[emote] && emotes[emote].rigging) {
+            for (let anim of emotes[emote].rigging.animations) {
+                const animName = anim.name;
+                const animSyntax = anim.syntax;
+                const tweenParams = Theatre.verifyAnimationSyntax(animSyntax);
+                const resTarget = rigResMap.find((e) => e.name == tweenParams[0].resName);
+                const textureEmote = await PIXI.Assets.load(resTarget.path);
+                Logger.debug(
+                    "Adding tweens for animation '%s' from syntax: %s with params: ",
+                    animName,
+                    animSyntax,
+                    tweenParams,
+                );
+                if (!textureEmote) {
+                    Logger.error(
+                        'ERROR: resource name : "%s" with path "%s" does not exist!',
+                        false,
+                        tweenParams[idx].resName,
+                        resTarget.path,
+                    );
+                    return;
+                }
+                const emoteSprite = new PIXI.Sprite(textureEmote);
+                emoteSprite.anchor.set(0.5);
+                dockContainer.addChild(emoteSprite);
+                emoteSprite.x = 0;
+                emoteSprite.y = 0;
+                for (let idx = 0; idx < tweenParams.length; ++idx) {
+                    const advOptions = tweenParams[idx].advOptions;
+                    let yoyo = null;
+                    let delay = 0;
+                    let repeat = 0;
+                    let repeatDelay = 0;
+                    let ease = Power0.easeNone;
+                    let yoyoEase = null;
+                    let noMirror = false;
+                    if (advOptions) {
+                        Logger.debug("adv options arg: ", advOptions);
+                        yoyo = advOptions.yoyo ? true : false;
+                        noMirror = advOptions.noMirror ? true : false;
+                        delay = advOptions.delay ? Number(advOptions.delay) : delay;
+                        repeat = advOptions.repeat ? Number(advOptions.repeat) : repeat;
+                        repeatDelay = advOptions.repeatDelay ? Number(advOptions.repeatDelay) : repeatDelay;
+                        ease = advOptions.ease ? Theatre.verifyEase(advOptions.ease) : ease;
+                        yoyoEase = advOptions.yoyoEase ? Theatre.verifyEase(advOptions.yoyoEase) : yoyoEase;
+                    }
+                    const { emoteSprite: formattedEmoteSprite, pixiParams } = this.formatTweenParams(
+                        emoteSprite,
+                        tweenParams[idx].props,
+                        portWidthEmote,
+                        portHeightEmote,
+                    );
+                    const tweenId = animName + idx;
+                    const tween = TweenMax.to(formattedEmoteSprite, tweenParams[idx].duration, {
+                        pixi: pixiParams,
+                        ease: ease,
+                        delay: delay,
+                        repeatDelay: repeatDelay,
+                        repeat: repeat,
+                        yoyo: yoyo,
+                        yoyoEase: yoyoEase,
+                        onComplete: function (ctx, tweenId) {
+                            Logger.debug("ANIMATION tween complete!");
+                            if (this) {
+                                this.kill();
+                            }
+                            // if the tweenId doesn't exist, do nothing more
+                            if (!this.tooltipTweens || !this.tooltipTweens[tweenId]) {
+                                return;
+                            }
+                            if (!this) {
+                                this.tooltipTweens[tweenId].kill();
+                            }
+                            this.tooltipTweens[tweenId] = null;
+                            let nTweens = {};
+                            for (let prop in this.tooltipTweens) {
+                                if (this.tooltipTweens[prop] != null) {
+                                    nTweens[prop] = this.tooltipTweens[prop];
+                                }
+                            }
+                            // replace after we removed the prop
+                            this.tooltipTweens = nTweens;
+                        },
+                        onCompleteParams: [this, tweenId],
+                    });
+                    if (repeat != 0) {
+                        tween.duration(tweenParams[idx].duration);
+                    }
+                    if (!app.stage) {
+                        if (tween) {
+                            tween.kill();
+                        }
+                        return;
+                    }
+                    // if the tweenId exists, kill that one, and replace with the new
+                    if (this.tooltipTweens[tweenId]) {
+                        this.tooltipTweens[tweenId].kill();
+                    }
+                    this.tooltipTweens[tweenId] = tween;
+                }
+            }
+        }
+    }
+
+    formatTweenParams(emoteSprite, tweenParamsProps, portWidthEmote, portHeightEmote) {
+        const pixiParams = {};
+        for (const prop of tweenParamsProps) {
+            // special case of x/y/scale
+            if (
+                prop.name == "x" ||
+                prop.name == "y" ||
+                prop.name == "rotation" ||
+                prop.name == "scaleX" ||
+                prop.name == "scaleY"
+            ) {
+                if (prop.initial.includes("%")) {
+                    prop.initial =
+                        (Number(prop.initial.match(/-*\d+\.*\d*/)[0] || 0) / 100) *
+                        (prop.name == "x" ? portWidthEmote : portHeightEmote);
+                    prop.final =
+                        (Number(prop.final.match(/-*\d+\.*\d*/)[0] || 0) / 100) *
+                        (prop.name == "x" ? portWidthEmote : portHeightEmote);
+                } else if (["scaleX", "scaleY", "rotation"].some((e) => e == prop.name)) {
+                    prop.initial = Number(prop.initial.match(/-*\d+\.*\d*/)[0] || 0);
+                    prop.final = Number(prop.final.match(/-*\d+\.*\d*/)[0] || 0);
+                }
+                Logger.debug("new %s : %s,%s", prop.name, prop.initial, prop.final);
+            }
+            // special case for some GSAP -> PIXI names
+            switch (prop.name) {
+                case "scaleX":
+                    emoteSprite.scale.x = prop.initial;
+                    break;
+                case "scaleY":
+                    emoteSprite.scale.y = prop.initial;
+                    break;
+                case "rotation":
+                    emoteSprite.rotation = prop.initial * (Math.PI / 180);
+                    break;
+                default:
+                    emoteSprite[prop.name] = prop.initial;
+                    break;
+            }
+            pixiParams[prop.name] = prop.final;
+        }
+        return { emoteSprite, pixiParams };
     }
 
     /**
@@ -1982,6 +2138,7 @@ export class Theatre {
     _renderTheatre(time) {
         // let the ticker update all its objects
         this.pixiCTX.ticker.update(time);
+        this.pixiToolTipCTX.ticker.update(time);
         // this.pixiCTX.renderer.clear(); // PIXI.v6 does not respect transparency for clear
         for (let insert of this.portraitDocks) {
             if (insert.dockContainer) {
@@ -4448,8 +4605,6 @@ export class Theatre {
         }
 
         let sprite = new PIXI.Sprite(texture);
-        let spriteWidth = texture.width;
-        let spriteHeight = texture.height;
         sprite.anchor.set(0.5);
         insert.portraitContainer.addChild(sprite);
 
@@ -4474,58 +4629,15 @@ export class Theatre {
                 yoyoEase = advOptions.yoyoEase ? Theatre.verifyEase(advOptions.yoyoEase) : yoyoEase;
             }
 
-            let pixiParams = {};
-            for (let prop of tweenParams[idx].props) {
-                // special case of x/y/scale
-                if (
-                    prop.name == "x" ||
-                    prop.name == "y" ||
-                    prop.name == "rotation" ||
-                    prop.name == "scaleX" ||
-                    prop.name == "scaleY"
-                ) {
-                    if (prop.initial.includes("%")) {
-                        prop.initial =
-                            (Number(prop.initial.match(/-*\d+\.*\d*/)[0] || 0) / 100) *
-                            (prop.name == "x" ? insert.portrait.width : insert.portrait.height);
-                        prop.final =
-                            (Number(prop.final.match(/-*\d+\.*\d*/)[0] || 0) / 100) *
-                            (prop.name == "x" ? insert.portrait.width : insert.portrait.height);
-                    } else if (["scaleX", "scaleY", "rotation"].some((e) => e == prop.name)) {
-                        prop.initial = Number(prop.initial.match(/-*\d+\.*\d*/)[0] || 0);
-                        prop.final = Number(prop.final.match(/-*\d+\.*\d*/)[0] || 0);
-                    }
-
-                    Logger.debug(
-                        "new %s : %s,%s : w:%s,h:%s",
-                        prop.name,
-                        prop.initial,
-                        prop.final,
-                        insert.portrait.width,
-                        insert.portrait.height,
-                    );
-                }
-
-                // special case for some GSAP -> PIXI names
-                switch (prop.name) {
-                    case "scaleX":
-                        sprite.scale.x = prop.initial;
-                        break;
-                    case "scaleY":
-                        sprite.scale.y = prop.initial;
-                        break;
-                    case "rotation":
-                        sprite.rotation = prop.initial * (Math.PI / 180);
-                        break;
-                    default:
-                        sprite[prop.name] = prop.initial;
-                        break;
-                }
-                pixiParams[prop.name] = prop.final;
-            }
+            const { emoteSprite: formattedSprite, pixiParams } = this.formatTweenParams(
+                sprite,
+                tweenParams[idx].props,
+                insert.portrait.width,
+                insert.portrait.height,
+            );
 
             let tweenId = animName + idx;
-            let tween = TweenMax.to(sprite, tweenParams[idx].duration, {
+            let tween = TweenMax.to(formattedSprite, tweenParams[idx].duration, {
                 pixi: pixiParams,
                 ease: ease,
                 delay: delay,
