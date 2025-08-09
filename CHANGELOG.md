@@ -1,3 +1,6 @@
+### 3.0.1
+- Add compatibility for Foundry VTT 13.347
+
 ### 3.0.0
 - Migrate to Foundry VTT 13.X
 - Fix issue with Narrator Mode not changing font size

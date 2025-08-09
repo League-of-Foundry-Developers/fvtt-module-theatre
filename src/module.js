@@ -117,7 +117,12 @@ Hooks.on("renderChatInput", () => {
     // The chat can change position depending on the sidebar state
     if (!isChatOutsideChatLog) {
         const parentChatMessage = $("#chat-message").parent();
-        $(".theatre-control-group").insertBefore(parentChatMessage.children(".chat-controls"));
+        // Needed for foundry v13.347
+        if (parentChatMessage.children(".chat-controls").length > 0) {
+            $(".theatre-control-group").insertBefore(parentChatMessage.children(".chat-controls"));
+        } else {
+            $(".theatre-control-group").insertBefore(parentChatMessage.children("#chat-controls"));
+        }
         $(".theatre-control-button-bar").insertBefore("#chat-message");
         $(".theatre-control-chat-cover").addClass("theatre-control-chat-cover-inside");
         $(".theatre-control-chat-cover").addClass("theatre-control-chat-cover-focus");

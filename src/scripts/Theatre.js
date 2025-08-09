@@ -195,6 +195,10 @@ export class Theatre {
          * Theatre Chat Controls
          */
         let chatControls = document.getElementsByClassName("chat-controls")[0];
+        // needed for foundry v13.347
+        if (!chatControls) {
+            chatControls = document.getElementById("chat-controls");
+        }
         let controlButtons = chatControls.getElementsByClassName("control-buttons")[0];
         let chatForm = document.getElementById("chat-form");
         let chatMessage = document.getElementById("chat-message");
