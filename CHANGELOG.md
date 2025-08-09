@@ -1,3 +1,6 @@
+### 3.1.0
+- Show emote on tooltip
+
 ### 3.0.1
 - Add compatibility for Foundry VTT 13.347
 
