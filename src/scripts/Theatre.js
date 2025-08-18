@@ -1848,7 +1848,13 @@ export class Theatre {
         app.stage.addChild(portraitContainer);
         app.stage.addChild(dockContainer);
 
-        let sprite = new PIXI.Sprite(texture);
+        let sprite = texture;
+        // use normal sprite if it's not a gif
+        if (!texture.animationSpeed) {
+            sprite = new PIXI.Sprite(texture);
+        } else {
+            sprite = texture.clone();
+        }
         let portWidth = texture.width;
         let portHeight = texture.height;
 
@@ -2451,7 +2457,13 @@ export class Theatre {
         let dockContainer = insert.dockContainer;
         let portraitContainer = insert.portraitContainer;
 
-        let sprite = new PIXI.Sprite(resources[resName]);
+        let sprite = resources[resName];
+        // use normal sprite if it's not a gif
+        if (!resources[resName].animationSpeed) {
+            sprite = new PIXI.Sprite(resources[resName]);
+        } else {
+            sprite = resources[resName].clone();
+        }
         let portWidth = resources[resName].width;
         let portHeight = resources[resName].height;
 
