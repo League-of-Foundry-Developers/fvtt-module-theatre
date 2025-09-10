@@ -57,6 +57,8 @@
   "Theatre.UI.Settings.textDecayMinHint": "劇院文本輸入衰减之前的最短時間（以秒爲單位）。",
   "Theatre.UI.Settings.textDecayRate": "文字延遲率",
   "Theatre.UI.Settings.textDecayRateHint": "基于消息的長度（以秒爲單位），文本衰减的速率。 這是“按每個字符”應用的，因此，如果衰减率爲1s或最小衰减時間（以較大者爲准），則在衰减之前100s的消息是100s。",
+  "Theatre.UI.Settings.showActorsOnTop": "顯示演員在屏幕上方",
+  "Theatre.UI.Settings.showActorsOnTopHint": "如果啟用，當有超過5個演員時，演員將顯示在屏幕上方。",
 
   "Theatre.MOTD.Header": "通知",
   "Theatre.MOTD.OldVersion": "劇院當前已過時，請在設置屏幕中啓用GM更新劇場。",

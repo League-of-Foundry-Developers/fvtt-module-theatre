@@ -53,6 +53,8 @@
   "Theatre.UI.Settings.textDecayMinHint": "A quantidade mínima de tempo em segundos antes do texto começar a decair.",
   "Theatre.UI.Settings.textDecayRate": "Taxa de Decaída do Texto",
   "Theatre.UI.Settings.textDecayRateHint": "A taxa em que o texto vai decair, baseada no comprimento da mensagem, em segundos. Isso é aplicado *por caractere*, portanto, uma mensagem com 100 caracteres tem 100s antes de decair completamente se a taxa for 1s, OU o tempo mínimo para o texto decair, o que for maior.",
+  "Theatre.UI.Settings.showActorsOnTop": "Mostrar atores na parte superior da tela",
+  "Theatre.UI.Settings.showActorsOnTopHint": "Se ativado, os atores serão exibidos na parte superior da tela quando houver mais de 5 atores.",
 
   "Theatre.MOTD.Header": "Notificação do Theatre",
   "Theatre.MOTD.OldVersion": "O Theatre está desatualizado. Por favor, peça para seu GM atualizar o Theatre na tela de configurações.",

@@ -92,6 +92,8 @@
           "3": "｢Kagikakko｣",
           "4": "『Nijū Kagiyamakakko』"
         },
+        "showActorsOnTop": "Show actors on top of the screen",
+        "showActorsOnTopHint": "If enabled, actors will be displayed on top of the screen when there are more than 5 actors.",
         "debug": "Enable debugging",
         "debugHint": "Prints debug messages to the console"
       },

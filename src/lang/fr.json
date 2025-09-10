@@ -53,6 +53,8 @@
   "Theatre.UI.Settings.textDecayMinHint": "Le temps minimum en secondes avant que le texte affiché dans théâtre ne commence a disparaître.",
   "Theatre.UI.Settings.textDecayRate": "Vitesse de disparition du texte",
   "Theatre.UI.Settings.textDecayRateHint": "La vitesse à laquelle le texte disparaît, en fonction de la durée du message en secondes. Ceci dépend du nombre de caractères, donc un texte de 100 caractères met 100s avant de disparaitre si la vitesse de disparition est de 1s.",
+  "Theatre.UI.Settings.showActorsOnTop": "Afficher les acteurs en haut de l'écran",
+  "Theatre.UI.Settings.showActorsOnTopHint": "Si activé, les acteurs seront affichés en haut de l'écran lorsqu'il y a plus de 5 acteurs.",
 
   "Theatre.MOTD.Header": "Notification de Théâtre",
   "Theatre.MOTD.OldVersion": "Théâtre n'est plus a jour, s'il vous plait demandez au GM de mètre a jour Théâtre.",

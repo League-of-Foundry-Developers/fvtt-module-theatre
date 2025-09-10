@@ -69,6 +69,8 @@
   "Theatre.UI.Settings.suppressMacroHotbar": "Mostrar lista de jugadores y barra de macros cuando se sale del modo escenario",
   "Theatre.UI.Settings.removeLabelSheetHeader": "Quitar etiquetas de las hojas de personaje",
   "Theatre.UI.Settings.removeLabelSheetHeaderHint": "Quita la etiqueta del encabezado de las hojas de personaje, es útil cuando se usan monitores pequeños o dispositivos móviles",
+  "Theatre.UI.Settings.showActorsOnTop": "Mostrar actores en la parte superior de la pantalla",
+  "Theatre.UI.Settings.showActorsOnTopHint": "Si se habilita, los actores se mostrarán en la parte superior de la pantalla cuando haya más de 5 actores.",
 
   "Theatre.UI.Keybinds.unfocusTextArea": "Quitar foco del área de texto",
   "Theatre.UI.Keybinds.addOwnedToStage": "Añadir tus actores al escenario",

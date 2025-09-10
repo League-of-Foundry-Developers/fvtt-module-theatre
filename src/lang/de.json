@@ -59,6 +59,8 @@
   "Theatre.UI.Settings.textDecayMinHint": "Das Minimum an Zeit in Sekunden befor der Theater Text Eintrag beginnt zu verschwinden.",
   "Theatre.UI.Settings.textDecayRate": "Textverfallrate",
   "Theatre.UI.Settings.textDecayRateHint": "Die Rate in der der Text verschwindet, basierend auf der Länge der Nachricht in Sekunden. Dies wird *pro Zeichen* angewendet, so dass 100 Zeichen 100 Sekunden entsprechen, bevor der Text verschwindet, wenn die Rate auf 1s gestellt wird, ODER die Minimum Textverfall-Zeit, welches höher ist.",
+  "Theatre.UI.Settings.showActorsOnTop": "Aktoren oben anzeigen",
+  "Theatre.UI.Settings.showActorsOnTopHint": "Wenn aktiviert, werden Akteure oben auf dem Bildschirm angezeigt, wenn mehr als 5 Akteure vorhanden sind.",
 
   "Theatre.MOTD.Header": "Theater Benachrichtigung",
   "Theatre.MOTD.OldVersion": "Theater ist aktuell veraltet, bitte lass es von deinem SL in den Einstellungen aktualisieren.",

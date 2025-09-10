@@ -83,7 +83,9 @@
           "2": "【方头括号】",
           "3": "｢鍵括号｣",
           "4": "『双重键括号』"
-        }
+        },
+        "showActorsOnTop": "在屏幕顶部显示角色",
+        "showActorsOnTopHint": "如果启用，当有超过5个角色时，角色将显示在屏幕顶部。"
       },
       "Keybinds": {
         "unfocusTextArea": "取消聚焦文本框",

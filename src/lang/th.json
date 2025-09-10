@@ -53,6 +53,8 @@
   "Theatre.UI.Settings.textDecayMinHint": "เวลาขั้นต่ำเป็นวินาที ก่อนที่ตัวอักษรใน theatre จะหายไป",
   "Theatre.UI.Settings.textDecayRate": "อัตราการจางของตัวอักษร",
   "Theatre.UI.Settings.textDecayRateHint": "ความเร็วในการหายไปของตัวอักษร ขึ้นอยู่กับความยาวของข้อความในหน่วยวินาทีต่อตัวอักษร เช่นข้อความที่มีอักษร 100 ตัว จะแสดง 100 วิก่อนที่จะหายไป ถ้าอัตราการหายไปของตัวอักษรคือ 1 วิ หรือเมื่อถึงเวลาขั้นต่ำที่จะให้ตัวอักษรหายไป นับตามค่าสูงสุด",
+  "Theatre.UI.Settings.showActorsOnTop": "แสดงนักแสดงที่ด้านบนของหน้าจอ",
+  "Theatre.UI.Settings.showActorsOnTopHint": "หากเปิดใช้งาน นักแสดงจะถูกแสดงที่ด้านบนของหน้าจอเมื่อมีนักแสดงมากกว่า 5 คน",
 
   "Theatre.MOTD.Header": "แจ้งเตือน Theatre",
   "Theatre.MOTD.OldVersion": "Theatre ขณะนี้ล้าสมัย, กรุณาบอก GM ให้อัปเดต theatre ในหน้าตั้งค่า",

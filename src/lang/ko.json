@@ -68,6 +68,8 @@
   "Theatre.UI.Settings.suppressMacroHotbar": "무대가 사라졌을 때 플레이어 목록과 매크로 단축바 표시하기",
   "Theatre.UI.Settings.removeLabelSheetHeader": "캐릭터 시트 헤더 라벨 미표시",
   "Theatre.UI.Settings.removeLabelSheetHeaderHint": "캐릭터 시트 헤더 라벨을 없앱니다. 작은 화면이나 모바일에서 유용합니다.",
+  "Theatre.UI.Settings.showActorsOnTop": "화면 상단에 배우 표시",
+  "Theatre.UI.Settings.showActorsOnTopHint": "활성화하면 5명 이상의 배우가 있을 때 화면 상단에 표시됩니다.",
 
   "Theatre.UI.Keybinds.unfocusTextArea": "채팅칸 포커스 해제",
   "Theatre.UI.Keybinds.addOwnedToStage": "소유한 액터 무대에 추가",
