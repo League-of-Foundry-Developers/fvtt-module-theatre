@@ -1,5 +1,9 @@
+### 3.1.1
+- Add setting to move stage to the top when there are more than 5 actors
+
 ### 3.1.0
 - Show emote on tooltip
+- Support gif files
 
 ### 3.0.1
 - Add compatibility for Foundry VTT 13.347
