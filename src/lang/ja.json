@@ -65,6 +65,8 @@
   "Theatre.UI.Settings.autoHideBottomHint": "立ち絵が出ているときに、画面の下部にあるPLリストとマクロバーを非表示にします。立ち絵の透明化を行うと再び出現します。",
   "Theatre.UI.Settings.removeLabelSheetHeader": "控室に追加＋立ち絵設定の文字を消す",
   "Theatre.UI.Settings.removeLabelSheetHeaderHint": "ウィンドウの上部に出る「控室に追加」や「立ち絵設定」の文字を消して文字数を少なくします。",
+  "Theatre.UI.Settings.showActorsOnTop": "画面の上部にキャラクターを表示",
+  "Theatre.UI.Settings.showActorsOnTopHint": "有効にすると、5人以上のキャラクターがいるときに画面の上部に表示されます。",
 
   "Theatre.UI.Keybinds.unfocusTextArea": "チャットから注目を外す",
   "Theatre.UI.Keybinds.addOwnedToStage": "所有しているすべてのコマを控室に追加",

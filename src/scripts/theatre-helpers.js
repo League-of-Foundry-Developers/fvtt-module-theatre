@@ -2311,6 +2311,7 @@ export class TheatreHelpers {
         Theatre.instance.stageInsertById(theatreId);
         // Store reference
         Theatre.instance.stage[theatreId] = new TheatreActor(actor, navItem);
+        TheatreHelpers.relocateStage();
     }
 
     /**
@@ -2324,6 +2325,7 @@ export class TheatreHelpers {
         }
         const theatreId = Theatre._getTheatreId(actor);
         Theatre.instance._removeFromStage(theatreId);
+        TheatreHelpers.relocateStage();
     }
 
     /**
@@ -2339,6 +2341,7 @@ export class TheatreHelpers {
             }
             Theatre.instance.removeInsertById(theatreId);
             delete Theatre.instance.stage[theatreId];
+            TheatreHelpers.relocateStage();
         }
     }
 
@@ -2357,6 +2360,40 @@ export class TheatreHelpers {
         Object.keys(Theatre.instance.stage).forEach((theatreId) => {
             Theatre.instance._removeFromStage(theatreId);
         });
+        TheatreHelpers.relocateStage();
+    }
+
+    static relocateStage(forceUpdate = false) {
+        const showActorsOnTop = game.settings.get(CONSTANTS.MODULE_ID, "showActorsOnTop");
+        if (!showActorsOnTop && !forceUpdate) {
+            return;
+        }
+        const keys = Object.keys(Theatre.instance.stage);
+        if (keys.length <= CONSTANTS.MAX_NUM_ACTORS_ON_CONTROL_GROUP || !showActorsOnTop) {
+            // move nav bar to chat box
+            const controlGroup = document.getElementsByClassName("theatre-control-group")[0];
+            if (!controlGroup) {
+                return;
+            }
+            const navBar = controlGroup.getElementsByClassName("theatre-control-nav-bar")[0];
+            if (navBar) {
+                return;
+            }
+            KHelpers.insertBefore(Theatre.instance.theatreNavBar, controlGroup.firstChild);
+            Logger.debug("moved nav bar to chat box");
+            return;
+        }
+        // move nav bar to top of screen
+        const uiTop = document.getElementById("ui-top");
+        if (!uiTop) {
+            return;
+        }
+        const navBar = uiTop.getElementsByClassName("theatre-control-nav-bar")[0];
+        if (navBar) {
+            return;
+        }
+        uiTop.appendChild(Theatre.instance.theatreNavBar);
+        Logger.debug("moved nav bar to top of screen");
     }
 
     /**

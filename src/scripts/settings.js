@@ -1,4 +1,5 @@
 import { Theatre } from "./Theatre.js";
+import { TheatreHelpers } from "./theatre-helpers.js";
 import CONSTANTS from "./constants/constants.js";
 import Logger from "./lib/Logger.js";
 
@@ -52,7 +53,6 @@ export const registerSettings = function () {
         type: Number,
     });
 
-    
     game.settings.register(CONSTANTS.MODULE_ID, "theatreImageUsePercent", {
         name: "Use screen height as maximum image height",
         scope: "world",
@@ -67,8 +67,8 @@ export const registerSettings = function () {
         scope: "client",
         config: true,
         default: 0.7,
-        type: Number
-      });
+        type: Number,
+    });
 
     game.settings.register(CONSTANTS.MODULE_ID, "theatreImageSizeUniform", {
         name: "Uniform image height",
@@ -210,7 +210,7 @@ export const registerSettings = function () {
         scope: "world",
         config: true,
         default: "",
-        type: String
+        type: String,
     });
 
     game.settings.register(CONSTANTS.MODULE_ID, "showUIAboveStage", {
@@ -268,6 +268,18 @@ export const registerSettings = function () {
         },
         onChange: (value) => {
             settingsCustom.quoteType = value;
+        },
+    });
+
+    game.settings.register(CONSTANTS.MODULE_ID, "showActorsOnTop", {
+        name: "Theatre.UI.Settings.showActorsOnTop",
+        hint: "Theatre.UI.Settings.showActorsOnTopHint",
+        scope: "client",
+        config: true,
+        type: Boolean,
+        default: false,
+        onChange: () => {
+            TheatreHelpers.relocateStage(true);
         },
     });
 
