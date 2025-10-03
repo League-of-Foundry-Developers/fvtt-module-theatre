@@ -23,6 +23,8 @@ import { Theatre } from "./Theatre.js";
 import CONSTANTS from "./constants/constants.js";
 import Logger from "./lib/Logger.js";
 
+const { ApplicationV2, HandlebarsApplicationMixin } = foundry.applications.api;
+
 /**
  * ============================================================
  * Application to configure Actor Theatre-Inserts
@@ -33,35 +35,45 @@ import Logger from "./lib/Logger.js";
  *
  * ============================================================
  */
-export class TheatreActorConfig extends FormApplication {
-    constructor(object = {}, options = {}) {
-        if (object._theatre_mod_configTab) {
-            options.tabs = [
-                {
-                    navSelector: ".tabs",
-                    contentSelector: ".theatre-config-contents",
-                    initial: object._theatre_mod_configTab,
-                },
-            ];
-            if (object._theatre_mod_configTab === "emotes") {
-                options.height = 775;
-            }
-        }
-        super(object, options);
+export class TheatreActorConfig extends HandlebarsApplicationMixin(ApplicationV2) {
+    constructor(options = {}) {
+        super(options);
     }
 
-    /**
-     * Default options for TheatreActorConfig
-     */
-    static get defaultOptions() {
-        const options = super.defaultOptions;
-        options.id = "theatre-config";
-        options.template = "modules/theatre/templates/theatre_actor_config.html";
-        options.width = 500;
-        options.height = 270;
-        options.tabs = [{ navSelector: ".tabs", contentSelector: ".theatre-config-contents", initial: "main" }];
-        return options;
-    }
+    static DEFAULT_OPTIONS = {
+        id: "theatre-config",
+        classes: ["whisperBox"],
+        tag: "form",
+        position: { width: 500, height: 360 },
+        window: { resizable: true, minimizable: true },
+        form: {
+            handler: this.#onSubmitForm,
+            closeOnSubmit: true,
+        },
+        actions: {
+            onAddEmoteLine: this._onAddEmoteLine,
+            onCustomIconImage: this._onCustomIconImage,
+        },
+    };
+
+    static PARTS = {
+        tabs: {
+            template: "templates/generic/tab-navigation.hbs",
+        },
+        content: {
+            template: "modules/theatre/templates/theatre_actor_config.html",
+        },
+    };
+
+    static TABS = {
+        primary: {
+            tabs: [
+                { id: "main", icon: "fas fa-user", label: "Theatre.UI.Config.Main" },
+                { id: "emotes", icon: "far fa-laugh", label: "Theatre.Emote.Label" },
+            ],
+            initial: "main",
+        },
+    };
 
     /**
      * Add the Entity name into the window title
@@ -70,52 +82,53 @@ export class TheatreActorConfig extends FormApplication {
         return `${this.object.name}: ${game.i18n.localize("Theatre.UI.Config.ConfigureTheatre")}`;
     }
 
+    get object() {
+        return this.options.document;
+    }
+
     /**
      * Construct and return the data object used to render the HTML template for this form application.
      *
      * @return (Object) : The Object to be used in handlebars compile
      */
-    getData() {
+    async _prepareContext(options) {
+        const parentContext = await super._prepareContext(options);
         const entityName = this.object.name;
-        return {
+        return foundry.utils.mergeObject(parentContext, {
             entityName: entityName,
             isGM: game.user.isGM,
             object: foundry.utils.duplicate(this.object),
             emote: Theatre.getActorEmotes(this.object._id),
-            options: this.options,
-        };
+            optalignChoices: {
+                top: "Theatre.UI.Config.SetTopAlignTop",
+                bottom: "Theatre.UI.Config.SetTopAlignBottom",
+            },
+        });
+    }
+
+    async _onRender(context, options) {
+        await super._onRender(context, options);
+        this.activateListeners();
     }
 
     /**
      * Activate the default set of listeners for the Actor Sheet
-     * These listeners handle basic stuff like form submission or updating images
-     *
-     * @param html (JQuery) The rendered template ready to have listeners attached
+     * These listeners handle basic stuff like updating images
      */
-    activateListeners(html) {
-        super.activateListeners(html);
-
-        let btnAdd = html[0].getElementsByClassName("theatre-config-btn-add-emote")[0];
-        if (btnAdd) btnAdd.addEventListener("click", this._onAddEmoteLine.bind(this));
-
-        let btnsEmoteConfig = html[0].getElementsByClassName("theatre-config-btn-edit-emote");
-        for (let btn of btnsEmoteConfig) btn.addEventListener("click", this._onEditEmoteLine.bind(this));
-
-        // Support custom icon updates
-        let iconsCustom = html[0].getElementsByClassName("customicon");
-        for (let icon of iconsCustom) icon.addEventListener("click", this._onCustomIconImage.bind(this));
-
+    activateListeners() {
         // Support custom label updates
-        let labelsCustom = html[0].getElementsByClassName("customlabel");
-        for (let label of labelsCustom) this._setupCustomLabelEvents(label);
+        const labelsCustom = this.element.getElementsByClassName("customlabel");
+        for (const label of labelsCustom) this._setupCustomLabelEvents(label);
     }
 
     /** @override */
-    _onChangeTab(event, tabs, active) {
-        this.object._theatre_mod_configTab = active;
-        // Auto change height
-        const tab = this.element.find(`.tab[data-tab="${active}"]`)[0];
-        this.setPosition({ height: (tab && tab.offsetHeight + 125) || "auto" });
+    _onClickTab(event) {
+        super._onClickTab(event);
+
+        const { tab } = event.target.dataset;
+        this.setPosition({
+            height: tab === "emotes" ? 795 : 360,
+        });
     }
 
     /**
@@ -159,7 +172,7 @@ export class TheatreActorConfig extends FormApplication {
             }
 
         // collect emote form updates + revised form updates
-        let configElement = this.element[0];
+        let configElement = this.element;
         let toDelete = configElement.querySelectorAll('.theatre-config-form-group[todelete="true"]');
         let emoteFormData = {};
         let revisedFormData = {};
@@ -197,26 +210,28 @@ export class TheatreActorConfig extends FormApplication {
      * @return Object : An object represeting the formData, but updated with new entries to be updated.
      */
     _processUpdateLabels(formData) {
-        let html = this.element[0];
+        const html = this.element;
 
-        let dataLabels = html.querySelectorAll("label[data-edit]");
-        for (let label of dataLabels) {
-            let target = label.getAttribute("data-edit");
+        const dataLabels = html.querySelectorAll("label[data-edit]");
+        for (const label of dataLabels) {
+            const target = label.getAttribute("data-edit");
             formData[target] = label.textContent;
         }
         return formData;
     }
 
     /**
-     * Implement the _updateObject method as required by the parent class spec
      * This defines how to update the subject of the form when the form is submitted
      *
-     * @param event (Object) : event that triggered this update ?
+     * @param event (Object) : event that triggered this update
      * @param formData (Object) : An object representing the formData that will be used to update the Entity.
      *
      * @private
      */
-    async _updateObject(event, formData) {
+    static async #onSubmitForm(event, form, sentFormData) {
+        event.preventDefault();
+
+        let formData = sentFormData.object;
         formData["_id"] = this.object._id;
 
         // if our baseinsert value was updated..
@@ -293,7 +308,7 @@ export class TheatreActorConfig extends FormApplication {
                     // behavior to take the sheet portrait or 'mystery man' image
                     if (!resName || resName === "") {
                         // try to restore baseinsert
-                        let formBaseInsert = formData["flags.theatre.baseinsert"];
+                        const formBaseInsert = formData["flags.theatre.baseinsert"];
                         if (k.endsWith("insert") && !k.endsWith("baseinsert")) {
                             if (formBaseInsert && formBaseInsert !== "") {
                                 resName = formBaseInsert;
@@ -311,7 +326,7 @@ export class TheatreActorConfig extends FormApplication {
                     }
 
                     // ensure resource exists
-                    if (!(await srcExists(resName))) {
+                    if (!(await foundry.canvas.srcExists(resName))) {
                         Logger.error("ERROR: Path %s does not exist!", true, resName);
                         Logger.error(game.i18n.localize("Theatre.UI.Notification.BadFilepath") + `"${resName}"`, true);
                         return;
@@ -328,19 +343,17 @@ export class TheatreActorConfig extends FormApplication {
 
         // check for null'd emotes, push the objects up a level if one exists
         const newData = foundry.utils.mergeObject(this.object, emoteFormData, { inplace: false });
-        let emMerge = newData.flags.theatre.emotes;
-        let nEmotes = {};
-        for (let emProp in emMerge) {
-            if (emMerge[emProp] == null) {
-                continue;
-            }
+        const emMerge = newData.flags.theatre.emotes;
+        const nEmotes = {};
+        for (const emProp in emMerge) {
             nEmotes[emProp] = emMerge[emProp];
         }
+
         // send the emote parent in bulk to get rid of unwanted children
         revisedFormData["flags.theatre.emotes"] = nEmotes;
         Logger.debug("Final Push Config update:", revisedFormData);
 
-        this.object.update(revisedFormData).then((response) => {
+        this.object.update(revisedFormData).then(() => {
             // perform texture updates if needed
             if (imgSrcs.length > 0) {
                 // we know the active emote, thus all we need is the new source image
@@ -458,20 +471,19 @@ export class TheatreActorConfig extends FormApplication {
      *
      * @private
      */
-    _onAddEmoteLine(ev) {
+    static _onAddEmoteLine(ev) {
         Logger.debug("Add Emote Pressed!");
-        //Logger.info(game.i18n.localize("Theatre.NotYet"), true);
 
         // We need to get a custom emote name for storage purposes, this is a running index from
         // 1-> MAXINT oh which the upper bound we don't account for, to get the correct custom
         // index to fill, we find all formGroups whose name starts with "custom" then when we
         // shave off the number, then we sort these numbers
-        let emoteContainer = ev.currentTarget.parentNode;
-        let formEmoteElems = emoteContainer.getElementsByClassName("theatre-config-form-group");
+        const emoteContainer = ev.target.parentNode;
+        const formEmoteElems = emoteContainer.getElementsByClassName("theatre-config-form-group");
 
-        let customElems = [];
-        for (let elem of formEmoteElems) {
-            let eName = elem.getAttribute("name");
+        const customElems = [];
+        for (const elem of formEmoteElems) {
+            const eName = elem.getAttribute("name");
             if (eName && eName.startsWith("custom"))
                 customElems.push({ sortidx: Number(eName.match(/\d+/)[0]), elem: elem });
         }
@@ -480,12 +492,12 @@ export class TheatreActorConfig extends FormApplication {
         customElems.sort((a, b) => {
             return a.sortidx - b.sortidx;
         });
-        let customIdx = customElems.length > 0 ? customElems[customElems.length - 1].sortidx + 1 : 1;
+        const customIdx = customElems.length > 0 ? customElems[customElems.length - 1].sortidx + 1 : 1;
 
-        let customObjElems = [];
-        for (let k in this.object.flags.theatre.emotes) {
-            let eName = k;
-            if (eName && eName.startsWith("custom"))
+        const customObjElems = [];
+        for (const k in this.object.flags.theatre.emotes) {
+            const eName = k;
+            if (this.object.flags.theatre.emotes[k] !== null && eName && eName.startsWith("custom"))
                 customObjElems.push({
                     sortidx: Number(eName.match(/\d+/)[0]),
                     elem: this.object.flags.theatre.emotes[k],
@@ -496,19 +508,16 @@ export class TheatreActorConfig extends FormApplication {
         customObjElems.sort((a, b) => {
             return a.sortidx - b.sortidx;
         });
-        let customObjIdx = customObjElems.length > 0 ? customObjElems[customObjElems.length - 1].sortidx + 1 : 1;
-        let customName = `custom${Math.max(customIdx, customObjIdx)}`;
+        const customObjIdx = customObjElems.length > 0 ? customObjElems[customObjElems.length - 1].sortidx + 1 : 1;
+        const customName = `custom${Math.max(customIdx, customObjIdx)}`;
 
         // inject a new DOM element to the emote list right before our button
-        let formGroup = document.createElement("div");
-        let emoteNameInput = document.createElement("input");
-        let emoteIconHolder = document.createElement("div");
-        let emoteIcon = document.createElement("img");
-        let fileButton = document.createElement("button");
-        let fileIcon = document.createElement("i");
-        let fileInput = document.createElement("input");
-        //let editEmoteButton = document.createElement("button");
-        //let editEmoteIcon = document.createElement("i");
+        const formGroup = document.createElement("div");
+        const emoteNameInput = document.createElement("input");
+        const emoteIconHolder = document.createElement("div");
+        const emoteIcon = document.createElement("img");
+        const fileButton = document.createElement("file-picker");
+        const fileIcon = document.createElement("i");
 
         KHelpers.addClass(formGroup, "theatre-config-form-group");
         KHelpers.addClass(emoteIconHolder, "theatre-emote-icon");
@@ -518,10 +527,6 @@ export class TheatreActorConfig extends FormApplication {
         KHelpers.addClass(fileIcon, "fas");
         KHelpers.addClass(fileIcon, "fa-file-import");
         KHelpers.addClass(fileIcon, "fa-fw");
-        KHelpers.addClass(fileInput, "image");
-        //KHelpers.addClass(editEmoteButton,"theatre-config-btn-edit-emote");
-        //KHelpers.addClass(editEmoteIcon,"fas");
-        //KHelpers.addClass(editEmoteIcon,"fa-sliders-h");
 
         formGroup.setAttribute("name", customName);
 
@@ -532,40 +537,26 @@ export class TheatreActorConfig extends FormApplication {
         emoteNameInput.value = game.i18n.localize("Theatre.UI.Config.CustomEmotePlaceholder");
         emoteNameInput.addEventListener("focusout", this._onCustomLabelInputFocusOut.bind(this));
 
-        fileButton.setAttribute("type", "button");
-        fileButton.setAttribute("data-type", "image");
-        fileButton.setAttribute("data-target", `flags.theatre.emotes.${customName}.insert`);
-        fileButton.setAttribute("title", "Browse Files");
-        fileButton.setAttribute("tabindex", "-1");
+        fileButton.setAttribute("type", "image");
+        fileButton.setAttribute("name", `flags.theatre.emotes.${customName}.insert`);
+        fileButton.setAttribute("data-dtype", "String");
+        fileButton.setAttribute("placeholder", game.i18n.localize("Theatre.UI.Config.PathPlaceholder"));
 
         emoteIcon.setAttribute("data-edit", `flags.theatre.emotes.${customName}.image`);
         emoteIcon.setAttribute("src", CONSTANTS.ICONLIB + "/blank.png");
         emoteIcon.setAttribute("title", game.i18n.localize("Theatre.UI.Title.ChooseEmoteIcon"));
-
-        //emoteIcon.setAttribute("src",`flags.theatre.emotes.${customName}.image`);
-
-        fileInput.setAttribute("type", "text");
-        fileInput.setAttribute("name", `flags.theatre.emotes.${customName}.insert`);
-        fileInput.setAttribute("data-dtype", "String");
-        fileInput.setAttribute("placeholder", game.i18n.localize("Theatre.UI.Config.PathPlaceholder"));
-
-        //editEmoteButton.setAttribute("type","button");
-        //editEmoteButton.setAttribute("name", customName);
-        //editEmoteButton.setAttribute("title",game.i18n.localize("Theatre.UI.Config.ConfigureEmote"));
+        emoteIcon.setAttribute("data-action", "onCustomIconImage");
 
         // assemble
         emoteIconHolder.appendChild(emoteIcon);
-        //editEmoteButton.appendChild(editEmoteIcon);
         fileButton.appendChild(fileIcon);
 
         formGroup.appendChild(emoteNameInput);
         formGroup.appendChild(emoteIconHolder);
         formGroup.appendChild(fileButton);
-        formGroup.appendChild(fileInput);
-        //formGroup.appendChild(editEmoteButton);
 
-        KHelpers.insertBefore(formGroup, ev.currentTarget);
-        this.activateListeners($(formGroup));
+        KHelpers.insertBefore(formGroup, ev.target);
+        this.activateListeners();
 
         // focus
         emoteNameInput.focus();
@@ -578,9 +569,9 @@ export class TheatreActorConfig extends FormApplication {
      *
      * @private
      */
-    _onCustomIconImage(ev) {
-        let target = ev.currentTarget;
-        new FilePicker({
+    static _onCustomIconImage(ev) {
+        const target = ev.target;
+        new foundry.applications.apps.FilePicker({
             type: "image",
             current: target.getAttribute("src"),
             callback: (path) => {
@@ -601,7 +592,7 @@ export class TheatreActorConfig extends FormApplication {
     _onCustomLabelClick(ev) {
         // replace the label with an input box
         ev.stopPropagation();
-        let inputLabel = document.createElement("input");
+        const inputLabel = document.createElement("input");
         inputLabel.setAttribute("type", "text");
         inputLabel.setAttribute(
             "name",
@@ -627,7 +618,7 @@ export class TheatreActorConfig extends FormApplication {
      */
     _onCustomLabelMouseEnter(ev) {
         // show dock
-        let dock = ev.currentTarget.getElementsByClassName("theatre-config-emote-label-dock")[0];
+        const dock = ev.currentTarget.getElementsByClassName("theatre-config-emote-label-dock")[0];
         dock.style.display = "flex";
     }
 
@@ -640,7 +631,7 @@ export class TheatreActorConfig extends FormApplication {
      */
     _onCustomLabelMouseLeave(ev) {
         // hide dock
-        let dock = ev.currentTarget.getElementsByClassName("theatre-config-emote-label-dock")[0];
+        const dock = ev.currentTarget.getElementsByClassName("theatre-config-emote-label-dock")[0];
         dock.style.display = "none";
     }
 
@@ -653,9 +644,9 @@ export class TheatreActorConfig extends FormApplication {
      */
     _onCustomLabelInputFocusOut(ev) {
         // re-build dock + label
-        let label = document.createElement("label");
-        let dock = document.createElement("div");
-        let deleteIcon = document.createElement("i");
+        const label = document.createElement("label");
+        const dock = document.createElement("div");
+        const deleteIcon = document.createElement("i");
         KHelpers.addClass(label, "theatre-config-emote-label");
         KHelpers.addClass(label, "customlabel");
         KHelpers.addClass(dock, "theatre-config-emote-label-dock");
@@ -689,7 +680,7 @@ export class TheatreActorConfig extends FormApplication {
     _onCustomLabelDockClick(ev) {
         // delete custom emote
         // mark the form group as 'to be deleted' as a rider on our update call
-        let formGroup = KHelpers.seekParentClass(ev.currentTarget, "theatre-config-form-group", 5);
+        const formGroup = KHelpers.seekParentClass(ev.currentTarget, "theatre-config-form-group", 5);
         if (!formGroup) return;
         formGroup.setAttribute("todelete", true);
         formGroup.style.left = "20px";
@@ -726,19 +717,7 @@ export class TheatreActorConfig extends FormApplication {
         label.addEventListener("click", this._onCustomLabelClick.bind(this));
         label.addEventListener("mouseenter", this._onCustomLabelMouseEnter.bind(this));
         label.addEventListener("mouseleave", this._onCustomLabelMouseLeave.bind(this));
-        let dock = label.getElementsByClassName("theatre-config-emote-label-dock")[0];
+        const dock = label.getElementsByClassName("theatre-config-emote-label-dock")[0];
         dock.addEventListener("click", this._onCustomLabelDockClick.bind(this));
-    }
-
-    /**
-     * Undo a custom emote item delete
-     *
-     * @param ev (Event) triggered event
-     *
-     * @private
-     */
-    _onEditEmoteLine(ev) {
-        Logger.debug("Emote config pressed for %s!", ev.currentTarget.getAttribute("name"));
-        Logger.info(game.i18n.localize("Theatre.NotYet"), true);
     }
 }

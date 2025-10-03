@@ -187,8 +187,6 @@ Hooks.on("deleteCombat", function () {
 Hooks.on("preCreateChatMessage", function (chatMessage, data) {
     let chatData = {
         speaker: {
-            // Actor: null,
-            // The above line is causing issues with chat buttons in v11 in certain systems. Will revert if it causes unforseen issues in other systems.
             scene: data.speaker?.scene,
             flags: {},
         },
@@ -204,7 +202,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage, data) {
 
     // Make the message OOC if needed
     if ($(theatre.theatreChatCover).hasClass("theatre-control-chat-cover-ooc")) {
-        const user = game.users.get(chatMessage.user.id);
+        const user = game.users.get(chatMessage.author.id);
         chatData.speaker.alias = user.name;
         if (foundry.utils.isNewerVersion(game.version, 12)) {
             chatData.style = CONST.CHAT_MESSAGE_STYLES.OOC;
@@ -216,20 +214,16 @@ Hooks.on("preCreateChatMessage", function (chatMessage, data) {
         return;
     }
 
-    if (Theatre.instance.speakingAs && Theatre.instance.usersTyping[chatMessage.user.id]) {
-        let theatreId = Theatre.instance.usersTyping[chatMessage.user.id].theatreId;
+    if (Theatre.instance.speakingAs && Theatre.instance.usersTyping[chatMessage.author.id]) {
+        let theatreId = Theatre.instance.usersTyping[chatMessage.author.id].theatreId;
         let insert = Theatre.instance.getInsertById(theatreId);
-        let actorId = theatreId.replace(CONSTANTS.PREFIX_ACTOR_ID, "");
-        let actor = game.actors.get(actorId) || null;
         Logger.debug("speakingAs %s", theatreId);
 
         if (insert && chatMessage.speaker) {
             let label = Theatre.instance._getLabelFromInsert(insert);
             let name = label.text;
-            let theatreColor = Theatre.instance.getPlayerFlashColor(chatMessage.user.id, insert.textColor);
             Logger.debug("name is %s", name);
             chatData.speaker.alias = name;
-            // ChatData.flags.theatreColor = theatreColor;
             if (foundry.utils.isNewerVersion(game.version, 12)) {
                 chatData.style = CONST.CHAT_MESSAGE_STYLES.IC;
             } else {
@@ -245,9 +239,7 @@ Hooks.on("preCreateChatMessage", function (chatMessage, data) {
         } else if (insert) {
             let label = Theatre.instance._getLabelFromInsert(insert);
             let name = label.text;
-            let theatreColor = Theatre.instance.getPlayerFlashColor(chatData.user, insert.textColor);
             chatData.speaker.alias = name;
-            // ChatData.flags.theatreColor = theatreColor;
             if (foundry.utils.isNewerVersion(game.version, 12)) {
                 chatData.style = CONST.CHAT_MESSAGE_STYLES.IC;
             } else {
@@ -488,12 +480,12 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
     }
 });
 
-Hooks.on("renderChatMessage", function (ChatMessage, html, data) {
+Hooks.on("renderChatMessageHTML", function (ChatMessage, html, context) {
     if (
         game.settings.get(CONSTANTS.MODULE_ID, "ignoreMessagesToChat") &&
         ChatMessage.flags?.[CONSTANTS.MODULE_ID]?.theatreMessage
     ) {
-        html[0].style.display = "none";
+        html.style.display = "none";
     }
     return true;
 });

@@ -1650,14 +1650,12 @@
   width: 50%;
   height: 30px;
   margin: 2px 2px;
-  background: rgba(255, 255, 255, 0.75);
   box-sizing: border-box;
   border: 1px solid #aaa;
   border-radius: 3px;
   padding: 1px 6px;
   align-items: flex-start;
   text-align: center;
-  cursor: default;
   font-size: 14px;
   line-height: 28px;
   font-family: "Signika";
@@ -1665,6 +1663,10 @@
 
 .theatre-config-btn-add-emote:hover {
   box-shadow: 0 0 5px red;
+}
+
+.theatre-config-btn-submit{
+    margin-top: 20px;
 }
 
 .theatre-config-btn-edit-emote {
