@@ -1,4 +1,7 @@
-### 3.1.1
+### 3.3.0
+- Migrate to ApplicationV2 and remove all the deprecation warnings
+
+### 3.2.0
 - Add setting to move stage to the top when there are more than 5 actors
 
 ### 3.1.0
