@@ -2201,7 +2201,8 @@ export class TheatreHelpers {
             actorSheet.actor.flags.theatre = { baseinsert: "", name: "" };
         }
 
-        new TheatreActorConfig(actorSheet.actor, {
+        new TheatreActorConfig({
+            document: actorSheet.actor,
             top: actorSheet.position.top + 40,
             left: actorSheet.position.left + (actorSheet.position.width - 500) / 2,
             configureDefault: true,

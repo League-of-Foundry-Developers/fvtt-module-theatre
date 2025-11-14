@@ -2877,7 +2877,7 @@ export class Theatre {
         // no actor is also fine if this is some kind of rigging resource
 
         // src check, not fine at all!
-        if (!(await srcExists(imgSrc))) {
+        if (!(await foundry.canvas.srcExists(imgSrc))) {
             Logger.error("ERROR (_AddTextureResource) : Replacement texture does not exist %s ", false, imgSrc);
             return;
         }
@@ -2939,7 +2939,7 @@ export class Theatre {
 
         // src check, not fine at all!
         for (let src of imgSrcs)
-            if (!(await srcExists(src.imgpath))) {
+            if (!(await foundry.canvas.srcExists(src.imgpath))) {
                 Logger.error("ERROR (_AddAllTextureResources) : Replacement texture does not exist %s ", false, src);
                 return;
             }
@@ -5203,391 +5203,404 @@ export class Theatre {
         let textFlyin = Theatre.FLYIN_ANIMS;
         let textStanding = Theatre.STANDING_ANIMS;
         let sideBar = document.getElementById("sidebar");
-        renderTemplate("modules/theatre/templates/emote_menu.html", {
-            emotes,
-            textFlyin,
-            textStanding,
-            fonts,
-        }).then((template) => {
-            Logger.debug("emote window template rendered");
-            Theatre.instance.theatreEmoteMenu.style.top = `${Theatre.instance.theatreControls.offsetTop - 410}px`;
-            Theatre.instance.theatreEmoteMenu.innerHTML = template;
+        foundry.applications.handlebars
+            .renderTemplate("modules/theatre/templates/emote_menu.html", {
+                emotes,
+                textFlyin,
+                textStanding,
+                fonts,
+            })
+            .then((template) => {
+                Logger.debug("emote window template rendered");
+                Theatre.instance.theatreEmoteMenu.style.top = `${Theatre.instance.theatreControls.offsetTop - 410}px`;
+                Theatre.instance.theatreEmoteMenu.innerHTML = template;
 
-            let wheelFunc = function (ev) {
-                //Logger.debug("wheel on text-box",ev.currentTarget.scrollTop,ev.deltaY,ev.deltaMode);
-                let pos = ev.deltaY > 0;
-                ev.currentTarget.scrollTop += pos ? 10 : -10;
-                ev.preventDefault();
-                ev.stopPropagation();
-            };
-            let wheelFunc2 = function (ev) {
-                //Logger.debug("wheel on text-anim",ev.currentTarget.parentNode.scrollTop,ev.deltaY,ev.deltaMode);
-                let pos = ev.deltaY > 0;
-                ev.currentTarget.parentNode.scrollTop += pos ? 10 : -10;
-                ev.preventDefault();
-                ev.stopPropagation();
-            };
+                let wheelFunc = function (ev) {
+                    //Logger.debug("wheel on text-box",ev.currentTarget.scrollTop,ev.deltaY,ev.deltaMode);
+                    let pos = ev.deltaY > 0;
+                    ev.currentTarget.scrollTop += pos ? 10 : -10;
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                };
+                let wheelFunc2 = function (ev) {
+                    //Logger.debug("wheel on text-anim",ev.currentTarget.parentNode.scrollTop,ev.deltaY,ev.deltaMode);
+                    let pos = ev.deltaY > 0;
+                    ev.currentTarget.parentNode.scrollTop += pos ? 10 : -10;
+                    ev.preventDefault();
+                    ev.stopPropagation();
+                };
 
-            // bind handlers for the font/size/color selectors
-            let sizeSelect = Theatre.instance.theatreEmoteMenu.getElementsByClassName("sizeselect")[0];
-            let colorSelect = Theatre.instance.theatreEmoteMenu.getElementsByClassName("colorselect")[0];
-            let fontSelect = Theatre.instance.theatreEmoteMenu.getElementsByClassName("fontselect")[0];
-            //Logger.debug("Selectors found: ",sizeSelect,colorSelect,fontSelect);
+                // bind handlers for the font/size/color selectors
+                let sizeSelect = Theatre.instance.theatreEmoteMenu.getElementsByClassName("sizeselect")[0];
+                let colorSelect = Theatre.instance.theatreEmoteMenu.getElementsByClassName("colorselect")[0];
+                let fontSelect = Theatre.instance.theatreEmoteMenu.getElementsByClassName("fontselect")[0];
+                //Logger.debug("Selectors found: ",sizeSelect,colorSelect,fontSelect);
 
-            // assign font from insert
-            if (insert && insert.textFont) {
-                //if (fonts.includes(insert.textFont)) fontSelect.value = insert.textFont;
-                //else fontSelect.value = fonts[0];
-                fontSelect.value = insert.textFont;
-            } else if (
-                Theatre.instance.userEmotes[game.user.id] &&
-                Theatre.instance.userEmotes[game.user.id].textFont
-            ) {
-                //if (fonts.includes(Theatre.instance.userEmotes[game.user.id].textFont))
-                //fontSelect.value = Theatre.instance.userEmotes[game.user.id].textFont;
-                //else
-                //fontSelect.value = fonts[0];
-                fontSelect.value = Theatre.instance.userEmotes[game.user.id].textFont;
-                if (insert) insert.textFont = fontSelect.value;
-            } else {
-                fontSelect.value = fonts[0];
-            }
-            // assign color from insert
-            if (insert && insert.textColor) {
-                colorSelect.value = insert.textColor;
-            } else if (
-                Theatre.instance.userEmotes[game.user.id] &&
-                Theatre.instance.userEmotes[game.user.id].textColor
-            ) {
-                colorSelect.value = Theatre.instance.userEmotes[game.user.id].textColor;
-                if (insert) insert.textColor = colorSelect.value;
-            }
-            // assgin font size
-            let sizeIcon = document.createElement("div");
-            let sizeValue = 2;
-            if (insert) sizeValue = insert.textSize;
-            else if (Theatre.instance.userEmotes[game.user.id])
-                sizeValue = Number(Theatre.instance.userEmotes[game.user.id].textSize);
-
-            switch (sizeValue) {
-                case 3:
-                    KHelpers.addClass(sizeIcon, "theatre-icon-fontsize-large");
-                    break;
-                case 1:
-                    KHelpers.addClass(sizeIcon, "theatre-icon-fontsize-small");
-                    break;
-                default:
-                    KHelpers.addClass(sizeIcon, "theatre-icon-fontsize-medium");
-                    break;
-            }
-            sizeSelect.appendChild(sizeIcon);
-
-            sizeSelect.addEventListener("click", (ev) => {
-                let insert = Theatre.instance.getInsertById(Theatre.instance.speakingAs);
-                let icon = sizeSelect.children[0];
-                let value = 2;
-                if (insert) value = insert.textSize;
+                // assign font from insert
+                if (insert && insert.textFont) {
+                    //if (fonts.includes(insert.textFont)) fontSelect.value = insert.textFont;
+                    //else fontSelect.value = fonts[0];
+                    fontSelect.value = insert.textFont;
+                } else if (
+                    Theatre.instance.userEmotes[game.user.id] &&
+                    Theatre.instance.userEmotes[game.user.id].textFont
+                ) {
+                    //if (fonts.includes(Theatre.instance.userEmotes[game.user.id].textFont))
+                    //fontSelect.value = Theatre.instance.userEmotes[game.user.id].textFont;
+                    //else
+                    //fontSelect.value = fonts[0];
+                    fontSelect.value = Theatre.instance.userEmotes[game.user.id].textFont;
+                    if (insert) insert.textFont = fontSelect.value;
+                } else {
+                    fontSelect.value = fonts[0];
+                }
+                // assign color from insert
+                if (insert && insert.textColor) {
+                    colorSelect.value = insert.textColor;
+                } else if (
+                    Theatre.instance.userEmotes[game.user.id] &&
+                    Theatre.instance.userEmotes[game.user.id].textColor
+                ) {
+                    colorSelect.value = Theatre.instance.userEmotes[game.user.id].textColor;
+                    if (insert) insert.textColor = colorSelect.value;
+                }
+                // assgin font size
+                let sizeIcon = document.createElement("div");
+                let sizeValue = 2;
+                if (insert) sizeValue = insert.textSize;
                 else if (Theatre.instance.userEmotes[game.user.id])
-                    value = Number(Theatre.instance.userEmotes[game.user.id].textSize);
+                    sizeValue = Number(Theatre.instance.userEmotes[game.user.id].textSize);
 
-                switch (value) {
+                switch (sizeValue) {
                     case 3:
-                        KHelpers.removeClass(icon, "theatre-icon-fontsize-large");
-                        KHelpers.addClass(icon, "theatre-icon-fontsize-medium");
-                        value = 2;
+                        KHelpers.addClass(sizeIcon, "theatre-icon-fontsize-large");
                         break;
                     case 1:
-                        KHelpers.removeClass(icon, "theatre-icon-fontsize-small");
-                        KHelpers.addClass(icon, "theatre-icon-fontsize-large");
-                        value = 3;
+                        KHelpers.addClass(sizeIcon, "theatre-icon-fontsize-small");
                         break;
                     default:
-                        KHelpers.removeClass(icon, "theatre-icon-fontsize-medium");
-                        KHelpers.addClass(icon, "theatre-icon-fontsize-small");
-                        value = 1;
+                        KHelpers.addClass(sizeIcon, "theatre-icon-fontsize-medium");
                         break;
                 }
-                Theatre.instance.setUserEmote(game.user.id, Theatre.instance.speakingAs, "textsize", value);
-            });
-            fontSelect.addEventListener("change", (ev) => {
-                Theatre.instance.setUserEmote(
-                    game.user.id,
-                    Theatre.instance.speakingAs,
-                    "textfont",
-                    ev.currentTarget.value,
-                );
-                Theatre.instance.renderEmoteMenu();
-            });
-            colorSelect.addEventListener("change", (ev) => {
-                Theatre.instance.setUserEmote(
-                    game.user.id,
-                    Theatre.instance.speakingAs,
-                    "textcolor",
-                    ev.currentTarget.value,
-                );
-            });
+                sizeSelect.appendChild(sizeIcon);
 
-            // Apply our language specific fonts to the template
-            // OR apply the font specified by the insert
-            let headers = Theatre.instance.theatreEmoteMenu.getElementsByTagName("h2");
-            let textAnims = Theatre.instance.theatreEmoteMenu.getElementsByClassName("textanim");
-            for (let e of headers) Theatre.instance._applyFontFamily(e, Theatre.instance.titleFont);
-            for (let e of textAnims) {
-                let font = fontSelect.value;
-                Theatre.instance._applyFontFamily(e, font);
-                e.addEventListener("wheel", wheelFunc2);
-            }
+                sizeSelect.addEventListener("click", (ev) => {
+                    let insert = Theatre.instance.getInsertById(Theatre.instance.speakingAs);
+                    let icon = sizeSelect.children[0];
+                    let value = 2;
+                    if (insert) value = insert.textSize;
+                    else if (Theatre.instance.userEmotes[game.user.id])
+                        value = Number(Theatre.instance.userEmotes[game.user.id].textSize);
 
-            // bind click listeners for the textanim elements to animate a preview
-            // hover-off will reset the text content
-            let flyinBox = Theatre.instance.theatreEmoteMenu.getElementsByClassName("textflyin-box")[0];
-            flyinBox = flyinBox.getElementsByClassName("theatre-container-column")[0];
-            let standingBox = Theatre.instance.theatreEmoteMenu.getElementsByClassName("textstanding-box")[0];
-            standingBox = standingBox.getElementsByClassName("theatre-container-column")[0];
-
-            flyinBox.addEventListener("wheel", wheelFunc);
-            standingBox.addEventListener("wheel", wheelFunc);
-
-            for (let child of flyinBox.children) {
-                // get animation function
-                // bind annonomous click listener
-                child.addEventListener("mouseover", (ev) => {
-                    let text = ev.currentTarget.getAttribute("otext");
-                    let anim = ev.currentTarget.getAttribute("name");
-                    //Logger.debug("child text: ",text,ev.currentTarget);
-                    ev.currentTarget.textContent = "";
-                    let charSpans = Theatre.splitTextBoxToChars(text, ev.currentTarget);
-                    textFlyin[anim].func.call(this, charSpans, 0.5, 0.05, null);
+                    switch (value) {
+                        case 3:
+                            KHelpers.removeClass(icon, "theatre-icon-fontsize-large");
+                            KHelpers.addClass(icon, "theatre-icon-fontsize-medium");
+                            value = 2;
+                            break;
+                        case 1:
+                            KHelpers.removeClass(icon, "theatre-icon-fontsize-small");
+                            KHelpers.addClass(icon, "theatre-icon-fontsize-large");
+                            value = 3;
+                            break;
+                        default:
+                            KHelpers.removeClass(icon, "theatre-icon-fontsize-medium");
+                            KHelpers.addClass(icon, "theatre-icon-fontsize-small");
+                            value = 1;
+                            break;
+                    }
+                    Theatre.instance.setUserEmote(game.user.id, Theatre.instance.speakingAs, "textsize", value);
                 });
-                child.addEventListener("mouseout", (ev) => {
-                    for (let c of ev.currentTarget.children) {
-                        for (let sc of c.children) TweenMax.killTweensOf(sc);
-                        TweenMax.killTweensOf(c);
-                    }
-                    for (let c of ev.currentTarget.children) c.parentNode.removeChild(c);
-                    TweenMax.killTweensOf(child);
-                    child.style["overflow-y"] = "scroll";
-                    child.style["overflow-x"] = "hidden";
-                    //Logger.debug("all tweens",TweenMax.getAllTweens());
-                    ev.currentTarget.textContent = ev.currentTarget.getAttribute("otext");
+                fontSelect.addEventListener("change", (ev) => {
+                    Theatre.instance.setUserEmote(
+                        game.user.id,
+                        Theatre.instance.speakingAs,
+                        "textfont",
+                        ev.currentTarget.value,
+                    );
+                    Theatre.instance.renderEmoteMenu();
                 });
-                // bind text anim type
-                child.addEventListener("mouseup", (ev) => {
-                    if (ev.button == 0) {
-                        if (KHelpers.hasClass(ev.currentTarget, "textflyin-active")) {
-                            KHelpers.removeClass(ev.currentTarget, "textflyin-active");
-                            Theatre.instance.setUserEmote(game.user.id, Theatre.instance.speakingAs, "textflyin", null);
-                        } else {
-                            let lastActives =
-                                Theatre.instance.theatreEmoteMenu.getElementsByClassName("textflyin-active");
-                            for (let la of lastActives) KHelpers.removeClass(la, "textflyin-active");
-                            //if (insert || Theatre.instance.speakingAs == CONSTANTS.NARRATOR) {
-                            KHelpers.addClass(ev.currentTarget, "textflyin-active");
-                            Theatre.instance.setUserEmote(
-                                game.user.id,
-                                Theatre.instance.speakingAs,
-                                "textflyin",
-                                ev.currentTarget.getAttribute("name"),
-                            );
-                            //}
-                        }
-                        // push focus to chat-message
-                        let chatMessage = document.getElementById("chat-message");
-                        chatMessage.focus();
-                    }
-                });
-                // check if this child is our configured 'text style'
-                let childTextMode = child.getAttribute("name");
-                if (insert) {
-                    let insertTextMode = insert.textFlyin;
-                    if (insertTextMode && insertTextMode == childTextMode) {
-                        KHelpers.addClass(child, "textflyin-active");
-                        // scroll to
-                        //TweenMax.to(flyinBox,.4,{scrollTo:{y:child.offsetTop, offsetY:flyinBox.offsetHeight/2}})
-                        flyinBox.scrollTop = child.offsetTop - Math.max(flyinBox.offsetHeight / 2, 0);
-                    }
-                } else if (Theatre.instance.speakingAs == CONSTANTS.NARRATOR) {
-                    let insertTextMode = Theatre.instance.theatreNarrator.getAttribute("textflyin");
-                    if (insertTextMode && insertTextMode == childTextMode) {
-                        KHelpers.addClass(child, "textflyin-active");
-                        // scroll to
-                        //TweenMax.to(flyinBox,.4,{scrollTo:{y:child.offsetTop, offsetY:flyinBox.offsetHeight/2}})
-                        flyinBox.scrollTop = child.offsetTop - Math.max(flyinBox.offsetHeight / 2, 0);
-                    }
-                } else if (
-                    !insert &&
-                    Theatre.instance.userEmotes[game.user.id] &&
-                    child.getAttribute("name") == Theatre.instance.userEmotes[game.user.id].textFlyin
-                ) {
-                    KHelpers.addClass(child, "textflyin-active");
-                    // scroll to
-                    //TweenMax.to(flyinBox,.4,{scrollTo:{y:child.offsetTop, offsetY:flyinBox.offsetHeight/2}})
-                    flyinBox.scrollTop = child.offsetTop - Math.max(flyinBox.offsetHeight / 2, 0);
-                }
-            }
-
-            for (let child of standingBox.children) {
-                // get animation function
-                // bind annonomous click listener
-                child.addEventListener("mouseover", (ev) => {
-                    let text = ev.currentTarget.getAttribute("otext");
-                    let anim = ev.currentTarget.getAttribute("name");
-                    //Logger.debug("child text: ",text,ev.currentTarget);
-                    ev.currentTarget.textContent = "";
-                    let charSpans = Theatre.splitTextBoxToChars(text, ev.currentTarget);
-                    textFlyin["typewriter"].func.call(
-                        this,
-                        charSpans,
-                        0.5,
-                        0.05,
-                        textStanding[anim] ? textStanding[anim].func : null,
+                colorSelect.addEventListener("change", (ev) => {
+                    Theatre.instance.setUserEmote(
+                        game.user.id,
+                        Theatre.instance.speakingAs,
+                        "textcolor",
+                        ev.currentTarget.value,
                     );
                 });
-                child.addEventListener("mouseout", (ev) => {
-                    for (let c of ev.currentTarget.children) {
-                        for (let sc of c.children) TweenMax.killTweensOf(sc);
-                        TweenMax.killTweensOf(c);
-                    }
-                    for (let c of ev.currentTarget.children) c.parentNode.removeChild(c);
-                    TweenMax.killTweensOf(child);
-                    child.style["overflow-y"] = "scroll";
-                    child.style["overflow-x"] = "hidden";
-                    //Logger.debug("all tweens",TweenMax.getAllTweens());
-                    ev.currentTarget.textContent = ev.currentTarget.getAttribute("otext");
-                });
-                // bind text anim type
-                child.addEventListener("mouseup", (ev) => {
-                    if (ev.button == 0) {
-                        if (KHelpers.hasClass(ev.currentTarget, "textstanding-active")) {
-                            KHelpers.removeClass(ev.currentTarget, "textstanding-active");
-                            Theatre.instance.setUserEmote(
-                                game.user.id,
-                                Theatre.instance.speakingAs,
-                                "textstanding",
-                                null,
-                            );
-                        } else {
-                            let lastActives =
-                                Theatre.instance.theatreEmoteMenu.getElementsByClassName("textstanding-active");
-                            for (let la of lastActives) KHelpers.removeClass(la, "textstanding-active");
-                            //if (insert || Theatre.instance.speakingAs == CONSTANTS.NARRATOR) {
-                            KHelpers.addClass(ev.currentTarget, "textstanding-active");
-                            Theatre.instance.setUserEmote(
-                                game.user.id,
-                                Theatre.instance.speakingAs,
-                                "textstanding",
-                                ev.currentTarget.getAttribute("name"),
-                            );
-                            //}
-                        }
-                        // push focus to chat-message
-                        let chatMessage = document.getElementById("chat-message");
-                        chatMessage.focus();
-                    }
-                });
-                // check if this child is our configured 'text style'
-                let childTextMode = child.getAttribute("name");
-                if (insert) {
-                    let insertTextMode = insert.textStanding;
-                    if (insertTextMode && insertTextMode == childTextMode) {
-                        KHelpers.addClass(child, "textstanding-active");
-                        //TweenMax.to(standingBox,.4,{scrollTo:{y:child.offsetTop, offsetY:standingBox.offsetHeight/2}})
-                        standingBox.scrollTop = child.offsetTop - Math.max(standingBox.offsetHeight / 2, 0);
-                    }
-                } else if (Theatre.instance.speakingAs == CONSTANTS.NARRATOR) {
-                    let insertTextMode = Theatre.instance.theatreNarrator.getAttribute("textstanding");
-                    if (insertTextMode && insertTextMode == childTextMode) {
-                        KHelpers.addClass(child, "textstanding-active");
-                        // scroll to
-                        //TweenMax.to(standingBox,.4,{scrollTo:{y:child.offsetTop, offsetY:standingBox.offsetHeight/2}})
-                        standingBox.scrollTop = child.offsetTop - Math.max(standingBox.offsetHeight / 2, 0);
-                    }
-                } else if (
-                    Theatre.instance.userEmotes[game.user.id] &&
-                    child.getAttribute("name") == Theatre.instance.userEmotes[game.user.id].textStanding
-                ) {
-                    KHelpers.addClass(child, "textstanding-active");
-                    // scroll to
-                    //TweenMax.to(standingBox,.4,{scrollTo:{y:child.offsetTop, offsetY:standingBox.offsetHeight/2}})
-                    standingBox.scrollTop = child.offsetTop - Math.max(standingBox.offsetHeight / 2, 0);
-                }
-            }
 
-            // If speaking as theatre, minimize away the emote section
-            let emoteBox = Theatre.instance.theatreEmoteMenu.getElementsByClassName("emote-box")[0];
-            let emContainer = emoteBox.getElementsByClassName("theatre-container-tiles")[0];
-            if (Theatre.instance.speakingAs == CONSTANTS.NARRATOR) {
-                emoteBox.style.cssText += "flex: 0 0 40px";
-                let emLabel = emoteBox.getElementsByTagName("h2")[0];
-                fontSelect.style["max-width"] = "unset";
-                emContainer.style.display = "none";
-                emLabel.style.display = "none";
-            } else {
-                // configure handles to bind emote selection
-                let emoteBtns = Theatre.instance.theatreEmoteMenu.getElementsByClassName("emote");
-                for (let child of emoteBtns) {
-                    //bind annomous click listener
+                // Apply our language specific fonts to the template
+                // OR apply the font specified by the insert
+                let headers = Theatre.instance.theatreEmoteMenu.getElementsByTagName("h2");
+                let textAnims = Theatre.instance.theatreEmoteMenu.getElementsByClassName("textanim");
+                for (let e of headers) Theatre.instance._applyFontFamily(e, Theatre.instance.titleFont);
+                for (let e of textAnims) {
+                    let font = fontSelect.value;
+                    Theatre.instance._applyFontFamily(e, font);
+                    e.addEventListener("wheel", wheelFunc2);
+                }
+
+                // bind click listeners for the textanim elements to animate a preview
+                // hover-off will reset the text content
+                let flyinBox = Theatre.instance.theatreEmoteMenu.getElementsByClassName("textflyin-box")[0];
+                flyinBox = flyinBox.getElementsByClassName("theatre-container-column")[0];
+                let standingBox = Theatre.instance.theatreEmoteMenu.getElementsByClassName("textstanding-box")[0];
+                standingBox = standingBox.getElementsByClassName("theatre-container-column")[0];
+
+                flyinBox.addEventListener("wheel", wheelFunc);
+                standingBox.addEventListener("wheel", wheelFunc);
+
+                for (let child of flyinBox.children) {
+                    // get animation function
+                    // bind annonomous click listener
+                    child.addEventListener("mouseover", (ev) => {
+                        let text = ev.currentTarget.getAttribute("otext");
+                        let anim = ev.currentTarget.getAttribute("name");
+                        //Logger.debug("child text: ",text,ev.currentTarget);
+                        ev.currentTarget.textContent = "";
+                        let charSpans = Theatre.splitTextBoxToChars(text, ev.currentTarget);
+                        textFlyin[anim].func.call(this, charSpans, 0.5, 0.05, null);
+                    });
+                    child.addEventListener("mouseout", (ev) => {
+                        for (let c of ev.currentTarget.children) {
+                            for (let sc of c.children) TweenMax.killTweensOf(sc);
+                            TweenMax.killTweensOf(c);
+                        }
+                        for (let c of ev.currentTarget.children) c.parentNode.removeChild(c);
+                        TweenMax.killTweensOf(child);
+                        child.style["overflow-y"] = "scroll";
+                        child.style["overflow-x"] = "hidden";
+                        //Logger.debug("all tweens",TweenMax.getAllTweens());
+                        ev.currentTarget.textContent = ev.currentTarget.getAttribute("otext");
+                    });
+                    // bind text anim type
                     child.addEventListener("mouseup", (ev) => {
                         if (ev.button == 0) {
-                            let emName = ev.currentTarget.getAttribute("name");
-                            Logger.debug("em name: %s was clicked", emName);
-                            if (KHelpers.hasClass(ev.currentTarget, "emote-active")) {
-                                KHelpers.removeClass(ev.currentTarget, "emote-active");
-                                // if speaking set to base
-                                Theatre.instance.setUserEmote(game.user.id, Theatre.instance.speakingAs, "emote", null);
-                            } else {
-                                let lastActives =
-                                    Theatre.instance.theatreEmoteMenu.getElementsByClassName("emote-active");
-                                for (let la of lastActives) KHelpers.removeClass(la, "emote-active");
-                                KHelpers.addClass(ev.currentTarget, "emote-active");
-                                // if speaking, then set our emote!
+                            if (KHelpers.hasClass(ev.currentTarget, "textflyin-active")) {
+                                KHelpers.removeClass(ev.currentTarget, "textflyin-active");
                                 Theatre.instance.setUserEmote(
                                     game.user.id,
                                     Theatre.instance.speakingAs,
-                                    "emote",
-                                    emName,
+                                    "textflyin",
+                                    null,
                                 );
+                            } else {
+                                let lastActives =
+                                    Theatre.instance.theatreEmoteMenu.getElementsByClassName("textflyin-active");
+                                for (let la of lastActives) KHelpers.removeClass(la, "textflyin-active");
+                                //if (insert || Theatre.instance.speakingAs == CONSTANTS.NARRATOR) {
+                                KHelpers.addClass(ev.currentTarget, "textflyin-active");
+                                Theatre.instance.setUserEmote(
+                                    game.user.id,
+                                    Theatre.instance.speakingAs,
+                                    "textflyin",
+                                    ev.currentTarget.getAttribute("name"),
+                                );
+                                //}
                             }
                             // push focus to chat-message
                             let chatMessage = document.getElementById("chat-message");
                             chatMessage.focus();
                         }
                     });
-                    // bind mouseenter Listener
-                    child.addEventListener("mouseenter", (ev) => {
-                        Theatre.instance.configureTheatreToolTip(
-                            Theatre.instance.speakingAs,
-                            ev.currentTarget.getAttribute("name"),
+                    // check if this child is our configured 'text style'
+                    let childTextMode = child.getAttribute("name");
+                    if (insert) {
+                        let insertTextMode = insert.textFlyin;
+                        if (insertTextMode && insertTextMode == childTextMode) {
+                            KHelpers.addClass(child, "textflyin-active");
+                            // scroll to
+                            //TweenMax.to(flyinBox,.4,{scrollTo:{y:child.offsetTop, offsetY:flyinBox.offsetHeight/2}})
+                            flyinBox.scrollTop = child.offsetTop - Math.max(flyinBox.offsetHeight / 2, 0);
+                        }
+                    } else if (Theatre.instance.speakingAs == CONSTANTS.NARRATOR) {
+                        let insertTextMode = Theatre.instance.theatreNarrator.getAttribute("textflyin");
+                        if (insertTextMode && insertTextMode == childTextMode) {
+                            KHelpers.addClass(child, "textflyin-active");
+                            // scroll to
+                            //TweenMax.to(flyinBox,.4,{scrollTo:{y:child.offsetTop, offsetY:flyinBox.offsetHeight/2}})
+                            flyinBox.scrollTop = child.offsetTop - Math.max(flyinBox.offsetHeight / 2, 0);
+                        }
+                    } else if (
+                        !insert &&
+                        Theatre.instance.userEmotes[game.user.id] &&
+                        child.getAttribute("name") == Theatre.instance.userEmotes[game.user.id].textFlyin
+                    ) {
+                        KHelpers.addClass(child, "textflyin-active");
+                        // scroll to
+                        //TweenMax.to(flyinBox,.4,{scrollTo:{y:child.offsetTop, offsetY:flyinBox.offsetHeight/2}})
+                        flyinBox.scrollTop = child.offsetTop - Math.max(flyinBox.offsetHeight / 2, 0);
+                    }
+                }
+
+                for (let child of standingBox.children) {
+                    // get animation function
+                    // bind annonomous click listener
+                    child.addEventListener("mouseover", (ev) => {
+                        let text = ev.currentTarget.getAttribute("otext");
+                        let anim = ev.currentTarget.getAttribute("name");
+                        //Logger.debug("child text: ",text,ev.currentTarget);
+                        ev.currentTarget.textContent = "";
+                        let charSpans = Theatre.splitTextBoxToChars(text, ev.currentTarget);
+                        textFlyin["typewriter"].func.call(
+                            this,
+                            charSpans,
+                            0.5,
+                            0.05,
+                            textStanding[anim] ? textStanding[anim].func : null,
                         );
                     });
-                    // check if this child is our configured 'emote'
-                    let childEmote = child.getAttribute("name");
+                    child.addEventListener("mouseout", (ev) => {
+                        for (let c of ev.currentTarget.children) {
+                            for (let sc of c.children) TweenMax.killTweensOf(sc);
+                            TweenMax.killTweensOf(c);
+                        }
+                        for (let c of ev.currentTarget.children) c.parentNode.removeChild(c);
+                        TweenMax.killTweensOf(child);
+                        child.style["overflow-y"] = "scroll";
+                        child.style["overflow-x"] = "hidden";
+                        //Logger.debug("all tweens",TweenMax.getAllTweens());
+                        ev.currentTarget.textContent = ev.currentTarget.getAttribute("otext");
+                    });
+                    // bind text anim type
+                    child.addEventListener("mouseup", (ev) => {
+                        if (ev.button == 0) {
+                            if (KHelpers.hasClass(ev.currentTarget, "textstanding-active")) {
+                                KHelpers.removeClass(ev.currentTarget, "textstanding-active");
+                                Theatre.instance.setUserEmote(
+                                    game.user.id,
+                                    Theatre.instance.speakingAs,
+                                    "textstanding",
+                                    null,
+                                );
+                            } else {
+                                let lastActives =
+                                    Theatre.instance.theatreEmoteMenu.getElementsByClassName("textstanding-active");
+                                for (let la of lastActives) KHelpers.removeClass(la, "textstanding-active");
+                                //if (insert || Theatre.instance.speakingAs == CONSTANTS.NARRATOR) {
+                                KHelpers.addClass(ev.currentTarget, "textstanding-active");
+                                Theatre.instance.setUserEmote(
+                                    game.user.id,
+                                    Theatre.instance.speakingAs,
+                                    "textstanding",
+                                    ev.currentTarget.getAttribute("name"),
+                                );
+                                //}
+                            }
+                            // push focus to chat-message
+                            let chatMessage = document.getElementById("chat-message");
+                            chatMessage.focus();
+                        }
+                    });
+                    // check if this child is our configured 'text style'
+                    let childTextMode = child.getAttribute("name");
                     if (insert) {
-                        // if we have an insert we're speaking through, we should get that emote state instead
-                        // if the insert has no emote state, neither should we despite user settings
-                        let insertEmote = insert.emote;
-                        if (insertEmote && insertEmote == childEmote) {
+                        let insertTextMode = insert.textStanding;
+                        if (insertTextMode && insertTextMode == childTextMode) {
+                            KHelpers.addClass(child, "textstanding-active");
+                            //TweenMax.to(standingBox,.4,{scrollTo:{y:child.offsetTop, offsetY:standingBox.offsetHeight/2}})
+                            standingBox.scrollTop = child.offsetTop - Math.max(standingBox.offsetHeight / 2, 0);
+                        }
+                    } else if (Theatre.instance.speakingAs == CONSTANTS.NARRATOR) {
+                        let insertTextMode = Theatre.instance.theatreNarrator.getAttribute("textstanding");
+                        if (insertTextMode && insertTextMode == childTextMode) {
+                            KHelpers.addClass(child, "textstanding-active");
+                            // scroll to
+                            //TweenMax.to(standingBox,.4,{scrollTo:{y:child.offsetTop, offsetY:standingBox.offsetHeight/2}})
+                            standingBox.scrollTop = child.offsetTop - Math.max(standingBox.offsetHeight / 2, 0);
+                        }
+                    } else if (
+                        Theatre.instance.userEmotes[game.user.id] &&
+                        child.getAttribute("name") == Theatre.instance.userEmotes[game.user.id].textStanding
+                    ) {
+                        KHelpers.addClass(child, "textstanding-active");
+                        // scroll to
+                        //TweenMax.to(standingBox,.4,{scrollTo:{y:child.offsetTop, offsetY:standingBox.offsetHeight/2}})
+                        standingBox.scrollTop = child.offsetTop - Math.max(standingBox.offsetHeight / 2, 0);
+                    }
+                }
+
+                // If speaking as theatre, minimize away the emote section
+                let emoteBox = Theatre.instance.theatreEmoteMenu.getElementsByClassName("emote-box")[0];
+                let emContainer = emoteBox.getElementsByClassName("theatre-container-tiles")[0];
+                if (Theatre.instance.speakingAs == CONSTANTS.NARRATOR) {
+                    emoteBox.style.cssText += "flex: 0 0 40px";
+                    let emLabel = emoteBox.getElementsByTagName("h2")[0];
+                    fontSelect.style["max-width"] = "unset";
+                    emContainer.style.display = "none";
+                    emLabel.style.display = "none";
+                } else {
+                    // configure handles to bind emote selection
+                    let emoteBtns = Theatre.instance.theatreEmoteMenu.getElementsByClassName("emote");
+                    for (let child of emoteBtns) {
+                        //bind annomous click listener
+                        child.addEventListener("mouseup", (ev) => {
+                            if (ev.button == 0) {
+                                let emName = ev.currentTarget.getAttribute("name");
+                                Logger.debug("em name: %s was clicked", emName);
+                                if (KHelpers.hasClass(ev.currentTarget, "emote-active")) {
+                                    KHelpers.removeClass(ev.currentTarget, "emote-active");
+                                    // if speaking set to base
+                                    Theatre.instance.setUserEmote(
+                                        game.user.id,
+                                        Theatre.instance.speakingAs,
+                                        "emote",
+                                        null,
+                                    );
+                                } else {
+                                    let lastActives =
+                                        Theatre.instance.theatreEmoteMenu.getElementsByClassName("emote-active");
+                                    for (let la of lastActives) KHelpers.removeClass(la, "emote-active");
+                                    KHelpers.addClass(ev.currentTarget, "emote-active");
+                                    // if speaking, then set our emote!
+                                    Theatre.instance.setUserEmote(
+                                        game.user.id,
+                                        Theatre.instance.speakingAs,
+                                        "emote",
+                                        emName,
+                                    );
+                                }
+                                // push focus to chat-message
+                                let chatMessage = document.getElementById("chat-message");
+                                chatMessage.focus();
+                            }
+                        });
+                        // bind mouseenter Listener
+                        child.addEventListener("mouseenter", (ev) => {
+                            Theatre.instance.configureTheatreToolTip(
+                                Theatre.instance.speakingAs,
+                                ev.currentTarget.getAttribute("name"),
+                            );
+                        });
+                        // check if this child is our configured 'emote'
+                        let childEmote = child.getAttribute("name");
+                        if (insert) {
+                            // if we have an insert we're speaking through, we should get that emote state instead
+                            // if the insert has no emote state, neither should we despite user settings
+                            let insertEmote = insert.emote;
+                            if (insertEmote && insertEmote == childEmote) {
+                                KHelpers.addClass(child, "emote-active");
+                                //emContainer.scrollTop = child.offsetTop-Math.max(emContainer.offsetHeight/2,0);
+                            }
+                            // we should 'highlight' emotes that at least have a base insert
+                            if (emotes[childEmote] && emotes[childEmote].insert)
+                                KHelpers.addClass(child, "emote-imgavail");
+                        }
+                        if (
+                            !insert &&
+                            Theatre.instance.userEmotes[game.user.id] &&
+                            childEmote == Theatre.instance.userEmotes[game.user.id].emote
+                        ) {
                             KHelpers.addClass(child, "emote-active");
                             //emContainer.scrollTop = child.offsetTop-Math.max(emContainer.offsetHeight/2,0);
                         }
-                        // we should 'highlight' emotes that at least have a base insert
-                        if (emotes[childEmote] && emotes[childEmote].insert) KHelpers.addClass(child, "emote-imgavail");
                     }
-                    if (
-                        !insert &&
-                        Theatre.instance.userEmotes[game.user.id] &&
-                        childEmote == Theatre.instance.userEmotes[game.user.id].emote
-                    ) {
-                        KHelpers.addClass(child, "emote-active");
-                        //emContainer.scrollTop = child.offsetTop-Math.max(emContainer.offsetHeight/2,0);
-                    }
+                    // bind mouseleave Listener
+                    emoteBtns[0].parentNode.addEventListener("mouseleave", (ev) => {
+                        Theatre.instance.theatreToolTip.style.opacity = 0;
+                    });
                 }
-                // bind mouseleave Listener
-                emoteBtns[0].parentNode.addEventListener("mouseleave", (ev) => {
-                    Theatre.instance.theatreToolTip.style.opacity = 0;
-                });
-            }
-        });
+            });
     }
 
     /**
@@ -5707,8 +5720,8 @@ export class Theatre {
      * @param ev (Event) : The Event that triggered this handler
      */
     handleChatMessageKeyDown(ev) {
-        const context = KeyboardManager.getKeyboardEventContext(ev);
-        const actions = KeyboardManager._getMatchingActions(context);
+        const context = foundry.helpers.interaction.KeyboardManager.getKeyboardEventContext(ev);
+        const actions = foundry.helpers.interaction.KeyboardManager._getMatchingActions(context);
         for (const action of actions) {
             if (!action.action.includes(CONSTANTS.MODULE_ID)) {
                 continue;
