@@ -64,14 +64,14 @@ Hooks.on("getActorSheetHeaderButtons", (app, buttons) => {
 /**
  * Hook in on ActorsheetV2's Header buttons + context menus
  */
-Hooks.on("getHeaderControlsActorSheetV2", (app, buttons) => {
+Hooks.on("getHeaderControlsDocumentSheetV2", (app, buttons) => {
     if (!game.user.isGM && game.settings.get(CONSTANTS.MODULE_ID, "gmOnly")) {
         return;
     }
     const removeLabelSheetHeader = game.settings.get(CONSTANTS.MODULE_ID, "removeLabelSheetHeader");
 
     let theatreButtons = [];
-    if (app.document.isOwner) {
+    if (app.document.isOwner && app.document.documentName === "Actor") {
         // Only prototype actors
         if (!app.document.token) {
             theatreButtons.push({
