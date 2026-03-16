@@ -145,7 +145,7 @@
     "compatibility": {
         "minimum": 13,
         "verified": 13,
-        "maximum": 13
+        "maximum": 14
     },
     "manifestPlusVersion": "1.2.1",
     "url": "https://github.com/League-of-Foundry-Developers/fvtt-module-theatre",
