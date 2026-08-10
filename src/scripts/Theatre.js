@@ -81,6 +81,9 @@ export class Theatre {
                 barStyle: "textbox",
                 narrHeight: "50%",
             };
+            // init / V14 re-render guards
+            this._initialized = false;
+            this._resizeListenerBound = false;
             // Font library
             Theatre.getFonts();
             // FaceAPI
@@ -105,15 +108,28 @@ export class Theatre {
         },
     };
 
+    /**
+     * Initialize theatre HTML, sockets, and listeners.
+     * Guarded so V14 sidebar tab swaps (re-firing renderChatLog) do not inject twice.
+     */
     initialize() {
+        if (this._initialized || document.getElementById("theatre-group")) {
+            this._initialized = true;
+            return;
+        }
         // inject HTML
         this._injectHTML();
+        if (!document.getElementById("theatre-group")) return;
         // socket
         this._initSocket();
         // global listeners
-        window.addEventListener("resize", this.handleWindowResize);
+        if (!this._resizeListenerBound) {
+            window.addEventListener("resize", this.handleWindowResize);
+            this._resizeListenerBound = true;
+        }
         // request a resync if needed
         this._sendResyncRequest("any");
+        this._initialized = true;
     }
 
     /**
