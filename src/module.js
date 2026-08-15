@@ -305,9 +305,8 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
     const isOCC = foundry.utils.isNewerVersion(game.version, 12)
         ? chatData.style === CONST.CHAT_MESSAGE_STYLES.OOC
         : chatData.type === CONST.CHAT_MESSAGE_TYPES.OOC;
+    // Skip rolls/OOC/emotes, UUID embeds, and structured HTML cards (not normal V14 <p> speech)
     if (
-        chatData.content.startsWith("<") || // Bandaid fix so that texts that start with html formatting don't utterly break it
-        chatData.content.startsWith("/") ||
         chatData.rolls.length ||
         chatData.emote ||
         isOCC ||
@@ -320,14 +319,17 @@ Hooks.on("createChatMessage", function (chatEntity, _, userId) {
     let textBox = Theatre.instance.getTextBoxById(theatreId);
     let insert = Theatre.instance.getInsertById(theatreId);
     let charSpans = [];
+    // V14 stores chat as HTML (e.g. <p>…</p>); strip tags for stage/narrator plaintext
     let textContent = chatData.content;
-
-    // Replace newlines
-    textContent = textContent.replace(/<br(| \/)>/g, "\n");
+    textContent = textContent.replace(/<br(| \/)>/gi, "\n");
     // Convert all html specials to plaintext
     let txtTemp = document.createElement("hiddentext");
     txtTemp.innerHTML = textContent;
-    textContent = txtTemp.textContent;
+    textContent = txtTemp.textContent || "";
+    // Slash commands may arrive HTML-wrapped on V14; check after strip
+    if (!textContent || textContent.trimStart().startsWith("/")) {
+        return;
+    }
     if (textBox) {
         // Kill all tweens
         for (let c of textBox.children) {
