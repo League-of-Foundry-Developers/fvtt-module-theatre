@@ -653,7 +653,7 @@ Hooks.on("updateActor", (actor, data) => {
     if (!insert) {
         return;
     }
-    insert.label.text = Theatre.getActorDisplayName(actor.id);
+    insert.label.text = actor.flags?.theatre?.name || Theatre.getActorDisplayName(actor.id);
     Theatre.instance._renderTheatre(performance.now());
 });
 
