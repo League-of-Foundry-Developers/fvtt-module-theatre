@@ -144,7 +144,7 @@
     "styles": ["styles/theatre.css"],
     "compatibility": {
         "minimum": 13,
-        "verified": 13,
+        "verified": 14,
         "maximum": 14
     },
     "manifestPlusVersion": "1.2.1",
